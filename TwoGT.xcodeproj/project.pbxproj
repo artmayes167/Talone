@@ -27,10 +27,6 @@
 		5D61636024E0972D00829AF2 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D61635F24E0972D00829AF2 /* KeychainService.swift */; };
 		5DBE439624C62A5A002C6515 /* LogInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439524C62A5A002C6515 /* LogInVC.swift */; };
 		5DBE439824C64219002C6515 /* YouVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439724C64219002C6515 /* YouVC.swift */; };
-		5DBE43A024C6460D002C6515 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439B24C6460C002C6515 /* AsyncImage.swift */; };
-		5DBE43A124C6460D002C6515 /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439C24C6460C002C6515 /* EnvironmentValues+ImageCache.swift */; };
-		5DBE43A224C6460D002C6515 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439D24C6460D002C6515 /* ImageCache.swift */; };
-		5DBE43A324C6460D002C6515 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439E24C6460D002C6515 /* ImageLoader.swift */; };
 		C7F7238BDE5867476C942941 /* Pods_TwoGT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6D98D12DEA1C9798A44A6C /* Pods_TwoGT.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,10 +66,6 @@
 		5D61635F24E0972D00829AF2 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		5DBE439524C62A5A002C6515 /* LogInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInVC.swift; sourceTree = "<group>"; };
 		5DBE439724C64219002C6515 /* YouVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = YouVC.swift; path = Profile/YouVC.swift; sourceTree = "<group>"; };
-		5DBE439B24C6460C002C6515 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
-		5DBE439C24C6460C002C6515 /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
-		5DBE439D24C6460D002C6515 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
-		5DBE439E24C6460D002C6515 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		750251F2B01BDC3A7F768084 /* Pods-TwoGTTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwoGTTests.release.xcconfig"; path = "Target Support Files/Pods-TwoGTTests/Pods-TwoGTTests.release.xcconfig"; sourceTree = "<group>"; };
 		842575F5449A3602CFF28CF6 /* Pods-TwoGT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwoGT.debug.xcconfig"; path = "Target Support Files/Pods-TwoGT/Pods-TwoGT.debug.xcconfig"; sourceTree = "<group>"; };
 		AF6D98D12DEA1C9798A44A6C /* Pods_TwoGT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwoGT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,21 +182,9 @@
 			isa = PBXGroup;
 			children = (
 				5D5D942F24E2AF490077F488 /* JSON */,
-				5DBE439924C645EF002C6515 /* AsyncImage */,
 				5D61635F24E0972D00829AF2 /* KeychainService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		5DBE439924C645EF002C6515 /* AsyncImage */ = {
-			isa = PBXGroup;
-			children = (
-				5DBE439B24C6460C002C6515 /* AsyncImage.swift */,
-				5DBE439C24C6460C002C6515 /* EnvironmentValues+ImageCache.swift */,
-				5DBE439D24C6460D002C6515 /* ImageCache.swift */,
-				5DBE439E24C6460D002C6515 /* ImageLoader.swift */,
-			);
-			path = AsyncImage;
 			sourceTree = "<group>";
 		};
 		66D3A4F0B6501C7546B32906 /* Pods */ = {
@@ -399,16 +379,12 @@
 			files = (
 				5D61635B24E090CB00829AF2 /* NeedsVC.swift in Sources */,
 				5D5D943324E2B11C0077F488 /* CityStateSearchVC.swift in Sources */,
-				5DBE43A224C6460D002C6515 /* ImageCache.swift in Sources */,
 				5D3A176724B671F90070739D /* TwoGT.xcdatamodeld in Sources */,
 				5D3A176224B671F90070739D /* AppDelegate.swift in Sources */,
 				5DBE439824C64219002C6515 /* YouVC.swift in Sources */,
 				5D61635E24E090F400829AF2 /* AddANeedVC.swift in Sources */,
 				5D61635624E086E400829AF2 /* Customizer.swift in Sources */,
-				5DBE43A324C6460D002C6515 /* ImageLoader.swift in Sources */,
-				5DBE43A124C6460D002C6515 /* EnvironmentValues+ImageCache.swift in Sources */,
 				5D61635924E08F8000829AF2 /* Enums.swift in Sources */,
-				5DBE43A024C6460D002C6515 /* AsyncImage.swift in Sources */,
 				5D3A176924B671F90070739D /* ContentView.swift in Sources */,
 				5D61635424E0678E00829AF2 /* ProfileCustomTab.swift in Sources */,
 				5D61636024E0972D00829AF2 /* KeychainService.swift in Sources */,
@@ -571,6 +547,7 @@
 				DEVELOPMENT_TEAM = 975CLU4P9Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TwoGT/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -578,7 +555,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArthurMayes.Talone;
 				PRODUCT_NAME = Talone;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -592,6 +569,7 @@
 				DEVELOPMENT_TEAM = 975CLU4P9Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TwoGT/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -599,7 +577,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArthurMayes.Talone;
 				PRODUCT_NAME = Talone;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
