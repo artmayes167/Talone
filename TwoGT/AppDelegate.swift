@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    application,
                    didFinishLaunchingWithOptions: launchOptions
                )
+        
+        if (UserDefaults.standard.string(forKey: "uuid") == nil) {
+            let uuid = UUID().uuidString
+            UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
+        }
         return true
     }
     
