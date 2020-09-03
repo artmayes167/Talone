@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="f5C-0r-sje">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="f5C-0r-sje">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -678,7 +679,7 @@
                                             <constraint firstAttribute="height" constant="44" id="XOF-KH-QIs"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" textContentType="address-level1"/>
                                         <connections>
                                             <outlet property="delegate" destination="MmC-33-bzH" id="OpE-9q-ta3"/>
                                         </connections>
@@ -692,25 +693,48 @@
                                             <segue destination="l96-9E-pqg" kind="embed" identifier="toStates" id="6Hz-56-sgp"/>
                                         </connections>
                                     </containerView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City/Zipcode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-cO-s4G">
-                                        <rect key="frame" x="0.0" y="88.5" width="97.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AKH-s3-s76">
-                                        <rect key="frame" x="0.0" y="121" width="390" height="44"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kqo-CA-xOl">
+                                        <rect key="frame" x="0.0" y="82.5" width="390" height="56"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="F8q-c4-4Jk">
+                                                <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City/Zipcode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfC-cO-s4G">
+                                                        <rect key="frame" x="0.0" y="0.0" width="97.5" height="0.0"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AKH-s3-s76">
+                                                        <rect key="frame" x="0.0" y="12" width="390" height="44"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="44" id="4BT-oh-Xaj"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits" textContentType="address-level2"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="MmC-33-bzH" id="Md2-oC-VKp"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="AKH-s3-s76" secondAttribute="trailing" id="5Vl-VV-Bjh"/>
+                                                    <constraint firstItem="AKH-s3-s76" firstAttribute="leading" secondItem="F8q-c4-4Jk" secondAttribute="leading" id="YQY-CM-2C1"/>
+                                                    <constraint firstAttribute="bottom" secondItem="AKH-s3-s76" secondAttribute="bottom" id="agO-fP-yDh"/>
+                                                    <constraint firstItem="AKH-s3-s76" firstAttribute="top" secondItem="kfC-cO-s4G" secondAttribute="bottom" constant="12" id="mqY-Xy-ufe"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="4BT-oh-Xaj"/>
+                                            <constraint firstItem="F8q-c4-4Jk" firstAttribute="top" secondItem="kqo-CA-xOl" secondAttribute="top" id="HFI-at-Q8X"/>
+                                            <constraint firstAttribute="trailing" secondItem="F8q-c4-4Jk" secondAttribute="trailing" id="U3R-nf-u2n"/>
+                                            <constraint firstItem="F8q-c4-4Jk" firstAttribute="leading" secondItem="kqo-CA-xOl" secondAttribute="leading" id="gPi-Yi-vx6"/>
+                                            <constraint firstAttribute="bottom" secondItem="F8q-c4-4Jk" secondAttribute="bottom" id="rXx-lJ-1sp"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="MmC-33-bzH" id="Md2-oC-VKp"/>
-                                        </connections>
-                                    </textField>
+                                    </view>
                                     <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yJw-zW-bKA">
-                                        <rect key="frame" x="0.0" y="171" width="390" height="200"/>
+                                        <rect key="frame" x="0.0" y="82.5" width="390" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="zAK-vD-fq1"/>
                                         </constraints>
@@ -719,12 +743,8 @@
                                         </connections>
                                     </containerView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h49-zh-Qd3">
-                                        <rect key="frame" x="0.0" y="177" width="390" height="575"/>
+                                        <rect key="frame" x="0.0" y="88.5" width="390" height="663.5"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vZ-tK-zdu">
-                                                <rect key="frame" x="12" y="79" width="366" height="30"/>
-                                                <state key="normal" title="SEARCH"/>
-                                            </button>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="6SK-hm-PqA">
                                                 <rect key="frame" x="12" y="24" width="366" height="32"/>
                                                 <segments>
@@ -732,7 +752,17 @@
                                                     <segment title="Save As Alt"/>
                                                     <segment title="Don't Save"/>
                                                 </segments>
+                                                <connections>
+                                                    <action selector="selectedTypeOfSave:" destination="MmC-33-bzH" eventType="valueChanged" id="jeK-Vj-eFC"/>
+                                                </connections>
                                             </segmentedControl>
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vZ-tK-zdu">
+                                                <rect key="frame" x="12" y="79" width="366" height="30"/>
+                                                <state key="normal" title="SEARCH WITH THIS LOCATION"/>
+                                                <connections>
+                                                    <segue destination="8Hd-dx-4BW" kind="unwind" unwindAction="unwindToAddANeed:" id="jQ5-sw-wZz"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
@@ -749,11 +779,11 @@
                                     <constraint firstAttribute="trailing" secondItem="ZGE-jT-7xl" secondAttribute="trailing" id="H5Y-Tq-CLd"/>
                                     <constraint firstItem="ina-FH-TaA" firstAttribute="leading" secondItem="11T-BJ-5cV" secondAttribute="leading" id="LYM-YH-LBh"/>
                                     <constraint firstItem="ZGE-jT-7xl" firstAttribute="leading" secondItem="11T-BJ-5cV" secondAttribute="leading" id="Lqo-YE-l5X"/>
-                                    <constraint firstAttribute="trailing" secondItem="AKH-s3-s76" secondAttribute="trailing" id="Oz3-5K-bCu"/>
+                                    <constraint firstItem="kqo-CA-xOl" firstAttribute="leading" secondItem="11T-BJ-5cV" secondAttribute="leading" id="Q2z-pR-HAv"/>
+                                    <constraint firstAttribute="trailing" secondItem="kqo-CA-xOl" secondAttribute="trailing" id="TdS-9q-daa"/>
                                     <constraint firstAttribute="trailing" secondItem="ina-FH-TaA" secondAttribute="trailing" id="Y41-yZ-13B"/>
                                     <constraint firstAttribute="trailing" secondItem="yJw-zW-bKA" secondAttribute="trailing" id="bjj-Sh-KPD"/>
                                     <constraint firstAttribute="trailing" secondItem="h49-zh-Qd3" secondAttribute="trailing" id="cya-ae-QbG"/>
-                                    <constraint firstItem="AKH-s3-s76" firstAttribute="leading" secondItem="11T-BJ-5cV" secondAttribute="leading" id="nt0-JN-P2P"/>
                                     <constraint firstItem="yJw-zW-bKA" firstAttribute="leading" secondItem="11T-BJ-5cV" secondAttribute="leading" id="w2k-9y-A2C"/>
                                 </constraints>
                             </stackView>
@@ -772,12 +802,16 @@
                     </view>
                     <connections>
                         <outlet property="cityContainer" destination="yJw-zW-bKA" id="pyM-Zg-0bu"/>
+                        <outlet property="cityInputView" destination="kqo-CA-xOl" id="G2a-4x-1MD"/>
                         <outlet property="cityTextField" destination="AKH-s3-s76" id="2VG-8x-tGm"/>
+                        <outlet property="searchButton" destination="5vZ-tK-zdu" id="3Zf-re-mr8"/>
                         <outlet property="stateContainer" destination="ina-FH-TaA" id="sPQ-h2-tcb"/>
                         <outlet property="stateTextField" destination="ZGE-jT-7xl" id="nfG-N3-wTz"/>
+                        <outlet property="typeOfSaveSegmentedControl" destination="6SK-hm-PqA" id="2u0-ON-sRh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v3P-51-98K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="8Hd-dx-4BW" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3564" y="58"/>
         </scene>

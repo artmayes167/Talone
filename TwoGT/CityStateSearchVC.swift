@@ -13,8 +13,8 @@ struct USState: Decodable {
     let cities: [String]
 }
 
-protocol CityStateSelectionDelegate {
-    func selected(state: String, city: String)
+enum SaveType: Int, CaseIterable {
+    case home, alternate, none
 }
 
 class CityStateSearchVC: UIViewController, UITextFieldDelegate {
@@ -24,7 +24,10 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var stateContainer: UIView!
     @IBOutlet weak var cityContainer: UIView!
     
-    var delegate: CityStateSelectionDelegate?
+    @IBOutlet weak var cityInputView: UIView!
+    
+    @IBOutlet weak var typeOfSaveSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var searchButton: UIButton!
     
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?
@@ -56,6 +59,22 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
         }
     }
     
+    var saveType: SaveType = .none
+    
+    @IBAction func selectedTypeOfSave(_ sender: UISegmentedControl) {
+        for x in SaveType.allCases {
+            if x.rawValue == sender.selectedSegmentIndex {
+                saveType = x
+                continue
+            }
+        }
+    }
+    
+    @IBAction func saveSearchLocation(_ sender: Any) {
+        // Pass city, state and save type
+    }
+    
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField {
         case stateTextField:
@@ -78,8 +97,6 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
     var citySelector: LocationPickerTVC?
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "toStates":
@@ -103,13 +120,14 @@ extension CityStateSearchVC: LocationPickerDelegate {
         switch type {
         case .state:
             stateTextField.text = item
+            // Hide the table in the stack
             stateContainer.isHidden = true
             selectedState = item
-            if let arr = states.first(where: { $0.name == item })?.cities {
-                citySelector?.configure(list: arr.sorted(), itemType: .city)
-                cityTextField.isEnabled = true
+            if let arr = states.first(where: { $0.name == item.capitalized })?.cities {
                 cityTextField.text = ""
                 selectedCity = nil
+                cityInputView.isHidden = false
+                citySelector?.configure(list: arr.sorted(), itemType: .city)
             } else {
                 fatalError()
             }
@@ -117,6 +135,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
             cityTextField.text = item
             cityContainer.isHidden = true
             selectedCity = item
+            searchButton.isEnabled = true
         default:
             print("Forgot to set ItemType in CityStateSearchVC")
         }
@@ -143,6 +162,7 @@ class LocationPickerTVC: UITableViewController {
         self.list = list
         type = itemType
         tableView.reloadData()
+        view.layoutIfNeeded()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

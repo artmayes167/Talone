@@ -13,7 +13,7 @@ class Need {
     
 }
 
-class AddANeedVC: UIViewController, NeedSelectionDelegate, CityStateSelectionDelegate {
+class AddANeedVC: UIViewController, NeedSelectionDelegate {
     
     @IBOutlet weak var needTextField: UITextField!
     @IBOutlet weak var needsPopOver: UIView!
@@ -48,22 +48,25 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate, CityStateSelectionDel
         dismissTapGesture.isEnabled = false
     }
     
-    // MARK: - CityStateSelectionDelegate
-    func selected(state: String, city: String) {
-        whereTextField.text = state.capitalized + ", " + city.capitalized
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "toSearchLocation":
-            let locVC = segue.destination as! CityStateSearchVC
-            locVC.delegate = self
         case "needsPO":
             let needsTVC = segue.destination as! NeedsTVC
             needsTVC.delegate = self
         default:
             print("Different segue")
         }
+    }
+    
+   @IBAction func unwindToAddANeed( _ segue: UIStoryboardSegue) {
+    if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
+            whereTextField.text = city.capitalized + ", " + state.capitalized
+            saveFor(s.saveType)
+        }
+    }
+    
+    func saveFor(_ type: SaveType) {
+        // store values
     }
 }
 
