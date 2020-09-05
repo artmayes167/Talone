@@ -13,11 +13,18 @@ class Need {
     
 }
 
+@IBDesignable public class DesignableTextView: UITextView {}
+
 class AddANeedVC: UIViewController, NeedSelectionDelegate {
     
-    @IBOutlet weak var needTextField: UITextField!
-    @IBOutlet weak var needsPopOver: UIView!
+    @IBOutlet weak var categoryTextField: UITextField!
+    @IBOutlet weak var categoriesPopOver: UIView!
     @IBOutlet weak var whereTextField: UITextField!
+    
+    @IBOutlet weak var buttonsAndDescriptionView: UIView!
+    
+    @IBOutlet weak var descriptionTextView: DesignableTextView!
+    
     var currentNeed = Need()
     
     
@@ -26,24 +33,33 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dismissTapGesture.isEnabled = false
+        //dismissTapGesture.isEnabled = false
         
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+           super.viewDidAppear(animated)
+           view.resignFirstResponder()
+       }
+    
     @IBAction func dismissOnTap(_ sender: Any) {
-        if needsPopOver.isHidden == false {
-            needsPopOver.isHidden = true
-            dismissTapGesture.isEnabled = false
+        if categoriesPopOver.isHidden == false {
+            categoriesPopOver.isHidden = true
+            //dismissTapGesture.isEnabled = false
         }
+        view.endEditing(true)
     }
     
     
+    @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
+        
+    }
     
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
-        needsPopOver.isHidden = true
-        needTextField.text = need.rawValue.capitalized
+        categoriesPopOver.isHidden = true
+        categoryTextField.text = need.rawValue.capitalized
         currentNeed.type = need
         dismissTapGesture.isEnabled = false
     }
@@ -72,8 +88,8 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
 
 extension AddANeedVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == needTextField {
-            needsPopOver.isHidden = false
+        if textField == categoryTextField {
+            categoriesPopOver.isHidden = false
             textField.resignFirstResponder()
             dismissTapGesture.isEnabled = true
         }
@@ -100,5 +116,12 @@ class NeedsTVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = needs[indexPath.row].rawValue.capitalized
         return cell
+    }
+}
+
+extension AddANeedVC: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        dismissTapGesture.isEnabled = true
     }
 }
