@@ -16,8 +16,10 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders.
-    
+    var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
+    var needsWriter = NeedsDbWriter()       // TODO: decide better place for data holders/fetchers/writers
+    var needsFetcher = NeedsDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // Notify FB application delegate
@@ -25,25 +27,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    application,
                    didFinishLaunchingWithOptions: launchOptions
                )
-        
-        if (UserDefaults.standard.string(forKey: "uuid") == nil) {
+
+        if UserDefaults.standard.string(forKey: "uuid") == nil {
             let uuid = UUID().uuidString
             UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
         }
-        
+
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-        
+
         // Fetch latest news for this city.
-        newsFetcher.fetchNews() {
-            newsItems in
+        newsFetcher.fetchNews { newsItems in
             print(newsItems)
+        }
+        // Create a mock need
+
+        // TODO: REMOVE BELOW LINE WHEN INTEGRATING WITH UI logic
+// NEEDS WRITER DOESN'T WORK YET; APPROPRIATE AUTHENTICATION IS MISSING.
+//        let locData = NeedsDbWriter.LocationInfo(city: "Chicago", state: "IL", country: "USA", address: nil, geoLocation: nil)
+//        let need = NeedsDbWriter.NeedItem(category: "Food", description: "any food, preferably low cholestorol", validUntil: 4124045393, owner: "peter.parker@gmail.com", locationData: locData)
+//
+//        needsWriter.addNeed(need, completion: { error in
+//            print("Need added!")
+//        })
+
+        // Fetch latest needs (DEMO)
+        needsFetcher.fetchNeeds("Chicago", "IL", "USA") { needs in
+            print(needs)
         }
 
         return true
     }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
 
             ApplicationDelegate.shared.application(
                 app,
@@ -69,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
 //        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 //    }
-    
+
     func authenticateUser(completion: @escaping (Bool, Error?) -> Void) {
         let context = LAContext()
         var error: NSError?
@@ -82,10 +98,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         } else {
-            
+
         }
     }
-    
+
 //    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 //        guard let url = URLContexts.first?.url else {
 //            return
@@ -112,7 +128,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 //            if let error = error as NSError? {
 //                // Replace this implementation with code to handle the error appropriately.
-//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                // fatalError() causes the application to generate a crash log and terminate.
+                  // You should not use this function in a shipping application, although it may be useful during development.
 //
 //                /*
 //                 Typical reasons for an error here include:
@@ -145,4 +162,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
 
 }
-
