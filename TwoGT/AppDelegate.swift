@@ -40,20 +40,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         newsFetcher.fetchNews { newsItems in
             print(newsItems)
         }
-        // Create a mock need
-
-        // TODO: REMOVE BELOW LINE WHEN INTEGRATING WITH UI logic
-// NEEDS WRITER DOESN'T WORK YET; APPROPRIATE AUTHENTICATION IS MISSING.
-//        let locData = NeedsDbWriter.LocationInfo(city: "Chicago", state: "IL", country: "USA", address: nil, geoLocation: nil)
-//        let need = NeedsDbWriter.NeedItem(category: "Food", description: "any food, preferably low cholestorol", validUntil: 4124045393, owner: "peter.parker@gmail.com", locationData: locData)
-//
-//        needsWriter.addNeed(need, completion: { error in
-//            print("Need added!")
-//        })
 
         // Fetch latest needs (DEMO)
         needsFetcher.fetchNeeds("Chicago", "IL", "USA") { needs in
             print(needs)
+        }
+        
+        // SignIn Anonymously
+        Auth.auth().signInAnonymously() { (authResult, error) in
+            guard let user = authResult?.user else { return }
+            let isAnonymous = user.isAnonymous  // true
+            let uid = user.uid
+            print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
+            
+            // DEMO ONLY
+            // Create a mock need - this works; use cautiously.
+/*
+            let locData = NeedsDbWriter.LocationInfo(city: "Chicago", state: "IL", country: "USA", address: nil, geoLocation: nil)
+            let need = NeedsDbWriter.NeedItem(category: "Food", description: "any food, preferably low cholestorol", validUntil: 4124045393, owner: "peter.parker@gmail.com", locationInfo: locData)
+    
+            self.needsWriter.addNeed(need, completion: { error in
+                if error == nil {
+                    print("Need added!")
+                } else {
+                    print("Error writing a need: \(error!)")
+                }
+            })*/
         }
 
         return true
