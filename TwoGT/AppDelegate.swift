@@ -10,12 +10,14 @@ import UIKit
 import CoreData
 import LocalAuthentication
 import FBSDKCoreKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders.
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // Notify FB application delegate
@@ -28,6 +30,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let uuid = UUID().uuidString
             UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
         }
+        
+        // Use Firebase library to configure APIs
+        FirebaseApp.configure()
+        
+        // Fetch latest news for this city.
+        newsFetcher.fetchNews() {
+            newsItems in
+            print(newsItems)
+        }
+
         return true
     }
     
