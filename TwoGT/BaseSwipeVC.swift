@@ -1,14 +1,14 @@
 //
-//  NeedsVC.swift
+//  BaseSwipeVC.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 8/9/20.
+//  Created by Arthur Mayes on 9/8/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 
 import UIKit
 
-class NeedsVC: UIViewController {
+class BaseSwipeVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,4 +27,13 @@ class NeedsVC: UIViewController {
     }
     */
 
+    @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) {
+    
+    }
+}
+
+class CardsBaseSwipeVC: UIViewController {
+    @IBAction func unwindToCardMainFlow( _ segue: UIStoryboardSegue) {
+    
+    }
 }

@@ -15,7 +15,7 @@ class Need {
 
 @IBDesignable public class DesignableTextView: UITextView {}
 
-class AddANeedVC: UIViewController, NeedSelectionDelegate {
+class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoriesPopOver: UIView!
@@ -25,11 +25,11 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
     
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     
+    @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
+    
     var currentNeed = Need()
     
-    
-    
-    @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
+    // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +40,10 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
            super.viewDidAppear(animated)
-           view.resignFirstResponder()
+           view.endEditing(true)
        }
     
+     // MARK: - Actions
     @IBAction func dismissOnTap(_ sender: Any) {
         if categoriesPopOver.isHidden == false {
             categoriesPopOver.isHidden = true
@@ -62,8 +63,10 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
         categoryTextField.text = need.rawValue.capitalized
         currentNeed.type = need
         dismissTapGesture.isEnabled = false
+        view.layoutIfNeeded()
     }
     
+     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "needsPO":
@@ -74,7 +77,7 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
         }
     }
     
-   @IBAction func unwindToAddANeed( _ segue: UIStoryboardSegue) {
+   @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
     if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
             whereTextField.text = city.capitalized + ", " + state.capitalized
             saveFor(s.saveType)
@@ -86,12 +89,13 @@ class AddANeedVC: UIViewController, NeedSelectionDelegate {
     }
 }
 
-extension AddANeedVC: UITextFieldDelegate {
+extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryTextField {
             categoriesPopOver.isHidden = false
             textField.resignFirstResponder()
             dismissTapGesture.isEnabled = true
+            view.layoutIfNeeded()
         }
     }
 }
@@ -119,7 +123,7 @@ class NeedsTVC: UITableViewController {
     }
 }
 
-extension AddANeedVC: UITextViewDelegate {
+extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         dismissTapGesture.isEnabled = true
