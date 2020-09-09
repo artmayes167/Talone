@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
-    var needsWriter = NeedsDbWriter()       // TODO: decide better place for data holders/fetchers/writers
+    // var needsWriter = NeedsDbWriter()       // TODO: decide better place for data holders/fetchers/writers
     var needsFetcher = NeedsDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
     var havesFetcher = HavesDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
 

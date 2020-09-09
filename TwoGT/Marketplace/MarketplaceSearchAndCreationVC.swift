@@ -7,10 +7,10 @@
 //
 
 import UIKit
+import Firebase
 
 class Need {
     var type: NeedType?
-    
 }
 
 @IBDesignable public class DesignableTextView: UITextView {}
@@ -20,14 +20,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoriesPopOver: UIView!
     @IBOutlet weak var whereTextField: UITextField!
-    
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
-    
     @IBOutlet weak var descriptionTextView: DesignableTextView!
-    
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     
     var currentNeed = Need()
+    var currentCity = ""
+    var currentState = ""
+    var currentCountry = "USA"
     
     // MARK: - View Life Cycle
     
@@ -52,10 +52,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         view.endEditing(true)
     }
     
-    
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
         
     }
+    
+    @IBAction func createNeedTouched(_ sender: Any) {
+        storeNeedToDatabase()
+    }
+
     
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
@@ -81,11 +85,35 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
             whereTextField.text = city.capitalized + ", " + state.capitalized
             saveFor(s.saveType)
+            currentCity = city.capitalized
+            currentState = state.capitalized
         }
     }
     
     func saveFor(_ type: SaveType) {
         // store values
+    }
+    
+    private func storeNeedToDatabase() {
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+
+        let locData = NeedsDbWriter.LocationInfo(city: currentCity, state: currentState, country: currentCountry, address: nil, geoLocation: nil)
+        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
+                                          description: "",
+                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          owner: user.uid,
+                                          locationInfo: locData)
+        
+        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
+            
+        needsWriter.addNeed(need, completion: { error in
+            if error == nil {
+                print("Need added!")
+            } else {
+                print("Error writing a need: \(error!)")
+            }
+        })
     }
 }
 
