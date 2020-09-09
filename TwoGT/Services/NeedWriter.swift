@@ -10,7 +10,7 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class NeedsBase {
+class FirebaseGeneric {
     struct AddressInfo: Codable {
         var streetAddress1: String
         var streetAddress2: String
@@ -32,6 +32,9 @@ class NeedsBase {
         var address: AddressInfo?
         var geoLocation: GeographicCoordinates?
     }
+}
+
+class NeedsBase: FirebaseGeneric {
 
     struct NeedItem: Codable {
         var category: String

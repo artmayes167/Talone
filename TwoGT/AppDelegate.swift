@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
     var needsWriter = NeedsDbWriter()       // TODO: decide better place for data holders/fetchers/writers
     var needsFetcher = NeedsDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
+    var havesFetcher = HavesDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -45,7 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         needsFetcher.fetchNeeds("Chicago", "IL", "USA") { needs in
             print(needs)
         }
-        
+
+        // Fetch haves matching needs
+        havesFetcher.fetchHaves(matching: ["Food", "Shelter"], "Chicago", "IL", "USA", completion: { (haves) in
+            print(haves)
+        })
+
         // SignIn Anonymously
         Auth.auth().signInAnonymously() { (authResult, error) in
             guard let user = authResult?.user else { return }
