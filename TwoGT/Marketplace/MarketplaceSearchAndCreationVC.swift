@@ -16,33 +16,45 @@ class Need {
 @IBDesignable public class DesignableTextView: UITextView {}
 
 class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
-    
+
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoriesPopOver: UIView!
+    @IBOutlet weak var whereTextLabel: UILabel!
     @IBOutlet weak var whereTextField: UITextField!
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
+    @IBOutlet weak var descriptionTextLabel: UILabel!
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
-    
+    @IBOutlet weak var createNewNeedHaveButton: UIButton!
+
     var currentNeed = Need()
     var currentCity: String?
     var currentState: String?
     var currentCountry = "USA"
-    
+    var currentNeedHaveSelectedSegmentIndex = 0
+
     // MARK: - View Life Cycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //dismissTapGesture.isEnabled = false
-        
+
+        currentCity = UserDefaults.standard.string(forKey: "currentCity")
+        currentState = UserDefaults.standard.string(forKey: "currentState")
+        currentCountry = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
+
+        if let c = currentCity, let s = currentState {    // TODO: Countries other than USA, Mexico may not have states
+            whereTextField.text = c.capitalized + ", " + s.capitalized
+        }
+
         // Do any additional setup after loading the view.
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
            super.viewDidAppear(animated)
            view.endEditing(true)
        }
-    
+
      // MARK: - Actions
     @IBAction func dismissOnTap(_ sender: Any) {
         if categoriesPopOver.isHidden == false {
@@ -51,16 +63,30 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
         view.endEditing(true)
     }
-    
+
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
-        
-    }
-    
-    @IBAction func createNeedTouched(_ sender: Any) {
-        storeNeedToDatabase()
+        currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
+        switch sender.selectedSegmentIndex {
+        case 1:
+            whereTextLabel.text = "Where Do You Have It?"
+            createNewNeedHaveButton.titleLabel?.text = "Create A New Have"
+            descriptionTextLabel.text = "Please enter a detailed description"
+        default:
+            whereTextLabel.text = "Where Do You Need It?"
+            createNewNeedHaveButton.titleLabel?.text = "Create A New Need"
+            descriptionTextLabel.text = "Or enter a description and create"
+        }
     }
 
-    
+    @IBAction func createNeedHaveTouched(_ sender: Any) {
+        switch currentNeedHaveSelectedSegmentIndex {
+        case 1:
+            storeHaveToDatabase()
+        default:
+            storeNeedToDatabase()
+        }
+    }
+
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
         categoriesPopOver.isHidden = true
@@ -69,7 +95,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
     }
-    
+
      // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -87,7 +113,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             print("Different segue")
         }
     }
-    
+
     @IBAction func seeMatchingNeeds(_ sender: Any) {
         guard let c = currentCity, let s = currentState else {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
@@ -102,21 +128,22 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
     }
-    
-    
+
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
     if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
             whereTextField.text = city.capitalized + ", " + state.capitalized
             saveFor(s.saveType)
             currentCity = city.capitalized
             currentState = state.capitalized
+            UserDefaults.standard.setValue(currentCity, forKeyPath: "currentCity")
+            UserDefaults.standard.setValue(currentState, forKeyPath: "currentState")
         }
     }
-    
+
     func saveFor(_ type: SaveType) {
         // store values
     }
-    
+
     private func storeNeedToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
@@ -124,15 +151,16 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             showOkayAlert(title: "", message: "Please complete all fields before trying to create a Need", handler: nil)
             return
         }
+
         let locData = NeedsDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
-        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
+        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue.capitalized ?? "miscellany",
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: user.uid,
                                           locationInfo: locData)
-        
+
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-            
+
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
                 print("Need added!")
@@ -141,6 +169,33 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         })
     }
+
+    private func storeHaveToDatabase() {
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+        guard let c = currentCity, let s = currentState else {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+            return
+        }
+
+        let locData = HavesDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
+        let have = HavesDbWriter.HaveItem(category: currentNeed.type?.rawValue.capitalized ?? "miscellany",
+                                          description: "",
+                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          owner: user.uid,
+                                          locationInfo: locData)
+
+        let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        havesWriter.addHave(have, completion: { error in
+            if error == nil {
+                print("Have added!")
+            } else {
+                print("Error writing a need: \(error!)")
+            }
+        })
+    }
+
 }
 
 extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
@@ -159,17 +214,17 @@ protocol NeedSelectionDelegate {
 }
 
 class NeedsTVC: UITableViewController {
-    var delegate: NeedSelectionDelegate?
+    weak var delegate: NeedSelectionDelegate?
     let needs = NeedType.allCases
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.didSelect(needs[indexPath.row])
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return needs.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = needs[indexPath.row].rawValue.capitalized
@@ -178,7 +233,7 @@ class NeedsTVC: UITableViewController {
 }
 
 extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
-    
+
     func textViewDidBeginEditing(_ textView: UITextView) {
         dismissTapGesture.isEnabled = true
     }

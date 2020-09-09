@@ -56,12 +56,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
 
         // SignIn Anonymously
-        Auth.auth().signInAnonymously() { (authResult, error) in
+        Auth.auth().signInAnonymously { (authResult, _) in
             guard let user = authResult?.user else { return }
             let isAnonymous = user.isAnonymous  // true
             let uid = user.uid
             print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
-            
+
             // DEMO ONLY
             // Create a mock need - this works; use cautiously.
 /*
