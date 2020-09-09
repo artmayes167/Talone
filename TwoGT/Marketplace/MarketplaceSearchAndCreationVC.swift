@@ -25,8 +25,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     
     var currentNeed = Need()
-    var currentCity = ""
-    var currentState = ""
+    var currentCity: String?
+    var currentState: String?
     var currentCountry = "USA"
     
     // MARK: - View Life Cycle
@@ -76,10 +76,33 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         case "needsPO":
             let needsTVC = segue.destination as! NeedsTVC
             needsTVC.delegate = self
+        case "toCollection":
+            guard let s = sender as? [NeedsBase.NeedItem] else { fatalError() }
+            guard let c = currentCity, let st = currentState else { fatalError() }
+            let vc = segue.destination as! NeedsSearchDisplayVC
+            vc.needs = s
+            let (category, city, state): (String, String, String) = (currentNeed.type!.rawValue, c, st)
+            vc.uiTuple = (category, city, state)
         default:
             print("Different segue")
         }
     }
+    
+    @IBAction func seeMatchingNeeds(_ sender: Any) {
+        guard let c = currentCity, let s = currentState else {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+            return
+        }
+        NeedsDbFetcher().fetchNeeds(city: c, state: s, currentCountry) { array in
+            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
+            if newArray.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                self.performSegue(withIdentifier: "toCollection", sender: newArray)
+            }
+        }
+    }
+    
     
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
     if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
@@ -97,8 +120,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeNeedToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-
-        let locData = NeedsDbWriter.LocationInfo(city: currentCity, state: currentState, country: currentCountry, address: nil, geoLocation: nil)
+        guard let c = currentCity, let s = currentState else {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to create a Need", handler: nil)
+            return
+        }
+        let locData = NeedsDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
         let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days

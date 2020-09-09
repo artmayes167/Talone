@@ -22,7 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var havesFetcher = HavesDbFetcher()     // TODO: decide better place for data holders/fetchers/writers
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let def = UserDefaults.standard
+        if !def.bool(forKey: "vigilant") {
+            def.set(false, forKey: "vigilant")
+        }
         // Notify FB application delegate
         ApplicationDelegate.shared.application(
                    application,
@@ -43,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         // Fetch latest needs (DEMO)
-        needsFetcher.fetchNeeds("Chicago", "IL", "USA") { needs in
+        needsFetcher.fetchNeeds(city: "Chicago", state: "IL", "USA") { needs in
             print(needs)
         }
 

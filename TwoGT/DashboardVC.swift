@@ -10,10 +10,16 @@ import UIKit
 
 class DashboardVC: UIViewController {
 
+    @IBOutlet weak var vigilantSwitch: UISwitch!
+    @IBOutlet weak var reachabilityStackView: UIStackView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let def = UserDefaults.standard
+        vigilantSwitch.isOn = def.bool(forKey: "vigilant")
+        switchedBetweenNormalAndVigilant(vigilantSwitch)
     }
     
 
@@ -32,6 +38,19 @@ class DashboardVC: UIViewController {
     @IBAction func showVigilanceInfo() {
         showOkayAlert(title: "Vigilance", message: str, handler: nil)
     }
+    
+    @IBAction func switchedBetweenNormalAndVigilant(_ sender: UISwitch) {
+        let def = UserDefaults.standard
+        if sender.isOn {
+            def.set(true, forKey: "vigilant")
+            reachabilityStackView.isHidden = false
+        } else {
+            def.set(false, forKey: "vigilant")
+            reachabilityStackView.isHidden = true
+        }
+        view.layoutIfNeeded()
+    }
+    
     
     
     var needsWriter = NeedsDbWriter()

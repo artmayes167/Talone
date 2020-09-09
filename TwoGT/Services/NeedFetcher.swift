@@ -11,12 +11,12 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class NeedsDbFetcher: NeedsBase {
-    func fetchNeeds(_ city: String, _ state: String, _ country: String, completion: @escaping ([NeedItem]) -> Void) {
+    func fetchNeeds(city: String, state: String, _ country: String?, completion: @escaping ([NeedItem]) -> Void) {
         let db = Firestore.firestore()
 
         db.collection("needs").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
-            .whereField("locationInfo.country", isEqualTo: country)
+            .whereField("locationInfo.country", isEqualTo: country ?? "USA")
             .getDocuments { (snapshot, error) in
             if let error = error {
                 print(error)
