@@ -214,7 +214,7 @@ protocol NeedSelectionDelegate {
 }
 
 class NeedsTVC: UITableViewController {
-    weak var delegate: NeedSelectionDelegate?
+    var delegate: NeedSelectionDelegate?
     let needs = NeedType.allCases
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
