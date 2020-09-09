@@ -43,3 +43,4 @@ extension UIView {
 
 @IBDesignable class DesignableImage: UIImageView {}
 @IBDesignable class DesignableView: UIView {}
+@IBDesignable class DesignableButton: UIButton {}
