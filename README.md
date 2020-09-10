@@ -1,5 +1,7 @@
 # Talone
 
+< Note: The file structure is in flux, because I am working on defining an organic flow for engineers.  If that doesn't make sense to you, that's fine.>
+
 The purpose of this app is to enable people in communities who have things, and people who need things, to connect anonymously
 The backend will know users by their email (used to register), a unique handle they create, and a unique ID created by the backend
 
