@@ -88,7 +88,7 @@ class DashboardVC: UIViewController {
             for city in c {
                 let locData = NeedsDbWriter.LocationInfo(city: city, state: s.name, country: "USA", address: nil, geoLocation: nil)
                 let cat = NeedType.allCases[Int(arc4random())%5].rawValue.capitalized
-                let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(c), \(s.name), \(cat)"), validUntil: 4124045393, owner: "artmayes167@gmail.com", locationInfo: locData)
+                let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(c), \(s.name), \(cat)"), validUntil: 4124045393, owner: "artmayes167", createdBy: "artmayes167@gmail.com", locationInfo: locData)
                 self.needsWriter.addNeed(need, completion: { error in
                     if error == nil {
                         print("Need added!")

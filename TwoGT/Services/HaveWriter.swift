@@ -14,10 +14,13 @@ import FirebaseFirestoreSwift
 class HavesBase: FirebaseGeneric {
     
     struct HaveItem: Codable {
+        @DocumentID var id: String? = UUID().uuidString
         var category: String
         var description: String?
         var validUntil: Int?
         var owner: String
+        var createdBy: String
+        @ServerTimestamp var createdAt: Timestamp?
         var locationInfo: LocationInfo
     }
 }

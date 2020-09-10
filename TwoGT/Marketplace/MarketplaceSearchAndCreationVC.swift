@@ -192,7 +192,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
-                                          owner: user.uid,
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
                                           locationInfo: locData)
 
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
@@ -218,7 +219,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
-                                          owner: user.uid,
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
                                           locationInfo: locData)
 
         let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
