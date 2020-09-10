@@ -10,7 +10,8 @@ import UIKit
 import AlamofireImage
 
 class NeedsSearchDisplayVC: UIViewController {
-    let spacer = CGFloat(12 * 2)
+    let spacer = CGFloat(1)
+    let numberOfItemsInRow = CGFloat(1)
     @IBOutlet weak var collectionView: UICollectionView!
     var uiTuple: (String, String, String)?
     var needs: [NeedsBase.NeedItem] = [] {
@@ -37,15 +38,16 @@ class NeedsSearchDisplayVC: UIViewController {
         cityStateLabel.text = city + ", " + state
     }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "viewNeed" {
+            
+        }
     }
-    */
+    
     
     
 
@@ -74,7 +76,7 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
 extension NeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
-        width = (width - spacer)/3
+        width = (width - spacer)/numberOfItemsInRow
         return CGSize(width: width, height: 128.0)
     }
 }
@@ -89,6 +91,6 @@ class PurposeCell: UICollectionViewCell {
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: need.category.lowercased())!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
-        titleLabel.text = need.owner // different identifier needed?
+        titleLabel.text = need.description // different identifier needed?
     }
 }
