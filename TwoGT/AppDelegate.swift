@@ -61,20 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let isAnonymous = user.isAnonymous  // true
             let uid = user.uid
             print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
-
-            // DEMO ONLY
-            // Create a mock need - this works; use cautiously.
-/*
-            let locData = NeedsDbWriter.LocationInfo(city: "Chicago", state: "IL", country: "USA", address: nil, geoLocation: nil)
-            let need = NeedsDbWriter.NeedItem(category: "Food", description: "any food, preferably low cholestorol", validUntil: 4124045393, owner: "peter.parker@gmail.com", locationInfo: locData)
-    
-            self.needsWriter.addNeed(need, completion: { error in
-                if error == nil {
-                    print("Need added!")
-                } else {
-                    print("Error writing a need: \(error!)")
-                }
-            })*/
         }
 
         return true

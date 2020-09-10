@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class FirebaseGeneric {
+
     struct AddressInfo: Codable {
         var streetAddress1: String
         var streetAddress2: String
@@ -36,11 +37,14 @@ class FirebaseGeneric {
 
 class NeedsBase: FirebaseGeneric {
 
-    struct NeedItem: Codable {
+    struct NeedItem: Identifiable, Codable {
+        @DocumentID var id: String? = UUID().uuidString
         var category: String
         var description: String?
         var validUntil: Int
         var owner: String
+        var createdBy: String
+        @ServerTimestamp var createdAt: Timestamp?
         var locationInfo: LocationInfo
     }
 }
