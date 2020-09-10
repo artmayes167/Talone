@@ -39,17 +39,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         //dismissTapGesture.isEnabled = false
-        
+        setCurrents()
 
-        if let c = currentCity, let s = currentState {    // TODO: Countries other than USA, Mexico may not have states
-            whereTextField.text = c.capitalized + ", " + s.capitalized
-            
-            // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
-        }
-
-        // Do any additional setup after loading the view.
+        // Notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -58,28 +52,27 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
        }
     
      // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification:NSNotification){
-
+    @objc func keyboardWillShow(notification: NSNotification){
         let userInfo = notification.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
 
-        var contentInset:UIEdgeInsets = self.scrollView.contentInset
+        var contentInset: UIEdgeInsets = self.scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height + 20
         scrollView.contentInset = contentInset
     }
 
-    @objc func keyboardWillHide(notification:NSNotification){
-
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+    @objc func keyboardWillHide(notification: NSNotification){
+        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
     
+     // MARK: - Utility Functions
     func setCurrents() {
         currentCity = UserDefaults.standard.string(forKey: "currentCity")
         currentState = UserDefaults.standard.string(forKey: "currentState")
         if let c = currentCity, let s = currentState {
-            whereTextField.text = c + ", " + s
+            whereTextField.text = c.capitalized + ", " + s.capitalized
         }
         currentCountry = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
     }
@@ -115,6 +108,21 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             storeNeedToDatabase()
         }
     }
+    
+    @IBAction func seeMatchingNeeds(_ sender: Any) {
+           guard let c = currentCity, let s = currentState else {
+               showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+               return
+           }
+           NeedsDbFetcher().fetchNeeds(city: c, state: s, currentCountry) { array in
+               let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
+               if newArray.isEmpty {
+                   self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+               } else {
+                   self.performSegue(withIdentifier: "toCollection", sender: newArray)
+               }
+           }
+       }
 
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
@@ -143,21 +151,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
-    @IBAction func seeMatchingNeeds(_ sender: Any) {
-        guard let c = currentCity, let s = currentState else {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
-            return
-        }
-        NeedsDbFetcher().fetchNeeds(city: c, state: s, currentCountry) { array in
-            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
-            if newArray.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
-            } else {
-                self.performSegue(withIdentifier: "toCollection", sender: newArray)
-            }
-        }
-    }
-
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
     if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
             whereTextField.text = city.capitalized + ", " + state.capitalized
@@ -169,6 +162,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
+     // MARK: - Save Functions
     func saveFor(_ type: SaveType) {
         // store values
     }

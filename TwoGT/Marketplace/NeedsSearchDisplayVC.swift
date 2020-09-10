@@ -31,7 +31,7 @@ class NeedsSearchDisplayVC: UIViewController {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
-        // Do any additional setup after loading the view.
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +40,6 @@ class NeedsSearchDisplayVC: UIViewController {
         categoryLabel.text = category
         cityStateLabel.text = city + ", " + state
     }
-
     
     // MARK: - Navigation
 
@@ -50,10 +49,6 @@ class NeedsSearchDisplayVC: UIViewController {
             
         }
     }
-    
-    
-    
-
 }
 
 extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
