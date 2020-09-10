@@ -11,6 +11,11 @@ import Firebase
 
 class Need {
     var type: NeedType?
+    var city = ""
+    var state = ""
+    var country = "USA"
+    var description = ""
+    var personalNotes = ""
 }
 
 @IBDesignable public class DesignableTextView: UITextView {}
@@ -29,9 +34,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     
     var currentNeed = Need()
-    var currentCity: String?
-    var currentState: String?
-    var currentCountry = "USA"
     var currentNeedHaveSelectedSegmentIndex = 0
 
     // MARK: - View Life Cycle
@@ -69,12 +71,12 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     
      // MARK: - Utility Functions
     func setCurrents() {
-        currentCity = UserDefaults.standard.string(forKey: "currentCity")
-        currentState = UserDefaults.standard.string(forKey: "currentState")
-        if let c = currentCity, let s = currentState {
-            whereTextField.text = c.capitalized + ", " + s.capitalized
+        currentNeed.city = UserDefaults.standard.string(forKey: "currentCity") ?? ""
+        currentNeed.state = UserDefaults.standard.string(forKey: "currentState") ?? ""
+        if !currentNeed.city.isEmpty, !currentNeed.state.isEmpty {
+            whereTextField.text = currentNeed.city.capitalized + ", " + currentNeed.state.capitalized
         }
-        currentCountry = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
+        //currentNeed.country = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
     }
 
      // MARK: - Actions
@@ -110,19 +112,19 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
     
     @IBAction func seeMatchingNeeds(_ sender: Any) {
-           guard let c = currentCity, let s = currentState else {
+        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
                showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
                return
            }
-           NeedsDbFetcher().fetchNeeds(city: c, state: s, currentCountry) { array in
-               let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
-               if newArray.isEmpty {
-                   self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
-               } else {
-                   self.performSegue(withIdentifier: "toCollection", sender: newArray)
-               }
-           }
-       }
+        NeedsDbFetcher().fetchNeeds(city: currentNeed.city, state: currentNeed.state, currentNeed.country) { array in
+            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
+            if newArray.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                self.performSegue(withIdentifier: "toCollection", sender: newArray)
+            }
+        }
+    }
 
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
@@ -141,24 +143,23 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             needsTVC.delegate = self
         case "toCollection":
             guard let s = sender as? [NeedsBase.NeedItem] else { fatalError() }
-            guard let c = currentCity, let st = currentState else { fatalError() }
+            if currentNeed.city.isEmpty || currentNeed.state.isEmpty { fatalError() }
             let vc = segue.destination as! NeedsSearchDisplayVC
             vc.needs = s
-            let (category, city, state): (String, String, String) = (currentNeed.type!.rawValue, c, st)
-            vc.uiTuple = (category, city, state)
+            vc.currentUserNeed = currentNeed
         default:
             print("Different segue")
         }
     }
 
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
-    if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
+        if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
             whereTextField.text = city.capitalized + ", " + state.capitalized
             saveFor(s.saveType)
-            currentCity = city.capitalized
-            currentState = state.capitalized
-            UserDefaults.standard.setValue(currentCity, forKeyPath: "currentCity")
-            UserDefaults.standard.setValue(currentState, forKeyPath: "currentState")
+            currentNeed.city = city
+            currentNeed.state = state
+            UserDefaults.standard.setValue(currentNeed.city, forKeyPath: "currentCity")
+            UserDefaults.standard.setValue(currentNeed.state, forKeyPath: "currentState")
         }
     }
 
@@ -170,13 +171,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeNeedToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        guard let c = currentCity, let s = currentState else {
+        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
             showOkayAlert(title: "", message: "Please complete all fields before trying to create a Need", handler: nil)
             return
         }
 
-        let locData = NeedsDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
-        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue.capitalized ?? "miscellany",
+        let locData = NeedsDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
+        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: user.uid,
@@ -196,12 +197,12 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeHaveToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        guard let c = currentCity, let s = currentState, let n = currentNeed.type else {
+        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return
         }
-
-        let locData = HavesDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
+        guard let n = currentNeed.type else { fatalError() }
+        let locData = HavesDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
         let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days

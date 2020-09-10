@@ -9,8 +9,23 @@
 import UIKit
 
 class ViewIndividualNeedVC: UIViewController {
+    var need: Need? {
+        didSet {
+            if isViewLoaded {
+                populateUI(with: need)
+            }
+        }
+    }
+    
+    @IBOutlet weak var headerTitleLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    @IBOutlet weak var needTypeLabel: UILabel!
+    @IBOutlet weak var locationLabel: UILabel!
+    
+    @IBOutlet weak var needDescriptionTextView: UITextView!
+    @IBOutlet weak var personalNotesTextView: UITextView!
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -20,6 +35,18 @@ class ViewIndividualNeedVC: UIViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        populateUI(with: need)
+        
+    }
+    
+    func populateUI(with need: Need?) {
+        guard let n = need else { return }
+        needTypeLabel.text = n.type?.rawValue.capitalized
+        locationLabel.text = n.city + ", " + n.state
     }
     
     // MARK: - Keyboard Notifications
@@ -38,7 +65,17 @@ class ViewIndividualNeedVC: UIViewController {
         scrollView.contentInset = contentInset
     }
     
-
+     // MARK: - Actions
+    
+    @IBAction func showLinkedNeeds(_ sender: Any) {
+    }
+    
+    @IBAction func showLinkedHaves(_ sender: Any) {
+    }
+    
+    @IBAction func joinThisNeed(_ sender: Any) {
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -49,4 +86,9 @@ class ViewIndividualNeedVC: UIViewController {
     }
     */
 
+}
+
+extension ViewIndividualNeedVC: UITextViewDelegate {
+    
+    
 }

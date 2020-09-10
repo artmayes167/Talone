@@ -623,6 +623,9 @@
                                                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="Kl3-MH-hP1" id="LNK-zX-1Pb"/>
+                                                        </connections>
                                                     </textView>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -644,6 +647,9 @@
                                                             <constraint firstAttribute="height" constant="44" id="0JE-9m-Keo"/>
                                                         </constraints>
                                                         <state key="normal" title="Linked Needs"/>
+                                                        <connections>
+                                                            <action selector="showLinkedNeeds:" destination="Kl3-MH-hP1" eventType="touchUpInside" id="WPw-3y-HwJ"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0p-xk-aYT" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="201" y="0.0" width="173" height="44"/>
@@ -651,6 +657,9 @@
                                                             <constraint firstAttribute="height" constant="44" id="j0e-Qg-IXO"/>
                                                         </constraints>
                                                         <state key="normal" title="Linked Haves"/>
+                                                        <connections>
+                                                            <action selector="showLinkedHaves:" destination="Kl3-MH-hP1" eventType="touchUpInside" id="GbB-V1-jYj"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
@@ -663,6 +672,9 @@
                                                     <constraint firstAttribute="height" constant="44" id="Fjp-4Y-Xyz"/>
                                                 </constraints>
                                                 <state key="normal" title="Join This Need"/>
+                                                <connections>
+                                                    <action selector="joinThisNeed:" destination="Kl3-MH-hP1" eventType="touchUpInside" id="Jnp-7r-de8"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -700,6 +712,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="7Yb-hK-CYR"/>
                     <connections>
+                        <outlet property="headerTitleLabel" destination="9pq-Hb-FwO" id="2Aa-oU-dDd"/>
+                        <outlet property="locationLabel" destination="mRi-rN-00i" id="0w4-1Y-ziK"/>
+                        <outlet property="needDescriptionTextView" destination="5lP-QK-Dx2" id="xSV-tZ-2FQ"/>
+                        <outlet property="needTypeLabel" destination="uPB-1A-wa3" id="vW4-XN-lgT"/>
+                        <outlet property="personalNotesTextView" destination="evI-gW-5hB" id="ygT-NW-p0v"/>
                         <outlet property="scrollView" destination="Xod-WK-IR3" id="npY-dK-K2r"/>
                     </connections>
                 </viewController>

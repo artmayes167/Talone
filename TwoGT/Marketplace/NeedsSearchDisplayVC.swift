@@ -14,7 +14,7 @@ class NeedsSearchDisplayVC: UIViewController {
     let numberOfItemsInRow = CGFloat(1)
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var uiTuple: (String, String, String)?
+    var currentUserNeed: Need?
     var needs: [NeedsBase.NeedItem] = [] {
         didSet {
             if isViewLoaded {
@@ -36,9 +36,13 @@ class NeedsSearchDisplayVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let (category, city, state) = uiTuple else { return }
-        categoryLabel.text = category
-        cityStateLabel.text = city + ", " + state
+        populateUI()
+    }
+    
+    func populateUI() {
+        guard let n = currentUserNeed else { fatalError() }
+        categoryLabel.text = n.type!.rawValue.capitalized
+        cityStateLabel.text = n.city.capitalized + ", " + n.state.capitalized
     }
     
     // MARK: - Navigation
