@@ -20,6 +20,12 @@ class Need {
 
 @IBDesignable public class DesignableTextView: UITextView {}
 
+extension UIViewController {
+    @objc func getKeyElements() -> [String] {
+        return []
+    }
+}
+
 class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBOutlet weak var categoryTextField: UITextField!
@@ -35,6 +41,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     
     var currentNeed = Need()
     var currentNeedHaveSelectedSegmentIndex = 0
+    
+    
+    override func getKeyElements() -> [String] {
+        return ["Category selection:", "Location Selection:", "Overall Functionality:"]
+    }
 
     // MARK: - View Life Cycle
 
@@ -46,6 +57,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {

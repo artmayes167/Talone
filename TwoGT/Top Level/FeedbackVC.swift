@@ -14,6 +14,20 @@ class FeedbackVC: UIViewController {
     
     @IBOutlet weak var feedbackTextView: DesignableTextView!
     
+    var elements: ViewControllerElements?
+    
+    var keyElements: [String] = [] {
+        didSet {
+            if isViewLoaded {
+                var placeholderText = ""
+                for s in keyElements {
+                    placeholderText += (s + "\n\n")
+                }
+                feedbackTextView.text = placeholderText
+            }
+        }
+    }
+    
     var topViewControllerIdentifier = "" {
         didSet {
             if isViewLoaded {
@@ -30,7 +44,9 @@ class FeedbackVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewControllerNameLabel.text = topViewControllerIdentifier
+        guard let e = elements, let i = e.identifier, let keyEs = e.elements else { fatalError() }
+        topViewControllerIdentifier = i
+        keyElements = keyEs
     }
 
     /*

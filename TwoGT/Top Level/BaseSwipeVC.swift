@@ -8,6 +8,11 @@
 
 import UIKit
 
+class ViewControllerElements {
+       var identifier: String?
+       var elements: [String]?
+   }
+
 class BaseSwipeVC: UIViewController {
 
     var baseTabBar: UITabBarController?
@@ -19,8 +24,13 @@ class BaseSwipeVC: UIViewController {
     }
     
     @IBAction func showFeedbackPage(_ sender: Any) {
-        let vc = baseTabBar?.selectedViewController?.restorationIdentifier ?? "No identifier available"
-        performSegue(withIdentifier: "toFeedback", sender: vc)
+        guard let vc = baseTabBar?.selectedViewController else { fatalError() }
+        let identifier = vc.restorationIdentifier ?? "No identifier available"
+        let keyElements = vc.getKeyElements()
+        let elements = ViewControllerElements()
+        elements.identifier = identifier
+        elements.elements = keyElements
+        performSegue(withIdentifier: "toFeedback", sender: elements)
     }
     
     
@@ -31,8 +41,8 @@ class BaseSwipeVC: UIViewController {
         if segue.identifier == "toBaseTabBar" {
             baseTabBar = segue.destination as? UITabBarController
         } else if segue.identifier == "toFeedback" {
-            if let vc = segue.destination as? FeedbackVC, let title = sender as? String {
-                vc.topViewControllerIdentifier = title
+            if let vc = segue.destination as? FeedbackVC, let e = sender as? ViewControllerElements {
+                vc.elements = e
             }
         }
     }
