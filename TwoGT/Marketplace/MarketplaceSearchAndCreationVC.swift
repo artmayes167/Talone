@@ -26,7 +26,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     @IBOutlet weak var createNewNeedHaveButton: UIButton!
-
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     var currentNeed = Need()
     var currentCity: String?
     var currentState: String?
@@ -38,13 +39,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         //dismissTapGesture.isEnabled = false
-
-        currentCity = UserDefaults.standard.string(forKey: "currentCity")
-        currentState = UserDefaults.standard.string(forKey: "currentState")
-        currentCountry = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
+        
 
         if let c = currentCity, let s = currentState {    // TODO: Countries other than USA, Mexico may not have states
             whereTextField.text = c.capitalized + ", " + s.capitalized
+            
+            // Notifications
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
         }
 
         // Do any additional setup after loading the view.
@@ -54,6 +56,33 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
            super.viewDidAppear(animated)
            view.endEditing(true)
        }
+    
+     // MARK: - Keyboard Notifications
+    @objc func keyboardWillShow(notification:NSNotification){
+
+        let userInfo = notification.userInfo!
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+
+        var contentInset:UIEdgeInsets = self.scrollView.contentInset
+        contentInset.bottom = keyboardFrame.size.height + 20
+        scrollView.contentInset = contentInset
+    }
+
+    @objc func keyboardWillHide(notification:NSNotification){
+
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInset
+    }
+    
+    func setCurrents() {
+        currentCity = UserDefaults.standard.string(forKey: "currentCity")
+        currentState = UserDefaults.standard.string(forKey: "currentState")
+        if let c = currentCity, let s = currentState {
+            whereTextField.text = c + ", " + s
+        }
+        currentCountry = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
+    }
 
      // MARK: - Actions
     @IBAction func dismissOnTap(_ sender: Any) {

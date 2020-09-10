@@ -29,6 +29,12 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var typeOfSaveSegmentedControl: UISegmentedControl!
     @IBOutlet weak var searchButton: UIButton!
     
+    // Managing Saved/New
+    @IBOutlet weak var savedLocationTableView: UITableView!
+    @IBOutlet weak var newCreationStack: UIStackView!
+    var savedLocations: [String] = []
+    
+    
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?
     var states: [USState] = []
@@ -36,6 +42,9 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        savedLocationTableView.rowHeight = UITableView.automaticDimension
+        savedLocationTableView.estimatedRowHeight = 50
 
         let path = Bundle.main.path(forResource: "citiesAndStates", ofType: "json")
         let url = URL.init(fileURLWithPath: path!)
@@ -57,6 +66,22 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    
+    @IBAction func selectedNewOrSaved(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            savedLocationTableView.isHidden = true
+            newCreationStack.isHidden = false
+        case 1:
+            savedLocationTableView.isHidden = false
+            newCreationStack.isHidden = true
+        default:
+            print("Oops in CityStateSearchVC")
+        }
+        view.layoutIfNeeded()
     }
     
     var saveType: SaveType = .none
@@ -112,7 +137,26 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
         }
         
     }
+}
 
+extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return savedLocations.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
+        cell.titleLabel.text = savedLocations[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+}
+
+class SavedLocationCell: UITableViewCell {
+    @IBOutlet weak var titleLabel: UILabel!
 }
 
 extension CityStateSearchVC: LocationPickerDelegate {

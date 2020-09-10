@@ -13,6 +13,7 @@ class NeedsSearchDisplayVC: UIViewController {
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
     @IBOutlet weak var collectionView: UICollectionView!
+    
     var uiTuple: (String, String, String)?
     var needs: [NeedsBase.NeedItem] = [] {
         didSet {
@@ -24,6 +25,8 @@ class NeedsSearchDisplayVC: UIViewController {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var cityStateLabel: UILabel!
     
+    
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
