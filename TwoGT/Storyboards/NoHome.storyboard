@@ -563,6 +563,77 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EEd-aP-Vh6" userLabel="New Handle View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="12" y="244" width="390" height="165"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Handle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vad-U9-5mG">
+                                        <rect key="frame" x="8" y="8" width="374" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="raz-Ko-mfX"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HJa-u2-DZE">
+                                        <rect key="frame" x="8" y="42" width="374" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="UWS-Tv-cai"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="bZX-7H-ZIQ" id="bMJ-7f-XqS"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYe-oF-7zy" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="103" width="310" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="uZS-jK-qBy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <state key="normal" title="Submit Handle"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="submitHandle" destination="bZX-7H-ZIQ" eventType="touchUpInside" id="Sfs-Rz-gw0"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="DYe-oF-7zy" firstAttribute="leading" secondItem="EEd-aP-Vh6" secondAttribute="leading" constant="40" id="2RR-7u-ODN"/>
+                                    <constraint firstAttribute="trailing" secondItem="HJa-u2-DZE" secondAttribute="trailing" constant="8" id="7Jy-ia-4Ab"/>
+                                    <constraint firstAttribute="trailing" secondItem="DYe-oF-7zy" secondAttribute="trailing" constant="40" id="9ho-U2-tC0"/>
+                                    <constraint firstItem="Vad-U9-5mG" firstAttribute="top" secondItem="EEd-aP-Vh6" secondAttribute="top" constant="8" id="JDV-5H-XxI"/>
+                                    <constraint firstItem="HJa-u2-DZE" firstAttribute="top" secondItem="Vad-U9-5mG" secondAttribute="bottom" constant="12" id="gT7-Tw-bcW"/>
+                                    <constraint firstItem="HJa-u2-DZE" firstAttribute="leading" secondItem="EEd-aP-Vh6" secondAttribute="leading" constant="8" id="kUJ-gi-Nr4"/>
+                                    <constraint firstAttribute="bottom" secondItem="DYe-oF-7zy" secondAttribute="bottom" constant="12" id="kdK-9h-TMJ"/>
+                                    <constraint firstAttribute="height" constant="165" id="lEp-Hd-Yug"/>
+                                    <constraint firstItem="Vad-U9-5mG" firstAttribute="leading" secondItem="EEd-aP-Vh6" secondAttribute="leading" constant="8" id="nK5-v9-L6h"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vad-U9-5mG" secondAttribute="trailing" constant="8" id="pcd-wB-4qC"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6b-eS-Qyi" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="12" y="772" width="390" height="50"/>
                                 <constraints>
@@ -586,7 +657,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="EEd-aP-Vh6" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="7fG-Ap-mwp"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="bNz-cj-rYk" secondAttribute="trailing" id="9yj-mz-DbK"/>
+                            <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="EEd-aP-Vh6" secondAttribute="trailing" constant="12" id="AvI-w0-unB"/>
+                            <constraint firstItem="EEd-aP-Vh6" firstAttribute="top" secondItem="aMY-JR-hUf" secondAttribute="bottom" constant="24" id="GfD-wi-4Qu"/>
                             <constraint firstItem="B6b-eS-Qyi" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="IaQ-bp-1Od"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="B6b-eS-Qyi" secondAttribute="trailing" constant="12" id="J1m-fo-bny"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="aMY-JR-hUf" secondAttribute="trailing" constant="12" id="MBB-GA-rr2"/>
@@ -603,6 +677,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Csy-Xw-Z6a"/>
                     <connections>
+                        <outlet property="newHandleTextField" destination="HJa-u2-DZE" id="w03-2C-MCQ"/>
                         <outlet property="reachabilityStackView" destination="opL-8m-Tgo" id="Rlk-bf-ZmZ"/>
                         <outlet property="vigilantSwitch" destination="d3r-mn-wq6" id="cM2-1Z-xzt"/>
                     </connections>

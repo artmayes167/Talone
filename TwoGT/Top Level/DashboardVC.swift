@@ -13,6 +13,8 @@ class DashboardVC: UIViewController {
     @IBOutlet weak var vigilantSwitch: UISwitch!
     @IBOutlet weak var reachabilityStackView: UIStackView!
     
+    @IBOutlet weak var newHandleTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,7 +53,10 @@ class DashboardVC: UIViewController {
         view.layoutIfNeeded()
     }
     
-    
+    @IBAction func submitHandle() {
+        let handle = newHandleTextField.text
+        
+    }
     
     var needsWriter = NeedsDbWriter()
     var states: [USState] = []
@@ -95,4 +100,9 @@ class DashboardVC: UIViewController {
         }
         
     }
+}
+
+
+extension DashboardVC: UITextFieldDelegate {
+    
 }
