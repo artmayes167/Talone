@@ -17,7 +17,11 @@ class ViewControllerElements {
 class Feedback {
     var identifier: String?
     var userId: String?
-    let handle = UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous"
+    var handle: String {
+        get {
+            return UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous"
+        }
+    }
     var feedback: String?
 }
 
@@ -61,7 +65,7 @@ class FeedbackVC: UIViewController {
         feedback.identifier = topViewControllerIdentifier
         feedback.userId = user.uid
         feedback.feedback = feedbackTextView.text
-        // submit 
+        // submit
     }
     
 
