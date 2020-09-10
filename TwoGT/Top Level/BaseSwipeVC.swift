@@ -8,20 +8,9 @@
 
 import UIKit
 
-class ViewControllerElements {
-       var identifier: String?
-       var elements: [String]?
-   }
-
 class BaseSwipeVC: UIViewController {
 
     var baseTabBar: UITabBarController?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
     
     @IBAction func showFeedbackPage(_ sender: Any) {
         guard let vc = baseTabBar?.selectedViewController else { fatalError() }
@@ -35,8 +24,6 @@ class BaseSwipeVC: UIViewController {
     
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toBaseTabBar" {
             baseTabBar = segue.destination as? UITabBarController
@@ -46,7 +33,6 @@ class BaseSwipeVC: UIViewController {
             }
         }
     }
-    
 
     @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) {
     

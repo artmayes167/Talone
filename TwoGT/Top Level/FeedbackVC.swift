@@ -7,16 +7,28 @@
 //
 
 import UIKit
+import Firebase
+
+class ViewControllerElements {
+    var identifier: String?
+    var elements: [String]?
+}
+
+class Feedback {
+    var identifier: String?
+    var userId: String?
+    let handle = UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous"
+    var feedback: String?
+}
 
 class FeedbackVC: UIViewController {
     
     @IBOutlet weak var viewControllerNameLabel: UILabel!
-    
     @IBOutlet weak var feedbackTextView: DesignableTextView!
     
     var elements: ViewControllerElements?
     
-    var keyElements: [String] = [] {
+    private var keyElements: [String] = [] {
         didSet {
             if isViewLoaded {
                 var placeholderText = ""
@@ -28,18 +40,12 @@ class FeedbackVC: UIViewController {
         }
     }
     
-    var topViewControllerIdentifier = "" {
+    private var topViewControllerIdentifier = "" {
         didSet {
             if isViewLoaded {
                 viewControllerNameLabel.text = topViewControllerIdentifier
             }
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +54,16 @@ class FeedbackVC: UIViewController {
         topViewControllerIdentifier = i
         keyElements = keyEs
     }
+    
+    @IBAction func submitFeedback(_ sender: Any) {
+        guard let user = Auth.auth().currentUser else { fatalError() }
+        let feedback = Feedback()
+        feedback.identifier = topViewControllerIdentifier
+        feedback.userId = user.uid
+        feedback.feedback = feedbackTextView.text
+        // submit 
+    }
+    
 
     /*
     // MARK: - Navigation
