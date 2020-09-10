@@ -147,7 +147,7 @@
                                                         </constraints>
                                                         <state key="normal" image="chevron.right.2" catalog="system"/>
                                                         <connections>
-                                                            <segue destination="MmC-33-bzH" kind="presentation" identifier="toSearchLocation" id="Sw3-sL-kIX"/>
+                                                            <segue destination="MmC-33-bzH" kind="show" identifier="toSearchLocation" id="Sw3-sL-kIX"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -741,10 +741,23 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rym-UV-Vj0">
+                                        <rect key="frame" x="12" y="0.0" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="87f-gZ-pcR"/>
+                                            <constraint firstAttribute="width" constant="44" id="hIq-Is-y9n"/>
+                                        </constraints>
+                                        <state key="normal" title="Back"/>
+                                        <connections>
+                                            <segue destination="8Hd-dx-4BW" kind="unwind" unwindAction="unwindToMarketplaceSearchAndCreationVC:" id="4sh-5I-aMf"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGray3Color" red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Fke-94-CnB"/>
+                                    <constraint firstItem="Rym-UV-Vj0" firstAttribute="leading" secondItem="q2l-Tq-hNp" secondAttribute="leading" constant="12" id="Ode-eu-l7O"/>
+                                    <constraint firstItem="Rym-UV-Vj0" firstAttribute="centerY" secondItem="q2l-Tq-hNp" secondAttribute="centerY" id="SSs-4i-TWD"/>
                                     <constraint firstItem="Jxc-3f-KMy" firstAttribute="centerX" secondItem="q2l-Tq-hNp" secondAttribute="centerX" id="VTG-1N-naV"/>
                                     <constraint firstItem="Jxc-3f-KMy" firstAttribute="centerY" secondItem="q2l-Tq-hNp" secondAttribute="centerY" id="itN-xW-rXC"/>
                                 </constraints>
@@ -773,10 +786,10 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tY2-8f-nJp">
-                                <rect key="frame" x="0.0" y="121" width="414" height="386"/>
+                                <rect key="frame" x="0.0" y="121" width="414" height="186"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="whQ-CP-Mph">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                    <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="whQ-CP-Mph">
+                                        <rect key="frame" x="0.0" y="-200" width="414" height="200"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="xdA-YT-L6o"/>
@@ -814,7 +827,7 @@
                                         </connections>
                                     </tableView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="11T-BJ-5cV">
-                                        <rect key="frame" x="0.0" y="200" width="414" height="136"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="136"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e1K-w9-4YJ">
                                                 <rect key="frame" x="0.0" y="0.0" width="40.5" height="24"/>
@@ -943,7 +956,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vZ-tK-zdu">
-                                        <rect key="frame" x="0.0" y="336" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="136" width="414" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="p5k-Ud-nW5"/>
                                         </constraints>
@@ -976,6 +989,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wCh-O4-L9C"/>
                     </view>
+                    <navigationItem key="navigationItem" id="nFb-c6-X4Q"/>
                     <connections>
                         <outlet property="cityContainer" destination="yJw-zW-bKA" id="pyM-Zg-0bu"/>
                         <outlet property="cityInputView" destination="kqo-CA-xOl" id="G2a-4x-1MD"/>

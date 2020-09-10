@@ -10,22 +10,33 @@ import UIKit
 
 class BaseSwipeVC: UIViewController {
 
+    var baseTabBar: UITabBarController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
     
-
-    /*
+    @IBAction func showFeedbackPage(_ sender: Any) {
+        let vc = UIApplication.shared.visibleViewController?.restorationIdentifier ?? "No identifier available"
+        performSegue(withIdentifier: "toFeedback", sender: vc)
+    }
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "toBaseTabBar" {
+            baseTabBar = segue.destination as? UITabBarController
+        } else if segue.identifier == "toFeedback" {
+            if let vc = segue.destination as? FeedbackVC, let title = sender as? String {
+                vc.topViewControllerIdentifier = title
+            }
+        }
     }
-    */
+    
 
     @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) {
     
