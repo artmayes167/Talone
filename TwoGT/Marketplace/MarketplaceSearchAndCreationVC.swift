@@ -173,13 +173,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeHaveToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        guard let c = currentCity, let s = currentState else {
+        guard let c = currentCity, let s = currentState, let n = currentNeed.type else {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return
         }
 
         let locData = HavesDbWriter.LocationInfo(city: c, state: s, country: currentCountry, address: nil, geoLocation: nil)
-        let have = HavesDbWriter.HaveItem(category: currentNeed.type?.rawValue.capitalized ?? "miscellany",
+        let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
                                           description: "",
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: user.uid,
