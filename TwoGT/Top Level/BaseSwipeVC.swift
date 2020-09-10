@@ -19,7 +19,7 @@ class BaseSwipeVC: UIViewController {
     }
     
     @IBAction func showFeedbackPage(_ sender: Any) {
-        let vc = UIApplication.shared.visibleViewController?.restorationIdentifier ?? "No identifier available"
+        let vc = baseTabBar?.selectedViewController?.restorationIdentifier ?? "No identifier available"
         performSegue(withIdentifier: "toFeedback", sender: vc)
     }
     
