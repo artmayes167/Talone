@@ -7,20 +7,67 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class Contributor {
-    var name: String?
-    //var
+    var name: String = "None Available"
+    var imageUrl: String?
+    var imageName: String = "avatar"
+    var role: String?
+    var linkUrl: String?
 }
 
 class ContributorsVC: UIViewController {
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    var contributors: [Contributor] = [] {
+        didSet {
+            if isViewLoaded {
+                collectionView.reloadData()
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        getContributors()
     }
     
+    func getContributors() {
+        let path = Bundle.main.path(forResource: "contributors", ofType: "json")
+        let url = URL.init(fileURLWithPath: path!)
+        do {
+            let jsonData = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            
+            print(jsonData)
+            let container = try decoder.decode([String: [String: [String: String]]].self, from: jsonData) as [String: [String: [String: String]]]
+            print(container)
+            let dict = container["contributors"]! as NSDictionary
+            let keys = dict.allKeys
+            var conts: [Contributor] = []
+            for key in keys {
+                conts.append(makeContributor(name: ((key as? String)!), data: dict))
+            }
+            conts.sort { $0.name < $1.name }
+            contributors = conts
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func makeContributor(name: String, data: NSDictionary) -> Contributor {
+        let c = Contributor()
+        c.name = name
+        let d = data[name] as! NSDictionary
+        if let n = d["imageName"] as? String, !n.isEmpty { c.imageName = n }
+        if let i = d["imageUrl"] as? String, !i.isEmpty { c.imageUrl = i }
+        if let l = d["linkUrl"] as? String, !l.isEmpty { c.linkUrl = l }
+        if let r = d["role"] as? String, !r.isEmpty { c.role = r }
+        return c
+    }
 
     /*
     // MARK: - Navigation
@@ -32,6 +79,10 @@ class ContributorsVC: UIViewController {
     }
     */
 
+    @IBAction func back(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -42,21 +93,34 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0 //needs.count
+        return contributors.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PurposeCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ContributorCell
        
-        //cell.configure(needs[indexPath.item])
+        cell.configure(contributors[indexPath.row])
        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let c = contributors[indexPath.item]
+        if let t = c.linkUrl, let url = URL(string: t) {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                showOkayAlert(title: "Oops", message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309"), handler: nil)
+            }
+        } else {
+            showOkayAlert(title: "Oops", message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real..."), handler: nil)
+        }
     }
 }
 
 extension ContributorsVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width
+        let width = collectionView.frame.size.width - 10
         return CGSize(width: width, height: 128.0)
     }
 }
@@ -64,12 +128,24 @@ extension ContributorsVC: UICollectionViewDelegateFlowLayout {
 class ContributorCell: UICollectionViewCell {
     
     @IBOutlet weak var contributorImage: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
     
-    func configure(_ need: NeedsBase.NeedItem) {
-        let size = CGSize(width: 100.0, height: 100.0)
-        let aspectScaledToFitImage = UIImage(named: "karlMoline")!.af.imageAspectScaled(toFit: size)
-        contributorImage.image = aspectScaledToFitImage
-        roleLabel.text = need.description // different identifier needed?
+    func configure(_ contributor: Contributor) {
+        //let size = CGSize(width: 200.0, height: 200.0)
+        
+        if let url = contributor.imageUrl {
+            if let imageURL = URL(string: url), let placeholder = UIImage(named: contributor.imageName) {
+                contributorImage.af.setImage(withURL: imageURL, placeholderImage: placeholder)
+            }
+        } else {
+            if let image = UIImage(named: contributor.imageName) {
+                //let aspectScaledToFitImage = image.af.imageAspectScaled(toFit: size)
+                contributorImage.image = image //aspectScaledToFitImage
+            }
+        }
+        
+        nameLabel.text = contributor.name
+        roleLabel.text = contributor.role
     }
 }

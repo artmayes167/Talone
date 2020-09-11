@@ -17,3 +17,5 @@
 // furniture by Colourcreatype from the Noun Project
 
 // shrug thick outline by Libby Ventura from the Noun Project
+
+// avatar by Jasfart from the Noun Project
