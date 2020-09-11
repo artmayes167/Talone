@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -55,27 +56,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification email, containing a code.  Enter the code on the next screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-5G-msG">
-                                        <rect key="frame" x="0.0" y="44.5" width="390" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We're going to save this email, because it is how we will privately identify you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KQ-gu-WhQ">
-                                        <rect key="frame" x="0.0" y="109.5" width="390" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBG-e1-9fd">
-                                        <rect key="frame" x="0.0" y="174.5" width="390" height="101.5"/>
-                                        <string key="text">If, for some reason, you feel the need to use multiple email accounts, maybe game the system a bit for whatever stupid reason you've concocted...  Go for it.  You'll need a new phone for each account, though.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="you@you.me" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HIl-kw-PxQ" customClass="DesignableTextField" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="300" width="390" height="44"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="390" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="YSc-sA-Mrj"/>
                                         </constraints>
@@ -96,6 +78,25 @@
                                             <outlet property="delegate" destination="zaG-xE-H7K" id="WZX-N8-xob"/>
                                         </connections>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification email, containing a code.  Enter the code on the next screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-5G-msG">
+                                        <rect key="frame" x="0.0" y="112.5" width="390" height="41"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We're going to save this email, because it is how we will privately identify you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KQ-gu-WhQ">
+                                        <rect key="frame" x="0.0" y="177.5" width="390" height="41"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBG-e1-9fd">
+                                        <rect key="frame" x="0.0" y="242.5" width="390" height="101.5"/>
+                                        <string key="text">If, for some reason, you feel the need to use multiple email accounts, maybe game the system a bit for whatever stupid reason you've concocted...  Go for it.  You'll need a new phone for each account, though.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SbW-dP-4JK">
                                         <rect key="frame" x="0.0" y="368" width="390" height="228"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -364,20 +365,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="At this point, we may need to generate a secret password, known to no human soul, and enable face/touch ID or lock code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
-                                        <rect key="frame" x="0.0" y="44.5" width="390" height="61"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The verification code is in your email.  This may be the only time we ever send you an email, so it should stick out." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
-                                        <rect key="frame" x="0.0" y="129.5" width="390" height="61"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="****" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zrR-Mf-V6N" customClass="DesignableTextField" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="214.5" width="390" height="44"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="390" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="lQ8-w6-xfz"/>
                                         </constraints>
@@ -398,6 +387,18 @@
                                             <outlet property="delegate" destination="BPl-01-p9q" id="ny1-EB-1m9"/>
                                         </connections>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="At this point, we may need to generate a secret password, known to no human soul, and enable face/touch ID or lock code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
+                                        <rect key="frame" x="0.0" y="112.5" width="390" height="61"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The verification code is in your email.  This may be the only time we ever send you an email, so it should stick out." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
+                                        <rect key="frame" x="0.0" y="197.5" width="390" height="61"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Drf-ZC-R32">
                                         <rect key="frame" x="0.0" y="282.5" width="390" height="387.5"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -864,6 +865,25 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xxM-8L-pxG" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="12" y="710" width="390" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="GBz-wt-UmG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Contributors"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6b-eS-Qyi" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="12" y="772" width="390" height="50"/>
                                 <constraints>
@@ -887,6 +907,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="xxM-8L-pxG" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="0GV-d6-5iN"/>
                             <constraint firstItem="EEd-aP-Vh6" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="7fG-Ap-mwp"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="bNz-cj-rYk" secondAttribute="trailing" id="9yj-mz-DbK"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="EEd-aP-Vh6" secondAttribute="trailing" constant="12" id="AvI-w0-unB"/>
@@ -894,7 +915,9 @@
                             <constraint firstItem="B6b-eS-Qyi" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="IaQ-bp-1Od"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="B6b-eS-Qyi" secondAttribute="trailing" constant="12" id="J1m-fo-bny"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="aMY-JR-hUf" secondAttribute="trailing" constant="12" id="MBB-GA-rr2"/>
+                            <constraint firstItem="B6b-eS-Qyi" firstAttribute="top" secondItem="xxM-8L-pxG" secondAttribute="bottom" constant="12" id="NtL-B2-YfS"/>
                             <constraint firstItem="aMY-JR-hUf" firstAttribute="top" secondItem="bNz-cj-rYk" secondAttribute="bottom" constant="12" id="i8a-Od-oJ9"/>
+                            <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="xxM-8L-pxG" secondAttribute="trailing" constant="12" id="iUg-Lz-YEk"/>
                             <constraint firstItem="bNz-cj-rYk" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" id="qVI-1O-fn3"/>
                             <constraint firstItem="aMY-JR-hUf" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="rqq-MC-7hw"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="bottom" secondItem="B6b-eS-Qyi" secondAttribute="bottom" constant="40" id="tM8-DI-cJb"/>
@@ -920,7 +943,99 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="473.91304347826093" y="1266.2946428571429"/>
+            <point key="canvasLocation" x="220" y="1283"/>
+        </scene>
+        <!--ContributorsVC-->
+        <scene sceneID="nUZ-yW-g6C">
+            <objects>
+                <viewController id="JMe-Qq-fIb" customClass="ContributorsVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TGl-kn-Yuk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZzM-0A-A7T">
+                                <rect key="frame" x="0.0" y="44" width="414" height="50"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contributors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nqv-RK-vbn">
+                                        <rect key="frame" x="142" y="10.5" width="130" height="29"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="4QP-9S-SeM"/>
+                                    <constraint firstItem="Nqv-RK-vbn" firstAttribute="centerX" secondItem="ZzM-0A-A7T" secondAttribute="centerX" id="8FC-Cj-0C7"/>
+                                    <constraint firstItem="Nqv-RK-vbn" firstAttribute="centerY" secondItem="ZzM-0A-A7T" secondAttribute="centerY" id="Oeh-1D-Wkd"/>
+                                </constraints>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="H7s-BE-RPa">
+                                <rect key="frame" x="0.0" y="102" width="414" height="760"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mnB-Fj-z7g">
+                                    <size key="itemSize" width="414" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="y7J-89-f9g">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="O6T-yM-1Fy">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="karlMoline" translatesAutoresizingMaskIntoConstraints="NO" id="sqE-tY-yOp" customClass="DesignableImage" customModule="Talone" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="14" width="100" height="100"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="100" id="Ofz-rk-QAS"/>
+                                                        <constraint firstAttribute="width" constant="100" id="yxz-ZJ-NwH"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                            <color key="value" cocoaTouchSystemColor="darkTextColor"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                            <real key="value" value="0.0"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="sqE-tY-yOp" firstAttribute="centerY" secondItem="O6T-yM-1Fy" secondAttribute="centerY" id="HN8-IO-KO8"/>
+                                                <constraint firstItem="sqE-tY-yOp" firstAttribute="leading" secondItem="O6T-yM-1Fy" secondAttribute="leading" id="UVL-YD-R0K"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="414" height="128"/>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="JMe-Qq-fIb" id="pi3-Rt-h0P"/>
+                                    <outlet property="delegate" destination="JMe-Qq-fIb" id="Th7-VT-XTP"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ZzM-0A-A7T" firstAttribute="leading" secondItem="TGl-kn-Yuk" secondAttribute="leading" id="1sZ-qM-JGm"/>
+                            <constraint firstItem="H7s-BE-RPa" firstAttribute="trailing" secondItem="948-L9-KoA" secondAttribute="trailing" id="C3J-4X-75T"/>
+                            <constraint firstItem="H7s-BE-RPa" firstAttribute="bottom" secondItem="948-L9-KoA" secondAttribute="bottom" id="I4O-CN-Exv"/>
+                            <constraint firstItem="948-L9-KoA" firstAttribute="trailing" secondItem="ZzM-0A-A7T" secondAttribute="trailing" id="L2o-hU-QTK"/>
+                            <constraint firstItem="ZzM-0A-A7T" firstAttribute="top" secondItem="948-L9-KoA" secondAttribute="top" id="Rxh-0d-E9w"/>
+                            <constraint firstItem="H7s-BE-RPa" firstAttribute="leading" secondItem="948-L9-KoA" secondAttribute="leading" id="Ueg-tG-Ez1"/>
+                            <constraint firstItem="H7s-BE-RPa" firstAttribute="top" secondItem="ZzM-0A-A7T" secondAttribute="bottom" constant="8" id="Vb7-CE-idI"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="948-L9-KoA"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j9D-cO-j8p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="863.768115942029" y="1818.75"/>
         </scene>
         <!--Cards-->
         <scene sceneID="VRw-jB-rTp">
@@ -1100,15 +1215,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fFA-Af-mHI">
-                                        <rect key="frame" x="0.0" y="74.5" width="390" height="81.5"/>
-                                        <string key="text">This will be the only information people see about you, other than what you choose to share with Cards.  And maybe a picture of a cat or something.  If that's what you want.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="CatLover3000" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OQE-Pl-MyA" customClass="DesignableTextField" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="210" width="390" height="44"/>
+                                        <rect key="frame" x="0.0" y="74.5" width="390" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="SY2-R8-rbs"/>
                                         </constraints>
@@ -1129,6 +1237,13 @@
                                             <outlet property="delegate" destination="43P-eo-xwU" id="cjV-5x-o7O"/>
                                         </connections>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fFA-Af-mHI">
+                                        <rect key="frame" x="0.0" y="172.5" width="390" height="81.5"/>
+                                        <string key="text">This will be the only information people see about you, other than what you choose to share with Cards.  And maybe a picture of a cat or something.  If that's what you want.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gN7-Yy-cy5">
                                         <rect key="frame" x="0.0" y="308" width="390" height="332"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -1189,6 +1304,7 @@
         <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="info.circle" catalog="system" width="128" height="121"/>
+        <image name="karlMoline" width="2320" height="3088"/>
         <image name="manatsign.square" catalog="system" width="128" height="114"/>
         <image name="person.crop.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="person.crop.square" catalog="system" width="128" height="114"/>

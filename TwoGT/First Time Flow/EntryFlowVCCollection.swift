@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EnterEmailVC: UIViewController {
+class EnterEmailVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var textField: UITextField!
     
@@ -16,10 +16,13 @@ class EnterEmailVC: UIViewController {
         performSegue(withIdentifier: "toVerification", sender: nil)
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
-class EnterVerificationVC: UIViewController {
+class EnterVerificationVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textField: UITextField!
     
    
@@ -31,9 +34,14 @@ class EnterVerificationVC: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
 }
 
-class EnterHandleVC: UIViewController {
+class EnterHandleVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textField: UITextField!
     
     @IBAction func submitHandle(_ sender: Any) {
@@ -42,5 +50,10 @@ class EnterHandleVC: UIViewController {
     
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
