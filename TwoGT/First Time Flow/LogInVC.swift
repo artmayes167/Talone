@@ -50,14 +50,16 @@ class LogInVC: UIViewController { // , LoginButtonDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.performSegue(withIdentifier: "toMain", sender: nil)
+        //self.performSegue(withIdentifier: "toMain", sender: nil)
     }
     
 
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+    }
+    
+    @IBAction func unwindToLogIn( _ segue: UIStoryboardSegue) {
         
     }
 }

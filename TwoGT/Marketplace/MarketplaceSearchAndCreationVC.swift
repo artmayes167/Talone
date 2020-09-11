@@ -201,7 +201,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
             } else {
                 //self.performSegue(withIdentifier: "toCollection", sender: array)
-                self.showOkayAlert(title: "", message: "Arthur will implement Matching Needs view?", handler: nil)
+                self.showOkayAlert(title: "", message: "Arthur will implement Matching Haves view!", handler: nil)
             }
         }
     }
