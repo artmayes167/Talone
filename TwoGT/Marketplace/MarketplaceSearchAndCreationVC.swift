@@ -38,11 +38,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     @IBOutlet weak var createNewNeedHaveButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
-    
+
     var currentNeed = Need()
     var currentNeedHaveSelectedSegmentIndex = 0
-    
-    
+
     override func getKeyElements() -> [String] {
         return ["Category selection:", "Location Selection:", "Overall Functionality:"]
     }
@@ -55,17 +54,17 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         setCurrents()
 
         // Notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewDidAppear(_ animated: Bool) {
            super.viewDidAppear(animated)
            view.endEditing(true)
        }
-    
+
      // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
         var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -75,11 +74,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         scrollView.contentInset = contentInset
     }
 
-    @objc func keyboardWillHide(notification: NSNotification){
+    @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset: UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
-    
+
      // MARK: - Utility Functions
     func setCurrents() {
         currentNeed.city = UserDefaults.standard.string(forKey: "currentCity") ?? ""
@@ -121,20 +120,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             storeNeedToDatabase()
         }
     }
-    
+
     @IBAction func seeMatchingNeeds(_ sender: Any) {
-        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
-               showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
-               return
-           }
-        NeedsDbFetcher().fetchNeeds(city: currentNeed.city, state: currentNeed.state, currentNeed.country) { array in
-            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
-            if newArray.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
-            } else {
-                self.performSegue(withIdentifier: "toCollection", sender: newArray)
-            }
-        }
+        fetchMatchingNeeds()
+    }
+
+    @IBAction func seeMatchingHaves(_ sender: Any) {
+        fetchMatchingHaves()
     }
 
     // MARK: - NeedSelectionDelegate
@@ -177,6 +169,41 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Save Functions
     func saveFor(_ type: SaveType) {
         // store values
+    }
+
+    private func checkPreconditionsAndAlert() -> Bool {
+        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+            return false
+        }
+        return true
+    }
+
+    private func fetchMatchingNeeds() {
+        guard checkPreconditionsAndAlert() == true else { return }
+
+        NeedsDbFetcher().fetchNeeds(city: currentNeed.city, state: currentNeed.state, currentNeed.country) { array in
+            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
+            if newArray.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                self.performSegue(withIdentifier: "toCollection", sender: newArray)
+            }
+        }
+    }
+
+    private func fetchMatchingHaves() {
+        guard checkPreconditionsAndAlert() == true else { return }
+        let type = self.currentNeed.type!.rawValue.capitalized
+
+        HavesDbFetcher().fetchHaves(matching: [type], currentNeed.city, currentNeed.state, currentNeed.country) { array in
+            if array.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                //self.performSegue(withIdentifier: "toCollection", sender: array)
+                self.showOkayAlert(title: "", message: "Arthur will implement Matching Needs view?", handler: nil)
+            }
+        }
     }
 
     private func storeNeedToDatabase() {

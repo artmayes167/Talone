@@ -47,6 +47,7 @@ class NeedsBase: FirebaseGeneric {
         @ServerTimestamp var createdAt: Timestamp?
         var locationInfo: LocationInfo
     }
+    
 }
 
 class NeedsDbWriter: NeedsBase {
