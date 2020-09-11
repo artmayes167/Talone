@@ -38,9 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         // Fetch latest news for this city.
-        newsFetcher.fetchNews { newsItems in
-            print(newsItems)
-        }
+//        newsFetcher.fetchNews { newsItems in
+//            print(newsItems)
+//        }
 
         // SignIn Anonymously
         Auth.auth().signInAnonymously { (authResult, _) in

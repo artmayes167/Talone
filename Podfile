@@ -10,6 +10,7 @@ target 'TwoGT' do
   pod 'FBSDKCoreKit'  
   pod 'FBSDKLoginKit'
   # pod 'FacebookShare'
+  pod 'Toast-Swift', '~> 5.0.1'
   
   # Add the Firebase pod for Google Analytics
   pod 'Firebase/Analytics'
