@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Toast_Swift
 
 class Need {
     var type: NeedType?
@@ -100,16 +101,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
-        switch sender.selectedSegmentIndex {
-        case 1:
-            whereTextLabel.text = "Where Do You Have It?"
-            createNewNeedHaveButton.titleLabel?.text = "Create A New Have"
-            descriptionTextLabel.text = "Please enter a detailed description"
-        default:
-            whereTextLabel.text = "Where Do You Need It?"
-            createNewNeedHaveButton.titleLabel?.text = "Create A New Need"
-            descriptionTextLabel.text = "Or enter a description and create"
-        }
+        whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
+        createNewNeedHaveButton.titleLabel?.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
+        descriptionTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Or enter a description and create" : "Please enter a detailed description"
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
@@ -216,7 +210,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         let locData = NeedsDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
         let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
-                                          description: "",
+                                          description: descriptionTextView.text.trimmingCharacters(in: [" "]),
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
@@ -226,9 +220,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
-                print("Need added!")
+                self.view.makeToast("a Need created successfully!", duration: 2.0, position: .center)
             } else {
-                print("Error writing a need: \(error!)")
+                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
         })
     }
@@ -236,14 +230,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeHaveToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+
+        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil || descriptionTextView.text.trimmingCharacters(in: [" "]).isEmpty {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to create a Have", handler: nil)
             return
         }
+
+        guard checkPreconditionsAndAlert() == true else { return }
+        
         guard let n = currentNeed.type else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
         let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
-                                          description: "",
+                                          description: descriptionTextView.text.trimmingCharacters(in: [" "]),
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
@@ -253,9 +251,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         havesWriter.addHave(have, completion: { error in
             if error == nil {
-                print("Have added!")
+                self.view.makeToast("a Have created successfully!", duration: 2.0, position: .center)
+                self.descriptionTextView.text = ""
             } else {
-                print("Error writing a need: \(error!)")
+                self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
             }
         })
     }
