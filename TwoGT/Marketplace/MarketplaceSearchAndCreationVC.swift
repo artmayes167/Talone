@@ -10,36 +10,32 @@ import UIKit
 import Firebase
 import Toast_Swift
 
-class Need {
-    var type: NeedType?
-    var city = ""
-    var state = ""
-    var country = "USA"
-    var description = ""
-    var personalNotes = ""
-}
-
-extension UIViewController {
-    @objc func getKeyElements() -> [String] {
-        return []
-    }
-}
-
 class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
+     // MARK: - Outlets
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoriesPopOver: UIView!
     @IBOutlet weak var whereTextLabel: UILabel!
     @IBOutlet weak var whereTextField: UITextField!
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
-    @IBOutlet weak var descriptionTextLabel: UILabel!
+    
+    @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     @IBOutlet weak var createNewNeedHaveButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
 
-    var currentNeed = Need()
+     // MARK: - Variables
+    let currentNeed = Need()
+    let currentHave = Have()
     var currentNeedHaveSelectedSegmentIndex = 0
+    
+    // Testing something out here
+    var currentPurpose: Purpose {
+        get {
+            return currentNeedHaveSelectedSegmentIndex == 0 ? currentNeed : currentHave
+        }
+    }
 
     override func getKeyElements() -> [String] {
         return ["Category selection:", "Location Selection:", "Overall Functionality:"]
@@ -79,13 +75,15 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
      // MARK: - Utility Functions
+    /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
+    /// Saved locations for selection are saved in the keychain, using the Saves.shared object
     func setCurrents() {
-        currentNeed.city = UserDefaults.standard.string(forKey: "currentCity") ?? ""
-        currentNeed.state = UserDefaults.standard.string(forKey: "currentState") ?? ""
-        if !currentNeed.city.isEmpty, !currentNeed.state.isEmpty {
-            whereTextField.text = currentNeed.city.capitalized + ", " + currentNeed.state.capitalized
+        let purpose = currentPurpose
+        purpose.setLocation(fromDefaults: true)
+        if purpose.isLocationValid() {
+            whereTextField.text = purpose.getLocation().city + ", " + purpose.getLocation().state
         }
-        //currentNeed.country = UserDefaults.standard.string(forKey: "currentCountry") ?? "USA"
+        /// Country is USA by default
     }
 
      // MARK: - Actions
@@ -101,15 +99,17 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
         whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
         createNewNeedHaveButton.titleLabel?.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
-        descriptionTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Or enter a description and create" : "Please enter a detailed description"
+        setCurrents()
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
-        switch currentNeedHaveSelectedSegmentIndex {
-        case 1:
-            storeHaveToDatabase()
-        default:
-            storeNeedToDatabase()
+        if checkPreconditionsAndAlert(light: false) {
+            switch currentNeedHaveSelectedSegmentIndex {
+                   case 1:
+                       storeHaveToDatabase()
+                   default:
+                       storeNeedToDatabase()
+                   }
         }
     }
 
@@ -125,7 +125,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     func didSelect(_ need: NeedType) {
         categoriesPopOver.isHidden = true
         categoryTextField.text = need.rawValue.capitalized
-        currentNeed.type = need
+        currentPurpose.setCategory(need)
         dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
     }
@@ -138,7 +138,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             needsTVC.delegate = self
         case "toCollection":
             guard let s = sender as? [NeedsBase.NeedItem] else { fatalError() }
-            if currentNeed.city.isEmpty || currentNeed.state.isEmpty { fatalError() }
+            if !currentPurpose.isLocationValid() { fatalError() }
             let vc = segue.destination as! NeedsSearchDisplayVC
             vc.needs = s
             vc.currentUserNeed = currentNeed
@@ -149,22 +149,28 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
+            if state.lowercased() == "district of columbia" { }
             whereTextField.text = city.capitalized + ", " + state.capitalized
             saveFor(s.saveType)
-            currentNeed.city = city
-            currentNeed.state = state
-            UserDefaults.standard.setValue(currentNeed.city, forKeyPath: "currentCity")
-            UserDefaults.standard.setValue(currentNeed.state, forKeyPath: "currentState")
+            currentPurpose.setLocation(fromDefaults: false, city: city, state: state)
         }
     }
 
      // MARK: - Save Functions
     func saveFor(_ type: SaveType) {
         // store values
+        switch type {
+        case .home:
+            print("Home Save Is Not Complete!!!!!")
+        case .alternate:
+            print("Alternate Save Is Not Complete!!!!!")
+        case .none:
+            print("No Save Is Not Complete!!!!!")
+        }
     }
 
-    private func checkPreconditionsAndAlert() -> Bool {
-        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
+    private func checkPreconditionsAndAlert(light: Bool) -> Bool {
+        if !currentPurpose.areAllRequiredFieldsFilled(light: light) {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return false
         }
@@ -172,7 +178,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func fetchMatchingNeeds() {
-        guard checkPreconditionsAndAlert() == true else { return }
+        guard checkPreconditionsAndAlert(light: true) == true else { return }
 
         NeedsDbFetcher().fetchNeeds(city: currentNeed.city, state: currentNeed.state, currentNeed.country) { array in
             let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
@@ -185,7 +191,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func fetchMatchingHaves() {
-        guard checkPreconditionsAndAlert() == true else { return }
+        guard checkPreconditionsAndAlert(light: true) == true else { return }
         let type = self.currentNeed.type!.rawValue.capitalized
 
         HavesDbFetcher().fetchHaves(matching: [type], currentNeed.city, currentNeed.state, currentNeed.country) { array in
@@ -229,15 +235,15 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
-        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil || descriptionTextView.text.trimmingCharacters(in: [" "]).isEmpty {
+
+        if !checkPreconditionsAndAlert(light: false) {
             showOkayAlert(title: "", message: "Please complete all fields before trying to create a Have", handler: nil)
             return
         }
-
-        guard checkPreconditionsAndAlert() == true else { return }
         
-        guard let n = currentNeed.type else { fatalError() }
-        let locData = HavesDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
+        guard let n = currentPurpose.getCategory() else { fatalError() }
+        let loc = currentPurpose.getLocation()
+        let locData = HavesDbWriter.LocationInfo(city: loc.city, state: loc.state, country: loc.country, address: nil, geoLocation: nil)
         let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
@@ -266,6 +272,12 @@ extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
             textField.resignFirstResponder()
             dismissTapGesture.isEnabled = true
             view.layoutIfNeeded()
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == headlineTextField {
+            currentPurpose.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         }
     }
 }
@@ -297,5 +309,11 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {
         dismissTapGesture.isEnabled = true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == descriptionTextView {
+            currentPurpose.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+        }
     }
 }

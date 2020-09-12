@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 extension UIViewController {
+    
+    @objc func getKeyElements() -> [String] {
+        return []
+    }
+    
     /// Show an Alert with an "Ok" button.
     ///
     /// - Parameters:

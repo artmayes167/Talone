@@ -7,3 +7,63 @@
 //
 
 import Foundation
+
+class Have: Purpose {
+    var type: NeedType?
+    var city = ""
+    var state = ""
+    var country = "USA"
+    var headline = ""
+    var description = ""
+    var personalNotes = ""
+    
+    func setCategory(_ type: NeedType) {
+        self.type = type
+    }
+    
+    func getCategory() -> NeedType? {
+        return type
+    }
+    
+    func setHeadline(_ headline: String?, description: String?) {
+        self.headline = headline ?? self.headline
+        self.description = description ?? self.description
+    }
+    
+    func getCurrentHeadline() -> String {
+        return headline
+    }
+    
+    func getCurrentDescription() -> String {
+        return description
+    }
+    
+    func setLocation(fromDefaults: Bool, city: String = "", state: String = "") {
+        if fromDefaults {
+            self.city = UserDefaults.standard.string(forKey: "currentCity") ?? city
+            self.state = UserDefaults.standard.string(forKey: "currentState") ?? state
+        } else {
+            self.city = !city.isEmpty ? city : self.city
+            self.state = !state.isEmpty ? state : self.state
+            UserDefaults.standard.setValue(self.city, forKeyPath: "currentCity")
+            UserDefaults.standard.setValue(self.state, forKeyPath: "currentState")
+        }
+    }
+    
+    func isLocationValid() -> Bool {
+        return !city.isEmpty && !state.isEmpty
+    }
+    
+    func getLocation() -> CityState {
+        return CityState(city: city.capitalized, state: state.capitalized)
+    }
+    
+    private func areHeavyRequirementsMet(_ isLight: Bool) -> Bool {
+        if !isLight { return !headline.isEmpty && !description.isEmpty }
+        return true
+    }
+    
+    func areAllRequiredFieldsFilled(light: Bool) -> Bool {
+        return isLocationValid() && (type != nil) && areHeavyRequirementsMet(light)
+    }
+}

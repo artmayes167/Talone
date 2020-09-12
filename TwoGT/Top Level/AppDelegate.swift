@@ -52,6 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let uid = user.uid
             print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
         }
+        
+        // Get ready to go
+        loadKeychainData()
 
         return true
     }
@@ -158,4 +161,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 //    }
 
+}
+
+extension AppDelegate {
+    func loadKeychainData() {
+        Saves.shared.loadSaves()
+    }
 }

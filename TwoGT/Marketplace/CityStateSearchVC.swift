@@ -167,7 +167,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
             // Hide the table in the stack
             stateContainer.isHidden = true
             selectedState = item
-            if let arr = states.first(where: { $0.name == item.capitalized })?.cities {
+            if let arr = states.first(where: { $0.name.uppercased() == item.uppercased() })?.cities {
                 cityTextField.text = ""
                 selectedCity = nil
                 cityInputView.isHidden = false

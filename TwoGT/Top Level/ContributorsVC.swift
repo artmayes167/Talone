@@ -16,6 +16,7 @@ class Contributor {
     var imageName: String = "avatar"
     var role: String?
     var linkUrl: String?
+    var symbolName: String = "square"
 }
 
 class ContributorsVC: UIViewController {
@@ -66,6 +67,7 @@ class ContributorsVC: UIViewController {
         if let i = d["imageUrl"] as? String, !i.isEmpty { c.imageUrl = i }
         if let l = d["linkUrl"] as? String, !l.isEmpty { c.linkUrl = l }
         if let r = d["role"] as? String, !r.isEmpty { c.role = r }
+        if let s = d["symbolName"] as? String, !s.isEmpty { c.symbolName = s }
         return c
     }
 
@@ -97,7 +99,8 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ContributorCell
+        let reuseId = "cell\(indexPath.item%2)"
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! ContributorCell
        
         cell.configure(contributors[indexPath.row])
        
@@ -130,6 +133,8 @@ class ContributorCell: UICollectionViewCell {
     @IBOutlet weak var contributorImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
+    @IBOutlet weak var symbolImageView: DesignableImage!
+    
     
     func configure(_ contributor: Contributor) {
         //let size = CGSize(width: 200.0, height: 200.0)
@@ -147,5 +152,6 @@ class ContributorCell: UICollectionViewCell {
         
         nameLabel.text = contributor.name
         roleLabel.text = contributor.role
+        symbolImageView.image = UIImage(named: contributor.symbolName)
     }
 }

@@ -23,3 +23,9 @@
 // stack by Gianluca Lanzetta from the Noun Project
 
 // chevron right by arjuazka from the Noun Project
+
+// square by SAS37 ICON from the Noun Project
+
+//  stack by Adrien Coquet from the Noun Project
+
+// leadership by Adrien Coquet from the Noun Project

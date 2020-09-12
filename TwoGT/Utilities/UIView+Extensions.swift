@@ -45,6 +45,7 @@ extension UIView {
 @IBDesignable class DesignableView: UIView {}
 @IBDesignable class DesignableButton: UIButton {}
 @IBDesignable class DesignableTextField: UITextField {}
+@IBDesignable class DesignableSegmentedControl: UISegmentedControl {}
 @IBDesignable public class DesignableTextView: UITextView {}
 
 class ActiveTextView: DesignableTextView {
