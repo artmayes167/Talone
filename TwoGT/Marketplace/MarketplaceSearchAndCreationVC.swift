@@ -19,8 +19,6 @@ class Need {
     var personalNotes = ""
 }
 
-@IBDesignable public class DesignableTextView: UITextView {}
-
 extension UIViewController {
     @objc func getKeyElements() -> [String] {
         return []

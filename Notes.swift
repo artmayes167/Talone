@@ -21,3 +21,5 @@
 // avatar by Jasfart from the Noun Project
 
 // stack by Gianluca Lanzetta from the Noun Project
+
+// chevron right by arjuazka from the Noun Project

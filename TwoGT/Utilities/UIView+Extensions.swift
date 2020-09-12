@@ -45,3 +45,13 @@ extension UIView {
 @IBDesignable class DesignableView: UIView {}
 @IBDesignable class DesignableButton: UIButton {}
 @IBDesignable class DesignableTextField: UITextField {}
+@IBDesignable public class DesignableTextView: UITextView {}
+
+class ActiveTextView: DesignableTextView {
+    let color = UIColor().activeTextViewBorder
+    
+    override func didMoveToSuperview() {
+        borderColor = color
+        super.didMoveToSuperview()
+    }
+}

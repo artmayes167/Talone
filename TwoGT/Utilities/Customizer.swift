@@ -19,6 +19,14 @@ class Customizer {
         UserDefaults.standard.set(theme, forKey: "theme")
         theme = ct
     }
+}
+
+extension UIColor {
     
+    var activeTextViewBorder: UIColor {
+        get {
+            return UIColor.hex("#047244").withAlphaComponent(0.67)
+        }
+    }
     
 }
