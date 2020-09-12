@@ -714,6 +714,33 @@
             </objects>
             <point key="canvasLocation" x="2187" y="1122"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="xA0-Qw-lku">
+            <objects>
+                <viewController id="V34-Ax-6eR" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7Kc-Zk-5fd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Admin Functionality coming soon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UJb-jW-pv6">
+                                <rect key="frame" x="80" y="410.5" width="254" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="UJb-jW-pv6" firstAttribute="centerX" secondItem="7Kc-Zk-5fd" secondAttribute="centerX" id="Jmj-qY-zgw"/>
+                            <constraint firstItem="UJb-jW-pv6" firstAttribute="centerY" secondItem="7Kc-Zk-5fd" secondAttribute="centerY" id="nb7-J8-fLX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="uSU-hJ-kMr"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RIp-TA-rEO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-564" y="1332"/>
+        </scene>
         <!--DashboardVC-->
         <scene sceneID="Tud-5j-aJS">
             <objects>
@@ -996,6 +1023,15 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bKM-FX-m2Q">
+                                <rect key="frame" x="12" y="642" width="390" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="gMi-9T-ca8"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="adminTapped:" destination="bZX-7H-ZIQ" eventType="touchUpInside" id="Jrx-2e-q9j"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
@@ -1009,12 +1045,15 @@
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="B6b-eS-Qyi" secondAttribute="trailing" constant="12" id="J1m-fo-bny"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="aMY-JR-hUf" secondAttribute="trailing" constant="12" id="MBB-GA-rr2"/>
                             <constraint firstItem="B6b-eS-Qyi" firstAttribute="top" secondItem="xxM-8L-pxG" secondAttribute="bottom" constant="12" id="NtL-B2-YfS"/>
+                            <constraint firstItem="bKM-FX-m2Q" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="Xwg-m9-qfo"/>
                             <constraint firstItem="aMY-JR-hUf" firstAttribute="top" secondItem="bNz-cj-rYk" secondAttribute="bottom" constant="12" id="i8a-Od-oJ9"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="xxM-8L-pxG" secondAttribute="trailing" constant="12" id="iUg-Lz-YEk"/>
                             <constraint firstItem="bNz-cj-rYk" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" id="qVI-1O-fn3"/>
                             <constraint firstItem="aMY-JR-hUf" firstAttribute="leading" secondItem="FzY-ha-T7P" secondAttribute="leading" constant="12" id="rqq-MC-7hw"/>
                             <constraint firstItem="FzY-ha-T7P" firstAttribute="bottom" secondItem="B6b-eS-Qyi" secondAttribute="bottom" constant="40" id="tM8-DI-cJb"/>
                             <constraint firstItem="bNz-cj-rYk" firstAttribute="top" secondItem="FzY-ha-T7P" secondAttribute="top" id="uee-5x-w3k"/>
+                            <constraint firstItem="xxM-8L-pxG" firstAttribute="top" secondItem="bKM-FX-m2Q" secondAttribute="bottom" constant="24" id="w47-vg-vHz"/>
+                            <constraint firstItem="FzY-ha-T7P" firstAttribute="trailing" secondItem="bKM-FX-m2Q" secondAttribute="trailing" constant="12" id="yhF-gO-a40"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FzY-ha-T7P"/>
                         <connections>
@@ -1026,6 +1065,7 @@
                         <outlet property="newHandleTextField" destination="HJa-u2-DZE" id="w03-2C-MCQ"/>
                         <outlet property="reachabilityStackView" destination="opL-8m-Tgo" id="Rlk-bf-ZmZ"/>
                         <outlet property="vigilantSwitch" destination="d3r-mn-wq6" id="cM2-1Z-xzt"/>
+                        <segue destination="V34-Ax-6eR" kind="presentation" identifier="toAdmin" id="Spg-Rn-UVN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PQa-NQ-TIT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -51,4 +51,25 @@ extension UIViewController {
         alert.addAction(action2)
         present(alert, animated: true, completion: nil)
     }
+    
+    func showAdminPasswordAlert(title: String, message: String, okayHandler: @escaping ((UIAlertAction) -> Void)) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "****"
+        }
+        let saveAction = UIAlertAction(title: "Enter", style: .default, handler: { alert -> Void in
+            let firstTextField = alertController.textFields![0] as UITextField
+            let adminPass = UserDefaults.standard.string(forKey: "admin")
+            if firstTextField.text == adminPass {
+                okayHandler(alert)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }

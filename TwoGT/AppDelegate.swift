@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !def.bool(forKey: "vigilant") {
             def.set(false, forKey: "vigilant")
         }
+        if def.string(forKey: "admin") == nil {
+            def.set("xxxx", forKey: "admin")
+        }
         // Notify FB application delegate
         ApplicationDelegate.shared.application(
                    application,

@@ -57,6 +57,32 @@ class DashboardVC: UIViewController {
         let handle = newHandleTextField.text
         
     }
+    var timer: Timer?
+    var adminCounter = 0
+    @IBAction func adminTapped(_ sender: Any) {
+        adminCounter += 1
+        if let t = timer, t.isValid {
+            if adminCounter == 5 {
+                self.adminCounter = 0
+                self.timer?.invalidate()
+                
+                showAdminPasswordAlert(title: "Admin", message: "") { _ in
+                    self.dismiss(animated: true) {
+                        self.performSegue(withIdentifier: "toAdmin", sender: nil)
+                    }
+                }
+            }
+        } else {
+            timer = Timer.init(timeInterval: Date().timeIntervalSince1970 + 60, repeats: false, block: { _ in
+                self.adminCounter = 0
+                self.timer?.invalidate()
+            })
+        }
+    }
+    
+    deinit {
+        timer?.invalidate()
+    }
     
     var needsWriter = NeedsDbWriter()
     var states: [USState] = []
