@@ -45,7 +45,10 @@ class EnterHandleVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textField: UITextField!
     
     @IBAction func submitHandle(_ sender: Any) {
-        performSegue(withIdentifier: "toBase", sender: nil)
+        // completion
+        showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
+            self.performSegue(withIdentifier: "toBase", sender: nil)
+        }
     }
     
     @IBAction func back(_ sender: Any) {

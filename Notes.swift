@@ -19,3 +19,5 @@
 // shrug thick outline by Libby Ventura from the Noun Project
 
 // avatar by Jasfart from the Noun Project
+
+// stack by Gianluca Lanzetta from the Noun Project
