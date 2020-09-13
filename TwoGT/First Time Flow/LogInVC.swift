@@ -26,7 +26,6 @@ class LogInVC: UIViewController { // , LoginButtonDelegate {
 //    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
 //
 //    }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,19 +46,18 @@ class LogInVC: UIViewController { // , LoginButtonDelegate {
 //        }
 //                }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //self.performSegue(withIdentifier: "toMain", sender: nil)
     }
-    
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
     }
-    
+
     @IBAction func unwindToLogIn( _ segue: UIStoryboardSegue) {
-        
+
     }
 }
