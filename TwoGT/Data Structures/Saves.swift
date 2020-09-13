@@ -12,7 +12,7 @@ class Saves {
     static let shared = Saves()
     
     var home: CityState?
-    var alternates: [CityState]?
+    var alternates: [CityState] = []
     
     func saveSaves() {
         let encodedData = Data.init(from: Saves.shared)
@@ -21,8 +21,8 @@ class Saves {
     
     func loadSaves() {
         let data = KeyChain.load(key: "saveLocations")
-        let unencodedData = data?.to(type: Saves.self)
-        Saves.shared.home = unencodedData?.home
-        Saves.shared.alternates = unencodedData?.alternates
+        guard let unencodedData = data?.to(type: Saves.self) else { fatalError() }
+        Saves.shared.home = unencodedData.home
+        Saves.shared.alternates = unencodedData.alternates
     }
 }

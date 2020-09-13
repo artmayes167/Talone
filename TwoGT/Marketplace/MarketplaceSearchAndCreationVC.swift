@@ -149,10 +149,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         if let s = segue.source as? CityStateSearchVC, let city = s.selectedCity, let state = s.selectedState {
-            if state.lowercased() == "district of columbia" { }
             whereTextField.text = city.capitalized + ", " + state.capitalized
-            saveFor(s.saveType)
             currentPurpose.setLocation(fromDefaults: false, city: city, state: state)
+            saveFor(s.saveType)
         }
     }
 
@@ -161,9 +160,12 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // store values
         switch type {
         case .home:
-            print("Home Save Is Not Complete!!!!!")
+            Saves.shared.home = currentPurpose.getLocation()
         case .alternate:
-            print("Alternate Save Is Not Complete!!!!!")
+            if !Saves.shared.alternates.contains(where: { $0 == currentPurpose.getLocation() }) {
+                Saves.shared.alternates.append(currentPurpose.getLocation())
+                Saves.shared.saveSaves()
+            }
         case .none:
             print("No Save Is Not Complete!!!!!")
         }

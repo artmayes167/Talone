@@ -59,7 +59,7 @@ class Need: Purpose {
     }
     
     private func areHeavyRequirementsMet(_ isLight: Bool) -> Bool {
-        if !isLight { return !headline.isEmpty && !description.trimmingCharacters(in: [" "]).isEmpty }
+        if !isLight { return !headline.trimmingCharacters(in: [" "]).isEmpty && !description.trimmingCharacters(in: [" "]).isEmpty }
         return true
     }
     
