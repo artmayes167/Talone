@@ -18,7 +18,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var whereTextLabel: UILabel!
     @IBOutlet weak var whereTextField: UITextField!
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
-    
+
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
@@ -29,7 +29,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     let currentNeed = Need()
     let currentHave = Have()
     var currentNeedHaveSelectedSegmentIndex = 0
-    
+
     // Testing something out here
     var currentPurpose: Purpose {
         get {
@@ -51,6 +51,16 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        if Auth.auth().currentUser?.isAnonymous ?? true {
+            // SignIn Anonymously
+            Auth.auth().signInAnonymously { (authResult, _) in
+                guard let user = authResult?.user else { return }
+                let isAnonymous = user.isAnonymous  // true
+                let uid = user.uid
+                print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -235,7 +245,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeHaveToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        
+
         guard let cat = currentPurpose.getCategory() else { fatalError() }
         let locData = currentPurpose.getLocationData()
         let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
@@ -268,7 +278,7 @@ extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
             view.layoutIfNeeded()
         }
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == headlineTextField {
             currentPurpose.setHeadline(headlineTextField.text, description: descriptionTextView.text)
@@ -304,7 +314,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         dismissTapGesture.isEnabled = true
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView == descriptionTextView {
             currentPurpose.setHeadline(headlineTextField.text, description: descriptionTextView.text)

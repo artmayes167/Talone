@@ -78,27 +78,27 @@
                                             <outlet property="delegate" destination="zaG-xE-H7K" id="WZX-N8-xob"/>
                                         </connections>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification email, containing a code.  Enter the code on the next screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-5G-msG">
-                                        <rect key="frame" x="0.0" y="112.5" width="390" height="41"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification email, containing a link. Please open that email in your email client and click on the link." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-5G-msG">
+                                        <rect key="frame" x="0.0" y="112.5" width="390" height="61"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We're going to save this email, because it is how we will privately identify you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KQ-gu-WhQ">
-                                        <rect key="frame" x="0.0" y="177.5" width="390" height="41"/>
+                                        <rect key="frame" x="0.0" y="197.5" width="390" height="41"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBG-e1-9fd">
-                                        <rect key="frame" x="0.0" y="242.5" width="390" height="101.5"/>
+                                        <rect key="frame" x="0.0" y="262.5" width="390" height="101.5"/>
                                         <string key="text">If, for some reason, you feel the need to use multiple email accounts, maybe game the system a bit for whatever stupid reason you've concocted...  Go for it.  You'll need a new phone for each account, though.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SbW-dP-4JK">
-                                        <rect key="frame" x="0.0" y="368" width="390" height="228"/>
+                                        <rect key="frame" x="0.0" y="388" width="390" height="208"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xb9-8m-pNs" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
@@ -106,7 +106,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="0HD-3b-0DR"/>
                                         </constraints>
-                                        <state key="normal" title="I ALREADY HAVE A CODE"/>
+                                        <state key="normal" title="I ALREADY HAVE RECEIVED EMAIL LINK"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                 <color key="value" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -161,6 +161,7 @@
                     <navigationItem key="navigationItem" id="RMa-J5-ynm"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="confirmEmailExistsAlready" destination="xb9-8m-pNs" id="wr9-Bq-VbH"/>
                         <outlet property="textField" destination="HIl-kw-PxQ" id="6Ob-bs-Khu"/>
                         <segue destination="BPl-01-p9q" kind="show" identifier="toVerification" id="PcY-N7-viJ"/>
                     </connections>
@@ -413,56 +414,39 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="EcC-5M-KC7">
                                 <rect key="frame" x="12" y="106" width="390" height="744"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Your Verification" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-q5-Q19">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-q5-Q19">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
+                                        <rect key="frame" x="0.0" y="54" width="390" height="81.5"/>
+                                        <string key="text">At this point, we will generate a secret password, known to no human soul, and enable face/touch ID or lock code. We will use this password to securely encrypt all your information.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="****" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zrR-Mf-V6N" customClass="DesignableTextField" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="390" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="lQ8-w6-xfz"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" textContentType="one-time-code"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <outlet property="delegate" destination="BPl-01-p9q" id="ny1-EB-1m9"/>
-                                        </connections>
-                                    </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="At this point, we may need to generate a secret password, known to no human soul, and enable face/touch ID or lock code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
-                                        <rect key="frame" x="0.0" y="112.5" width="390" height="61"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The verification code is in your email.  This may be the only time we ever send you an email, so it should stick out." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
-                                        <rect key="frame" x="0.0" y="197.5" width="390" height="61"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
+                                        <rect key="frame" x="0.0" y="159.5" width="390" height="101.5"/>
+                                        <string key="text">We are still waiting for you to click on the link on the email we sent you. You need to navigate to your email application (or browser). After clicking that link, you will be redirected back here and you can continue this sign-in process.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Drf-ZC-R32">
-                                        <rect key="frame" x="0.0" y="282.5" width="390" height="387.5"/>
+                                        <rect key="frame" x="0.0" y="285" width="390" height="385"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRn-fJ-pwG" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="694" width="390" height="50"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" button="YES" notEnabled="YES"/>
+                                        </accessibility>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="eGT-qi-W6R"/>
                                         </constraints>
-                                        <state key="normal" title="SUBMIT"/>
+                                        <state key="normal" title="SIGN IN"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                 <color key="value" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -475,7 +459,6 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <action selector="submitEmail:" destination="Dnu-9L-IzL" eventType="touchUpInside" id="6JU-Co-VH4"/>
                                             <action selector="submitVerification:" destination="BPl-01-p9q" eventType="touchUpInside" id="O1a-AH-Lzt"/>
                                         </connections>
                                     </button>
@@ -525,14 +508,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="5ox-49-euG"/>
                     <connections>
-                        <outlet property="textField" destination="zrR-Mf-V6N" id="WFb-MV-r8A"/>
+                        <outlet property="signInButton" destination="bRn-fJ-pwG" id="QWJ-Ld-3DQ"/>
+                        <outlet property="signInInfo" destination="52g-Xp-4C1" id="E4O-9a-yv1"/>
                         <segue destination="43P-eo-xwU" kind="show" identifier="toHandle" id="EB5-Ls-A7D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvI-iC-tn2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="Dnu-9L-IzL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="866.66666666666674" y="-198.21428571428569"/>
+            <point key="canvasLocation" x="939" y="-198"/>
         </scene>
         <!--Marketplace-->
         <scene sceneID="edb-u0-J0w">
@@ -1702,11 +1685,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d64-xm-sJR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1589.8550724637682" y="-198.21428571428569"/>
+            <point key="canvasLocation" x="1713" y="-198"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PcY-N7-viJ"/>
+        <segue reference="tKQ-cG-KsL"/>
         <segue reference="WuH-8A-hhF"/>
     </inferredMetricsTieBreakers>
     <resources>

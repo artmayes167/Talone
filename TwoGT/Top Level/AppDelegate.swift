@@ -39,22 +39,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
+        
+        //try? Auth.auth().signOut() // Needed to test login-process
+        
+        checkIfAuthenticatedAndProgress()
+        // Otherwise, go to sign-in view
 
-        // Fetch latest news for this city.
+// Fetch latest news for this city.
 //        newsFetcher.fetchNews { newsItems in
 //            print(newsItems)
 //        }
-
-        // SignIn Anonymously
-        Auth.auth().signInAnonymously { (authResult, _) in
-            guard let user = authResult?.user else { return }
-            let isAnonymous = user.isAnonymous  // true
-            let uid = user.uid
-            print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
-        }
-        
-        // Get ready to go
-        loadKeychainData()
 
         return true
     }
@@ -70,6 +64,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         }
 
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
+    }
+    
+    private func handlePasswordlessSignIn(withURL url: URL) -> Bool {
+        let link = url.absoluteString
+        
+        if Auth.auth().isSignIn(withEmailLink: link) {  // Checks if the link is a sign-in link; can be used one-time only.
+            UserDefaults.standard.set(link, forKey: "Link")
+            // Post a notification to the PasswordlessViewController to resume authentication
+            NotificationCenter.default
+              .post(Notification(name: Notification.Name("PasswordlessEmailNotificationSuccess")))
+            return true
+        }
+        return false
+    }
+    
+    private func checkIfAuthenticatedAndProgress() {
+
+        if Auth.auth().currentUser?.isEmailVerified ?? false, (Auth.auth().currentUser?.isAnonymous ?? true) == false  {
+            print("Email verified!!! User not anonymous!")
+        
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let mainStoryboard = UIStoryboard(name: "Marketplace", bundle: nil)
+            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Marketplace Intro View Controller") as! MarketplaceSearchAndCreationVC
+
+            self.window?.rootViewController = mainVC
+            self.window?.makeKeyAndVisible()
+        }
+
+    }
+    
     // MARK: UISceneSession Lifecycle
 
 //    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
