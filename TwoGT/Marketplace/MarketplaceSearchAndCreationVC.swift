@@ -184,7 +184,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard checkPreconditionsAndAlert(light: true) == true else { return }
 
         NeedsDbFetcher().fetchNeeds(city: currentNeed.city, state: currentNeed.state, currentNeed.country) { array in
-            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.rawValue }
+            let newArray = array.filter { $0.category.lowercased() == self.currentNeed.type!.databaseValue() }
             if newArray.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
             } else {
@@ -195,7 +195,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func fetchMatchingHaves() {
         guard checkPreconditionsAndAlert(light: true) == true else { return }
-        let type = self.currentNeed.type!.rawValue.capitalized
+        let type = self.currentNeed.type!.databaseValue()
 
         HavesDbFetcher().fetchHaves(matching: [type], currentNeed.city, currentNeed.state, currentNeed.country) { array in
             if array.isEmpty {
@@ -207,16 +207,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeNeedToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        if currentNeed.city.isEmpty || currentNeed.state.isEmpty || currentNeed.type == nil {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to create a Need", handler: nil)
-            return
-        }
-
-        let locData = NeedsDbWriter.LocationInfo(city: currentNeed.city, state: currentNeed.state, country: currentNeed.country, address: nil, geoLocation: nil)
-        let need = NeedsDbWriter.NeedItem(category: currentNeed.type?.rawValue ?? "miscellany",
+        guard let cat = currentPurpose.getCategory() else { fatalError() }
+        let locData = currentPurpose.getLocationData()
+        let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
@@ -227,27 +224,21 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
-                self.view.makeToast("a Need created successfully!", duration: 2.0, position: .center)
+                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center)
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
         })
     }
 
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeHaveToDatabase() {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-
-
-        if !checkPreconditionsAndAlert(light: false) {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to create a Have", handler: nil)
-            return
-        }
         
-        guard let n = currentPurpose.getCategory() else { fatalError() }
-        let loc = currentPurpose.getLocation()
-        let locData = HavesDbWriter.LocationInfo(city: loc.city, state: loc.state, country: loc.country, address: nil, geoLocation: nil)
-        let have = HavesDbWriter.HaveItem(category: n.rawValue.capitalized,
+        guard let cat = currentPurpose.getCategory() else { fatalError() }
+        let locData = currentPurpose.getLocationData()
+        let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
                                           validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
@@ -258,7 +249,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         havesWriter.addHave(have, completion: { error in
             if error == nil {
-                self.view.makeToast("a Have created successfully!", duration: 2.0, position: .center)
+                self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center)
                 self.descriptionTextView.text = ""
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)

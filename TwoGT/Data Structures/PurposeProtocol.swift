@@ -20,6 +20,9 @@ protocol Purpose {
     
     func isLocationValid() -> Bool
     func getLocation() -> CityState
+    
+    /// - Returns: a `NeedsDbWriter.LocationInfo` object
+    func getLocationData() -> NeedsDbWriter.LocationInfo
     func getCurrentHeadline() -> String
     func getCurrentDescription() -> String
     
@@ -36,6 +39,10 @@ protocol Purpose {
 extension Purpose {
     func setCategory(_ type: NeedType = .miscellany) {}
     func setLocation(fromDefaults: Bool, city: String = "", state: String = "") {}
+    func getLocationData() -> NeedsDbWriter.LocationInfo {
+        let loc = getLocation()
+        return NeedsDbWriter.LocationInfo(city: loc.city, state: loc.state, country: loc.country, address: nil, geoLocation: nil)
+    }
     func setHeadline(_ headline: String? = "", description: String? = "") {}
 }
 
