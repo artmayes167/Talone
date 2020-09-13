@@ -161,6 +161,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         switch type {
         case .home:
             Saves.shared.home = currentPurpose.getLocation()
+            Saves.shared.saveSaves()
         case .alternate:
             if !Saves.shared.alternates.contains(where: { $0 == currentPurpose.getLocation() }) {
                 Saves.shared.alternates.append(currentPurpose.getLocation())

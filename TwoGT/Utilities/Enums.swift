@@ -8,18 +8,33 @@
 
 import Foundation
 
+/// Used specifically for RawRepresentables with rawValue == String.  Default implementation returns a capitalized string.
+   /// - Returns: The string value of the RawRepresentable, formatted according to backend developer preferences.
+protocol DatabaseReady: RawRepresentable {
+    func databaseValue() -> String
+}
+
+extension DatabaseReady {
+    func databaseValue() -> String {
+        if let v = self.rawValue as? String {
+            return v.capitalized
+        }
+        return ""
+    }
+}
+
 enum ProfileButtonType {
     case me, card
 }
 
-enum CustomTheme {
+enum CustomTheme: String, CaseIterable, DatabaseReady {
     case defaultTheme
 }
 
-enum NeedType: String, CaseIterable {
+enum NeedType: String, CaseIterable, DatabaseReady {
     case food, clothes, shelter, furniture, miscellany
 }
 
-enum AddressType {
+enum AddressType: String, CaseIterable, DatabaseReady {
     case home, retail, office, other, custom  // custom for a temporary address
 }
