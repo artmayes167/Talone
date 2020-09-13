@@ -21,6 +21,9 @@ target 'TwoGT' do
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
 
+  # Helpers
+  pod 'SwiftDate'
+
   target 'TwoGTTests' do
     inherit! :search_paths
     # Pods for testing
