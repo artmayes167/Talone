@@ -61,7 +61,7 @@ class ViewIndividualNeedVC: UIViewController {
     }
 
     @objc func keyboardWillHide(notification: NSNotification){
-        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
+        let contentInset: UIEdgeInsets = UIEdgeInsets()
         scrollView.contentInset = contentInset
     }
     

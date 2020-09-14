@@ -80,7 +80,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
+        let contentInset: UIEdgeInsets = UIEdgeInsets()
         scrollView.contentInset = contentInset
     }
 
@@ -170,18 +170,24 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // store values
         switch type {
         case .home:
-            Saves.shared.home = currentPurpose.getLocation()
-            Saves.shared.saveSaves()
+            Saves.shared().home = currentPurpose.getLocation()
+            Saves.saveSaves().printDescription()
+            print("---------- FOR HOME")
         case .alternate:
-            if !Saves.shared.alternates.contains(where: { $0 == currentPurpose.getLocation() }) {
-                Saves.shared.alternates.append(currentPurpose.getLocation())
-                Saves.shared.saveSaves()
+            var oldAlternates: [CityState] = Saves.shared().alternates ?? []
+            if oldAlternates.isEmpty { oldAlternates = [currentPurpose.getLocation()] }
+            else if !oldAlternates.contains(where: { $0 == currentPurpose.getLocation() }) {
+                oldAlternates.append(currentPurpose.getLocation())
             }
+            Saves.shared().alternates = oldAlternates
+            Saves.saveSaves().printDescription()
+            print("---------- FOR ALTERNATE")
         case .none:
             print("No Save Is Not Complete!!!!!")
         }
     }
 
+     // MARK: - Private Functions
     private func checkPreconditionsAndAlert(light: Bool) -> Bool {
         if !currentPurpose.areAllRequiredFieldsFilled(light: light) {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
@@ -269,7 +275,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
 }
 
-extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
+ // MARK: - UITextFieldDelegate
+extension MarketplaceSearchAndCreationVC {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryTextField {
             categoriesPopOver.isHidden = false
@@ -286,10 +293,12 @@ extension MarketplaceSearchAndCreationVC: UITextFieldDelegate {
     }
 }
 
+ // MARK: -
 protocol NeedSelectionDelegate {
     func didSelect(_ need: NeedType)
 }
 
+ // MARK: -
 class NeedsTVC: UITableViewController {
     var delegate: NeedSelectionDelegate?
     let needs = NeedType.allCases
@@ -309,6 +318,7 @@ class NeedsTVC: UITableViewController {
     }
 }
 
+ // MARK: -
 extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textViewDidBeginEditing(_ textView: UITextView) {

@@ -46,8 +46,81 @@ extension Purpose {
     func setHeadline(_ headline: String? = "", description: String? = "") {}
 }
 
-struct CityState: Encodable, Equatable {
+extension String {
+    func taloneDatabaseValue() -> String {
+        return self.capitalized
+    }
+}
+
+class DatabaseReadyClass: NSObject {
+
+    func getAllKeys(myClass: AnyClass) -> [String] {
+        var propertiesCount: CUnsignedInt = 0
+        print(myClass)
+        guard let propertiesInAClass = class_copyPropertyList(myClass, &propertiesCount) else {
+            if myClass.self is Keyed.Type {
+                return myClass.keys()
+            } else { return [] }
+        }
+        var propertiesArray: [String] = []
+        for i in 0..<propertiesCount {
+            let property = propertiesInAClass[Int(i)]
+            if let propName = NSString(cString: property_getName(property), encoding: String.Encoding.utf8.rawValue) {
+                let name = String(propName)
+                propertiesArray.append(name)
+            }
+        }
+        return propertiesArray
+    }
+    
+    func propertyValue(_ key: String) -> AnyObject? {
+        return self.value(forKey: key) as AnyObject?
+    }
+    
+    @objc func propertyClass(_ key: String) -> AnyClass? {
+        if let k = propertyValue(key) as? NSObject {
+            return type(of: k)
+        }
+        return nil
+    }
+}
+
+class CityState: DatabaseReadyClass, NSSecureCoding {
+    
+    enum CodingKeys: String, DatabaseReady {
+        case city, state, country
+    }
+    
     let city: String
     let state: String
     let country = "USA"
+    
+    static var supportsSecureCoding: Bool = true
+    
+    func displayName() -> String {
+        return city + ", " + state
+    }
+    
+    init(city: String, state: String) {
+        self.city = city
+        self.state = state
+    }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(city, forKey: CodingKeys.city.databaseValue())
+        coder.encode(state, forKey: CodingKeys.state.databaseValue())
+        coder.encode(country, forKey: CodingKeys.country.databaseValue())
+    }
+    
+    required convenience init?(coder: NSCoder) {
+        guard
+            let city = coder.decodeObject(forKey: CodingKeys.city.databaseValue()) as? String,
+            let state = coder.decodeObject(forKey: CodingKeys.state.databaseValue()) as? String
+            //let country = coder.decodeObject(forKey: CodingKeys.country.databaseValue()) as? String
+        else {
+            return nil
+        }
+        self.init(city: city, state: state)
+    }
 }
+

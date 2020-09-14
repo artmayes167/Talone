@@ -7,19 +7,19 @@ target 'TwoGT' do
 
   pod 'Alamofire'
   pod 'AlamofireImage', '~> 4.1'
-  pod 'FBSDKCoreKit'  
-  pod 'FBSDKLoginKit'
+  #pod 'FBSDKCoreKit'  # Crypto
+  #pod 'FBSDKLoginKit' # Crypto
   # pod 'FacebookShare'
   pod 'Toast-Swift', '~> 5.0.1'
   
   # Add the Firebase pod for Google Analytics
-  pod 'Firebase/Analytics'
+  pod 'Firebase/Analytics' # Crypto
 
   # Add the pods for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore
-  pod 'Firebase/Auth'
-  pod 'Firebase/Firestore'
-  pod 'FirebaseFirestoreSwift'
+  pod 'Firebase/Auth'  # Crypto
+  pod 'Firebase/Firestore' # Crypto
+  pod 'FirebaseFirestoreSwift' # Crypto
 
   # Helpers
   pod 'SwiftDate'

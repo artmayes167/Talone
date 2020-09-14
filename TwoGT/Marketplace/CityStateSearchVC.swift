@@ -17,7 +17,7 @@ enum SaveType: Int, CaseIterable {
     case home, alternate, none
 }
 
-class CityStateSearchVC: UIViewController, UITextFieldDelegate {
+class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var stateTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
@@ -31,14 +31,16 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
     
     // Managing Saved/New
     @IBOutlet weak var savedLocationTableView: UITableView!
-    @IBOutlet weak var newCreationStack: UIStackView!
-    var savedLocations: [String] = []
+    @IBOutlet weak var savedLocationView: UIView!
     
+    @IBOutlet weak var newCreationStack: UIStackView!
+    var savedLocations: Saves = Saves.shared()
     
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?
     var states: [USState] = []
     var allStates: [String] = []
+    var sectionTitles: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,9 +54,9 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             
-            print(jsonData)
+            //print(jsonData)
             let container = try decoder.decode([String: [String]].self, from: jsonData) as [String: [String]]
-            print(container)
+            //print(container)
             container.forEach { (key, value) in
                 let st = USState(name: key, cities: value)
                 states.append(st)
@@ -62,10 +64,13 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
             }
             allStates.sort{ $0 < $1 }
             stateSelector?.configure(list: allStates, itemType: .state)
+            stateContainer.isHidden = true
             
         } catch {
             print(error.localizedDescription)
         }
+        savedLocationTableView.reloadData()
+        savedLocationView.isHidden = true
     }
     
     
@@ -73,15 +78,17 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
         
         switch sender.selectedSegmentIndex {
         case 0:
-            savedLocationTableView.isHidden = true
+            savedLocationView.isHidden = true
             newCreationStack.isHidden = false
+            view.layoutIfNeeded()
         case 1:
-            savedLocationTableView.isHidden = false
+            savedLocationView.isHidden = false
             newCreationStack.isHidden = true
+            view.layoutIfNeeded()
+            savedLocationTableView.reloadData()
         default:
             print("Oops in CityStateSearchVC")
         }
-        view.layoutIfNeeded()
     }
     
     var saveType: SaveType = .none
@@ -140,13 +147,55 @@ class CityStateSearchVC: UIViewController, UITextFieldDelegate {
 }
 
 extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
+    
+    func applicableSections() -> NSDictionary {
+        sectionTitles = Saves.CodingKeys.allCases.map { $0.rawValue }
+        sectionTitles.sort { $0 > $1 }
+        var myDict: [String: AnyObject?] = [:]
+        for s in sectionTitles {
+            myDict[s] = Saves.shared().propertyValue(s)
+        }
+        let compactDict = myDict.filter { (key, value) -> Bool in
+            if let v = value as? [CityState], !v.isEmpty { return true }
+            if let _ = value as? CityState { return true }
+            return false
+        }     //compactMapValues { obj in obj }
+        sectionTitles = sectionTitles.filter { compactDict[$0] != nil }
+        return NSDictionary(dictionary: compactDict as [AnyHashable : Any])
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        _ = applicableSections()
+        return sectionTitles.count
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
+        _ = applicableSections()
+        let a = sectionTitles
+        cell.titleLabel.text = a[section]
+        return cell.contentView
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return savedLocations.count
+        if let _ = applicableSections()[sectionTitles[section]] as? CityState { return 1 }
+        if let item = applicableSections()[sectionTitles[section]] as? [CityState] { return item.count }
+        print("applicableSections mechanism has failed miserably in numberOfRowsInSection")
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
-        cell.titleLabel.text = savedLocations[indexPath.row]
+        let sections = applicableSections()
+        
+        if let item = sections[sectionTitles[indexPath.section]] as? CityState {
+            cell.titleLabel.text = item.displayName()
+        } else if let item = sections[sectionTitles[indexPath.section]] as? [CityState] {
+                cell.titleLabel.text = item[indexPath.row].displayName()
+        } else {
+            cell.titleLabel.text = "Suck It, Art"
+            print("applicableSections mechanism has failed miserably in cellForRowAt")
+        }
         return cell
     }
     
@@ -206,7 +255,6 @@ class LocationPickerTVC: UITableViewController {
         self.list = list
         type = itemType
         tableView.reloadData()
-        view.layoutIfNeeded()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

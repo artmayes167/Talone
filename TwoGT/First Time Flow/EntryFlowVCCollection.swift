@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import Toast_Swift
 
-class EnterEmailVC: UIViewController, UITextFieldDelegate {
+class EnterEmailVC: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var confirmEmailExistsAlready: DesignableButton!
@@ -44,10 +44,6 @@ class EnterEmailVC: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.text = UserDefaults.standard.string(forKey: "Email") ?? ""
@@ -58,7 +54,7 @@ class EnterEmailVC: UIViewController, UITextFieldDelegate {
     }
 }
 
-class EnterVerificationVC: UIViewController, UITextFieldDelegate {
+class EnterVerificationVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
 
     @IBOutlet weak var signInInfo: UILabel!
@@ -83,11 +79,6 @@ class EnterVerificationVC: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setSignInButtonState()
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 
     private func setSignInButtonState() {
@@ -130,7 +121,7 @@ class EnterVerificationVC: UIViewController, UITextFieldDelegate {
     }
 }
 
-class EnterHandleVC: UIViewController, UITextFieldDelegate {
+class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
 
     @IBAction func submitHandle(_ sender: Any) {
@@ -142,10 +133,5 @@ class EnterHandleVC: UIViewController, UITextFieldDelegate {
 
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

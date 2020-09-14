@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 import LocalAuthentication
-import FBSDKCoreKit
+//import FBSDKCoreKit
 import Firebase
 
 @UIApplicationMain
@@ -26,7 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if def.string(forKey: "admin") == nil {
             def.set("xxxx", forKey: "admin")
         }
+        
         // Notify FB application delegate
+        /*
         ApplicationDelegate.shared.application(
                    application,
                    didFinishLaunchingWithOptions: launchOptions
@@ -36,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let uuid = UUID().uuidString
             UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
         }
+ */
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
@@ -53,16 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
-
-            ApplicationDelegate.shared.application(
-                app,
-                open: url,
-                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-            )
-
-        }
+//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
+        // Notify FB application delegate
+//            ApplicationDelegate.shared.application(
+//                app,
+//                open: url,
+//                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+//                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+//            )
+//
+//        }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
@@ -187,10 +190,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 //    }
 
-}
-
-extension AppDelegate {
-    func loadKeychainData() {
-        Saves.shared.loadSaves()
-    }
 }

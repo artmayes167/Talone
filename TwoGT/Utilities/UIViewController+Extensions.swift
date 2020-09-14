@@ -78,3 +78,10 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 }
+
+extension UIViewController: UITextFieldDelegate {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
