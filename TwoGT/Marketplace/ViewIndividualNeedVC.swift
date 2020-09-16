@@ -9,10 +9,10 @@
 import UIKit
 
 class ViewIndividualNeedVC: UIViewController {
-    var need: Need? {
+    var needItem: NeedsBase.NeedItem? {
         didSet {
             if isViewLoaded {
-                populateUI(with: need)
+                populateUI()
             }
         }
     }
@@ -38,16 +38,19 @@ class ViewIndividualNeedVC: UIViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
         
+        if let owner = needItem?.owner {
+            headerTitleLabel.text = String(format: "%@'s Need", owner)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        populateUI(with: need)
+        populateUI()
         
     }
     
-    func populateUI(with need: Need?) {
-        guard let n = need?.needItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
+    func populateUI() {
+        guard let n = needItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
         needTypeLabel.text = n
         locationLabel.text = cityState.displayName()
     }

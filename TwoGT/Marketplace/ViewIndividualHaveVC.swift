@@ -17,8 +17,6 @@ class ViewIndividualHaveVC: UIViewController {
         }
     }
     
-    var have: Have?
-    
     // Manages live activity in the app
     var creationManager: PurposeCreationManager?
     
@@ -40,6 +38,9 @@ class ViewIndividualHaveVC: UIViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
         
+        if let owner = haveItem?.owner {
+            headerTitleLabel.text = String(format: "%@'s Have", owner)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

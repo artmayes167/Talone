@@ -52,7 +52,9 @@ class NeedsSearchDisplayVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewNeed" {
-            
+            guard let vc = segue.destination as? ViewIndividualNeedVC, let n = sender as? NeedsBase.NeedItem else { fatalError() }
+            vc.needItem = n
+            vc.creationManager = creationManager
         }
     }
 }
@@ -74,6 +76,10 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
         cell.configure(needs[indexPath.item])
        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "viewNeed", sender: needs[indexPath.item])
     }
 }
 
