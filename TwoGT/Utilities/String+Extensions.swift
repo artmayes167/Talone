@@ -12,4 +12,8 @@ extension String {
     func localized(_ comment: String = "This translation should be self-explanatory") -> String {
       return NSLocalizedString(self, comment: comment)
     }
+    
+    func taloneDatabaseValue() -> String {
+        return self.capitalized
+    }
 }

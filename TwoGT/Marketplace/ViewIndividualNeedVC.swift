@@ -17,6 +17,9 @@ class ViewIndividualNeedVC: UIViewController {
         }
     }
     
+    // Manages live activity in the app
+    var creationManager: PurposeCreationManager?
+    
     @IBOutlet weak var headerTitleLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -44,9 +47,9 @@ class ViewIndividualNeedVC: UIViewController {
     }
     
     func populateUI(with need: Need?) {
-        guard let n = need else { return }
-        needTypeLabel.text = n.type?.rawValue.capitalized
-        locationLabel.text = n.city + ", " + n.state
+        guard let n = need?.needItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
+        needTypeLabel.text = n
+        locationLabel.text = cityState.displayName()
     }
     
     // MARK: - Keyboard Notifications

@@ -1,21 +1,21 @@
 //
-//  NeedsSearchDisplayVC.swift
+//  HavesSearchDisplayVC.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/9/20.
+//  Created by Arthur Mayes on 9/15/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 
 import UIKit
 import AlamofireImage
 
-class NeedsSearchDisplayVC: UIViewController {
+class HavesSearchDisplayVC: UIViewController {
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
     @IBOutlet weak var collectionView: UICollectionView!
     
     var creationManager: PurposeCreationManager?
-    var needs: [NeedsBase.NeedItem] = [] {
+    var haves: [HavesBase.HaveItem] = [] {
         didSet {
             if isViewLoaded {
                 collectionView.reloadData()
@@ -57,7 +57,7 @@ class NeedsSearchDisplayVC: UIViewController {
     }
 }
 
-extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension HavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -65,19 +65,19 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return needs.count
+        return haves.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PurposeCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HaveCell
        
-        cell.configure(needs[indexPath.item])
+        cell.configure(haves[indexPath.item])
        
         return cell
     }
 }
 
-extension NeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
+extension HavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
@@ -85,16 +85,16 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-class PurposeCell: UICollectionViewCell {
+class HaveCell: UICollectionViewCell {
     
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    func configure(_ need: NeedsBase.NeedItem) {
+    func configure(_ have: HavesBase.HaveItem) {
         
         let size = CGSize(width: 128.0, height: 128.0)
-        let aspectScaledToFitImage = UIImage(named: need.category.lowercased())!.af.imageAspectScaled(toFit: size)
+        let aspectScaledToFitImage = UIImage(named: have.category.lowercased())!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
-        titleLabel.text = need.description // different identifier needed?
+        titleLabel.text = have.description // different identifier needed?
     }
 }

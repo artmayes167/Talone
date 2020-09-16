@@ -24,6 +24,11 @@ class FirebaseGeneric {
     struct GeographicCoordinates: Codable {
         var latitude: Double
         var longitude: Double
+        
+        init(latitude: Double, longitude: Double) {
+            self.latitude = latitude
+            self.longitude = longitude
+        }
     }
 
     struct LocationInfo: Codable {
@@ -32,14 +37,33 @@ class FirebaseGeneric {
         var country: String
         var address: AddressInfo?
         var geoLocation: GeographicCoordinates?
+        
+        init(locationInfo: AppLocationInfo) {
+            guard let coords = locationInfo.geoLocation?.geographicCoordinates else { fatalError() }
+            self.city = locationInfo.city
+            self.state = locationInfo.state
+            self.country = locationInfo.country
+            self.address = nil
+            self.geoLocation = GeographicCoordinates(latitude: coords.latitude!, longitude: coords.longitude!)
+        }
+        
+        init(city: String, state: String, country: String = "USA", address: AddressInfo?, geoLocation: GeographicCoordinates?) {
+            self.city = city
+            self.state = state
+            self.country = country
+            self.address = address
+            self.geoLocation = geoLocation
+        }
     }
 }
+
+
 
 class NeedsBase: FirebaseGeneric {
 
     struct NeedItem: Identifiable, Codable {
         @DocumentID var id: String? = UUID().uuidString
-        var category: String
+        var category: String // Inherited
         var description: String?
         var validUntil: Int
         var owner: String

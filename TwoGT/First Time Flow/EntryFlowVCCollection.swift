@@ -124,8 +124,15 @@ class EnterVerificationVC: UIViewController {
 class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
 
-    @IBAction func submitHandle(_ sender: Any) {
+    @IBAction func submitHandle(_ sender: UIButton) {
+        guard let t = textField.text, !(t.count < 4)  else {
+            showOkayAlert(title: "Oops", message: "Please choose a handle with 4 or more characters") { _ in }
+            return
+        }
         // completion
+        guard let email = UserDefaults.standard.string(forKey: "Email") else { fatalError() }
+        let u = UserClass(handle: t, personalData: PersonalData(email: email), avatarData: nil, cards: nil)
+        Saves.shared.user = User(user: u)
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
             self.performSegue(withIdentifier: "toBase", sender: nil)
         }

@@ -1,49 +1,77 @@
+// Card.swift
+
+// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// To parse the JSON, add this file to your project and do:
 //
-//  Card.swift
-//  TwoGT
+//   let card = try Card(json)
 //
-//  Created by Arthur Mayes on 8/15/20.
-//  Copyright © 2020 Arthur Mayes. All rights reserved.
+// To parse values from Alamofire responses:
 //
+//   Alamofire.request(url).responseCard { response in
+//     if let card = response.result.value {
+//       ...
+//     }
+//   }
 
 import Foundation
+import Alamofire
 
-enum CardSection: String, CaseIterable {
-    case address, phone, notes
+// MARK: - Card
+@objcMembers class Card: NSObject, Codable {
+    var handle: String?
+    var personalData: PersonalData?
+    var avatarData: AvatarData?
+    var personalNotes, cardComments: String?
+
+    init(handle: String?, personalData: PersonalData?, avatarData: AvatarData?, personalNotes: String?, cardComments: String?) {
+        self.handle = handle
+        self.personalData = personalData
+        self.avatarData = avatarData
+        self.personalNotes = personalNotes
+        self.cardComments = cardComments
+    }
 }
 
-enum Addresses: String, CaseIterable {
-    case email, home, work, box
-}
+// MARK: Card convenience initializers and mutators
 
-enum Phone: String, CaseIterable {
-    case home, cell, work, fax
-}
+extension Card {
+    convenience init(data: Data) throws {
+        let me = try newJSONDecoder().decode(Card.self, from: data)
+        self.init(handle: me.handle, personalData: me.personalData, avatarData: me.avatarData, personalNotes: me.personalNotes, cardComments: me.cardComments)
+    }
 
-enum Note: String, CaseIterable {
-    case cardOwner, user
-}
+    convenience init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
 
-//func getKeys(for section: CardSection) -> [String] {
-//    switch section {
-//    case .address:
-//        return Addresses.allCases.compactMap { $0.rawValue }
-//    case .phone:
-//        return Phone.allCases.compactMap { $0.rawValue }
-//    case .notes:
-//        return Note.allCases.compactMap { $0.rawValue }
-//    }
-// }
+    convenience init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
 
+    func with(
+        handle: String?? = nil,
+        personalData: PersonalData?? = nil,
+        avatarData: AvatarData?? = nil,
+        personalNotes: String?? = nil,
+        cardComments: String?? = nil
+    ) -> Card {
+        return Card(
+            handle: handle ?? self.handle,
+            personalData: personalData ?? self.personalData,
+            avatarData: avatarData ?? self.avatarData,
+            personalNotes: personalNotes ?? self.personalNotes,
+            cardComments: cardComments ?? self.cardComments
+        )
+    }
 
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
 
-struct Card {
-    // Store sections as dictionaries, and include all dictionaries (empty or not) in payload
-    // An empty dictionary signals that a section is not included
-    // If User doesn't include a section in their card, we send an empty (or null?) dict
-    // If User once sent a card to someone, we could enable deletion of their contact information by replacing the previous card with empty dictionaries (to replace the data on their end), and deleting the card reference on the back end afterward
-    
-    var sections: [CardSection: [String: String]] = [:]
-   // var creep = false
-    // set up a keychain store for on-device encryption of personal data
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
 }

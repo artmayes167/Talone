@@ -35,54 +35,12 @@ enum ArchiveError: Error, Equatable {
     }
 }
 
-class Saves: DatabaseReadyClass, NSSecureCoding, Keyed {
+final class Saves: NSObject {
     
-    private static var privateSelf = Saves.loadSaves()
-    private var liveSaves: Saves?
-    
-    class func shared() -> Saves {
-        return Saves.privateSelf.liveSaves!
-    }
+    static let shared = Saves()
         
     static let saveLocation = "SavedLocations"
-    
-    var home: CityState? 
-    var alternates: [CityState]?
-    
-    enum CodingKeys: String, DatabaseReady {
-        case home, alternates
-    }
-    
-    override func propertyValue(_ key: String) -> AnyObject? {
-        switch key {
-        case CodingKeys.home.rawValue:
-            return self.home as CityState?
-        case CodingKeys.alternates.rawValue:
-            return self.alternates as AnyObject?
-        default:
-            return nil
-        }
-    }
-    
-    @objc static func keys() -> [String] {
-        let cases =  NSString.init(string: "\(CodingKeys.allCases)")
-        let casesWithout = cases.replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
-        let array = casesWithout.components(separatedBy: ", ") as [String]
-        var returnArray: [String] = []
-        for s in array {
-            let newArray = s.components(separatedBy: ".")
-            let count = newArray.count
-            if count < 2 { fatalError() }
-            let str = /*newArray[count-2] + "." +*/ newArray[count-1]
-            returnArray.append(str)
-        }
-        return returnArray
-    }
-    
-    init(home: CityState?, alternates: [CityState]?) {
-        self.home = home
-        self.alternates = alternates ?? []
-    }
+    var user: User?
     
     class func checkDocumentsDirectory() -> URL? {
         var localUrl: URL
@@ -99,7 +57,7 @@ class Saves: DatabaseReadyClass, NSSecureCoding, Keyed {
     class func saveSaves() -> ArchiveError {
         guard let url = Saves.checkDocumentsDirectory() else { return .failedToGenerateFilePath() }
         do {
-            let archiver = try NSKeyedArchiver.archivedData(withRootObject: Saves.shared() as Any, requiringSecureCoding: true)
+            let archiver = try NSKeyedArchiver.archivedData(withRootObject: Saves.shared.user as Any, requiringSecureCoding: true)
             do {
                 try archiver.write(to: url)
             } catch {
@@ -112,31 +70,31 @@ class Saves: DatabaseReadyClass, NSSecureCoding, Keyed {
         return .none()
     }
     
-    class func loadSaves() -> Saves {
-        var save: Saves = Saves(home: nil, alternates: [])
-        
-        guard let data = Saves.getData() else {
-            print(ArchiveError.noDataFound())
-            return save
-        }
-        
-        do {
-            let saves = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)
-            if let s = saves as? Saves {
-                print("++++++++++NSKeyedUnarchiver found saves!-----  \(s)+++++++++++++")
-                save = s
-            }
-        } catch {
-            print(ArchiveError.dataFoundButNotUnarchived())
-            return save
-        }
-        save.liveSaves = save
-        print(ArchiveError.none())
-        return save
+    func encode(with: NSCoder) {
         
     }
     
-    class func getData() -> Data? {
+    private class func loadSaves() {
+        
+        guard let data = Saves.getData() else {
+            print(ArchiveError.noDataFound())
+            return
+        }
+        
+        do {
+            Saves.shared.user = try User(data: data)
+            
+            print("++++++++++Created User From Data!!!!!!!+++++++++++++")
+            print(ArchiveError.none())
+            return
+        } catch {
+            print(ArchiveError.dataFoundButNotUnarchived())
+            return
+        }
+        
+    }
+    
+    private class func getData() -> Data? {
         guard let localUrl = Saves.checkDocumentsDirectory() else {
             print(ArchiveError.failedToGenerateURL())
             return nil
@@ -149,22 +107,22 @@ class Saves: DatabaseReadyClass, NSSecureCoding, Keyed {
         }
     }
     
-    func encode(with coder: NSCoder) {
-        coder.encode(home, forKey: CodingKeys.home.databaseValue())
-        coder.encode(alternates, forKey: CodingKeys.alternates.databaseValue())
-    }
+//    func encode(with coder: NSCoder) {
+//
+//    }
+    
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+////        var cityStateContainer = container
+////            .nestedContainer(keyedBy: CityState.CodingKeys.self, forKey: .home)
+////        try cityStateContainer.encode(home?.city, forKey: .city)
+////        try cityStateContainer.encode(home?.state, forKey: .state)
+////        try cityStateContainer.encode(home?.country, forKey: .country)
+//
+//        try container.encode(home, forKey: .home)
+//        try container.encode(alternates, forKey: CodingKeys.alternates)
+//    }
     
     static var supportsSecureCoding: Bool = true
-    
-    required init?(coder: NSCoder) {
-//        guard
-//            let home = coder.decodeObject(of: CityState.self, forKey: CodingKeys.home.databaseValue()) as? CityState,
-//            let alternates = coder.decodeObject(of: [CityState].self, forKey: CodingKeys.state.databaseValue()) as? [CityState]
-//        else {
-//            return nil
-//        }
-//
-//        self.home = home
-//        self.alternates = alternates
-    }
 }
+

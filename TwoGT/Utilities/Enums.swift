@@ -8,9 +8,9 @@
 
 import Foundation
 
-@objc protocol Keyed {
-    @objc static func keys() -> [String]
-}
+//@objc protocol Keyed {
+//    @objc static func keys() -> [String]
+//}
 
 /// Used specifically for `RawRepresentables` with `rawValue == String`.  Default implementation returns a `String.capitalized` if applicable, and an empty `String` if `rawValue` fails to translate.
    /// - Returns: The `String` value of the `RawRepresentable`, formatted according to backend developer preferences.
@@ -46,7 +46,7 @@ enum CustomTheme: String, CaseIterable, DatabaseReady {
 }
 
 enum NeedType: String, CaseIterable, DatabaseReady {
-    case food, clothes, shelter, furniture, miscellany
+    case none, food, clothes, shelter, furniture, miscellany
 }
 
 enum AddressType: String, CaseIterable, DatabaseReady {

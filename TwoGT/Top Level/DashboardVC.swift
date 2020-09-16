@@ -85,6 +85,7 @@ class DashboardVC: UIViewController {
     }
     
     var needsWriter = NeedsDbWriter()
+    var havesWriter = HavesDbWriter()
     var states: [USState] = []
     var allStates: [String] = []
     @IBAction func makeNeeds() {
@@ -112,10 +113,23 @@ class DashboardVC: UIViewController {
         for s in states {
             let c = s.cities
             for city in c {
-                let locData = NeedsDbWriter.LocationInfo(city: city, state: s.name, country: "USA", address: nil, geoLocation: nil)
+                /// create new needs
+//                let locData = NeedsDbWriter.LocationInfo(city: city, state: s.name, country: "USA", address: nil, geoLocation: nil)
+//                let cat = NeedType.allCases[Int(arc4random())%5].rawValue.capitalized
+//                let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(s.name), \(cat)"), validUntil: 4124045393, owner: "artmayes167", createdBy: "artmayes167@gmail.com", locationInfo: locData)
+//                self.needsWriter.addNeed(need, completion: { error in
+//                    if error == nil {
+//                        print("Need added!")
+//                    } else {
+//                        print("Error writing a need: \(error!)")
+//                    }
+//                })
+                
+                /// create new haves
+                let locData = HavesDbWriter.LocationInfo(city: city, state: s.name, country: "USA", address: nil, geoLocation: nil)
                 let cat = NeedType.allCases[Int(arc4random())%5].rawValue.capitalized
-                let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(c), \(s.name), \(cat)"), validUntil: 4124045393, owner: "artmayes167", createdBy: "artmayes167@gmail.com", locationInfo: locData)
-                self.needsWriter.addNeed(need, completion: { error in
+                let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(s.name), \(cat)"), validUntil: 4124045393, owner: "artmayes167", createdBy: "artmayes167@gmail.com", locationInfo: locData)
+                self.havesWriter.addHave(have, completion: { error in
                     if error == nil {
                         print("Need added!")
                     } else {
