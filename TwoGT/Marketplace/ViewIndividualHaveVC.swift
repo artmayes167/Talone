@@ -24,8 +24,10 @@ class ViewIndividualHaveVC: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var needTypeLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
+    
+    
+  
     
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
@@ -51,8 +53,8 @@ class ViewIndividualHaveVC: UIViewController {
     
     func populateUI() {
         guard let n = haveItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
-        needTypeLabel.text = n
-        locationLabel.text = cityState.displayName()
+        locationLabel.text = String(format:"%@ in %@", n, cityState.displayName())
+        view.layoutIfNeeded()
     }
     
     // MARK: - Keyboard Notifications
