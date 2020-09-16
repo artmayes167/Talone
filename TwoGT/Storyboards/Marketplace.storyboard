@@ -97,11 +97,11 @@
                                         <rect key="frame" x="20" y="-6" width="374" height="693"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYL-sd-S7S" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="100" y="4" width="174" height="100"/>
+                                                <rect key="frame" x="100" y="4" width="174" height="200"/>
                                                 <color key="backgroundColor" red="0.51219951700907806" green="1" blue="0.61904517779075441" alpha="0.67851027399999997" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" priority="750" constant="100" id="7A8-qw-2bi"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="fVZ-9v-Du6"/>
+                                                    <constraint firstAttribute="height" priority="750" constant="200" id="7A8-qw-2bi"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="fVZ-9v-Du6"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
@@ -205,6 +205,7 @@
                                             <constraint firstItem="OwC-eh-gOI" firstAttribute="leading" secondItem="aRW-FL-X2M" secondAttribute="leading" constant="12" id="IR0-g4-kuL"/>
                                             <constraint firstItem="4xN-Qz-67P" firstAttribute="top" secondItem="9QH-wr-9hW" secondAttribute="bottom" id="Jpn-7f-TUF"/>
                                             <constraint firstItem="jmK-BQ-ztz" firstAttribute="top" secondItem="jvR-Cp-8ir" secondAttribute="bottom" id="KCq-qT-Zqb"/>
+                                            <constraint firstItem="jvR-Cp-8ir" firstAttribute="top" relation="lessThanOrEqual" secondItem="eYL-sd-S7S" secondAttribute="bottom" constant="-186" id="Kgx-j9-4O4"/>
                                             <constraint firstAttribute="trailing" secondItem="jvR-Cp-8ir" secondAttribute="trailing" id="MwP-FD-gLg"/>
                                             <constraint firstItem="9QH-wr-9hW" firstAttribute="leading" secondItem="aRW-FL-X2M" secondAttribute="leading" id="bWq-ce-z8i"/>
                                             <constraint firstItem="jvR-Cp-8ir" firstAttribute="leading" secondItem="aRW-FL-X2M" secondAttribute="leading" id="esT-vw-39Y"/>
@@ -309,6 +310,7 @@
                                             </view>
                                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FDX-yK-q78">
                                                 <rect key="frame" x="0.0" y="177.5" width="390" height="200"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="200" id="BeO-cF-FTs"/>
                                                 </constraints>
@@ -1139,10 +1141,10 @@
         <scene sceneID="W2o-LQ-M5V">
             <objects>
                 <tableViewController id="Z2s-xn-AA5" customClass="NeedsTVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ib5-qc-IUl">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ib5-qc-IUl">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="xs1-n9-7OB">
                                 <rect key="frame" x="0.0" y="28" width="390" height="43.5"/>
@@ -1150,7 +1152,10 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xs1-n9-7OB" id="Eby-ef-6wV">
                                     <rect key="frame" x="0.0" y="0.0" width="390" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1161,7 +1166,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9VB-w2-K4B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3545" y="-368"/>
+            <point key="canvasLocation" x="3151" y="-380"/>
         </scene>
         <!--Location PickerTVC-->
         <scene sceneID="PI5-vd-ZOh">
