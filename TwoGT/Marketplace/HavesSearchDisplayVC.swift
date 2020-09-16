@@ -51,8 +51,10 @@ class HavesSearchDisplayVC: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "viewNeed" {
-            
+        if segue.identifier == "viewHave" {
+            guard let vc = segue.destination as? ViewIndividualHaveVC, let h = sender as? HavesBase.HaveItem else { fatalError() }
+            vc.haveItem = h
+            vc.creationManager = creationManager
         }
     }
 }
@@ -74,6 +76,10 @@ extension HavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
         cell.configure(haves[indexPath.item])
        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "viewHave", sender: haves[indexPath.item])
     }
 }
 

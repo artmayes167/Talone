@@ -29,3 +29,5 @@
 //  stack by Adrien Coquet from the Noun Project
 
 // leadership by Adrien Coquet from the Noun Project
+
+// sun by OneShoot from the Noun Project
