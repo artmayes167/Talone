@@ -85,3 +85,5 @@ extension UIViewController: UITextFieldDelegate {
         return true
     }
 }
+
+extension UIViewController: ModalBackButtonDelegate {}

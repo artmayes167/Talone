@@ -36,6 +36,9 @@ class CityStateSearchVC: UIViewController {
     @IBOutlet weak var newCreationStack: UIStackView!
     var savedLocations = Saves.shared.user?.user?.searches
     
+    @IBOutlet weak var statesCoverView: UIView?
+    
+    
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?
     var states: [USState] = []
@@ -44,7 +47,9 @@ class CityStateSearchVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if let s = statesCoverView {
+            view.bringSubviewToFront(s)
+        }
         savedLocationTableView.rowHeight = UITableView.automaticDimension
         savedLocationTableView.estimatedRowHeight = 50
 
@@ -65,6 +70,7 @@ class CityStateSearchVC: UIViewController {
             allStates.sort{ $0 < $1 }
             stateSelector?.configure(list: allStates, itemType: .state)
             stateContainer.isHidden = true
+            statesCoverView?.isHidden = true
             
         } catch {
             print(error.localizedDescription)
@@ -112,10 +118,12 @@ class CityStateSearchVC: UIViewController {
         case stateTextField:
             textField.resignFirstResponder()
             stateContainer.isHidden = false
+            statesCoverView?.isHidden = false
             cityContainer.isHidden = true
         case cityTextField:
             textField.resignFirstResponder()
             stateContainer.isHidden = true
+            statesCoverView?.isHidden = true
             cityContainer.isHidden = false
         default:
             print("Need another segue defined in CityStateSearchVC")
@@ -145,7 +153,11 @@ class CityStateSearchVC: UIViewController {
     }
     
     @IBAction func back(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        if let n = self.navigationController {
+            n.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
 }
@@ -213,6 +225,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
             stateTextField.text = item
             // Hide the table in the stack
             stateContainer.isHidden = true
+            statesCoverView?.isHidden = true
             selectedLocation.state = item
             if let arr = states.first(where: { $0.name.uppercased() == item.uppercased() })?.cities {
                 cityTextField.text = ""
@@ -259,9 +272,10 @@ class LocationPickerTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
-        cell?.textLabel?.text = list[indexPath.row]
-        return cell ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SimpleSearchCell
+        cell.basicLabel.text = list[indexPath.row]
+        // cell.colorBar
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

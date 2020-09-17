@@ -30,4 +30,14 @@
 
 // leadership by Adrien Coquet from the Noun Project
 
-// sun by OneShoot from the Noun Project
+// sun by OneShoot from the Noun Project (used top and bottom of image)
+
+// Arrow by Ghiyats Mujtaba from the Noun Project (downArrow)
+
+// confused by Kevin from the Noun Project
+
+// marketplace by Vectors Market from the Noun Project
+
+// event by Saifurrijal from the Noun Project
+
+// internship by Ralf Schmitzer from the Noun Project

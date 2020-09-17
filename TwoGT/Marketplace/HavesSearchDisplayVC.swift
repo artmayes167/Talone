@@ -57,6 +57,8 @@ class HavesSearchDisplayVC: UIViewController {
             vc.creationManager = creationManager
         }
     }
+    
+     @IBAction func unwindToSearchDisplay( _ segue: UIStoryboardSegue) {}
 }
 
 extension HavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {

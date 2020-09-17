@@ -124,8 +124,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
-        categoriesPopOver.isHidden = true
         categoryTextField.text = need.rawValue.capitalized
+        categoriesPopOver.isHidden = true
         
         if let c = creationManager {
            c.setCategory(need)
@@ -161,6 +161,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
+    
         if let s = segue.source as? CityStateSearchVC {
             
             if creationManager == nil {
@@ -334,10 +335,17 @@ class NeedsTVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = needs[indexPath.row].rawValue.capitalized
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SimpleSearchCell
+        cell.basicLabel.text = needs[indexPath.row].rawValue.capitalized
         return cell
     }
+}
+
+class SimpleSearchCell: UITableViewCell {
+    
+    @IBOutlet weak var basicLabel: UILabel!
+    @IBOutlet weak var colorBar: UIView!
+    
 }
 
  // MARK: -
