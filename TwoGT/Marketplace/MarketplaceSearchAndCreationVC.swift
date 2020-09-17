@@ -210,7 +210,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Private Functions
     private func checkPreconditionsAndAlert(light: Bool) -> Bool {
-        guard let c = creationManager else { fatalError() }
+        guard let c = creationManager else {
+            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+            return false
+        }
         if !c.areAllRequiredFieldsFilled(light: light) {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return false

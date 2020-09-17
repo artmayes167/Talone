@@ -152,13 +152,29 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hr-2k-bNM" customClass="ModalBackButton" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="12" y="44" width="50" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="Hah-kb-z3D"/>
+                                    <constraint firstAttribute="height" constant="45" id="kNC-iN-njP"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="u6w-X8-WFl" kind="unwind" unwindAction="unwindToEventsSearchAndCreationVC:" id="rpr-tj-M4e"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="0hr-2k-bNM" firstAttribute="leading" secondItem="F3o-GD-lD7" secondAttribute="leading" constant="12" id="Ebc-0Q-SHw"/>
+                            <constraint firstItem="0hr-2k-bNM" firstAttribute="top" secondItem="F3o-GD-lD7" secondAttribute="top" id="VAB-58-GPF"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="F3o-GD-lD7"/>
                     </view>
                     <navigationItem key="navigationItem" id="lwM-rV-PAh"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kn0-5S-uXG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="u6w-X8-WFl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2875" y="275"/>
         </scene>
@@ -228,7 +244,7 @@
                                         </constraints>
                                         <state key="normal" title="Back"/>
                                         <connections>
-                                            <action selector="back:" destination="w6T-mM-UiC" eventType="touchUpInside" id="bGc-Gh-gk8"/>
+                                            <segue destination="fN4-ph-7fr" kind="unwind" unwindAction="unwindToEventsSearchAndCreationVC:" id="kVn-f3-rtD"/>
                                         </connections>
                                     </button>
                                 </subviews>

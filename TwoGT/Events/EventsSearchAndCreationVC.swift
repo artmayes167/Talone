@@ -15,7 +15,6 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Outlets
         @IBOutlet weak var categoryTextField: UITextField!
         @IBOutlet weak var categoriesPopOver: UIView!
-        @IBOutlet weak var whereTextLabel: UILabel!
         @IBOutlet weak var whereTextField: UITextField!
         @IBOutlet weak var buttonsAndDescriptionView: UIView!
 
@@ -26,7 +25,6 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         @IBOutlet weak var scrollView: UIScrollView!
 
          // MARK: - Variables
-        var currentNeedHaveSelectedSegmentIndex = 0
         var creationManager: PurposeCreationManager?
 
         override func getKeyElements() -> [String] {
@@ -80,7 +78,6 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
         /// Saved locations for selection are saved in the keychain, using the Saves.shared object
         func setUIForCurrents() {
-            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex) ?? .unknown)
             if let loc = creationManager?.getLocationOrNil() {
                 whereTextField.text = loc.displayName()
             }
@@ -97,21 +94,7 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
 
         @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
-            currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
-            whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
-            createNewNeedHaveButton.titleLabel?.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
             setUIForCurrents() // sets needType, and populates location label
-        }
-
-        @IBAction func createNeedHaveTouched(_ sender: Any) {
-            if checkPreconditionsAndAlert(light: false) {
-                switch currentNeedHaveSelectedSegmentIndex {
-                       case 1:
-                           storeHaveToDatabase()
-                       default:
-                           storeNeedToDatabase()
-                       }
-            }
         }
 
         @IBAction func seeMatchingNeeds(_ sender: Any) {
@@ -148,7 +131,7 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
 
-       @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
+       @IBAction func unwindToEventsSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         
             if let s = segue.source as? CityStateSearchVC {
                 
@@ -198,7 +181,10 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
          // MARK: - Private Functions
         private func checkPreconditionsAndAlert(light: Bool) -> Bool {
-            guard let c = creationManager else { fatalError() }
+            guard let c = creationManager else {
+                showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+                return false
+            }
             if !c.areAllRequiredFieldsFilled(light: light) {
                 showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
                 return false

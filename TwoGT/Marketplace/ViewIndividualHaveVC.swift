@@ -81,7 +81,13 @@ class ViewIndividualHaveVC: UIViewController {
     @IBAction func showLinkedHaves(_ sender: Any) {
     }
     
-    @IBAction func joinThisNeed(_ sender: Any) {
+    @IBAction func joinThisHave(_ sender: Any) {
+        // show textView for Headline and description (Required?)
+        // Create a Have in the database linked to the current Have
+        
+        guard let c = creationManager, let h = haveItem else { fatalError() }
+        
+        
     }
     
     /*

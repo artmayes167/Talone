@@ -41,3 +41,5 @@
 // event by Saifurrijal from the Noun Project
 
 // internship by Ralf Schmitzer from the Noun Project
+
+// dashboard by Kokota from the Noun Project
