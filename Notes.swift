@@ -43,3 +43,7 @@
 // internship by Ralf Schmitzer from the Noun Project
 
 // dashboard by Kokota from the Noun Project
+
+// Hand by taamir468 from the Noun Project (needForTab)
+
+// give by Lnhi from the Noun Project (haveForTab)
