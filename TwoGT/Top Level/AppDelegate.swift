@@ -24,11 +24,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let u = try managedContext.fetch(fetchRequest).first {
                 return u
             } else {
-                let u = User()
-                return u
+                return AppDelegate.createUser(inContext: managedContext)
             }
         } catch _ as NSError {
           return User()
+        }
+    }
+    
+    class func createUser(inContext managedContext: NSManagedObjectContext) -> User {
+        
+        let entity =
+          NSEntityDescription.entity(forEntityName: "User",
+                                     in: managedContext)!
+        
+       guard let user = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? User else {
+                                                fatalError()
+        }
+        
+//        restaurant.setValue(name, forKeyPath: "name")
+//        restaurant.setValue(cuisine, forKey: "cuisine")
+        
+        do {
+          try managedContext.save()
+            return user
+        } catch let error as NSError {
+          print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
         }
     }
 
