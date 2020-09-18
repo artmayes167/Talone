@@ -12,32 +12,26 @@ enum CurrentCreationType: Int {
     case need, have, unknown
 }
 
-class PurposeCreationManager: NSObject, PurposeInitializationProtocol {
+class PurposeCreationManager: NSObject {
     
-    private var purpose: PurposeClass?
-    private var need: Need?
-    private var have: Have?
+    private var purpose: Purpose = Purpose()
+    private var need: Need = Need()
+    private var have: Have = Have()
     private var creationType: CurrentCreationType = .unknown
     
     convenience init?(withType: NeedType, state: String) {
         self.init()
-        let cityState = CityState(locationInfo: AppLocationInfo(city: "", state: state), community: "")
-        purpose = PurposeClass.init(category: withType.rawValue, cityState: cityState, needs: [], haves: [], events: [])
-        createTemplateNeedAndHave()
+        let cityState = CityState()
+        cityState.state = state
+        purpose.category = withType.rawValue
+        purpose.cityState = cityState
     }
     
     convenience init?(locationInfo: AppLocationInfo) {
         self.init()
-        let cityState = CityState(locationInfo: locationInfo, community: "")
-        purpose = PurposeClass.init(category: NeedType.none.rawValue, cityState: cityState, needs: [], haves: [], events: [])
-        createTemplateNeedAndHave()
-    }
-    
-    private func createTemplateNeedAndHave() {
-        let item = Item(id: "", headline: "", eventDescription: "", category: "", createdBy: "", createdAt: 0, haveDescription: "", needDescription: "")
-        need = Need(fulfilled: false, needItem: item, personalNotes: nil, needIDS: nil, haveIDS: nil, eventIDS: nil)
-        have = Have(haveItem: item, personalNotes: nil, needIDS: nil, haveIDS: nil, eventIDS: nil)
-        
+        let cityState = CityState(locationInfo: locationInfo)
+        purpose = Purpose()
+        purpose.cityState = cityState
     }
     
     func setCreationType(_ type: CurrentCreationType) {
@@ -45,83 +39,84 @@ class PurposeCreationManager: NSObject, PurposeInitializationProtocol {
     }
     
     func setCategory(_ type: NeedType) {
-        purpose?.category = type.rawValue
+        purpose.category = type.rawValue
     }
     
     func getCategory() -> NeedType {
-        if let p = purpose {
-            return NeedType(rawValue: p.category) ?? .none
-        } else {
-            fatalError()
-        }
+        return NeedType(rawValue: purpose.category!)! // crash if not
     }
     
     func setLocation(cityState: CityState) {
-        purpose?.cityState = cityState
+        purpose.cityState = cityState
     }
     
     func setLocation(location: AppLocationInfo) {
-        purpose?.cityState.locationInfo = location
+        purpose.cityState = CityState(locationInfo: location)
     }
     
     func setLocation(city: String, state: String, country: String) {
-        purpose?.cityState = CityState(locationInfo: AppLocationInfo(city: city, state: state, country: country), community: "")
+        if let i = AppLocationInfo(city: city, state: state, country: country) {
+            purpose.cityState = CityState(locationInfo: i)
+        }
     }
     
     func setCommunity(_ community: String) {
-        purpose?.cityState.community = community
+        let c = Community()
+        c.name = community
+        purpose.cityState?.addToCommunities(c)
     }
     
     func getLocationOrNil() -> CityState? {
-        return purpose?.cityState
+        return purpose.cityState
     }
     
-    func getCurrentHeadline() -> String? {
+    func setHeadline(_ headline: String?, description: String?) {
         switch creationType {
         case .have:
-            return have?.getHeadlineOrNil()
+            let h = have.haveItem ?? HaveItem()
+            h.headline = headline
+            h.desc = description
+            have.haveItem = h
         case .need:
-            return need?.getHeadlineOrNil()
+            let n = need.needItem ?? NeedItem()
+            n.headline = headline
+            n.desc = description
+            need.needItem = n
+        default:
+            return
+        }
+    }
+    
+    func getHeadline() -> String? {
+        switch creationType {
+        case .have:
+            return have.haveItem?.headline
+        case .need:
+            return need.needItem?.headline
         default:
             return nil
         }
     }
     
-    func getCurrentDescription() -> String? {
+    func getDescription() -> String? {
         switch creationType {
         case .have:
-            return have?.getNotesOrNil()
+            return have.personalNotes
         case .need:
-            return need?.getNotesOrNil()
+            return need.personalNotes
         default:
             return nil
         }
     }
     
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
-        guard let _ = purpose else { return false }
         switch creationType {
         case .have:
-            return have?.areAllRequiredFieldsFilled(light: light) ?? false
+            return have.haveItem?.areAllRequiredFieldsFilled(light: light) ?? false
         case .need:
-            return need?.areAllRequiredFieldsFilled(light: light) ?? false
+            return need.needItem?.areAllRequiredFieldsFilled(light: light) ?? false
         default:
             return false
-        }
-    }
-    
-    func setHeadline(_ headline: String?, description: String?) {
-        switch creationType {
-        case .have:
-            guard let h = have?.haveItem else { fatalError() }
-            h.headline = headline
-            h.haveDescription = description
-        case .need:
-            guard let n = need?.needItem else { fatalError() }
-            n.headline = headline
-            n.needDescription = description
-        default:
-            return
         }
     }
     

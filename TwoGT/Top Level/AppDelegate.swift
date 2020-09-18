@@ -9,11 +9,28 @@
 import UIKit
 import CoreData
 import LocalAuthentication
-//import FBSDKCoreKit
+import FBSDKCoreKit
 import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    class func user() -> User  {
+        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = d.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+
+        do {
+            if let u = try managedContext.fetch(fetchRequest).first {
+                return u
+            } else {
+                let u = User()
+                return u
+            }
+        } catch _ as NSError {
+          return User()
+        }
+    }
 
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
@@ -28,7 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         // Notify FB application delegate
-        /*
         ApplicationDelegate.shared.application(
                    application,
                    didFinishLaunchingWithOptions: launchOptions
@@ -38,7 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let uuid = UUID().uuidString
             UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
         }
- */
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
@@ -56,16 +71,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
         // Notify FB application delegate
-//            ApplicationDelegate.shared.application(
-//                app,
-//                open: url,
-//                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-//                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
-//            )
-//
-//        }
+           ApplicationDelegate.shared.application(
+                app,
+                open: url,
+                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+            )
+
+        }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
@@ -90,13 +105,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Email verified!!! User not anonymous!")
         
             self.window = UIWindow(frame: UIScreen.main.bounds)
-            let mainStoryboard = UIStoryboard(name: "Marketplace", bundle: nil)
-            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Marketplace Intro View Controller") as! MarketplaceSearchAndCreationVC
+            let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
+            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
 
             self.window?.rootViewController = mainVC
             self.window?.makeKeyAndVisible()
         }
 
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        do {
+            BackgroundTask.run(application: application) { backgroundTask in
+                save()
+                backgroundTask.end()
+            }
+        }
+    }
+    
+    func save() {
+        do {
+            try persistentContainer.viewContext.save()
+        }
+        catch {
+            fatalError()
+        }
     }
     
     // MARK: UISceneSession Lifecycle
@@ -146,16 +179,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data stack
 
-//    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
 //        /*
 //         The persistent container for the application. This implementation
 //         creates and returns a container, having loaded the store for the
 //         application to it. This property is optional since there are legitimate
 //         error conditions that could cause the creation of the store to fail.
 //        */
-//        let container = NSPersistentCloudKitContainer(name: "TwoGT")
-//        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//            if let error = error as NSError? {
+        let container = NSPersistentCloudKitContainer(name: "TwoGT")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
 //                // Replace this implementation with code to handle the error appropriately.
 //                // fatalError() causes the application to generate a crash log and terminate.
                   // You should not use this function in a shipping application, although it may be useful during development.
@@ -168,26 +201,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                 * The store could not be migrated to the current model version.
 //                 Check the error message to determine what the actual problem was.
 //                 */
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
-//            }
-//        })
-//        return container
-//    }()
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        // TODO: - Make sure this doesn't merge thigs we don't want merged
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return container
+    }()
 
     // MARK: - Core Data Saving support
 
-//    func saveContext () {
-//        let context = persistentContainer.viewContext
-//        if context.hasChanges {
-//            do {
-//                try context.save()
-//            } catch {
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
 //                // Replace this implementation with code to handle the error appropriately.
 //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//                let nserror = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//            }
-//        }
-//    }
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 
+}
+
+class BackgroundTask {
+    private let application: UIApplication
+    private var identifier = UIBackgroundTaskIdentifier.invalid
+
+    init(application: UIApplication) {
+        self.application = application
+    }
+
+    class func run(application: UIApplication, handler: (BackgroundTask) -> ()) {
+        // NOTE: The handler must call end() when it is done
+
+        let backgroundTask = BackgroundTask(application: application)
+        backgroundTask.begin()
+        handler(backgroundTask)
+    }
+
+    func begin() {
+        self.identifier = application.beginBackgroundTask {
+            self.end()
+        }
+    }
+
+    func end() {
+        if (identifier != UIBackgroundTaskIdentifier.invalid) {
+            application.endBackgroundTask(identifier)
+        }
+
+        identifier = UIBackgroundTaskIdentifier.invalid
+    }
 }
