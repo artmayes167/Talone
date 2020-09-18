@@ -110,14 +110,57 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
-        if checkPreconditionsAndAlert(light: false) {
-            switch currentNeedHaveSelectedSegmentIndex {
-                   case 1:
-                       storeHaveToDatabase()
-                   default:
-                       storeNeedToDatabase()
-                   }
+        guard let c = creationManager else { fatalError() }
+        
+        switch currentNeedHaveSelectedSegmentIndex {
+               case 1:
+                let haveItem = createHaveItem()
+                haveItem.headline = headlineTextField.text
+                haveItem.desc = descriptionTextView.text
+                c.setHaveItem(item: haveItem)
+                if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
+               default:
+                let needItem = createNeedItem()
+                needItem.headline = headlineTextField.text
+                needItem.desc = descriptionTextView.text
+                c.setNeedItem(item: needItem)
+                if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
+               }
+    }
+    
+    private func createNeedItem() -> NeedItem {
+        /// create new needs
+        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
+        let cat = c.getCategory().databaseValue()
+        var emailString: String = "artmayes167@gmail.com"
+        if let emails = AppDelegate.user().emails {
+            if let primaryEmail: Email = emails.first(where: {
+                if let e = ($0 as? Email) {
+                    return e.name == "primary"
+                }
+                return false
+            }) as? Email {
+                if let pEmail = primaryEmail.emailString {
+                    emailString = pEmail
+                }
+            }
         }
+        
+        let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
+        let newNeed = NeedItem.createNeedItem(item: need)
+        return newNeed
+    }
+    
+    private func createHaveItem() -> HaveItem {
+        /// create new needs
+        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
+        let cat = c.getCategory().databaseValue()
+        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "primary"} ) as! Email
+        let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
+        let newHave = HaveItem.createHaveItem(item: have)
+        return newHave
     }
 
     @IBAction func seeMatchingNeeds(_ sender: Any) {
@@ -240,8 +283,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeNeedToDatabase() {
-        guard checkPreconditionsAndAlert(light: true) == true else { return }
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError() }
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
+        }
         
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
@@ -258,7 +301,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
-                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center)
+                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    //self.performSegue(withIdentifier: "bob", sender: nil)
+                }
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }

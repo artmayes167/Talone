@@ -72,10 +72,7 @@ extension CityState {
     }
     
     func locationInfo() -> AppLocationInfo {
-        let a = AppLocationInfo()
-        a.city = self.city
-        a.state = self.state
-        a.country = self.country
+        let a = AppLocationInfo.create(city: city!, state: state!, country: country!)
         return a
     }
 }
@@ -198,27 +195,135 @@ extension Address {
     }
 }
 
+extension NeedItem {
+    class func createNeedItem(item: NeedsBase.NeedItem) -> NeedItem {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "NeedItem",
+                                     in: managedContext)!
+        
+       guard let needItem = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? NeedItem else {
+                                                fatalError()
+        }
+        needItem.category = item.category
+        needItem.desc = item.description
+        needItem.validUntil = Int64(item.validUntil)
+        needItem.owner = item.owner
+        needItem.createdBy = item.createdBy
+        needItem.createdAt = item.createdAt?.dateValue()
+        needItem.id = item.id
+        do {
+          try managedContext.save()
+            return needItem
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
+extension Need {
+    class func createNeed(item: NeedItem) -> Need {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Need",
+                                     in: managedContext)!
+        
+       guard let need = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Need else {
+                                                fatalError()
+        }
+        need.needItem = item
+        do {
+          try managedContext.save()
+            return need
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
+extension HaveItem {
+    class func createHaveItem(item: HavesBase.HaveItem) -> HaveItem {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "HaveItem",
+                                     in: managedContext)!
+        
+       guard let haveItem = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? HaveItem else {
+                                                fatalError()
+        }
+        haveItem.category = item.category
+        haveItem.desc = item.description
+        haveItem.validUntil = Int64(item.validUntil ?? 0)
+        haveItem.owner = item.owner
+        haveItem.createdBy = item.createdBy
+        haveItem.createdAt = item.createdAt?.dateValue()
+        haveItem.id = item.id
+        do {
+          try managedContext.save()
+            return haveItem
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
+extension Have {
+    class func createHave(item: HaveItem) -> Have {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Have",
+                                     in: managedContext)!
+        
+       guard let have = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Have else {
+                                                fatalError()
+        }
+        have.haveItem = item
+        do {
+          try managedContext.save()
+            return have
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
 extension AppLocationInfo {
-//    class func create(city: String, state: String, country: String) -> AppLocationInfo {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-//        
-//        let managedContext = appDelegate.persistentContainer.viewContext
-//        
-//        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo",
-//                                     in: managedContext)!
-//        
-//        let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
-//        
-//        locationInfo.country = country
-//        locationInfo.city = city
-//        locationInfo.state = state
-//        
-//        do {
-//          try managedContext.save()
-//            return locationInfo
-//        } catch let error as NSError {
-//            print("Could not save. \(error), \(error.userInfo)")
-//            fatalError()
-//        }
-//    }
+    class func create(city: String, state: String, country: String) -> AppLocationInfo {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo",
+                                     in: managedContext)!
+        
+        let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
+        
+        locationInfo.country = country
+        locationInfo.city = city
+        locationInfo.state = state
+        
+        do {
+          try managedContext.save()
+            return locationInfo
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
 }

@@ -16,8 +16,8 @@ enum CurrentCreationType: Int {
 class PurposeCreationManager: NSObject {
     
     private var purpose: Purpose = Purpose()
-    private var need: Need = Need()
-    private var have: Have = Have()
+    private var need: Need?
+    private var have: Have?
     private var creationType: CurrentCreationType = .unknown
     
     
@@ -143,15 +143,13 @@ class PurposeCreationManager: NSObject {
     func setHeadline(_ headline: String?, description: String?) {
         switch creationType {
         case .have:
-            let h = have.haveItem ?? HaveItem()
+            guard let h = have?.haveItem else { return }
             h.headline = headline
             h.desc = description
-            have.haveItem = h
         case .need:
-            let n = need.needItem ?? NeedItem()
+            guard let n = need?.needItem else { return }
             n.headline = headline
             n.desc = description
-            need.needItem = n
         default:
             return
         }
@@ -160,9 +158,9 @@ class PurposeCreationManager: NSObject {
     func getHeadline() -> String? {
         switch creationType {
         case .have:
-            return have.haveItem?.headline
+            return have?.haveItem?.headline
         case .need:
-            return need.needItem?.headline
+            return need?.needItem?.headline
         default:
             return nil
         }
@@ -171,20 +169,44 @@ class PurposeCreationManager: NSObject {
     func getDescription() -> String? {
         switch creationType {
         case .have:
-            return have.personalNotes
+            return have?.haveItem?.desc
         case .need:
-            return need.personalNotes
+            return need?.needItem?.desc
         default:
             return nil
         }
     }
     
+    func setNeed(_ need: Need) {
+        self.need = need
+    }
+    
+    func setNeedItem(item: NeedItem) {
+        guard let n = need else {
+            need = Need.createNeed(item: item)
+            return
+        }
+        n.needItem = item
+    }
+    
+    func setHave(_ have: Have) {
+        self.have = have
+    }
+    
+    func setHaveItem(item: HaveItem) {
+        guard let h = have else {
+            have = Have.createHave(item: item)
+            return
+        }
+        h.haveItem = item
+    }
+    
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
         switch creationType {
         case .have:
-            return have.haveItem?.areAllRequiredFieldsFilled(light: light) ?? false
+            return have?.haveItem?.areAllRequiredFieldsFilled(light: light) ?? false
         case .need:
-            return need.needItem?.areAllRequiredFieldsFilled(light: light) ?? false
+            return need?.needItem?.areAllRequiredFieldsFilled(light: light) ?? false
         default:
             return false
         }
