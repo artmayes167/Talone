@@ -82,6 +82,7 @@ class ActiveTextView: DesignableTextView {
     
     override func didMoveToSuperview() {
         borderColor = color
+        backgroundColor = .white
         super.didMoveToSuperview()
     }
 }
