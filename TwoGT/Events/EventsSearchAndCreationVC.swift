@@ -105,49 +105,47 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             fetchMatchingHaves()
         }
 
-        // MARK: - NeedSelectionDelegate
-        func didSelect(_ need: NeedType) {
-            categoriesPopOver.isHidden = true
-            categoryTextField.text = need.rawValue.capitalized
-            
-            if let c = creationManager {
-               c.setCategory(need)
-            } else {
-                creationManager = PurposeCreationManager.init(withType: need, state: "")
-            }
-            
-            dismissTapGesture.isEnabled = false
-            view.layoutIfNeeded()
-        }
-
-         // MARK: - Navigation
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            switch segue.identifier {
-                case "needsPO":
-                let needsTVC = segue.destination as! NeedsTVC
-                needsTVC.delegate = self
-            default:
-                print("Different segue")
-            }
-        }
-
-       @IBAction func unwindToEventsSearchAndCreationVC( _ segue: UIStoryboardSegue) {
+    // MARK: - NeedSelectionDelegate
+    func didSelect(_ need: NeedType) {
+        categoryTextField.text = need.rawValue.capitalized
+        categoriesPopOver.isHidden = true
         
-            if let s = segue.source as? CityStateSearchVC {
-                
-                if creationManager == nil {
-                    creationManager = PurposeCreationManager.init(locationInfo: s.selectedLocation)
-                }
-                
-                guard let c = creationManager else { fatalError() }
-                   
-                c.setLocation(location: s.selectedLocation)
-                
-                whereTextField.text = c.getLocationOrNil()?.displayName()
-                // TODO: -
-                saveFor(s.saveType)
-            }
+        if let c = creationManager {
+           c.setCategory(need)
+        } else {
+            creationManager = PurposeCreationManager(type: need, city: "", state: "")
         }
+        
+        dismissTapGesture.isEnabled = false
+        view.layoutIfNeeded()
+    }
+
+     // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+            case "needsPO":
+            let needsTVC = segue.destination as! NeedsTVC
+            needsTVC.delegate = self
+        default:
+            print("Different segue")
+        }
+    }
+
+    @IBAction func unwindToEventsSearchAndCreationVC( _ segue: UIStoryboardSegue) {
+        if let s = segue.source as? CityStateSearchVC {
+            let loc = s.selectedLocation
+            guard let city = loc["city"], let state = loc["state"] else { fatalError() }
+            if let c = creationManager {
+                c.setLocation(city: city, state: state, country: loc["country"] ?? "USA")
+            } else {
+                creationManager = PurposeCreationManager(type: .none, city: city, state: state)
+            }
+            
+            whereTextField.text = creationManager!.getLocationOrNil()?.displayName()
+            // TODO: -
+            saveFor(s.saveType)
+        }
+    }
 
          // MARK: - Save Functions
     func saveFor(_ type: SaveType) {
