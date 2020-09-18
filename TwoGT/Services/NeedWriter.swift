@@ -39,12 +39,12 @@ class FirebaseGeneric {
         var geoLocation: GeographicCoordinates?
         
         init(locationInfo: AppLocationInfo) {
-            guard let coords = locationInfo.geoLocation?.geographicCoordinates else { fatalError() }
-            self.city = locationInfo.city
-            self.state = locationInfo.state
-            self.country = locationInfo.country
+            self.city = locationInfo.city ?? ""
+            guard let s = locationInfo.state, let c = locationInfo.country else { fatalError() }
+            self.state = s
+            self.country = c
             self.address = nil
-            self.geoLocation = GeographicCoordinates(latitude: coords.latitude!, longitude: coords.longitude!)
+            self.geoLocation = nil //GeographicCoordinates(latitude: coords.latitude!, longitude: coords.longitude!)
         }
         
         init(city: String, state: String, country: String = "USA", address: AddressInfo?, geoLocation: GeographicCoordinates?) {

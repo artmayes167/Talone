@@ -150,34 +150,18 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
 
          // MARK: - Save Functions
-        func saveFor(_ type: SaveType) {
-            guard let c = creationManager, let loc = c.getLocationOrNil() else { fatalError() }
-            // store values
-            switch type {
-            case .home:
-                if let u = Saves.shared.user?.user, var searches = u.searches {
-                
-                    if var d = searches["home"], !d.contains(loc.displayName()) {
-                        d.append(loc.displayName())
-                        searches["home"] = d
-                    }
-                }
-                Saves.saveSaves().printDescription()
-                print("---------- FOR HOME")
-            case .alternate:
-                if let u = Saves.shared.user?.user, var searches = u.searches {
-                
-                    if var d = searches["alternate"], !d.contains(loc.displayName()) {
-                        d.append(loc.displayName())
-                        searches["alternate"] = d
-                    }
-                }
-                Saves.saveSaves().printDescription()
-                print("---------- FOR HOME")
-            case .none:
-                print("No Save Is Not Complete!!!!!")
-            }
+    func saveFor(_ type: SaveType) {
+        guard let c = creationManager, let loc = c.getLocationOrNil() else { fatalError() }
+        if !(type == .none) {
+            let user = AppDelegate.user()
+            let s = SearchLocation()
+            s.city = loc.city
+            s.state = loc.state
+            s.country = loc.country
+            s.type = ["home", "alternate"][type.rawValue]
+            user.addToSearchLocations(s)
         }
+    }
 
          // MARK: - Private Functions
         private func checkPreconditionsAndAlert(light: Bool) -> Bool {
@@ -192,85 +176,85 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             return true
         }
 
-        private func fetchMatchingNeeds() {
-            guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
-            
-            NeedsDbFetcher().fetchNeeds(city: loc.city, state: loc.state, loc.country) { array in
-                let newArray = array.filter { $0.category.lowercased() == c.getCategory().rawValue }
-                if newArray.isEmpty {
-                    self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
-                } else {
-                    self.performSegue(withIdentifier: "toNeedsCollection", sender: newArray)
-                }
+    private func fetchMatchingNeeds() {
+        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
+        
+        NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
+            let newArray = array.filter { $0.category.lowercased() == c.getCategory().rawValue }
+            if newArray.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                self.performSegue(withIdentifier: "toNeedsCollection", sender: newArray)
             }
         }
-
-        private func fetchMatchingHaves() {
-            guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
-
-            HavesDbFetcher().fetchHaves(matching: [c.getCategory().databaseValue()], loc.city, loc.state, loc.country) { array in
-                if array.isEmpty {
-                    self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
-                } else {
-                    self.performSegue(withIdentifier: "toHavesCollection", sender: array)
-                    //self.showOkayAlert(title: "", message: "Arthur will implement Matching Haves view!", handler: nil)
-                }
-            }
-        }
-
-        /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-        private func storeNeedToDatabase() {
-            guard checkPreconditionsAndAlert(light: true) == true else { return }
-            guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
-            
-            // if need-type nor location is not selected, display an error message
-            guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-            let cat = c.getCategory()
-            let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
-                                              description: descriptionTextView.text.trimmingCharacters(in: [" "]),
-                                              validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
-                                              owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                              createdBy: user.uid,
-                                              locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
-
-            let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-            needsWriter.addNeed(need, completion: { error in
-                if error == nil {
-                    self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center)
-                } else {
-                    self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
-                }
-            })
-        }
-
-        /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-        private func storeHaveToDatabase() {
-            guard checkPreconditionsAndAlert(light: true) == true else { return }
-            guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
-            // if need-type nor location is not selected, display an error message
-            guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-            let cat = c.getCategory()
-            let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
-                                              description: descriptionTextView.text.trimmingCharacters(in: [" "]),
-                                              validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
-                                              owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                              createdBy: user.uid,
-                                              locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
-
-            let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-            havesWriter.addHave(have, completion: { error in
-                if error == nil {
-                    self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center)
-                    self.descriptionTextView.text = ""
-                } else {
-                    self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
-                }
-            })
-        }
-
     }
+
+    private func fetchMatchingHaves() {
+        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+
+        HavesDbFetcher().fetchHaves(matching: [c.getCategory().databaseValue()], city, state, country) { array in
+            if array.isEmpty {
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+            } else {
+                self.performSegue(withIdentifier: "toHavesCollection", sender: array)
+                //self.showOkayAlert(title: "", message: "Arthur will implement Matching Haves view!", handler: nil)
+            }
+        }
+    }
+
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
+    private func storeNeedToDatabase() {
+        guard checkPreconditionsAndAlert(light: true) == true else { return }
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError() }
+        
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+        
+        let cat = c.getCategory()
+        let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
+                                          description: c.getDescription(),
+                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+
+        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        needsWriter.addNeed(need, completion: { error in
+            if error == nil {
+                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center)
+            } else {
+                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        })
+    }
+
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
+    private func storeHaveToDatabase() {
+        guard checkPreconditionsAndAlert(light: true) == true else { return }
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+        let cat = c.getCategory()
+        let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
+                                          description: descriptionTextView.text.trimmingCharacters(in: [" "]),
+                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc()))
+
+        let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        havesWriter.addHave(have, completion: { error in
+            if error == nil {
+                self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center)
+                self.descriptionTextView.text = ""
+            } else {
+                self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        })
+    }
+}
 
      // MARK: - UITextFieldDelegate
     extension EventsSearchAndCreationVC {

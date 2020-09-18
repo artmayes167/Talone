@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 struct USState: Decodable {
     let name: String
@@ -34,16 +35,16 @@ class CityStateSearchVC: UIViewController {
     @IBOutlet weak var savedLocationView: UIView!
     
     @IBOutlet weak var newCreationStack: UIStackView!
-    var savedLocations = Saves.shared.user?.user?.searches
     
     @IBOutlet weak var statesCoverView: UIView?
     
+    let user = AppDelegate.user()
     
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?
     var states: [USState] = []
     var allStates: [String] = []
-    var sectionTitles: [String] = []
+    var sections: Dictionary<String, [SearchLocation]> = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +79,6 @@ class CityStateSearchVC: UIViewController {
         savedLocationTableView.reloadData()
         savedLocationView.isHidden = true
     }
-    
     
     @IBAction func selectedNewOrSaved(_ sender: UISegmentedControl) {
         
@@ -131,7 +131,7 @@ class CityStateSearchVC: UIViewController {
         view.layoutIfNeeded()
     }
     
-    var selectedLocation: AppLocationInfo = AppLocationInfo(city: "", state: "", country: "USA")
+    var selectedLocation = AppLocationInfo()
     var stateSelector: LocationPickerTVC?
     var citySelector: LocationPickerTVC?
     
@@ -168,44 +168,31 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func setApplicableSections() {
-        sectionTitles = SectionTitles.allCases.map { $0.rawValue }
-        sectionTitles.sort { $0 > $1 }
-        var myDict: [String: [String]] = savedLocations ?? [:]
-        if myDict.isEmpty {
-            for s in sectionTitles {
-                myDict[s] = []
-            }
-            savedLocations = myDict
-        }
-        let compactDict = myDict.compactMapValues { obj in obj }
-//            myDict.filter { (key, value) -> Bool in
-//            if let v = value as? [CityState], !v.isEmpty { return true }
-//            if let _ = value as? CityState { return true }
-//            return false
-//        }
-        sectionTitles = sectionTitles.filter { !compactDict[$0]!.isEmpty }
+        sections = user.sortedAddresses()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         setApplicableSections()
-        return sectionTitles.count
+        return sections.keys.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
-        let a = sectionTitles
-        cell.titleLabel.text = a[section]
+        let array = ["home", "alternate"]
+        cell.titleLabel.text = array[section]
         return cell.contentView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return savedLocations?[sectionTitles[section]]?.count ?? 0
+        let array = ["home", "alternate"]
+        return sections[array[section]]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let array = ["home", "alternate"]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
-        guard let s = savedLocations?[sectionTitles[indexPath.section]] else { fatalError() }
-        cell.titleLabel.text = s[indexPath.row]
+        guard let s = sections[array[indexPath.section]] else { return cell }
+        cell.titleLabel.text = s[indexPath.row].displayName()
         return cell
     }
     

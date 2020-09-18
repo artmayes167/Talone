@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import Toast_Swift
+import CoreData
 
 class EnterEmailVC: UIViewController {
 
@@ -129,10 +130,16 @@ class EnterHandleVC: UIViewController {
             showOkayAlert(title: "Oops", message: "Please choose a handle with 4 or more characters") { _ in }
             return
         }
+        
+        // TODO: - Set the handle on the back end
         // completion
         guard let email = UserDefaults.standard.string(forKey: "Email") else { fatalError() }
-        let u = UserClass(handle: t, personalData: PersonalData(email: email), avatarData: nil, cards: nil)
-        Saves.shared.user = User(user: u)
+        let e = Email()
+        e.emailString = email
+        e.name = "talone"
+        AppDelegate.user().addToEmails(e)
+        AppDelegate.user().handle = textField.text
+        
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
             self.performSegue(withIdentifier: "toBase", sender: nil)
         }
