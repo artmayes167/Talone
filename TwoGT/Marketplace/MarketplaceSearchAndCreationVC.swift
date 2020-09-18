@@ -28,7 +28,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Variables
     var currentNeedHaveSelectedSegmentIndex = 0
-    var creationManager: PurposeCreationManager?
+    var creationManager: PurposeCreationManager? {
+        didSet {
+            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!) 
+        }
+    }
 
     override func getKeyElements() -> [String] {
         return ["Category selection:", "Location Selection:", "Overall Functionality:"]
@@ -85,6 +89,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         if let loc = creationManager?.getLocationOrNil() {
             whereTextField.text = loc.displayName()
         }
+        // Get last saved location from defaults?
         /// Country is USA by default
     }
 
@@ -130,8 +135,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         
         if let c = creationManager {
            c.setCategory(need)
-        } else {
-            creationManager = PurposeCreationManager.init(withType: need, state: "")
         }
         
         dismissTapGesture.isEnabled = false
@@ -165,15 +168,19 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     
         if let s = segue.source as? CityStateSearchVC {
             
-            if creationManager == nil {
-                creationManager = PurposeCreationManager.init(locationInfo: s.selectedLocation)
+            let loc = s.selectedLocation
+            guard let city = loc["city"], let state = loc["state"] else { fatalError() }
+            if let c = creationManager {
+                c.setLocation(city: city, state: state, country: loc["country"] ?? "USA")
+            } else {
+                var type: NeedType = .none
+                if let t = categoryTextField.text?.lowercased() {
+                    type = NeedType(rawValue: t) ?? type
+                }
+                creationManager = PurposeCreationManager(type: type, city: city, state: state)
             }
             
-            guard let c = creationManager else { fatalError() }
-               
-            c.setLocation(location: s.selectedLocation)
-            
-            whereTextField.text = c.getLocationOrNil()?.displayName()
+            whereTextField.text = creationManager!.getLocationOrNil()?.displayName()
             // TODO: -
             saveFor(s.saveType)
         }
@@ -184,10 +191,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let c = creationManager, let loc = c.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
             let user = AppDelegate.user()
-            let s = SearchLocation()
-            s.city = loc.city
-            s.state = loc.state
-            s.country = loc.country
+            // Use core data
+            guard let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country)
             s.type = ["home", "alternate"][type.rawValue]
             user.addToSearchLocations(s)
         }
@@ -313,7 +319,13 @@ protocol NeedSelectionDelegate {
  // MARK: -
 class NeedsTVC: UITableViewController {
     var delegate: NeedSelectionDelegate?
-    let needs = NeedType.allCases
+    var needs: [NeedType] = NeedType.allCases
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        needs.removeFirst(1)
+        tableView.reloadData()
+    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.didSelect(needs[indexPath.row])

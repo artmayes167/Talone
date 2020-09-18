@@ -6,15 +6,63 @@
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
+extension Purpose {
+    
+    class func create(type: String, city: String, state: String, country: String = "USA", community: String = "") -> Purpose {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Purpose",
+                                     in: managedContext)!
+        
+       let purpose = Purpose(entity: entity, insertInto: managedContext)
+        purpose.setValue(type, forKey: "category")
+        let c = CityState.create(city: city, state: state, country: country, communityName: community)
+        purpose.setValue(c, forKey: "cityState")
+        
+        do {
+          try managedContext.save()
+            return purpose
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+    
+    func cdKey() -> String? {
+        return cityState?.displayName()
+    }
+}
 
 extension CityState {
-    convenience init?(locationInfo: AppLocationInfo) {
-        self.init()
-        self.city = locationInfo.city
-        self.state = locationInfo.state
-        self.country = locationInfo.country
+    class func create(city: String, state: String, country: String, communityName: String) -> CityState {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "CityState",
+                                     in: managedContext)!
+        
+        let cityState = CityState(entity: entity, insertInto: managedContext) as CityState
+        
+        let community = Community.create(communityName: communityName)
+        
+        cityState.country = country
+        cityState.city = city
+        cityState.state = state
+        cityState.addToCommunities(community)
+        
+        do {
+          try managedContext.save()
+            return cityState
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
     }
     
     func displayName() -> String {
@@ -29,6 +77,32 @@ extension CityState {
         a.state = self.state
         a.country = self.country
         return a
+    }
+}
+
+extension Community {
+    class func create(communityName: String) -> Community {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Community",
+                                     in: managedContext)!
+        
+       guard let community = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Community else {
+                                                fatalError()
+        }
+        
+        community.name = communityName
+        
+        do {
+          try managedContext.save()
+            return community
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
     }
 }
 
@@ -60,6 +134,32 @@ extension Item {
 }
 
 extension SearchLocation {
+    class func createSearchLocation(city: String, state: String, country: String = "USA", community: String = "") -> SearchLocation {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "SearchLocation",
+                                     in: managedContext)!
+        
+       guard let searchLocation = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? SearchLocation else {
+                                                fatalError()
+        }
+        searchLocation.city = city
+        searchLocation.state = state
+        searchLocation.country = country
+        searchLocation.community = community
+        do {
+          try managedContext.save()
+            return searchLocation
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+    
     func displayName() -> String {
         if let c = city, let s = state {
             return c.capitalized + ", " + s.capitalized
@@ -67,28 +167,58 @@ extension SearchLocation {
     }
 }
 
-extension AppLocationInfo {
-    convenience init?(city: String, state: String, country: String) {
-        self.init()
-        self.city = city
-        self.state = state
-        self.country = country
+extension Address {
+    class func createAddress(city: String, state: String, country: String = "USA", type: String = "home") -> Address {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Address",
+                                     in: managedContext)!
+        
+       guard let address = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Address else {
+                                                fatalError()
+        }
+        address.type = type
+        do {
+          try managedContext.save()
+            return address
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+    
+    func locationInfoOrNil() -> AppLocationInfo? {
+        if let _ = city, let _ = state, let _ = country {
+            return self
+        }
+        return nil
     }
 }
 
-extension Address {
-    convenience init?(locationInfo: AppLocationInfo) {
-        self.init()
-        self.city = locationInfo.city
-        self.state = locationInfo.state
-        self.country = locationInfo.country
-    }
-    
-    func locationInfo() -> AppLocationInfo {
-        let a = AppLocationInfo()
-        a.city = self.city
-        a.state = self.state
-        a.country = self.country
-        return a
-    }
+extension AppLocationInfo {
+//    class func create(city: String, state: String, country: String) -> AppLocationInfo {
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+//        
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//        
+//        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo",
+//                                     in: managedContext)!
+//        
+//        let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
+//        
+//        locationInfo.country = country
+//        locationInfo.city = city
+//        locationInfo.state = state
+//        
+//        do {
+//          try managedContext.save()
+//            return locationInfo
+//        } catch let error as NSError {
+//            print("Could not save. \(error), \(error.userInfo)")
+//            fatalError()
+//        }
+//    }
 }

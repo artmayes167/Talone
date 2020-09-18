@@ -26,8 +26,7 @@ class ViewIndividualHaveVC: UIViewController {
     
     @IBOutlet weak var locationLabel: UILabel!
     
-    
-  
+    @IBOutlet weak var doYouLabel: UILabel!
     
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
@@ -53,6 +52,9 @@ class ViewIndividualHaveVC: UIViewController {
     
     func populateUI() {
         guard let n = haveItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
+        guard let t = creationManager?.currentCreationType() else { fatalError() }
+        let str = "Do you " + t + "..."
+        doYouLabel.text = str
         locationLabel.text = String(format:"%@ in %@", n, cityState.displayName())
         view.layoutIfNeeded()
     }
