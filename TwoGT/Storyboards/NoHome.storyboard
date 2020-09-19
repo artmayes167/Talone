@@ -3084,7 +3084,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQ0-ce-0Im">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Haves: Miscelleny" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JB8-wq-Toc">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All 300 of My Haves" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JB8-wq-Toc">
                                         <rect key="frame" x="12" y="12" width="390" height="53"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                         <nil key="textColor"/>
@@ -3135,10 +3135,10 @@
             </objects>
             <point key="canvasLocation" x="2475" y="830"/>
         </scene>
-        <!--View Individual HaveVC-->
+        <!--View My HaveVC-->
         <scene sceneID="OPO-ml-g1X">
             <objects>
-                <viewController id="kHO-PJ-agu" customClass="ViewIndividualHaveVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kHO-PJ-agu" customClass="ViewMyHaveVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="35p-eA-ZWF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3165,7 +3165,7 @@
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <connections>
-                                            <segue destination="BJR-XQ-LlD" kind="unwind" unwindAction="unwindToSearchDisplay:" id="gdc-9X-uMQ"/>
+                                            <segue destination="BJR-XQ-LlD" kind="unwind" unwindAction="unwindToMyHaves:" id="toD-fH-564"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -3419,7 +3419,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uj8-Xn-2su">
                                                         <rect key="frame" x="0.0" y="32" width="390" height="100"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dyc-2t-3sK" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dyc-2t-3sK" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="22" y="0.0" width="346" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" systemColor="labelColor"/>
@@ -3535,10 +3535,12 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="vhN-20-38t"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Linked Needs"/>
+                                                                <state key="normal" title="Delete Have">
+                                                                    <color key="titleColor" systemColor="systemRedColor"/>
+                                                                </state>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                                        <color key="value" systemColor="systemRedColor"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                         <real key="value" value="2"/>
@@ -3551,13 +3553,13 @@
                                                                     <action selector="showLinkedNeeds:" destination="kHO-PJ-agu" eventType="touchUpInside" id="Ed1-rs-2nP"/>
                                                                 </connections>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zxE-De-Ows" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zxE-De-Ows" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="201" y="0.0" width="189" height="44"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="7yX-ec-rNk"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Linked Haves"/>
+                                                                <state key="normal" title="Linked Items"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                         <real key="value" value="2"/>
@@ -3591,7 +3593,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QRA-J0-mol" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="514" width="390" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Join This Have"/>
+                                                <state key="normal" title="Save Notes"/>
                                                 <connections>
                                                     <action selector="joinThisHave:" destination="kHO-PJ-agu" eventType="touchUpInside" id="zcz-dS-j4e"/>
                                                 </connections>
@@ -3699,10 +3701,10 @@
             </objects>
             <point key="canvasLocation" x="3209" y="852"/>
         </scene>
-        <!--View Individual NeedVC-->
+        <!--View My NeedVC-->
         <scene sceneID="MVw-H2-Ufb">
             <objects>
-                <viewController id="P1s-0b-Pxg" customClass="ViewIndividualNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3728,7 +3730,7 @@
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <connections>
-                                            <segue destination="ka7-PT-a3Q" kind="unwind" unwindAction="unwindToSearchDisplay:" id="nIg-I5-yND"/>
+                                            <segue destination="ka7-PT-a3Q" kind="unwind" unwindAction="unwindToMyNeeds:" id="VBr-2S-IA0"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -3998,7 +4000,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Paf-8I-9Pt">
                                                         <rect key="frame" x="0.0" y="32" width="390" height="100"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="91u-vP-3aw" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="91u-vP-3aw" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="0.0" width="342" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" systemColor="labelColor"/>
@@ -4121,10 +4123,12 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="r6k-Tk-qgo"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Linked Needs"/>
+                                                                <state key="normal" title="Delete Need">
+                                                                    <color key="titleColor" systemColor="systemRedColor"/>
+                                                                </state>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                                        <color key="value" systemColor="systemRedColor"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                         <real key="value" value="2"/>
@@ -4137,13 +4141,13 @@
                                                                     <action selector="showLinkedNeeds:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="5ef-td-vtA"/>
                                                                 </connections>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXd-gs-PCz" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXd-gs-PCz" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="201" y="0.0" width="189" height="44"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="Cmb-Cf-JfE"/>
                                                                 </constraints>
-                                                                <state key="normal" title="Linked Haves"/>
+                                                                <state key="normal" title="Linked Items"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                         <real key="value" value="2"/>
@@ -4177,7 +4181,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZyJ-oS-Iyr" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="560" width="390" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Join This Need"/>
+                                                <state key="normal" title="Save Notes"/>
                                                 <connections>
                                                     <action selector="joinThisNeed:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="Tuw-qL-RVy"/>
                                                 </connections>
@@ -4297,7 +4301,7 @@
             <size key="intrinsicContentSize" width="121" height="31"/>
         </designable>
         <designable name="CXd-gs-PCz">
-            <size key="intrinsicContentSize" width="92" height="30"/>
+            <size key="intrinsicContentSize" width="87" height="30"/>
         </designable>
         <designable name="DYe-oF-7zy">
             <size key="intrinsicContentSize" width="153" height="41"/>
@@ -4318,7 +4322,7 @@
             <size key="intrinsicContentSize" width="181" height="41"/>
         </designable>
         <designable name="QRA-J0-mol">
-            <size key="intrinsicContentSize" width="128" height="36"/>
+            <size key="intrinsicContentSize" width="100" height="36"/>
         </designable>
         <designable name="TKH-AD-Wdu">
             <size key="intrinsicContentSize" width="46" height="30"/>
@@ -4330,7 +4334,7 @@
             <size key="intrinsicContentSize" width="538" height="538"/>
         </designable>
         <designable name="ZyJ-oS-Iyr">
-            <size key="intrinsicContentSize" width="131" height="36"/>
+            <size key="intrinsicContentSize" width="100" height="36"/>
         </designable>
         <designable name="bRn-fJ-pwG">
             <size key="intrinsicContentSize" width="54" height="30"/>
@@ -4342,7 +4346,7 @@
             <size key="intrinsicContentSize" width="142" height="30"/>
         </designable>
         <designable name="fkM-fu-qRE">
-            <size key="intrinsicContentSize" width="94" height="30"/>
+            <size key="intrinsicContentSize" width="83" height="30"/>
         </designable>
         <designable name="gpj-3T-H7R">
             <size key="intrinsicContentSize" width="32" height="34"/>
@@ -4354,7 +4358,7 @@
             <size key="intrinsicContentSize" width="580" height="580"/>
         </designable>
         <designable name="oiG-ER-Fkg">
-            <size key="intrinsicContentSize" width="94" height="30"/>
+            <size key="intrinsicContentSize" width="85" height="30"/>
         </designable>
         <designable name="sqE-tY-yOp">
             <size key="intrinsicContentSize" width="538" height="538"/>
@@ -4375,7 +4379,7 @@
             <size key="intrinsicContentSize" width="140" height="30"/>
         </designable>
         <designable name="zxE-De-Ows">
-            <size key="intrinsicContentSize" width="92" height="30"/>
+            <size key="intrinsicContentSize" width="87" height="30"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

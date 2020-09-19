@@ -61,9 +61,8 @@ class MyNeedsSearchDisplayVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewNeed" {
-            guard let vc = segue.destination as? ViewIndividualNeedVC, let n = sender as? NeedsBase.NeedItem else { fatalError() }
-           
-            
+            guard let vc = segue.destination as? ViewMyNeedVC, let n = sender as? Need else { fatalError() }
+            vc.need = n
         }
     }
     
