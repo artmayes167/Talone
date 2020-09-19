@@ -1732,7 +1732,7 @@
                                         <rect key="frame" x="20" y="-6" width="374" height="693"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="obe-nM-Fgt" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="100" y="4" width="174" height="20"/>
+                                                <rect key="frame" x="100" y="82" width="174" height="20"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="D7x-LV-9jk"/>
@@ -2031,7 +2031,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="dIH-cU-y7h">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f65-Dk-CAK" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f65-Dk-CAK" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="189" height="44"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
@@ -2053,7 +2053,7 @@
                                                                             <action selector="seeMatchingNeeds:" destination="8hf-gU-7T7" eventType="touchUpInside" id="bAb-wn-se1"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zHa-yz-HzN" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zHa-yz-HzN" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="201" y="0.0" width="189" height="44"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
@@ -2308,6 +2308,8 @@
                         <outlet property="dismissTapGesture" destination="PKx-yh-dZ7" id="b1E-g2-diS"/>
                         <outlet property="headlineTextField" destination="4nP-Mq-Hql" id="Kl4-Ul-ofm"/>
                         <outlet property="scrollView" destination="P1o-O3-WzN" id="4B9-dJ-0gb"/>
+                        <outlet property="seeMatchingHavesButton" destination="zHa-yz-HzN" id="iAQ-cN-OIs"/>
+                        <outlet property="seeMatchingNeedsButton" destination="f65-Dk-CAK" id="QB6-S8-3R6"/>
                         <outlet property="whereTextField" destination="3ft-Hi-2sx" id="BCt-ok-2xi"/>
                         <outlet property="whereTextLabel" destination="VEw-5P-nud" id="iPG-zt-DGj"/>
                         <segue destination="O7k-WT-Yao" kind="presentation" identifier="toNeedsCollection" id="Ney-0r-dLf"/>

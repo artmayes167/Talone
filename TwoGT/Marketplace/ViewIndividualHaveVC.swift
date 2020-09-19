@@ -16,51 +16,52 @@ class ViewIndividualHaveVC: UIViewController {
             }
         }
     }
-    
+
     // Manages live activity in the app
     var creationManager: PurposeCreationManager?
-    
+
     @IBOutlet weak var headerTitleLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
-    
+
     @IBOutlet weak var locationLabel: UILabel!
-    
+
     @IBOutlet weak var doYouLabel: UILabel!
-    
+
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
-    
+
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
-        
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         if let owner = haveItem?.owner {
             headerTitleLabel.text = String(format: "%@'s Have", owner)
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         populateUI()
-        
+
     }
-    
+
     func populateUI() {
         guard let n = haveItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
         guard let t = creationManager?.currentCreationType() else { fatalError() }
         let str = "Do you " + t + "..."
         doYouLabel.text = str
-        locationLabel.text = String(format:"%@ in %@", n, cityState.displayName())
+        locationLabel.text = String(format: "%@ in %@", n, cityState.displayName())
+        needDescriptionTextView.text = haveItem?.description
         view.layoutIfNeeded()
     }
-    
+
     // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
         var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -70,28 +71,27 @@ class ViewIndividualHaveVC: UIViewController {
         scrollView.contentInset = contentInset
     }
 
-    @objc func keyboardWillHide(notification: NSNotification){
+    @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset: UIEdgeInsets = UIEdgeInsets()
         scrollView.contentInset = contentInset
     }
-    
+
      // MARK: - Actions
-    
+
     @IBAction func showLinkedNeeds(_ sender: Any) {
     }
-    
+
     @IBAction func showLinkedHaves(_ sender: Any) {
     }
-    
+
     @IBAction func joinThisHave(_ sender: Any) {
         // show textView for Headline and description (Required?)
         // Create a Have in the database linked to the current Have
-        
+
         guard let c = creationManager, let h = haveItem else { fatalError() }
-        
-        
+
     }
-    
+
     /*
     // MARK: - Navigation
 
@@ -105,6 +105,5 @@ class ViewIndividualHaveVC: UIViewController {
 }
 
 extension ViewIndividualHaveVC: UITextViewDelegate {
-    
-    
+
 }

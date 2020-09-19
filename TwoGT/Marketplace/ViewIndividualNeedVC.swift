@@ -19,47 +19,48 @@ class ViewIndividualNeedVC: UIViewController {
             }
         }
     }
-    
+
     // Manages live activity in the app
     var creationManager: PurposeCreationManager?
-    
+
     @IBOutlet weak var headerTitleLabel: UILabel!
 
     @IBOutlet weak var scrollView: UIScrollView!
-    
+
     @IBOutlet weak var needTypeLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
-    
+
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
-    
+
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
-        
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         if let owner = needItem?.owner {
             headerTitleLabel.text = String(format: "%@'s Need", owner)
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         populateUI()
-        
+
     }
-    
+
     func populateUI() {
         guard let n = needItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
         needTypeLabel.text = n
         locationLabel.text = cityState.displayName()
+        needDescriptionTextView.text = needItem?.description
     }
-    
+
     // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
         var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -69,28 +70,28 @@ class ViewIndividualNeedVC: UIViewController {
         scrollView.contentInset = contentInset
     }
 
-    @objc func keyboardWillHide(notification: NSNotification){
+    @objc func keyboardWillHide(notification: NSNotification) {
         let contentInset: UIEdgeInsets = UIEdgeInsets()
         scrollView.contentInset = contentInset
     }
-    
+
      // MARK: - Actions
-    
+
     @IBAction func joinThisNeed(_ sender: Any) {
         guard let item = needItem else {
             fatalError()
         }
         storeJoiningNeedToDatabase(needItem: item)
     }
-    
+
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeJoiningNeedToDatabase(needItem: NeedsBase.NeedItem) {
         guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
         }
-        
+
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        
+
         let need = NeedsDbWriter.NeedItem(category: needItem.category,
                                           description: c.getDescription() ?? needItem.description,
                                           validUntil: needItem.validUntil, //valid until next 7 days
@@ -125,7 +126,7 @@ class ViewIndividualNeedVC: UIViewController {
             }
         })
     }
-    
+
     /*
     // MARK: - Navigation
 
@@ -139,6 +140,5 @@ class ViewIndividualNeedVC: UIViewController {
 }
 
 extension ViewIndividualNeedVC: UITextViewDelegate {
-    
-    
+
 }
