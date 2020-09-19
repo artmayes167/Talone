@@ -19,7 +19,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var whereTextLabel: UILabel!
     @IBOutlet weak var whereTextField: UITextField!
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
-
+    @IBOutlet weak var seeMatchingHavesButton: DesignableButton!
+    @IBOutlet weak var seeMatchingNeedsButton: DesignableButton!
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: DesignableTextView!
     @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
@@ -30,7 +31,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     var currentNeedHaveSelectedSegmentIndex = 0
     var creationManager: PurposeCreationManager? {
         didSet {
-            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!) 
+            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
         }
     }
 
@@ -111,7 +112,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         guard let c = creationManager else { fatalError() }
-        
+
         switch currentNeedHaveSelectedSegmentIndex {
                case 1:
                 let haveItem = createHaveItem()
@@ -127,7 +128,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
                }
     }
-    
+
     private func createNeedItem() -> NeedItem {
         /// create new needs
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
@@ -146,18 +147,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 }
             }
         }
-        
+
         let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
         let newNeed = NeedItem.createNeedItem(item: need)
         return newNeed
     }
-    
+
     private func createHaveItem() -> HaveItem {
         /// create new needs
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let cat = c.getCategory().databaseValue()
-        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "primary"} ) as! Email
+        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "primary"}) as! Email
         let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
         let newHave = HaveItem.createHaveItem(item: have)
         return newHave
@@ -175,13 +176,15 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     func didSelect(_ need: NeedType) {
         categoryTextField.text = need.rawValue.capitalized
         categoriesPopOver.isHidden = true
-        
+        seeMatchingNeedsButton.isEnabled = true
+        seeMatchingHavesButton.isEnabled = true
+
         if let c = creationManager {
            c.setCategory(need)
         } else {
             creationManager = PurposeCreationManager(type: need, city: "", state: "")
         }
-        
+
         dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
     }
@@ -210,9 +213,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
-    
+
         if let s = segue.source as? CityStateSearchVC {
-            
+
             let loc = s.selectedLocation
             guard let city = loc["city"], let state = loc["state"] else { fatalError() }
             if let c = creationManager {
@@ -224,7 +227,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 }
                 creationManager = PurposeCreationManager(type: type, city: city, state: state)
             }
-            
+
             whereTextField.text = creationManager!.getLocationOrNil()?.displayName()
             // TODO: -
             saveFor(s.saveType)
@@ -259,7 +262,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func fetchMatchingNeeds() {
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
-        
+
         NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
             let newArray = array.filter { $0.category.lowercased() == c.getCategory().rawValue }
             if newArray.isEmpty {
@@ -287,10 +290,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func storeNeedToDatabase() {
         guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
         }
-        
+
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        
+
         let cat = c.getCategory()
         let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
                                           description: c.getDescription(),
@@ -381,7 +384,7 @@ protocol NeedSelectionDelegate {
 class NeedsTVC: UITableViewController {
     var delegate: NeedSelectionDelegate?
     var needs: [NeedType] = NeedType.allCases
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         needs.removeFirst(1)
@@ -404,10 +407,10 @@ class NeedsTVC: UITableViewController {
 }
 
 class SimpleSearchCell: UITableViewCell {
-    
+
     @IBOutlet weak var basicLabel: UILabel!
     @IBOutlet weak var colorBar: UIView!
-    
+
 }
 
  // MARK: -
