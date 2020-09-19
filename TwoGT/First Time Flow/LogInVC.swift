@@ -11,7 +11,7 @@ import UIKit
 
 // Only use touch/face ID, or passcode to enter app?  Like Venmo
 
-class LogInVC: UIViewController { // , LoginButtonDelegate {
+class LogInVC: UIViewController { //, LoginButtonDelegate {
 //    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
 //        Profile.loadCurrentProfile { (profile, error) in
 //            if error == nil {
@@ -22,7 +22,7 @@ class LogInVC: UIViewController { // , LoginButtonDelegate {
 //        }
 //
 //    }
-//
+
 //    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
 //
 //    }

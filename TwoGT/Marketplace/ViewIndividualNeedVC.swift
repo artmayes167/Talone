@@ -105,11 +105,21 @@ class ViewIndividualNeedVC: UIViewController {
                 let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
                 c.setNeed(n)
                 c.setParentNeed(Need.createNeed(item: NeedItem.createNeedItem(item: needItem)))
-                
-                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                    // TODO: - Create unwind segue to my needs
-                    //self.performSegue(withIdentifier: "bob", sender: nil)
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                if let p = c.getSavedPurpose() {
+                    AppDelegate.user().addToPurposes(p)
+                    if appDelegate.save() {
+                        self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                            // TODO: - Create unwind segue to my needs
+                            //self.performSegue(withIdentifier: "bob", sender: nil)
+                        }
+                    } else {
+                        fatalError()
+                    }
+                } else {
+                    fatalError()
                 }
+                
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }

@@ -139,18 +139,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         do {
             BackgroundTask.run(application: application) { backgroundTask in
-                save()
+                _ = save()
                 backgroundTask.end()
             }
         }
     }
     
-    func save() {
+    func save() -> Bool {
         do {
             try persistentContainer.viewContext.save()
+            return true
         }
         catch {
-            fatalError()
+            return false
         }
     }
     
@@ -163,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        scene.storyboard = UIStoryboard.init(name: "NoHome", bundle: nil)
 //        return scene
 //    }
-//
+
 //    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
 //        // Called when the user discards a scene session.
 //        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.

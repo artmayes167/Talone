@@ -46,8 +46,13 @@
 		5DA077882512AFF1000E46D9 /* EventsSearchAndCreationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA077872512AFF1000E46D9 /* EventsSearchAndCreationVC.swift */; };
 		5DBDA5CA25158E32001A80A5 /* MyNeedsSearchDisplayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA5C925158E32001A80A5 /* MyNeedsSearchDisplayVC.swift */; };
 		5DBDA5CF25158E58001A80A5 /* MyHavesSearchDisplayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA5CE25158E58001A80A5 /* MyHavesSearchDisplayVC.swift */; };
+		5DBDA61325160C0C001A80A5 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA60E25160C0C001A80A5 /* AsyncImage.swift */; };
+		5DBDA61425160C0C001A80A5 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA60F25160C0C001A80A5 /* ImageLoader.swift */; };
+		5DBDA61525160C0C001A80A5 /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA61025160C0C001A80A5 /* EnvironmentValues+ImageCache.swift */; };
+		5DBDA61625160C0C001A80A5 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA61125160C0C001A80A5 /* ImageCache.swift */; };
 		5DBE439624C62A5A002C6515 /* LogInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439524C62A5A002C6515 /* LogInVC.swift */; };
 		5DBE439824C64219002C6515 /* YouVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE439724C64219002C6515 /* YouVC.swift */; };
+		5DC87A2025161778004BCB3E /* MyCardInitialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC87A1F25161778004BCB3E /* MyCardInitialView.swift */; };
 		5DF3C6C9250AFBBF00F8D510 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF3C6C8250AFBBF00F8D510 /* String+Extensions.swift */; };
 		5DF3C6CC250BD86000F8D510 /* EntryFlowVCCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF3C6CB250BD86000F8D510 /* EntryFlowVCCollection.swift */; };
 		5DF3C6CE250BED8200F8D510 /* contributors.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3C6CD250BED8200F8D510 /* contributors.json */; };
@@ -156,8 +161,13 @@
 		5DA077872512AFF1000E46D9 /* EventsSearchAndCreationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsSearchAndCreationVC.swift; sourceTree = "<group>"; };
 		5DBDA5C925158E32001A80A5 /* MyNeedsSearchDisplayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNeedsSearchDisplayVC.swift; sourceTree = "<group>"; };
 		5DBDA5CE25158E58001A80A5 /* MyHavesSearchDisplayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHavesSearchDisplayVC.swift; sourceTree = "<group>"; };
+		5DBDA60E25160C0C001A80A5 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		5DBDA60F25160C0C001A80A5 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		5DBDA61025160C0C001A80A5 /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
+		5DBDA61125160C0C001A80A5 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		5DBE439524C62A5A002C6515 /* LogInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInVC.swift; sourceTree = "<group>"; };
 		5DBE439724C64219002C6515 /* YouVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouVC.swift; sourceTree = "<group>"; };
+		5DC87A1F25161778004BCB3E /* MyCardInitialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCardInitialView.swift; sourceTree = "<group>"; };
 		5DF3C6C8250AFBBF00F8D510 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		5DF3C6CB250BD86000F8D510 /* EntryFlowVCCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryFlowVCCollection.swift; sourceTree = "<group>"; };
 		5DF3C6CD250BED8200F8D510 /* contributors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = contributors.json; sourceTree = "<group>"; };
@@ -312,6 +322,7 @@
 			children = (
 				5D3A176324B671F90070739D /* SceneDelegate.swift */,
 				5D3A176824B671F90070739D /* ContentView.swift */,
+				5DC87A1F25161778004BCB3E /* MyCardInitialView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -377,6 +388,7 @@
 		5D6B210C25018C5E00745A69 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5DBDA60D25160BF8001A80A5 /* ASyncImage */,
 				5D6B2106250186BA00745A69 /* Date+Extensions.swift */,
 				5D6B2107250186BA00745A69 /* UIColor+Hex.swift */,
 				5D6B2105250186BA00745A69 /* UIView+Extensions.swift */,
@@ -422,6 +434,17 @@
 				5DBDA5CE25158E58001A80A5 /* MyHavesSearchDisplayVC.swift */,
 			);
 			path = "My Haves";
+			sourceTree = "<group>";
+		};
+		5DBDA60D25160BF8001A80A5 /* ASyncImage */ = {
+			isa = PBXGroup;
+			children = (
+				5DBDA60E25160C0C001A80A5 /* AsyncImage.swift */,
+				5DBDA61025160C0C001A80A5 /* EnvironmentValues+ImageCache.swift */,
+				5DBDA61125160C0C001A80A5 /* ImageCache.swift */,
+				5DBDA60F25160C0C001A80A5 /* ImageLoader.swift */,
+			);
+			path = ASyncImage;
 			sourceTree = "<group>";
 		};
 		5DD97AEA24E8421B00059F29 /* Data Structures */ = {
@@ -687,6 +710,7 @@
 				5DFF448E251407BF007F8CE4 /* Card+CoreDataProperties.swift in Sources */,
 				5D4A81FC250A99BB00AFC5E5 /* FeedbackVC.swift in Sources */,
 				5DFF4472251407BF007F8CE4 /* Purpose+CoreDataProperties.swift in Sources */,
+				5DBDA61525160C0C001A80A5 /* EnvironmentValues+ImageCache.swift in Sources */,
 				5D8A05BC2508AAD600202F79 /* DashboardVC.swift in Sources */,
 				5DBDA5CA25158E32001A80A5 /* MyNeedsSearchDisplayVC.swift in Sources */,
 				6D4E00FC2506E7D1004BD000 /* NewsFeedFetcher.swift in Sources */,
@@ -721,6 +745,7 @@
 				5DF3C6C9250AFBBF00F8D510 /* String+Extensions.swift in Sources */,
 				5DBE439824C64219002C6515 /* YouVC.swift in Sources */,
 				5DFF44C725143956007F8CE4 /* Address+CoreDataClass.swift in Sources */,
+				5DBDA61625160C0C001A80A5 /* ImageCache.swift in Sources */,
 				5DFF446E251407BF007F8CE4 /* Need+CoreDataProperties.swift in Sources */,
 				5D4A81F7250A860200AFC5E5 /* ViewIndividualNeedVC.swift in Sources */,
 				5DFF4482251407BF007F8CE4 /* AppLocationInfo+CoreDataProperties.swift in Sources */,
@@ -738,7 +763,9 @@
 				6D4E00FE25070222004BD000 /* NeedWriter.swift in Sources */,
 				5D61635624E086E400829AF2 /* Customizer.swift in Sources */,
 				5D61635924E08F8000829AF2 /* Enums.swift in Sources */,
+				5DC87A2025161778004BCB3E /* MyCardInitialView.swift in Sources */,
 				5DFF4481251407BF007F8CE4 /* AppLocationInfo+CoreDataClass.swift in Sources */,
+				5DBDA61425160C0C001A80A5 /* ImageLoader.swift in Sources */,
 				5D3A176924B671F90070739D /* ContentView.swift in Sources */,
 				6D4E010225086514004BD000 /* HaveWriter.swift in Sources */,
 				5DFF43102513EAC4007F8CE4 /* CoreDataObjectExtensions.swift in Sources */,
@@ -759,6 +786,7 @@
 				5DFF44C825143956007F8CE4 /* Address+CoreDataProperties.swift in Sources */,
 				5DFF44A12514302D007F8CE4 /* User+CoreDataClass.swift in Sources */,
 				5D3A176424B671F90070739D /* SceneDelegate.swift in Sources */,
+				5DBDA61325160C0C001A80A5 /* AsyncImage.swift in Sources */,
 				5D348A6325082CB200725820 /* CardsIntroVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

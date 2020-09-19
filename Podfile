@@ -8,7 +8,7 @@ target 'TwoGT' do
   pod 'Alamofire'
   pod 'AlamofireImage', '~> 4.1'
   pod 'FBSDKCoreKit'  # Crypto
-  #pod 'FBSDKLoginKit' # Crypto
+  pod 'FBSDKLoginKit' # Crypto
   # pod 'FacebookShare'
   pod 'Toast-Swift', '~> 5.0.1'
   

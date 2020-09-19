@@ -216,6 +216,27 @@ class PurposeCreationManager: NSObject {
         }
     }
     
+    func prepareForSave() -> Bool {
+        switch creationType {
+        case .have:
+            guard let h = have else { print("Have Not Set when preparing for save!!!!"); return false }
+            purpose.addToHaves(h)
+            return true
+        case .need:
+            guard let n = need else { print("Need Not Set when preparing for save!!!!"); return false }
+            purpose.addToNeeds(n)
+            return true
+        default:
+            print("Creation Type Not Set when preparing for save!!!!")
+            return false
+        }
+    }
+    
+    func getSavedPurpose() -> Purpose? {
+        if !prepareForSave() { return nil }
+        return purpose
+    }
+    
 }
 
 //extension PurposeCreationManager {

@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Address" representedClassName="Address" parentEntity="AppLocationInfo" syncable="YES" codeGenerationType="class">
+    <entity name="Address" representedClassName="Address" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="street1" optional="YES" attributeType="String"/>
         <attribute name="street2" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="addresses" inverseEntity="User"/>
     </entity>
-    <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES" codeGenerationType="class">
+    <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES">
         <attribute name="city" attributeType="String" defaultValueString=""/>
         <attribute name="country" attributeType="String" defaultValueString="USA"/>
         <attribute name="state" attributeType="String" defaultValueString=""/>
     </entity>
-    <entity name="Card" representedClassName="Card" syncable="YES" codeGenerationType="class">
+    <entity name="Card" representedClassName="Card" syncable="YES">
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="cards" inverseEntity="User"/>
     </entity>
-    <entity name="CityState" representedClassName="CityState" parentEntity="AppLocationInfo" syncable="YES" codeGenerationType="class">
+    <entity name="CityState" representedClassName="CityState" parentEntity="AppLocationInfo" syncable="YES">
         <relationship name="communities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Community" inverseName="cityState" inverseEntity="Community"/>
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="cityState" inverseEntity="Purpose"/>
     </entity>
-    <entity name="Community" representedClassName="Community" syncable="YES" codeGenerationType="class">
+    <entity name="Community" representedClassName="Community" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="cityState" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CityState" inverseName="communities" inverseEntity="CityState"/>
     </entity>
-    <entity name="Email" representedClassName="Email" syncable="YES" codeGenerationType="class">
+    <entity name="Email" representedClassName="Email" syncable="YES">
         <attribute name="emailString" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="emails" inverseEntity="User"/>
     </entity>
-    <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
+    <entity name="Event" representedClassName="Event" syncable="YES">
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="events" inverseEntity="Purpose"/>
     </entity>
-    <entity name="Have" representedClassName="Have" syncable="YES" codeGenerationType="class">
+    <entity name="Have" representedClassName="Have" syncable="YES">
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
         <relationship name="childHaves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Have" inverseName="parentHave" inverseEntity="Have"/>
         <relationship name="childNeeds" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="parentHave" inverseEntity="Need"/>
@@ -38,17 +38,17 @@
         <relationship name="parentHave" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="childHaves" inverseEntity="Have"/>
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="haves" inverseEntity="Purpose"/>
     </entity>
-    <entity name="HaveItem" representedClassName="HaveItem" parentEntity="Item" syncable="YES" codeGenerationType="class">
+    <entity name="HaveItem" representedClassName="HaveItem" parentEntity="Item" syncable="YES">
         <relationship name="have" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="haveItem" inverseEntity="Have"/>
     </entity>
-    <entity name="ImageInfo" representedClassName="ImageInfo" syncable="YES" codeGenerationType="class">
+    <entity name="ImageInfo" representedClassName="ImageInfo" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageURLString" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="images" inverseEntity="User"/>
     </entity>
-    <entity name="Item" representedClassName="Item" isAbstract="YES" syncable="YES" codeGenerationType="class">
+    <entity name="Item" representedClassName="Item" isAbstract="YES" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="createdBy" optional="YES" attributeType="String"/>
@@ -58,7 +58,7 @@
         <attribute name="owner" optional="YES" attributeType="String"/>
         <attribute name="validUntil" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Need" representedClassName="Need" syncable="YES" codeGenerationType="class">
+    <entity name="Need" representedClassName="Need" syncable="YES">
         <attribute name="personalNotes" optional="YES" attributeType="String" defaultValueString=""/>
         <relationship name="childNeeds" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="parentNeed" inverseEntity="Need"/>
         <relationship name="needItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NeedItem" inverseName="need" inverseEntity="NeedItem"/>
@@ -66,15 +66,15 @@
         <relationship name="parentNeed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Need" inverseName="childNeeds" inverseEntity="Need"/>
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="needs" inverseEntity="Purpose"/>
     </entity>
-    <entity name="NeedItem" representedClassName="NeedItem" parentEntity="Item" syncable="YES" codeGenerationType="class">
+    <entity name="NeedItem" representedClassName="NeedItem" parentEntity="Item" syncable="YES">
         <relationship name="need" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="needItem" inverseEntity="Need"/>
     </entity>
-    <entity name="PhoneNumber" representedClassName="PhoneNumber" syncable="YES" codeGenerationType="class">
+    <entity name="PhoneNumber" representedClassName="PhoneNumber" syncable="YES">
         <attribute name="number" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="phoneNumbers" inverseEntity="User"/>
     </entity>
-    <entity name="Purpose" representedClassName="Purpose" syncable="YES" codeGenerationType="class">
+    <entity name="Purpose" representedClassName="Purpose" syncable="YES">
         <attribute name="category" optional="YES" attributeType="String" defaultValueString=""/>
         <relationship name="cityState" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CityState" inverseName="purpose" inverseEntity="CityState"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="purpose" inverseEntity="Event"/>
@@ -82,19 +82,19 @@
         <relationship name="needs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Need" inverseName="purpose" inverseEntity="Need"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="purposes" inverseEntity="User"/>
     </entity>
-    <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES" codeGenerationType="class">
+    <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="community" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="searchLocations" inverseEntity="User"/>
     </entity>
-    <entity name="SocialMedia" representedClassName="SocialMedia" syncable="YES" codeGenerationType="class">
+    <entity name="SocialMedia" representedClassName="SocialMedia" syncable="YES">
         <attribute name="personalURLString" optional="YES" attributeType="String"/>
         <attribute name="siteName" optional="YES" attributeType="String"/>
         <attribute name="siteURLString" optional="YES" attributeType="String"/>
         <attribute name="userName" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="socialMediaInfo" inverseEntity="User"/>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+    <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="handle" optional="YES" attributeType="String"/>
         <relationship name="addresses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Address" inverseName="user" inverseEntity="Address"/>
         <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Card" inverseName="user" inverseEntity="Card"/>
