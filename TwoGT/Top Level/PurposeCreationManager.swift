@@ -189,6 +189,10 @@ class PurposeCreationManager: NSObject {
         n.needItem = item
     }
     
+    func setParentNeed(_ need: Need) {
+        self.need?.addToParentNeed(need)
+    }
+    
     func setHave(_ have: Have) {
         self.have = have
     }

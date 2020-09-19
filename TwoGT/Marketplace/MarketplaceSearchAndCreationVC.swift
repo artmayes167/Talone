@@ -178,6 +178,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         
         if let c = creationManager {
            c.setCategory(need)
+        } else {
+            creationManager = PurposeCreationManager(type: need, city: "", state: "")
         }
         
         dismissTapGesture.isEnabled = false

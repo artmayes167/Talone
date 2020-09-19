@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Firebase
+import Toast_Swift
+import CoreData
 
 class ViewIndividualNeedVC: UIViewController {
     var needItem: NeedsBase.NeedItem? {
@@ -73,13 +76,44 @@ class ViewIndividualNeedVC: UIViewController {
     
      // MARK: - Actions
     
-    @IBAction func showLinkedNeeds(_ sender: Any) {
-    }
-    
-    @IBAction func showLinkedHaves(_ sender: Any) {
-    }
-    
     @IBAction func joinThisNeed(_ sender: Any) {
+        guard let item = needItem else {
+            fatalError()
+        }
+        storeJoiningNeedToDatabase(needItem: item)
+    }
+    
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
+    private func storeJoiningNeedToDatabase(needItem: NeedsBase.NeedItem) {
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
+        }
+        
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+        
+        let need = NeedsDbWriter.NeedItem(category: needItem.category,
+                                          description: c.getDescription() ?? needItem.description,
+                                          validUntil: needItem.validUntil, //valid until next 7 days
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+
+        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        needsWriter.addNeed(need, completion: { error in
+            if error == nil {
+                let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
+                c.setNeed(n)
+                c.setParentNeed(Need.createNeed(item: NeedItem.createNeedItem(item: needItem)))
+                
+                self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    //self.performSegue(withIdentifier: "bob", sender: nil)
+                }
+            } else {
+                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        })
     }
     
     /*
