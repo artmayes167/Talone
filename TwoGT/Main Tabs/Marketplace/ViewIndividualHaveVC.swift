@@ -92,8 +92,48 @@ class ViewIndividualHaveVC: UIViewController {
 
         // Decide whether we need to create a Need for this; or we just associate the userId to the Have
         // object
-        guard let c = creationManager, let h = haveItem else { fatalError() }
-        joinTheHave()
+//        guard let c = creationManager, let h = haveItem else { fatalError() }
+        storeJoiningNeedToDatabase()
+    }
+    
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
+    private func storeJoiningNeedToDatabase() {
+        guard let c = creationManager, let have = haveItem  else { fatalError()
+        }
+
+        // if need-type nor location is not selected, display an error message
+//        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+
+        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        needsWriter.createNeedAndJoinHave(have, usingHandle: AppDelegate.user().handle ?? "Anonymous") { (error, firebaseNeedItem) in
+            if error == nil, let needItem = firebaseNeedItem {
+                let n = Need.createNeed(item: NeedItem.createNeedItem(item: needItem))
+                let h = HaveItem.createHaveItem(item: have)
+                let localHave = Have.createHave(item: h)
+                n.parentHave = localHave
+                c.setNeed(n)
+                
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                if let p = c.getSavedPurpose() {
+                    AppDelegate.user().addToPurposes(p)
+                    if appDelegate.save() {
+                        self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                            // TODO: - Create unwind segue to my needs
+                            self.joinThisHaveButton.isEnabled = false
+                            self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
+                        }
+                    } else {
+                        fatalError()
+                    }
+                } else {
+                    fatalError()
+                }
+                
+            } else {
+                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        }
     }
     
     @IBAction func sendCard(_ sender: Any) {
@@ -112,22 +152,22 @@ class ViewIndividualHaveVC: UIViewController {
     }
     */
 
-    private func joinTheHave() {
-
-        guard let have = haveItem else { return }
-        
-        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user().handle ?? "Anonymous") { error in
-            if error == nil {
-                // Show success
-                self.view.makeToast("Created a need and linked it to this Have", duration: 2.0, position: .center) {_ in
-                }
-                // Since we do not navigate away from this view, prevent user from creating another need.
-                self.joinThisHaveButton.isEnabled = false
-
-            }
-        }
-        
-    }
+//    private func joinTheHave() {
+//
+//        guard let have = haveItem else { return }
+//
+//        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user().handle ?? "Anonymous") { (error, needItem) in
+//            if error == nil {
+//                // Show success
+//                self.view.makeToast("Created a need and linked it to this Have", duration: 2.0, position: .center) {_ in
+//                }
+//                // Since we do not navigate away from this view, prevent user from creating another need.
+//                self.joinThisHaveButton.isEnabled = false
+//
+//            }
+//        }
+//
+//    }
 }
 
 extension ViewIndividualHaveVC: UITextViewDelegate {

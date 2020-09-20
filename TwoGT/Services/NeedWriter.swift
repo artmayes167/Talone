@@ -100,7 +100,7 @@ class NeedsDbWriter: NeedsBase {
         completion(nil)
     }
     
-    func createNeedAndJoinHave(_ have: HavesBase.HaveItem, usingHandle userHandle: String, completion: @escaping (Error?) -> Void) {
+    func createNeedAndJoinHave(_ have: HavesBase.HaveItem, usingHandle userHandle: String, completion: @escaping (Error?, NeedItem?) -> Void) {
                 
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         if let userId = Auth.auth().currentUser?.uid {
@@ -111,12 +111,12 @@ class NeedsDbWriter: NeedsBase {
                 if error == nil, let needId = needItem.id, let haveId = have.id {
                     HavesDbWriter().associateAuthUserHavingNeedId(needId, toHaveId: haveId) { error in
                         // call completion
-                        completion(error)
+                        completion(error, needItem)
                     }
                 }
             }
         } else {
-            completion(GenericFirebaseError.noAuthUser)
+            completion(GenericFirebaseError.noAuthUser, nil)
         }
     }
 }

@@ -123,7 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func checkIfAuthenticatedAndProgress() {
 
-        if Auth.auth().currentUser?.isEmailVerified ?? false, (Auth.auth().currentUser?.isAnonymous ?? true) == false  {
+        if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
             print("Email verified!!! User not anonymous!")
         
             self.window = UIWindow(frame: UIScreen.main.bounds)
