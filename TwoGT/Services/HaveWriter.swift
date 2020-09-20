@@ -16,6 +16,7 @@ class HavesBase: FirebaseGeneric {
     struct HaveItem: Codable {
         @DocumentID var id: String? = UUID().uuidString
         var category: String
+        var headline: String?
         var description: String?
         var needs: [String]? // Need Ids
         var users: [String]? // user.uids

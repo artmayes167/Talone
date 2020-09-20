@@ -75,6 +75,7 @@ class NeedsBase: FirebaseGeneric {
     struct NeedItem: Identifiable, Codable {
         @DocumentID var id: String? = UUID().uuidString
         var category: String // Inherited
+        var headline: String?
         var description: String?
         var validUntil: Timestamp
         var owner: String
