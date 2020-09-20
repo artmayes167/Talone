@@ -94,7 +94,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "viewNeed", sender: haves[indexPath.item])
+        performSegue(withIdentifier: "viewHave", sender: haves[indexPath.item])
     }
 }
 
