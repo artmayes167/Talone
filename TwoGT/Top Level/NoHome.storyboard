@@ -204,7 +204,7 @@
                                             <segue destination="zaG-xE-H7K" kind="show" identifier="toEnterEmail" id="L0o-Ip-aRu"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ug2-ZQ-S2a" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ug2-ZQ-S2a" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="98" width="366" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="RFd-sN-gfO"/>
@@ -434,22 +434,28 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ON THE SAME DEVICE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-WL-oud">
+                                        <rect key="frame" x="0.0" y="54" width="390" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" systemColor="systemRedColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
-                                        <rect key="frame" x="0.0" y="54" width="390" height="81.5"/>
+                                        <rect key="frame" x="0.0" y="102" width="390" height="81.5"/>
                                         <string key="text">At this point, we will generate a secret password, known to no human soul, and enable face/touch ID or lock code. We will use this password to securely encrypt all your information.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
-                                        <rect key="frame" x="0.0" y="159.5" width="390" height="101.5"/>
-                                        <string key="text">We are still waiting for you to click on the link on the email we sent you. You need to navigate to your email application (or browser). After clicking that link, you will be redirected back here and you can continue this sign-in process.</string>
+                                        <rect key="frame" x="0.0" y="207.5" width="390" height="101.5"/>
+                                        <string key="text">We are still waiting for you to click on the link on the email we sent you. You need to navigate to your email application (or browser) on this device. After clicking that link, you will be redirected back here and you can continue this sign-in process.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Drf-ZC-R32">
-                                        <rect key="frame" x="0.0" y="285" width="390" height="385"/>
+                                        <rect key="frame" x="0.0" y="333" width="390" height="337"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRn-fJ-pwG" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
@@ -919,7 +925,7 @@
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="32" maxY="0.0"/>
-                                                <state key="normal" title="Initiate Transfers" image="arrow.right.arrow.left" catalog="system">
+                                                <state key="normal" title="Initiate Transfers" image="transfer">
                                                     <color key="titleColor" systemColor="systemBlueColor"/>
                                                 </state>
                                             </button>
@@ -1679,9 +1685,12 @@
                     <connections>
                         <outlet property="textField" destination="OQE-Pl-MyA" id="1TN-OQ-qqz"/>
                         <segue destination="rvs-iw-e00" kind="show" identifier="toBase" id="WuH-8A-hhF"/>
+                        <segue destination="Wcb-M1-gsm" kind="unwind" identifier="unwindToMyNeeds" unwindAction="unwindToMyNeeds:" id="8tB-SB-d8c"/>
+                        <segue destination="Wcb-M1-gsm" kind="unwind" identifier="unwindToMyHaves" unwindAction="unwindToMyHaves:" id="scI-UL-fY8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d64-xm-sJR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="Wcb-M1-gsm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1713" y="-198"/>
         </scene>
@@ -4390,7 +4399,6 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="appIcon" width="180" height="180"/>
-        <image name="arrow.right.arrow.left" catalog="system" width="119" height="128"/>
         <image name="avatar" width="538" height="538"/>
         <image name="chevronRight" width="592" height="592"/>
         <image name="confused" width="613" height="581"/>
@@ -4406,6 +4414,7 @@
         <image name="stack" width="580" height="580"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
+        <image name="transfer" width="25" height="27"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

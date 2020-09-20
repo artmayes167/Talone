@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import Toast_Swift
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 

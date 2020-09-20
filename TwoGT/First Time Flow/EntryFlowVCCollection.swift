@@ -134,9 +134,7 @@ class EnterHandleVC: UIViewController {
         // TODO: - Set the handle on the back end
         // completion
         guard let email = UserDefaults.standard.string(forKey: "Email") else { fatalError() }
-        let e = Email()
-        e.emailString = email
-        e.name = "talone"
+        let e = Email.create(name: "talone", emailAddress: email)
         AppDelegate.user().addToEmails(e)
         AppDelegate.user().handle = textField.text
         

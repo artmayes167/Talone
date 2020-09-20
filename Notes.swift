@@ -47,3 +47,5 @@
 // Hand by taamir468 from the Noun Project (needForTab)
 
 // give by Lnhi from the Noun Project (haveForTab)
+
+// transfer by Adrien Coquet from the Noun Project

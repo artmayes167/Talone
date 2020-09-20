@@ -47,7 +47,7 @@ class HavesDbWriter: HavesBase {
         //do {
             let ref = db.collection("haves").document(haveId)
         ref.updateData(["needs": FieldValue.arrayUnion([needId])]) { error in
-            print(error)
+            print(error.debugDescription)
             completion(error)
         }
     }
@@ -56,7 +56,7 @@ class HavesDbWriter: HavesBase {
         let db = Firestore.firestore()
         let ref = db.collection("haves").document(haveId)
         ref.updateData(["interestedUsers": FieldValue.arrayUnion([userId])]) { error in
-            print(error)
+            print(error.debugDescription)
             completion(error)
         }
     }

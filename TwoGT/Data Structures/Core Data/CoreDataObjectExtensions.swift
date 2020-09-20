@@ -120,6 +120,33 @@ extension User {
     }
 }
 
+extension Email {
+    class func create(name: String, emailAddress: String) -> Email {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Email",
+                                     in: managedContext)!
+        
+       guard let email = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Email else {
+                                                fatalError()
+        }
+        
+        email.name = name
+        email.emailString = emailAddress
+        
+        do {
+          try managedContext.save()
+            return email
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
 extension Item {
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
         guard let c = category, !c.isEmpty else { return false }

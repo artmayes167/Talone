@@ -1,5 +1,5 @@
 //
-//  AddANeedVC.swift
+//  MarketplaceSearchAndCreationVC.swift
 //  TwoGT
 //
 //  Created by Arthur Mayes on 8/9/20.
@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 import Toast_Swift
 import CoreData
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
@@ -317,7 +319,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                     if appDelegate.save() {
                         self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
                             // TODO: - Create unwind segue to my needs
-                            //self.performSegue(withIdentifier: "bob", sender: nil)
+                            self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                         }
                     } else {
                         fatalError()
@@ -351,8 +353,22 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         havesWriter.addHave(have, completion: { error in
             if error == nil {
-                self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center)
-                self.descriptionTextView.text = ""
+                let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
+                c.setHave(h)
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                if let p = c.getSavedPurpose() {
+                    AppDelegate.user().addToPurposes(p)
+                    if appDelegate.save() {
+                        self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
+                            // TODO: - Create unwind segue to my needs
+                            self.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
+                        }
+                    } else {
+                        fatalError()
+                    }
+                } else {
+                    fatalError()
+                }
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
             }
