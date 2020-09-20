@@ -1685,12 +1685,9 @@
                     <connections>
                         <outlet property="textField" destination="OQE-Pl-MyA" id="1TN-OQ-qqz"/>
                         <segue destination="rvs-iw-e00" kind="show" identifier="toBase" id="WuH-8A-hhF"/>
-                        <segue destination="Wcb-M1-gsm" kind="unwind" identifier="unwindToMyNeeds" unwindAction="unwindToMyNeeds:" id="8tB-SB-d8c"/>
-                        <segue destination="Wcb-M1-gsm" kind="unwind" identifier="unwindToMyHaves" unwindAction="unwindToMyHaves:" id="scI-UL-fY8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d64-xm-sJR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="Wcb-M1-gsm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1713" y="-198"/>
         </scene>
@@ -2166,7 +2163,7 @@
                                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AcC-6t-XFl" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="12" y="154" width="342" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="100" id="aVf-C1-PFm"/>
                                                                 </constraints>
@@ -2323,9 +2320,12 @@
                         <outlet property="whereTextLabel" destination="VEw-5P-nud" id="iPG-zt-DGj"/>
                         <segue destination="O7k-WT-Yao" kind="presentation" identifier="toNeedsCollection" id="Ney-0r-dLf"/>
                         <segue destination="VFf-sh-nVd" kind="presentation" identifier="toHavesCollection" id="xms-8j-XJW"/>
+                        <segue destination="mmG-QD-rSE" kind="unwind" identifier="unwindToMyHaves" unwindAction="unwindToMyHaves:" id="QR2-VT-mcp"/>
+                        <segue destination="mmG-QD-rSE" kind="unwind" identifier="unwindToMyNeeds" unwindAction="unwindToMyNeeds:" id="aUY-od-eJa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OPS-Fj-pPw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="mmG-QD-rSE" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer cancelsTouchesInView="NO" id="PKx-yh-dZ7">
                     <connections>
                         <action selector="dismissOnTap:" destination="8hf-gU-7T7" id="p6h-NZ-CAa"/>

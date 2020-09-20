@@ -30,10 +30,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
 
      // MARK: - Variables
-    var currentNeedHaveSelectedSegmentIndex = 0
     var creationManager: PurposeCreationManager? {
         didSet {
             creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
+        }
+    }
+    
+    var currentNeedHaveSelectedSegmentIndex = 0 {
+        didSet {
+            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
+            let title = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
+            createNewNeedHaveButton.setTitle(title, for: .normal)
+            whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
         }
     }
 
@@ -66,6 +74,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     override func viewDidAppear(_ animated: Bool) {
            super.viewDidAppear(animated)
            view.endEditing(true)
+            setUIForCurrents()
        }
 
      // MARK: - Keyboard Notifications
@@ -84,11 +93,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         scrollView.contentInset = contentInset
     }
 
-     // MARK: - Utility Functions
+     // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
     /// Saved locations for selection are saved in the keychain, using the Saves.shared object
     func setUIForCurrents() {
-        creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex) ?? .unknown)
+        
         if let loc = creationManager?.getLocationOrNil() {
             whereTextField.text = loc.displayName()
         }
@@ -96,7 +105,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         /// Country is USA by default
     }
 
-     // MARK: - Actions
+     // MARK: IBActions
     @IBAction func dismissOnTap(_ sender: Any) {
         if categoriesPopOver.isHidden == false {
             categoriesPopOver.isHidden = true
@@ -106,10 +115,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
+        // UI and CoreData elements are handled in didSet()
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
-        whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
-        createNewNeedHaveButton.titleLabel?.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
-        setUIForCurrents() // sets needType, and populates location label
+        
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
@@ -131,6 +139,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
+     // MARK: Private Functions
     private func createNeedItem() -> NeedItem {
         /// create new needs
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
@@ -160,7 +169,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let cat = c.getCategory().databaseValue()
-        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "primary"}) as! Email
+        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "talone"}) as! Email
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
 
         let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
@@ -176,7 +185,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         fetchMatchingHaves()
     }
 
-    // MARK: - NeedSelectionDelegate
+    // MARK: NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
         categoryTextField.text = need.rawValue.capitalized
         categoriesPopOver.isHidden = true
@@ -193,7 +202,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         view.layoutIfNeeded()
     }
 
-     // MARK: - Navigation
+     // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "needsPO":
@@ -238,8 +247,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
-     // MARK: - Save Functions
-    func saveFor(_ type: SaveType) {
+     // MARK: Save Functions
+    private func saveFor(_ type: SaveType) {
         guard let c = creationManager, let loc = c.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
             let user = AppDelegate.user()
@@ -318,7 +327,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                     AppDelegate.user().addToPurposes(p)
                     if appDelegate.save() {
                         self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                            // TODO: - Create unwind segue to my needs
+                            // TODO: - Unwind segue to my needs
                             self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                         }
                     } else {
@@ -377,8 +386,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
 }
 
- // MARK: - UITextFieldDelegate
-extension MarketplaceSearchAndCreationVC {
+ // MARK: - UITextFieldDelegate, UITextViewDelegate
+extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryTextField {
             categoriesPopOver.isHidden = false
@@ -390,6 +399,26 @@ extension MarketplaceSearchAndCreationVC {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == headlineTextField {
+            creationManager?.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+        }
+    }
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        if textView == descriptionTextView {
+            return true
+        }
+        return false
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        dismissTapGesture.isEnabled = true
+        let rect = scrollView.convert(textView.frame, from:buttonsAndDescriptionView)
+        let newRect = rect //.offsetBy(dx: 0, dy: (textView.superview?.frame.origin.y)!)
+        self.scrollView.scrollRectToVisible(newRect, animated: false)
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == descriptionTextView {
             creationManager?.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         }
     }
@@ -433,16 +462,3 @@ class SimpleSearchCell: UITableViewCell {
 
 }
 
- // MARK: -
-extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
-
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        dismissTapGesture.isEnabled = true
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView == descriptionTextView {
-            creationManager?.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        }
-    }
-}

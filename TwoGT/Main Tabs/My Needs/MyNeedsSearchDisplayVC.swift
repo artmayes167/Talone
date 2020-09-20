@@ -36,6 +36,15 @@ class MyNeedsSearchDisplayVC: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
         
+        getNeeds()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        populateUI()
+    }
+    
+    func getNeeds() {
         var array: [Need] = []
         for p in purposes ?? [] {
             if let needs = p.needs as? Set<Need> {
@@ -45,11 +54,6 @@ class MyNeedsSearchDisplayVC: UIViewController {
             }
         }
         needs = array
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        populateUI()
     }
     
     func populateUI() {
@@ -67,7 +71,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     @IBAction func unwindToMyNeeds( _ segue: UIStoryboardSegue) {
-        
+        getNeeds()
     }
 
 }

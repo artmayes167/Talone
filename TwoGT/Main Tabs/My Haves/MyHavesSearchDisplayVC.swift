@@ -34,6 +34,15 @@ class MyHavesSearchDisplayVC: UIViewController {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
         
+        getHaves()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        populateUI()
+    }
+    
+    func getHaves() {
         var array: [Have] = []
         for p in purposes ?? [] {
             if let haves = p.haves as? Set<Have> {
@@ -43,11 +52,6 @@ class MyHavesSearchDisplayVC: UIViewController {
             }
         }
         haves = array
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        populateUI()
     }
     
     func populateUI() {
@@ -65,7 +69,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
     
     @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-        
+        getHaves()
     }
 
 }
