@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Toast_Swift
 
 class ViewIndividualHaveVC: UIViewController {
     var haveItem: HavesBase.HaveItem? {
@@ -30,7 +31,8 @@ class ViewIndividualHaveVC: UIViewController {
 
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
-
+    @IBOutlet weak var joinThisHaveButton: DesignableButton!
+    
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,15 +90,12 @@ class ViewIndividualHaveVC: UIViewController {
         // show textView for Headline and description (Required?)
         // Create a Have in the database linked to the current Have
 
+        // Decide whether we need to create a Need for this; or we just associate the userId to the Have
+        // object
         guard let c = creationManager, let h = haveItem else { fatalError() }
+        joinTheHave()
+    }
 
-    }
-    
-    @IBAction func sendCard(_ sender: Any) {
-    }
-    
-    @IBAction func saveNotes(_ sender: Any) {
-    }
     /*
     // MARK: - Navigation
 
@@ -107,6 +106,22 @@ class ViewIndividualHaveVC: UIViewController {
     }
     */
 
+    private func joinTheHave() {
+
+        guard let have = haveItem else { return }
+        
+        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user().handle ?? "Anonymous") { error in
+            if error == nil {
+                // Show success
+                self.view.makeToast("Created a need and linked it to this Have", duration: 2.0, position: .center) {_ in
+                }
+                // Since we do not navigate away from this view, prevent user from creating another need.
+                self.joinThisHaveButton.isEnabled = false
+
+            }
+        }
+        
+    }
 }
 
 extension ViewIndividualHaveVC: UITextViewDelegate {

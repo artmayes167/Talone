@@ -210,7 +210,7 @@ extension NeedItem {
         }
         needItem.category = item.category
         needItem.desc = item.description
-        needItem.validUntil = Int64(item.validUntil)
+        needItem.validUntil = Int64(item.validUntil.seconds)
         needItem.owner = item.owner
         needItem.createdBy = item.createdBy
         needItem.createdAt = item.createdAt?.dateValue()
@@ -264,7 +264,7 @@ extension HaveItem {
         }
         haveItem.category = item.category
         haveItem.desc = item.description
-        haveItem.validUntil = Int64(item.validUntil ?? 0)
+        //haveItem.validUntil = Int64(from: item.validUntil ?? 0) TODO: FIX THIS
         haveItem.owner = item.owner
         haveItem.createdBy = item.createdBy
         haveItem.createdAt = item.createdAt?.dateValue()

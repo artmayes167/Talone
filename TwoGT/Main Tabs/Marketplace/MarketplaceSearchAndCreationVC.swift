@@ -147,8 +147,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 }
             }
         }
-
-        let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
+        let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
         let newNeed = NeedItem.createNeedItem(item: need)
         return newNeed
     }
@@ -159,7 +159,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let cat = c.getCategory().databaseValue()
         let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "primary"}) as! Email
-        let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: 4124045393, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
+
+        let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
         let newHave = HaveItem.createHaveItem(item: have)
         return newHave
     }
@@ -295,9 +297,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
         let cat = c.getCategory()
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
                                           description: c.getDescription(),
-                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          validUntil: defaultValidUntilDate,
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
                                           locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
@@ -336,9 +339,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
         let cat = c.getCategory()
+        let defaultValidUntilDate = Date(timeIntervalSinceNow: 30*24*60*60)
         let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
-                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          validUntil: Timestamp(date: defaultValidUntilDate),
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
                                           locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc()))
