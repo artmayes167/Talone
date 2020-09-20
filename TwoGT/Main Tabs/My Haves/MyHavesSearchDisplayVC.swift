@@ -13,8 +13,8 @@ class MyHavesSearchDisplayVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var categoryLabel: UILabel!
     
-    var purposes: Set<Purpose> = {
-        return AppDelegate.user().purposes as! Set<Purpose>
+    var purposes: Set<Purpose>? = {
+        return AppDelegate.user().purposes as? Set<Purpose>
     }()
 
     let spacer = CGFloat(1)
@@ -35,7 +35,7 @@ class MyHavesSearchDisplayVC: UIViewController {
         layout.minimumInteritemSpacing = 12
         
         var array: [Have] = []
-        for p in purposes {
+        for p in purposes ?? [] {
             if let haves = p.haves as? Set<Have> {
                 for h in haves {
                     array.append(h)
