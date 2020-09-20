@@ -112,21 +112,21 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         guard let c = creationManager else { fatalError() }
-
+        
         switch currentNeedHaveSelectedSegmentIndex {
-               case 1:
-                let haveItem = createHaveItem()
-                haveItem.headline = headlineTextField.text
-                haveItem.desc = descriptionTextView.text
-                c.setHaveItem(item: haveItem)
-                if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
-               default:
-                let needItem = createNeedItem()
-                needItem.headline = headlineTextField.text
-                needItem.desc = descriptionTextView.text
-                c.setNeedItem(item: needItem)
-                if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
-               }
+        case 1:
+            let haveItem = createHaveItem()
+            haveItem.headline = headlineTextField.text
+            haveItem.desc = descriptionTextView.text
+            c.setHaveItem(item: haveItem)
+            if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
+        default:
+            let needItem = createNeedItem()
+            needItem.headline = headlineTextField.text
+            needItem.desc = descriptionTextView.text
+            c.setNeedItem(item: needItem)
+            if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
+        }
     }
 
     private func createNeedItem() -> NeedItem {

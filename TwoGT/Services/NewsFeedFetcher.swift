@@ -16,7 +16,7 @@ class NewsFeedFetcher {
     struct NewsItem: Codable {
         var category: String
         var description: String
-        var validUntil: Int
+        var validUntil: Timestamp
     }
 
     var latestNews = [NewsItem]()

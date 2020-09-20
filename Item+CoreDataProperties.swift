@@ -24,7 +24,7 @@ extension Item {
     @NSManaged public var headline: String?
     @NSManaged public var id: String?
     @NSManaged public var owner: String?
-    @NSManaged public var validUntil: Int64
+    @NSManaged public var validUntil: Date?
 
 }
 

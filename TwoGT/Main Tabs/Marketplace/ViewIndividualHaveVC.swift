@@ -95,7 +95,13 @@ class ViewIndividualHaveVC: UIViewController {
         guard let c = creationManager, let h = haveItem else { fatalError() }
         joinTheHave()
     }
+    
+    @IBAction func sendCard(_ sender: Any) {
+    }
 
+    @IBAction func saveNotes(_ sender: Any) {
+    }
+    
     /*
     // MARK: - Navigation
 
