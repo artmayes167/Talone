@@ -209,9 +209,10 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
         
         let cat = c.getCategory()
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
                                           description: c.getDescription(),
-                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          validUntil: defaultValidUntilDate,
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
                                           locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
@@ -234,9 +235,10 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
         let cat = c.getCategory()
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
-                                          validUntil: Int(Date().timeIntervalSince1970) + 7*24*60*60, //valid until next 7 days
+                                          validUntil: defaultValidUntilDate,
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
                                           locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc()))

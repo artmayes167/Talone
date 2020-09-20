@@ -7,10 +7,21 @@
 //
 
 //import Foundation
+import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class FirebaseGeneric {
+    
+    enum GenericFirebaseError: Error {
+        case noAuthUser, undefined
+        var errorDescription: String? {
+            switch self {
+                case .noAuthUser: return "No authenticated user"
+                case .undefined: return "Unspecified error"
+            }
+        }
+    }
 
     struct AddressInfo: Codable {
         var streetAddress1: String
@@ -65,7 +76,7 @@ class NeedsBase: FirebaseGeneric {
         @DocumentID var id: String? = UUID().uuidString
         var category: String // Inherited
         var description: String?
-        var validUntil: Int
+        var validUntil: Timestamp
         var owner: String
         var createdBy: String
         @ServerTimestamp var createdAt: Timestamp?
@@ -79,12 +90,32 @@ class NeedsDbWriter: NeedsBase {
         let db = Firestore.firestore()
 
         do {
-            try db.collection("needs").document().setData(from: need)
+            try db.collection("needs").document(need.id ?? "").setData(from: need)
         } catch {
             // handle the error here
             print(error)
             completion(error)
         }
         completion(nil)
+    }
+    
+    func createNeedAndJoinHave(_ have: HavesBase.HaveItem, usingHandle userHandle: String, completion: @escaping (Error?) -> Void) {
+                
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
+        if let userId = Auth.auth().currentUser?.uid {
+            // TODO: This needsItem needs to derive data from MarketPlaceVC, as user may have entered description/header etc.
+            let needItem = NeedsBase.NeedItem(category: have.category, validUntil: defaultValidUntilDate, owner: userHandle, createdBy: userId, locationInfo: have.locationInfo)
+
+            addNeed(needItem) { error in
+                if error == nil, let needId = needItem.id, let haveId = have.id {
+                    HavesDbWriter().associateAuthUserHavingNeedId(needId, toHaveId: haveId) { error in
+                        // call completion
+                        completion(error)
+                    }
+                }
+            }
+        } else {
+            completion(GenericFirebaseError.noAuthUser)
+        }
     }
 }
