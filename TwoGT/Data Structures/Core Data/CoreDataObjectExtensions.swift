@@ -113,8 +113,8 @@ extension User {
                 if (s as? SearchLocation)?.type == "home" { home.append(s as! SearchLocation) }
                 else if (s as? SearchLocation)?.type == "alternate" { alternate.append(s as! SearchLocation) }
             }
-            dict["home"] = home
-            dict["alternate"] = alternate
+            if !home.isEmpty { dict["home"] = home }
+            if !alternate.isEmpty { dict["alternate"] = alternate }
         }
         return dict
     }

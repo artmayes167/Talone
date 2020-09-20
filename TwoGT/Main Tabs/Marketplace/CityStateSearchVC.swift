@@ -38,6 +38,8 @@ class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var statesCoverView: UIView?
     
+    // let marketplaceSegueIdentifier = "toMarketplaceSearch"
+    
     let user = AppDelegate.user()
     
     var statesTVC: LocationPickerTVC?
@@ -45,7 +47,14 @@ class CityStateSearchVC: UIViewController {
     var states: [USState] = []
     var allStates: [String] = []
     var sections: Dictionary<String, [SearchLocation]> = [:]
+    
+    var saveType: SaveType = .none
+    var selectedLocation: [String: String] = [:]
+    var stateSelector: LocationPickerTVC?
+    var citySelector: LocationPickerTVC?
 
+    
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         if let s = statesCoverView {
@@ -80,6 +89,7 @@ class CityStateSearchVC: UIViewController {
         savedLocationView.isHidden = true
     }
     
+     // MARK: - IBActions
     @IBAction func selectedNewOrSaved(_ sender: UISegmentedControl) {
         
         switch sender.selectedSegmentIndex {
@@ -97,8 +107,6 @@ class CityStateSearchVC: UIViewController {
         }
     }
     
-    var saveType: SaveType = .none
-    
     @IBAction func selectedTypeOfSave(_ sender: UISegmentedControl) {
         for x in SaveType.allCases {
             if x.rawValue == sender.selectedSegmentIndex {
@@ -109,7 +117,7 @@ class CityStateSearchVC: UIViewController {
     }
     
     @IBAction func saveSearchLocation(_ sender: Any) {
-        // Pass city, state and save type
+        
     }
     
     
@@ -130,10 +138,6 @@ class CityStateSearchVC: UIViewController {
         }
         view.layoutIfNeeded()
     }
-    
-    var selectedLocation: [String: String] = [:]
-    var stateSelector: LocationPickerTVC?
-    var citySelector: LocationPickerTVC?
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -162,6 +166,7 @@ class CityStateSearchVC: UIViewController {
     
 }
 
+ // MARK: - Saved Locations TableView DataSource/Delegate
 extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
     enum SectionTitles: String, CaseIterable {
         case home, alternate
@@ -177,7 +182,7 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "header") as! SavedLocationCell
         let array = ["home", "alternate"]
         cell.titleLabel.text = array[section]
         return cell.contentView
@@ -197,12 +202,18 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let array = ["home", "alternate"]
+        let type = array[indexPath.section]
+        guard let s = sections[type] else { fatalError() }
+        let loc = s[indexPath.row]
+        selectedLocation = ["city": loc.city!, "state": loc.state!]
+        searchButton.isEnabled = true
     }
 }
 
 class SavedLocationCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var colorBarView: DesignableView?
 }
 
 extension CityStateSearchVC: LocationPickerDelegate {
