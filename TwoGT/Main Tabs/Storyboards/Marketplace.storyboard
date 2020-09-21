@@ -492,6 +492,21 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kqo-CA-xOl">
                                                 <rect key="frame" x="0.0" y="102" width="414" height="92"/>
                                                 <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2U-Fj-ySM" userLabel="Under Location Line View">
+                                                        <rect key="frame" x="24" y="0.0" width="366" height="2"/>
+                                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="2" id="oC7-99-7TS"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" systemColor="darkTextColor"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="F8q-c4-4Jk">
                                                         <rect key="frame" x="12" y="8" width="390" height="76"/>
                                                         <subviews>
@@ -537,8 +552,11 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
+                                                    <constraint firstItem="u2U-Fj-ySM" firstAttribute="top" secondItem="kqo-CA-xOl" secondAttribute="top" id="9c8-eT-ZCw"/>
                                                     <constraint firstItem="F8q-c4-4Jk" firstAttribute="top" secondItem="kqo-CA-xOl" secondAttribute="top" constant="8" id="HFI-at-Q8X"/>
+                                                    <constraint firstAttribute="trailing" secondItem="u2U-Fj-ySM" secondAttribute="trailing" constant="24" id="bkW-Yg-MLf"/>
                                                     <constraint firstItem="F8q-c4-4Jk" firstAttribute="leading" secondItem="kqo-CA-xOl" secondAttribute="leading" constant="12" id="gPi-Yi-vx6"/>
+                                                    <constraint firstItem="u2U-Fj-ySM" firstAttribute="leading" secondItem="kqo-CA-xOl" secondAttribute="leading" constant="24" id="nSe-h2-dZt"/>
                                                     <constraint firstAttribute="trailing" secondItem="F8q-c4-4Jk" secondAttribute="trailing" constant="12" id="r4c-Pj-SRW"/>
                                                     <constraint firstAttribute="bottom" secondItem="F8q-c4-4Jk" secondAttribute="bottom" constant="8" id="rXx-lJ-1sp"/>
                                                 </constraints>
@@ -2271,6 +2289,9 @@
         <image name="food" width="329" height="304.5"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
