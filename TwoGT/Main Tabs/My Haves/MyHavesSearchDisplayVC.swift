@@ -52,6 +52,7 @@ class MyHavesSearchDisplayVC: UIViewController {
             }
         }
         haves = array
+        if isViewLoaded { collectionView.reloadData() }
     }
     
     func populateUI() {

@@ -53,6 +53,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
             }
         }
         needs = array
+        if isViewLoaded { collectionView.reloadData() }
     }
     
     func populateUI() {
