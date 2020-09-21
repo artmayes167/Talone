@@ -7,7 +7,9 @@
 //
 
 import UIKit
-//import FBSDKLoginKit
+import LocalAuthentication
+import FBSDKCoreKit
+import Firebase
 
 // Only use touch/face ID, or passcode to enter app?  Like Venmo
 
@@ -29,6 +31,7 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkIfAuthenticatedAndProgress()
 //        let loginButton = FBLoginButton()
 //        loginButton.center = view.center
 //        view.addSubview(loginButton)
@@ -46,11 +49,84 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
 //        }
 //                }
     }
+    
+    func checkIfAuthenticatedAndProgress() {
+
+        if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
+            print("Email verified!!! User not anonymous!")
+            authenticationWithTouchID() { (success, error) in
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                if success {
+                    DispatchQueue.main.async() {
+                        appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
+                        let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
+                        let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
+
+                        appDelegate.window?.rootViewController = mainVC
+                        appDelegate.window?.makeKeyAndVisible()
+                    }
+                } else if let e = error {
+                    DispatchQueue.main.async() {
+                        self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
+                            self.checkIfAuthenticatedAndProgress()
+                        }, cancelHandler: { (_) in
+                            fatalError("\(e.localizedDescription)")
+                        })
+                    }
+                } else {
+                    DispatchQueue.main.async() {
+                        self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
+                            self.checkIfAuthenticatedAndProgress()
+                        }, cancelHandler: { (_) in
+                            fatalError("No success or error, just unanticipated failure.")
+                        })
+                    }
+                }
+            }
+        } else {
+            DispatchQueue.main.async() {
+                self.performSegue(withIdentifier: "toEnterEmail", sender: nil)
+            }
+        }
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //self.performSegue(withIdentifier: "toMain", sender: nil)
     }
+    
+    func authenticationWithTouchID(completion: @escaping (Bool, Error?) -> Void) {
+           let localAuthenticationContext = LAContext()
+           localAuthenticationContext.localizedFallbackTitle = "Please use your Passcode"
+
+           var authorizationError: NSError?
+           let reason = "Authentication required to access the secure data"
+
+           if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authorizationError) {
+               
+               localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, evaluateError in
+                   
+                   if success {
+                        DispatchQueue.main.async() {
+                            self.showOkayAlert(title: "Success", message: "Authenticated succesfully!") { (_) in
+                                completion(success, evaluateError)
+                            }
+                       }
+                   } else {
+                       // Failed to authenticate
+                       completion(success, evaluateError)
+                   
+                   }
+               }
+           } else {
+               completion(false, authorizationError)
+           }
+       }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

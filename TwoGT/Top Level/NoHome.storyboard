@@ -99,11 +99,11 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SbW-dP-4JK">
-                                        <rect key="frame" x="0.0" y="388" width="390" height="208"/>
+                                        <rect key="frame" x="0.0" y="388" width="390" height="282"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xb9-8m-pNs" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="620" width="390" height="50"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xb9-8m-pNs" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="682" width="390" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="0HD-3b-0DR"/>
                                         </constraints>
@@ -180,75 +180,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GqI-Oy-HSf">
-                                <rect key="frame" x="24" y="368" width="366" height="160"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mbv-mq-PqP" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="12" width="366" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="q4b-TO-B8k"/>
-                                        </constraints>
-                                        <state key="normal" title="Enter First Time Flow"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" systemColor="systemBlueColor"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <segue destination="zaG-xE-H7K" kind="show" identifier="toEnterEmail" id="L0o-Ip-aRu"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ug2-ZQ-S2a" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="98" width="366" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="RFd-sN-gfO"/>
-                                        </constraints>
-                                        <state key="normal" title="Enter Regular App flow With Anonymous Login"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" systemColor="systemBlueColor"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <segue destination="yxN-K6-smz" kind="show" identifier="toMain" id="Tte-bN-npT"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tempLogoKarl1" translatesAutoresizingMaskIntoConstraints="NO" id="Iti-aD-tMA" customClass="DesignableImage" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="107" y="348" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstItem="Mbv-mq-PqP" firstAttribute="leading" secondItem="GqI-Oy-HSf" secondAttribute="leading" id="MYR-qc-Y4P"/>
-                                    <constraint firstItem="Ug2-ZQ-S2a" firstAttribute="leading" secondItem="GqI-Oy-HSf" secondAttribute="leading" id="MhM-JG-E6Y"/>
-                                    <constraint firstAttribute="bottom" secondItem="Ug2-ZQ-S2a" secondAttribute="bottom" constant="12" id="ZVy-vc-HCm"/>
-                                    <constraint firstAttribute="trailing" secondItem="Ug2-ZQ-S2a" secondAttribute="trailing" id="ahq-t6-v0z"/>
-                                    <constraint firstAttribute="height" constant="160" id="cIB-eW-ZYG"/>
-                                    <constraint firstItem="Mbv-mq-PqP" firstAttribute="top" secondItem="GqI-Oy-HSf" secondAttribute="top" constant="12" id="sUf-vV-Lws"/>
-                                    <constraint firstAttribute="trailing" secondItem="Mbv-mq-PqP" secondAttribute="trailing" id="uJp-9c-51s"/>
+                                    <constraint firstAttribute="height" constant="200" id="6Qu-3M-CQF"/>
+                                    <constraint firstAttribute="width" constant="200" id="Lb1-6A-fVX"/>
                                 </constraints>
-                            </view>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.13633771845715079" green="0.36270621827411165" blue="0.12098052541100214" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Satisfying Community" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wa-Je-63M">
+                                <rect key="frame" x="69" y="232" width="276" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8Sh-2k-SOT"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
-                            <constraint firstItem="8Sh-2k-SOT" firstAttribute="trailing" secondItem="GqI-Oy-HSf" secondAttribute="trailing" constant="24" id="NPO-Kg-DLC"/>
-                            <constraint firstItem="GqI-Oy-HSf" firstAttribute="centerX" secondItem="ZSm-tQ-tho" secondAttribute="centerX" id="QRM-uF-by8"/>
-                            <constraint firstItem="GqI-Oy-HSf" firstAttribute="leading" secondItem="8Sh-2k-SOT" secondAttribute="leading" constant="24" id="mPC-yK-Gy3"/>
-                            <constraint firstItem="GqI-Oy-HSf" firstAttribute="centerY" secondItem="ZSm-tQ-tho" secondAttribute="centerY" id="nye-Sl-tGA"/>
+                            <constraint firstItem="Iti-aD-tMA" firstAttribute="top" secondItem="4wa-Je-63M" secondAttribute="bottom" constant="80" id="QUU-oR-So0"/>
+                            <constraint firstItem="Iti-aD-tMA" firstAttribute="centerY" secondItem="ZSm-tQ-tho" secondAttribute="centerY" id="oN2-bu-Gci"/>
+                            <constraint firstItem="4wa-Je-63M" firstAttribute="centerX" secondItem="ZSm-tQ-tho" secondAttribute="centerX" id="yjo-2k-h9n"/>
+                            <constraint firstItem="Iti-aD-tMA" firstAttribute="centerX" secondItem="ZSm-tQ-tho" secondAttribute="centerX" id="zex-7k-euG"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oZA-9v-zK7"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <segue destination="zaG-xE-H7K" kind="show" identifier="toEnterEmail" id="V83-f6-4vY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Md5-50-9zs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3994,14 +3964,14 @@
         <designable name="HIl-kw-PxQ">
             <size key="intrinsicContentSize" width="126.5" height="34"/>
         </designable>
+        <designable name="Iti-aD-tMA">
+            <size key="intrinsicContentSize" width="200" height="200"/>
+        </designable>
         <designable name="LTw-85-eve">
             <size key="intrinsicContentSize" width="1574.5" height="35.5"/>
         </designable>
         <designable name="Lxt-9v-KNN">
             <size key="intrinsicContentSize" width="56" height="30"/>
-        </designable>
-        <designable name="Mbv-mq-PqP">
-            <size key="intrinsicContentSize" width="144" height="30"/>
         </designable>
         <designable name="OQE-Pl-MyA">
             <size key="intrinsicContentSize" width="137.5" height="34"/>
@@ -4014,9 +3984,6 @@
         </designable>
         <designable name="TKH-AD-Wdu">
             <size key="intrinsicContentSize" width="46" height="30"/>
-        </designable>
-        <designable name="Ug2-ZQ-S2a">
-            <size key="intrinsicContentSize" width="319" height="30"/>
         </designable>
         <designable name="YL6-H6-cv3">
             <size key="intrinsicContentSize" width="210" height="36"/>
@@ -4074,6 +4041,7 @@
         <image name="person.crop.square" catalog="system" width="128" height="114"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
+        <image name="tempLogoKarl1" width="200" height="200"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -4172,6 +4140,9 @@
         </systemColor>
         <systemColor name="systemGray4Color">
             <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

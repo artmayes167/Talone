@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //try? Auth.auth().signOut() // Needed to test login-process
         
-        checkIfAuthenticatedAndProgress()
+        
         // Otherwise, go to sign-in view
 
 // Fetch latest news for this city.
@@ -119,21 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
         return false
-    }
-    
-    private func checkIfAuthenticatedAndProgress() {
-
-        if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
-            print("Email verified!!! User not anonymous!")
-        
-            self.window = UIWindow(frame: UIScreen.main.bounds)
-            let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
-            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
-
-            self.window?.rootViewController = mainVC
-            self.window?.makeKeyAndVisible()
-        }
-
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -173,22 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
 //        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 //    }
-
-    func authenticateUser(completion: @escaping (Bool, Error?) -> Void) {
-        let context = LAContext()
-        var error: NSError?
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            let reason = "Identify yourself!"
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) {
-                success, authenticationError in
-                DispatchQueue.main.async {
-                    completion(success, authenticationError)
-                }
-            }
-        } else {
-
-        }
-    }
 
 //    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 //        guard let url = URLContexts.first?.url else {
