@@ -66,7 +66,11 @@ class ModalBackButton: DesignableButton {
         // set color scheme/image
         self.setImage(UIImage(named: "downArrow"), for: .normal)
         self.setTitle("", for: .normal)
-        self.tintColor = .black
+        self.tintColor = .purple
+        self.backgroundColor = .white
+        self.borderWidth = 2
+        self.borderColor = .purple
+        self.cornerRadius = 8
         self.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
     }
 }
