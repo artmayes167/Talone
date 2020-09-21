@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import MessageUI
 
 class ViewControllerElements {
     var identifier: String?
@@ -93,12 +94,17 @@ class FeedbackVC: UIViewController {
         feedback.userId = user.uid
         feedback.feedback = feedbackTextView.text
         // submit
+        launchEmail(body: feedbackTextView.text)
     }
     
     @IBAction func doneEditingText(_ sender: Any) {
         feedbackTextView.resignFirstResponder()
     }
     
+    @IBAction func copyEmailToClipboard(_ sender: Any) {
+        let pasteBoard = UIPasteboard.general
+        pasteBoard.string = "artmayes167@icloud.com"
+    }
     /*
     // MARK: - Navigation
 
@@ -111,10 +117,14 @@ class FeedbackVC: UIViewController {
 
 }
 
-
+ // MARK: -
 extension FeedbackVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        doneButtonTop.constant = 60
+        let rect = scrollView.convert(textView.frame, from:textView.superview)
+        let newRect = rect //.offsetBy(dx: 0, dy: (textView.superview?.frame.origin.y)!)
+        self.scrollView.scrollRectToVisible(newRect, animated: false)
+        
+        doneButtonTop.constant = 97
         UIView.animate(withDuration: 0.2) {
             self.doneButton.alpha = 1.0
             self.view.layoutIfNeeded()
@@ -126,6 +136,43 @@ extension FeedbackVC: UITextViewDelegate {
         UIView.animate(withDuration: 0.2) {
             self.doneButton.alpha = 0
             self.view.layoutIfNeeded()
+        }
+    }
+}
+
+ // MARK: -
+extension FeedbackVC: MFMailComposeViewControllerDelegate {
+
+    func launchEmail(body: String) {
+
+        let emailTitle = "Feedback on " + topViewControllerIdentifier
+        let toRecipents = ["artmayes167@icloud.com"]
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setSubject(emailTitle)
+        mc.setMessageBody(body, isHTML: false)
+        mc.setToRecipients(toRecipents)
+
+        self.present(mc, animated: true, completion: nil)
+    }
+
+    func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
+        var message = ""
+        switch result {
+        case .cancelled:
+            message = "Mail cancelled"
+        case .saved:
+            message = "Mail saved"
+        case .sent:
+            message = "Mail sent"
+        case .failed:
+            message = "Mail sent failure: \(String(describing: error?.localizedDescription))."
+        default:
+            message = "Something unanticipated has occurred"
+            break
+        }
+        self.dismiss(animated: true) {
+            self.showOkayAlert(title: "", message: message, handler: nil)
         }
     }
 }

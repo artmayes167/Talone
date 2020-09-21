@@ -35,6 +35,10 @@ class DashboardVC: UIViewController {
     }
     */
     
+    @IBAction func unwindToDashboard( _ segue: UIStoryboardSegue) {
+        
+    }
+    
     let str = String(format: "\nThis app behaves like a normal app by default, hunting down any way to get to the interwebs, then sending and grabbing as much data as possible. \n\n You have the option of setting the app so that it will only communicate with the interwebs when you say so. \n\n Turning this setting on will enable an interface in the app that gives you full control over any networking activity performed herein. \n\n Hopefully this will reduce costs associated with data plans and untrusted networks.")
 
     @IBAction func showVigilanceInfo() {

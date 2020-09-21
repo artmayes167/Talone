@@ -130,9 +130,10 @@ class EnterHandleVC: UIViewController {
             showOkayAlert(title: "Oops", message: "Please choose a handle with 4 or more characters") { _ in }
             return
         }
-        
+        let handle = t.trimmingCharacters(in: .whitespacesAndNewlines)
         // TODO: - Set the handle on the back end
         // completion
+        UserDefaults.standard.setValue(handle, forKey: "userHandle")
         guard let email = UserDefaults.standard.string(forKey: "Email") else { fatalError() }
         let e = Email.create(name: "talone", emailAddress: email)
         AppDelegate.user().addToEmails(e)
