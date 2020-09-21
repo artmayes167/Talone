@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Toast_Swift
 
 class ViewMyHaveVC: UIViewController {
     
@@ -28,6 +29,11 @@ class ViewMyHaveVC: UIViewController {
     
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
+    
+    // MARK: - IBActions
+    @IBAction func deleteHave(_ sender: Any) {
+        deleteCurrentHave()
+    }
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -70,4 +76,19 @@ class ViewMyHaveVC: UIViewController {
         scrollView.contentInset = contentInset
     }
 
+    private func deleteCurrentHave() {
+        guard let haveItem = have?.haveItem else { return }
+                
+        HavesDbWriter().deleteHave(id: haveItem.id!, creator: haveItem.createdBy ?? "") { error in
+            if error == nil {
+                self.view.makeToast("You have Deleted the Have", duration: 1.0, position: .center) {_ in 
+                    self.dismiss(animated: true)
+                }
+                // TODO: ART: ADD HERE THE CODE TO REMOVE THIS HAVE FROM COREDATA!
+            } else {
+                self.showOkayAlert(title: "Error", message: "Error while deleting have. Error: \(error!.localizedDescription)", handler: nil)
+            }
+
+        }
+    }
 }

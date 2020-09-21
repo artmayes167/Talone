@@ -14,10 +14,11 @@ import FirebaseFirestoreSwift
 class FirebaseGeneric {
     
     enum GenericFirebaseError: Error {
-        case noAuthUser, undefined
+        case noAuthUser, unauthorized, undefined
         var errorDescription: String? {
             switch self {
                 case .noAuthUser: return "No authenticated user"
+                case .unauthorized: return "User is not the creator of this document"
                 case .undefined: return "Unspecified error"
             }
         }
@@ -81,6 +82,8 @@ class NeedsBase: FirebaseGeneric {
         var owner: String
         var createdBy: String
         @ServerTimestamp var createdAt: Timestamp?
+        @ServerTimestamp var modifiedAt: Timestamp?
+        var status: String? = "Active"
         var locationInfo: LocationInfo
     }
     

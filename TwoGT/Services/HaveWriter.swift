@@ -24,6 +24,8 @@ class HavesBase: FirebaseGeneric {
         var owner: String
         var createdBy: String
         @ServerTimestamp var createdAt: Timestamp?
+        @ServerTimestamp var modifiedAt: Timestamp?
+        var status: String? = "Active"
         var locationInfo: LocationInfo
     }
 }
@@ -33,7 +35,7 @@ class HavesDbWriter: HavesBase {
         let db = Firestore.firestore()
 
         do {
-            try db.collection("haves").document().setData(from: have)
+            try db.collection("haves").document(have.id ?? "").setData(from: have)
         } catch {
             // handle the error here
             print(error)
@@ -87,6 +89,20 @@ class HavesDbWriter: HavesBase {
         }
     }
 
-
+    func deleteHave(id: String, creator: String, completion: @escaping (Error?) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            completion(GenericFirebaseError.noAuthUser)
+            return
+        }
+        
+        if creator != userId {
+            completion(GenericFirebaseError.unauthorized)
+        }
+        
+        let db = Firestore.firestore()
+        db.collection("haves").document(id).delete() { err in
+            completion(err)
+        }
+    }
 
 }
