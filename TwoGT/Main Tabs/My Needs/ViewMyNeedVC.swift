@@ -52,8 +52,7 @@ class ViewMyNeedVC: UIViewController {
     
     func populateUI() {
         guard let n = need?.needItem?.category, let cityState = need?.purpose?.cityState else { return }
-        needTypeLabel.text = n
-        locationLabel.text = cityState.displayName()
+        locationLabel.text = n + " in " + cityState.displayName()
     }
     
     // MARK: - Keyboard Notifications

@@ -146,13 +146,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func save() -> Bool {
-        do {
-            try persistentContainer.viewContext.save()
-            return true
+        if persistentContainer.viewContext.hasChanges {
+            do {
+                try persistentContainer.viewContext.save()
+                return true
+            }
+            catch {
+                return false
+            }
         }
-        catch {
-            return false
-        }
+        return true
     }
     
     // MARK: UISceneSession Lifecycle
