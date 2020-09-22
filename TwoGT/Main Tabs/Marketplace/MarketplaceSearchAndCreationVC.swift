@@ -184,7 +184,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let cat = c.getCategory().databaseValue()
-        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == "talone"}) as! Email
+        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == DefaultsKeys.taloneEmail.rawValue}) as! Email
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
 
         let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
@@ -257,6 +257,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
 
             loc[.display] = creationManager!.getLocationOrNil()?.displayName()
+            whereTextField.text = loc[.display]
             var dict: [String: String] = [:]
             for (key, value) in loc {
                 dict[key.rawValue] = value
