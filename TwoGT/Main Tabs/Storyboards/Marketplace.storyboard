@@ -248,7 +248,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tY2-8f-nJp" userLabel="NewSaved Stack View">
-                                <rect key="frame" x="0.0" y="209" width="414" height="538"/>
+                                <rect key="frame" x="0.0" y="209" width="414" height="446"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHy-Hf-4zc">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
@@ -400,8 +400,8 @@
                                             <constraint firstItem="whQ-CP-Mph" firstAttribute="leading" secondItem="oHy-Hf-4zc" secondAttribute="leading" id="vCd-xo-qSI"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="11T-BJ-5cV">
-                                        <rect key="frame" x="0.0" y="200" width="414" height="276"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="11T-BJ-5cV">
+                                        <rect key="frame" x="0.0" y="200" width="414" height="184"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xrk-hH-BpK">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="16"/>
@@ -489,7 +489,7 @@
                                                     <segue destination="l96-9E-pqg" kind="embed" identifier="toStates" id="6Hz-56-sgp"/>
                                                 </connections>
                                             </containerView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kqo-CA-xOl">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kqo-CA-xOl">
                                                 <rect key="frame" x="0.0" y="102" width="414" height="92"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2U-Fj-ySM" userLabel="Under Location Line View">
@@ -557,12 +557,13 @@
                                                     <constraint firstAttribute="trailing" secondItem="u2U-Fj-ySM" secondAttribute="trailing" constant="24" id="bkW-Yg-MLf"/>
                                                     <constraint firstItem="F8q-c4-4Jk" firstAttribute="leading" secondItem="kqo-CA-xOl" secondAttribute="leading" constant="12" id="gPi-Yi-vx6"/>
                                                     <constraint firstItem="u2U-Fj-ySM" firstAttribute="leading" secondItem="kqo-CA-xOl" secondAttribute="leading" constant="24" id="nSe-h2-dZt"/>
+                                                    <constraint firstAttribute="height" constant="92" id="qQy-Fz-FNO"/>
                                                     <constraint firstAttribute="trailing" secondItem="F8q-c4-4Jk" secondAttribute="trailing" constant="12" id="r4c-Pj-SRW"/>
                                                     <constraint firstAttribute="bottom" secondItem="F8q-c4-4Jk" secondAttribute="bottom" constant="8" id="rXx-lJ-1sp"/>
                                                 </constraints>
                                             </view>
                                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yJw-zW-bKA">
-                                                <rect key="frame" x="0.0" y="194" width="414" height="300"/>
+                                                <rect key="frame" x="0.0" y="102" width="414" height="300"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="300" id="zAK-vD-fq1"/>
                                                 </constraints>
@@ -571,7 +572,7 @@
                                                 </connections>
                                             </containerView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Lv-Ue-hhx">
-                                                <rect key="frame" x="0.0" y="194" width="414" height="14"/>
+                                                <rect key="frame" x="0.0" y="102" width="414" height="14"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1eu-zl-5yd" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="157" y="0.0" width="100" height="16"/>
@@ -601,7 +602,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h49-zh-Qd3" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="208" width="414" height="68"/>
+                                                <rect key="frame" x="0.0" y="116" width="414" height="68"/>
                                                 <subviews>
                                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="6SK-hm-PqA">
                                                         <rect key="frame" x="12" y="12" width="390" height="45"/>
@@ -650,7 +651,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2r6-Ki-LOk">
-                                        <rect key="frame" x="0.0" y="476" width="414" height="62"/>
+                                        <rect key="frame" x="0.0" y="384" width="414" height="62"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vZ-tK-zdu" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="12" width="366" height="50"/>
@@ -782,7 +783,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLG-Q9-ACO">
                                                     <rect key="frame" x="24" y="0.0" width="342" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -949,7 +950,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3HG-Jv-8XY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4272" y="151"/>
+            <point key="canvasLocation" x="4257" y="175"/>
         </scene>
         <!--Haves Search DisplayVC-->
         <scene sceneID="Rq6-MO-HbL">

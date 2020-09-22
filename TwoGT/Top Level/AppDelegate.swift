@@ -42,8 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 fatalError()
         }
         
-//        restaurant.setValue(name, forKeyPath: "name")
-//        restaurant.setValue(cuisine, forKey: "cuisine")
+//        user.setValue(name, forKeyPath: "name")
+//        user.setValue(cuisine, forKey: "cuisine")
         
         do {
           try managedContext.save()
@@ -72,9 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    didFinishLaunchingWithOptions: launchOptions
                )
 
-        if UserDefaults.standard.string(forKey: "uuid") == nil {
+        if UserDefaults.standard.string(forKey: DefaultsKeys.uuid.rawValue) == nil {
             let uuid = UUID().uuidString
-            UserDefaults.standard.setValue(uuid, forKeyPath: "uuid")
+            UserDefaults.standard.setValue(uuid, forKeyPath: DefaultsKeys.uuid.rawValue)
         }
 
         // Use Firebase library to configure APIs

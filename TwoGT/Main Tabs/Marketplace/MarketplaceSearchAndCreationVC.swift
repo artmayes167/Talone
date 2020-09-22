@@ -13,6 +13,10 @@ import CoreData
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+enum DefaultsSavedLocationKeys: String {
+    case country, state, city, community, display
+}
+
 class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Outlets
@@ -76,6 +80,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
            view.endEditing(true)
             setUIForCurrents()
        }
+    
+    func setInitialValues() {
+        if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
+            guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { fatalError() }
+            if let c = creationManager {
+                c.setLocation(city: city, state: state, country: loc[DefaultsSavedLocationKeys.country.rawValue] ?? "USA")
+            }
+            DispatchQueue.main.async() {
+                self.whereTextField.text = loc[DefaultsSavedLocationKeys.display.rawValue] ?? self.creationManager?.getLocationOrNil()?.displayName()
+            }
+        }
+    }
 
      // MARK: - Keyboard Notifications
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -97,7 +113,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
     /// Saved locations for selection are saved in the keychain, using the Saves.shared object
     func setUIForCurrents() {
-        
         if let loc = creationManager?.getLocationOrNil() {
             whereTextField.text = loc.displayName()
         }
@@ -229,10 +244,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         if let s = segue.source as? CityStateSearchVC {
 
-            let loc = s.selectedLocation
-            guard let city = loc["city"], let state = loc["state"] else { fatalError() }
+            var loc = s.selectedLocation
+            guard let city = loc[.city], let state = loc[.state] else { fatalError() }
             if let c = creationManager {
-                c.setLocation(city: city, state: state, country: loc["country"] ?? "USA")
+                c.setLocation(city: city, state: state, country: loc[.country] ?? "USA")
             } else {
                 var type: NeedType = .none
                 if let t = categoryTextField.text?.lowercased() {
@@ -241,8 +256,12 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 creationManager = PurposeCreationManager(type: type, city: city, state: state)
             }
 
-            whereTextField.text = creationManager!.getLocationOrNil()?.displayName()
-            // TODO: -
+            loc[.display] = creationManager!.getLocationOrNil()?.displayName()
+            var dict: [String: String] = [:]
+            for (key, value) in loc {
+                dict[key.rawValue] = value
+            }
+            UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
             saveFor(s.saveType)
         }
     }
@@ -327,7 +346,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                     AppDelegate.user().addToPurposes(p)
                     if appDelegate.save() {
                         self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                            // TODO: - Unwind segue to my needs
                             self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                         }
                     } else {

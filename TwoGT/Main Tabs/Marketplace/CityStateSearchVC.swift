@@ -49,7 +49,7 @@ class CityStateSearchVC: UIViewController {
     var sections: Dictionary<String, [SearchLocation]> = [:]
     
     var saveType: SaveType = .none
-    var selectedLocation: [String: String] = [:]
+    var selectedLocation: [DefaultsSavedLocationKeys: String] = [:]
     var stateSelector: LocationPickerTVC?
     var citySelector: LocationPickerTVC?
 
@@ -206,7 +206,7 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
         let type = array[indexPath.section]
         guard let s = sections[type] else { fatalError() }
         let loc = s[indexPath.row]
-        selectedLocation = ["city": loc.city!, "state": loc.state!]
+        selectedLocation = [.city: loc.city!, .state: loc.state!]
         searchButton.isEnabled = true
     }
 }
@@ -224,7 +224,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
             // Hide the table in the stack
             stateContainer.isHidden = true
             statesCoverView?.isHidden = true
-            selectedLocation["state"] = item
+            selectedLocation[.state] = item
             if let arr = states.first(where: { $0.name.uppercased() == item.uppercased() })?.cities {
                 cityTextField.text = ""
                 cityInputView.isHidden = false
@@ -235,7 +235,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
         case .city:
             cityTextField.text = item
             cityContainer.isHidden = true
-            selectedLocation["city"] = item
+            selectedLocation[.city] = item
             searchButton.isEnabled = true
         default:
             print("Forgot to set ItemType in CityStateSearchVC")

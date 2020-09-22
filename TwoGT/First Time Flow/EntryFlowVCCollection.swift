@@ -35,7 +35,7 @@ class EnterEmailVC: UIViewController {
                                         // The link was successfully sent. Inform the user.
                                         // Save the email locally so you don't need to ask the user for it again
                                         // if they open the link on the same device.
-                                        UserDefaults.standard.set(email, forKey: "Email")
+                                        UserDefaults.standard.set(email, forKey: DefaultsKeys.taloneEmail.rawValue)
                                         self.showOkayAlert(title: "", message: "Check your email for link") { (_ action: UIAlertAction) in
                                             self.performSegue(withIdentifier: "toVerification", sender: nil)
                                         }
@@ -47,7 +47,7 @@ class EnterEmailVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField.text = UserDefaults.standard.string(forKey: "Email") ?? ""
+        textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -83,7 +83,7 @@ class EnterVerificationVC: UIViewController {
     }
 
     private func setSignInButtonState() {
-        if let _ = UserDefaults.standard.string(forKey: "Email"),
+        if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),
             let _ = UserDefaults.standard.string(forKey: "Link") {
             signInButton.isEnabled = true
             signInInfo.isHidden = true
@@ -93,7 +93,7 @@ class EnterVerificationVC: UIViewController {
     }
 
     private func trySignInWithEmailLink() {
-        if let email = UserDefaults.standard.string(forKey: "Email"), let link = UserDefaults.standard.string(forKey: "Link") {
+        if let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let link = UserDefaults.standard.string(forKey: "Link") {
             Auth.auth().signIn(withEmail: email, link: link) { (_, error) in
                 if let error = error {
                     self.showOkayAlert(title: "", message: error.localizedDescription) { (_ action: UIAlertAction) in
@@ -133,8 +133,8 @@ class EnterHandleVC: UIViewController {
         let handle = t.trimmingCharacters(in: .whitespacesAndNewlines)
         // TODO: - Set the handle on the back end
         // completion
-        UserDefaults.standard.setValue(handle, forKey: "userHandle")
-        guard let email = UserDefaults.standard.string(forKey: "Email") else { fatalError() }
+        UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
+        guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
         let e = Email.create(name: "talone", emailAddress: email)
         AppDelegate.user().addToEmails(e)
         AppDelegate.user().handle = textField.text

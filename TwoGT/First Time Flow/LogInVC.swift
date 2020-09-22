@@ -52,6 +52,7 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
     
     func checkIfAuthenticatedAndProgress() {
 
+        // May want to look at deleting a user
         if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
             print("Email verified!!! User not anonymous!")
             authenticationWithTouchID() { (success, error) in

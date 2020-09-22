@@ -34,7 +34,6 @@ class PurposeCreationManager: NSObject {
         })
         self.purpose = p.first ?? Purpose.create(type: type.rawValue, city: city, state: state)
         print("Successfully created Purpose with PurposeCreationManager.query")
-        
     }
     
     /*

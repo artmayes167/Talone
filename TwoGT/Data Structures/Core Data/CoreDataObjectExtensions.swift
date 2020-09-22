@@ -23,9 +23,10 @@ extension Purpose {
         purpose.setValue(type, forKey: "category")
         let c = CityState.create(city: city, state: state, country: country, communityName: community)
         purpose.setValue(c, forKey: "cityState")
-
+        print("---------This is what the purpose looks like after adding values in Purpose extension------- \(purpose)")
         do {
           try managedContext.save()
+            print("Successfully created Purpose in Purpose extension!")
             return purpose
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")

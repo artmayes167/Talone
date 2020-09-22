@@ -136,9 +136,9 @@ class EventsSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBAction func unwindToEventsSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         if let s = segue.source as? CityStateSearchVC {
             let loc = s.selectedLocation
-            guard let city = loc["city"], let state = loc["state"] else { fatalError() }
+            guard let city = loc[.city], let state = loc[.state] else { fatalError() }
             if let c = creationManager {
-                c.setLocation(city: city, state: state, country: loc["country"] ?? "USA")
+                c.setLocation(city: city, state: state, country: loc[.country] ?? "USA")
             } else {
                 creationManager = PurposeCreationManager(type: .none, city: city, state: state)
             }
