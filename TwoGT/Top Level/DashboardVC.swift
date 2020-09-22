@@ -5,7 +5,7 @@
 //  Created by Arthur Mayes on 9/9/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
-
+/// I'm preserving this class for the vigilance implimentation, and the data creation methods at the bottom
 import UIKit
 
 class DashboardVC: UIViewController {
@@ -88,6 +88,7 @@ class DashboardVC: UIViewController {
         timer?.invalidate()
     }
     
+    /// Unused functioning template
     var needsWriter = NeedsDbWriter()
     var havesWriter = HavesDbWriter()
     var states: [USState] = []

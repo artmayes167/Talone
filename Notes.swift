@@ -51,3 +51,5 @@
 // transfer by Adrien Coquet from the Noun Project
 
 // Aperture by P Thanga Vignesh from the Noun Project
+
+// tab by Zach Bogart from the Noun Project

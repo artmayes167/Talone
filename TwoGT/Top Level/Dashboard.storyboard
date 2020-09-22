@@ -32,10 +32,11 @@
                             <constraint firstItem="UJb-jW-pv6" firstAttribute="centerY" secondItem="7Kc-Zk-5fd" secondAttribute="centerY" id="nb7-J8-fLX"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="8cK-fB-YTi"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RIp-TA-rEO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-594" y="1951"/>
+            <point key="canvasLocation" x="-1651" y="3315"/>
         </scene>
         <!--DashboardVC-->
         <scene sceneID="Tud-5j-aJS">
@@ -359,7 +360,6 @@
                         <outlet property="newHandleTextField" destination="HJa-u2-DZE" id="w03-2C-MCQ"/>
                         <outlet property="reachabilityStackView" destination="opL-8m-Tgo" id="Rlk-bf-ZmZ"/>
                         <outlet property="vigilantSwitch" destination="d3r-mn-wq6" id="cM2-1Z-xzt"/>
-                        <segue destination="V34-Ax-6eR" kind="presentation" identifier="toAdmin" id="Spg-Rn-UVN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PQa-NQ-TIT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -443,7 +443,7 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="VVJ-e5-nNy">
-                                                <rect key="frame" x="0.0" y="12" width="390" height="330"/>
+                                                <rect key="frame" x="0.0" y="12" width="390" height="400"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ki-Ts-Av1" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
@@ -564,6 +564,31 @@
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1r-2r-UQp" userLabel="Admin" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="350" width="390" height="50"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="50" id="1Bn-eb-b3p"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" systemColor="systemBlueColor"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="8"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="adminTapped:" destination="7sc-zw-MCo" eventType="touchUpInside" id="BZp-eh-nA9"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="DXV-eU-vFt" secondAttribute="trailing" id="3sd-dH-Keo"/>
@@ -623,6 +648,9 @@
                             <constraint firstItem="Cbh-5U-SfO" firstAttribute="top" secondItem="Yv7-RW-s01" secondAttribute="bottom" id="tHr-He-wZ5"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <segue destination="V34-Ax-6eR" kind="show" identifier="toAdmin" id="5fF-Wh-RJZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M3K-wy-xch" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="KeM-D2-coP" userLabel="Exit" sceneMemberID="exit"/>
@@ -2179,6 +2207,9 @@
         </designable>
         <designable name="HbU-UQ-3pW">
             <size key="intrinsicContentSize" width="46" height="30"/>
+        </designable>
+        <designable name="J1r-2r-UQp">
+            <size key="intrinsicContentSize" width="30" height="41"/>
         </designable>
         <designable name="NTh-g9-zw7">
             <size key="intrinsicContentSize" width="181" height="41"/>
