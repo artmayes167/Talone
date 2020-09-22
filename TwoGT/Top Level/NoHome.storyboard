@@ -3374,9 +3374,9 @@
                     <size key="freeformSize" width="414" height="1000"/>
                     <connections>
                         <outlet property="doYouLabel" destination="85z-T2-sfg" id="FFT-EE-hJP"/>
+                        <outlet property="haveDescriptionTextView" destination="Dyc-2t-3sK" id="ejV-eq-Q0o"/>
                         <outlet property="headerTitleLabel" destination="bO9-jZ-zF6" id="fKe-eX-9UD"/>
                         <outlet property="locationLabel" destination="kk6-oQ-Ylj" id="igb-yG-vzY"/>
-                        <outlet property="needDescriptionTextView" destination="Dyc-2t-3sK" id="ejV-eq-Q0o"/>
                         <outlet property="personalNotesTextView" destination="Lpi-yi-yb0" id="4Wk-nx-PGK"/>
                         <outlet property="scrollView" destination="7ZF-Wj-CoB" id="oXO-Ti-Xs8"/>
                     </connections>
@@ -3415,7 +3415,7 @@
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <connections>
-                                            <segue destination="ka7-PT-a3Q" kind="unwind" unwindAction="unwindToMyNeeds:" id="VBr-2S-IA0"/>
+                                            <segue destination="ka7-PT-a3Q" kind="unwind" identifier="dismissToMyNeeds" unwindAction="unwindToMyNeeds:" id="VBr-2S-IA0"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -3778,7 +3778,7 @@
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                                 <connections>
-                                                                    <action selector="showLinkedNeeds:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="5ef-td-vtA"/>
+                                                                    <action selector="deleteNeed:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="8nI-gU-pN5"/>
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CXd-gs-PCz" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
@@ -3799,9 +3799,6 @@
                                                                         <real key="value" value="8"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
-                                                                <connections>
-                                                                    <action selector="showLinkedHaves:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="Chg-BV-xIG"/>
-                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -3822,9 +3819,6 @@
                                                 <rect key="frame" x="0.0" y="472" width="390" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Save Notes"/>
-                                                <connections>
-                                                    <action selector="joinThisNeed:" destination="P1s-0b-Pxg" eventType="touchUpInside" id="Tuw-qL-RVy"/>
-                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -4041,7 +4035,7 @@
         <image name="internshipForTab" width="28" height="26"/>
         <image name="marketplaceForTab" width="25" height="25"/>
         <image name="needForTab" width="29" height="25"/>
-        <image name="person.crop.square" catalog="system" width="32" height="32"/>
+        <image name="person.crop.square" catalog="system" width="128" height="114"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
         <image name="tempLogoKarl1" width="200" height="200"/>

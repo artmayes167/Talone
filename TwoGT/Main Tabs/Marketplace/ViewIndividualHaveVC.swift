@@ -32,7 +32,7 @@ class ViewIndividualHaveVC: UIViewController {
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
     @IBOutlet weak var joinThisHaveButton: DesignableButton!
-    
+
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,9 +80,6 @@ class ViewIndividualHaveVC: UIViewController {
 
      // MARK: - Actions
 
-    @IBAction func showLinkedNeeds(_ sender: Any) {
-    }
-
     @IBAction func showLinkedHaves(_ sender: Any) {
     }
 
@@ -95,7 +92,7 @@ class ViewIndividualHaveVC: UIViewController {
 //        guard let c = creationManager, let h = haveItem else { fatalError() }
         storeJoiningNeedToDatabase()
     }
-    
+
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeJoiningNeedToDatabase() {
         guard let c = creationManager, let have = haveItem  else { fatalError()
@@ -113,7 +110,7 @@ class ViewIndividualHaveVC: UIViewController {
                 let localHave = Have.createHave(item: h)
                 n.parentHave = localHave
                 c.setNeed(n)
-                
+
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
                     AppDelegate.user().addToPurposes(p)
@@ -129,19 +126,19 @@ class ViewIndividualHaveVC: UIViewController {
                 } else {
                     fatalError()
                 }
-                
+
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
-    
+
     @IBAction func sendCard(_ sender: Any) {
     }
 
     @IBAction func saveNotes(_ sender: Any) {
     }
-    
+
     /*
     // MARK: - Navigation
 
