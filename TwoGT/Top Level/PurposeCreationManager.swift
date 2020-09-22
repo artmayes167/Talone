@@ -19,21 +19,44 @@ class PurposeCreationManager: NSObject {
     private var need: Need?
     private var have: Have?
     private var creationType: CurrentCreationType = .unknown
-    
+    private var category: NeedType?
+    private var cityState: CityState?
     
     // TODO: - Rethink these inits to require city and state
-    convenience init?(type: NeedType, city: String, state: String, country: String = "USA", community: String = "") {
-        self.init()
+    private func createPurpose(type: NeedType, cityState: CityState) -> Bool {
         let pred = NSPredicate(format: "category == %@", type.rawValue)
         let p: [Purpose] = PurposeCreationManager.query(table: "Purpose", searchPredicate: pred).filter({ (purpose) -> Bool in
             let pps = purpose as Purpose
             if let cs = pps.cityState {
-                return cs.city == city && cs.state == state
+                return cs.city == cityState.city && cs.state == cityState.state
+            } else {
+                print("---------Query failed in PurposeCreationManager -> createPurpose-- No cityState existed on an existing Purpose")
             }
             return false
         })
-        self.purpose = p.first ?? Purpose.create(type: type.rawValue, city: city, state: state)
-        print("Successfully created Purpose with PurposeCreationManager.query")
+        if p.isEmpty { print("Query failed in PurposeCreationManager -> createPurpose-- Return array was empty" ) }
+        guard let newPurpose = p.first ?? Purpose.create(type: type.rawValue, cityState: cityState) else {
+            print("Failed to create new purpose in PurposeCreationManager -> createPurpose")
+            return false }
+        self.purpose = newPurpose
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let success = appDelegate.save()
+        if success {
+            print("---------Successfully saved in PurposeCreationManager -> createPurpose")
+        } else {
+            print("---------NOT successfully saved in PurposeCreationManager -> createPurpose")
+        }
+        print("---------Successfully created Purpose with PurposeCreationManager")
+        return true
+    }
+    
+    func checkPrimaryNavigationParameters() -> Bool {
+        guard let c = cityState, let t = category, creationType != .unknown else  {
+            print("---------Missing values in PurposeCreationManager -> checkPrimaryNavigationParameters.  cityState = \(String(describing: cityState)), category = \(String(describing: category)), creationType = \(creationType.rawValue)")
+            return false
+        }
+        let success = createPurpose(type: t, cityState: c)
+        return success
     }
     
     /*
@@ -64,6 +87,7 @@ class PurposeCreationManager: NSObject {
         let fetchRequest: NSFetchRequest<T> = NSFetchRequest(entityName: table)
         fetchRequest.predicate = searchPredicate
         let results = try! context.fetch(fetchRequest)
+        print("---------Results from query = \(results)")
         return results
     }
     
@@ -92,7 +116,7 @@ class PurposeCreationManager: NSObject {
         creationType = type
     }
     
-    func currentCreationType() -> String {
+    func currentCreationTypeString() -> String {
         switch creationType {
         case .have:
             return "have"
@@ -103,30 +127,33 @@ class PurposeCreationManager: NSObject {
         }
     }
     
-    func setCategory(_ type: NeedType) {
-        purpose.category = type.rawValue
+    func currentCreationType() -> CurrentCreationType {
+        return creationType
     }
     
-    func getCategory() -> NeedType {
-        return NeedType(rawValue: purpose.category!)! // crash if not
+    func setCategory(_ type: NeedType) {
+        category = type
+        
+    }
+    
+    func getCategory() -> NeedType? {
+        return category
     }
     
     func setLocation(cityState: CityState) {
-        purpose.cityState = cityState
+        self.cityState = cityState
     }
     
-    func setLocation(location: AppLocationInfo) {
-        guard let c = purpose.cityState else { fatalError() }
-        c.city = location.city
-        c.state = location.state
-        c.country = location.country
+    func setLocation(location: AppLocationInfo, communityName: String) -> Bool {
+        guard let city = location.city, let state = location.state, let country = location.country else { return false }
+        let c = CityState.create(city: city, state: state, country: country, communityName: communityName)
+        cityState = c
+        return true
     }
     
-    func setLocation(city: String, state: String, country: String) {
-        guard let c = purpose.cityState else { fatalError() }
-        c.city = city
-        c.state = state
-        c.country = country
+    func setLocation(city: String, state: String, country: String, community: String) {
+        let c = CityState.create(city: city, state: state, country: country, communityName: community)
+        self.cityState = c
     }
     
     func setCommunity(_ community: String) {
@@ -136,7 +163,7 @@ class PurposeCreationManager: NSObject {
     }
     
     func getLocationOrNil() -> CityState? {
-        return purpose.cityState
+        return cityState
     }
     
     func setHeadline(_ headline: String?, description: String?) {
@@ -192,6 +219,14 @@ class PurposeCreationManager: NSObject {
         self.need?.addToParentNeed(need)
     }
     
+    func setNeedParentHave(_ have: Have) {
+        self.need?.parentHave = have
+    }
+    
+    func setHaveParentHave(_ have: Have) {
+        self.have?.parentHave = have
+    }
+    
     func setHave(_ have: Have) {
         self.have = have
     }
@@ -220,13 +255,15 @@ class PurposeCreationManager: NSObject {
         case .have:
             guard let h = have else { print("Have Not Set when preparing for save!!!!"); return false }
             purpose.addToHaves(h)
+            print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
             return true
         case .need:
-            guard let n = need else { print("Need Not Set when preparing for save!!!!"); return false }
+            guard let n = need else { print("---------Need Not Set when preparing for save!!!!"); return false }
             purpose.addToNeeds(n)
+            print("---------Preparing purpose for save, successfully: \(purpose.needs!.contains(n))")
             return true
         default:
-            print("Creation Type Not Set when preparing for save!!!!")
+            print("---------Creation Type Not Set when preparing for save!!!!")
             return false
         }
     }

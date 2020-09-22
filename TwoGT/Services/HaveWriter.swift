@@ -38,7 +38,7 @@ class HavesDbWriter: HavesBase {
             try db.collection("haves").document(have.id ?? "").setData(from: have)
         } catch {
             // handle the error here
-            print(error)
+            print(error.localizedDescription  + "in HaveWriter -> addHave")
             completion(error)
         }
         completion(nil)
@@ -49,7 +49,7 @@ class HavesDbWriter: HavesBase {
         //do {
             let ref = db.collection("haves").document(haveId)
         ref.updateData(["needs": FieldValue.arrayUnion([needId])]) { error in
-            print(error.debugDescription)
+            print(error.debugDescription + "in HaveWriter -> associateNeedId")
             completion(error)
         }
     }
@@ -58,7 +58,7 @@ class HavesDbWriter: HavesBase {
         let db = Firestore.firestore()
         let ref = db.collection("haves").document(haveId)
         ref.updateData(["interestedUsers": FieldValue.arrayUnion([userId])]) { error in
-            print(error.debugDescription)
+            print(error.debugDescription + "in HaveWriter -> associateUserId")
             completion(error)
         }
     }

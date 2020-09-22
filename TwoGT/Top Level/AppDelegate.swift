@@ -132,6 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func save() -> Bool {
         if persistentContainer.viewContext.hasChanges {
+            persistentContainer.viewContext.insert(AppDelegate.user())
             do {
                 try persistentContainer.viewContext.save()
                 return true

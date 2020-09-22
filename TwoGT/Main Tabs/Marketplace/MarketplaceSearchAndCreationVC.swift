@@ -34,15 +34,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
 
      // MARK: - Variables
-    var creationManager: PurposeCreationManager? {
-        didSet {
-            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
-        }
-    }
+    var creationManager: PurposeCreationManager = PurposeCreationManager()
     
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
-            creationManager?.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
+            creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
             let title = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
             createNewNeedHaveButton.setTitle(title, for: .normal)
             whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
@@ -58,7 +54,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         //dismissTapGesture.isEnabled = false
-        setUIForCurrents()
+        setInitialValues()
 
         // Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -80,18 +76,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
            view.endEditing(true)
             setUIForCurrents()
        }
-    
-    func setInitialValues() {
-        if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
-            guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { fatalError() }
-            if let c = creationManager {
-                c.setLocation(city: city, state: state, country: loc[DefaultsSavedLocationKeys.country.rawValue] ?? "USA")
-            }
-            DispatchQueue.main.async() {
-                self.whereTextField.text = loc[DefaultsSavedLocationKeys.display.rawValue] ?? self.creationManager?.getLocationOrNil()?.displayName()
-            }
-        }
-    }
 
      // MARK: - Keyboard Notifications
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -112,15 +96,26 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
     /// Saved locations for selection are saved in the keychain, using the Saves.shared object
-    func setUIForCurrents() {
-        if let loc = creationManager?.getLocationOrNil() {
+    private func setInitialValues() {
+        if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
+            guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
+            creationManager.setLocation(city: city, state: state, country: loc[DefaultsSavedLocationKeys.country.rawValue] ?? "USA", community: loc[DefaultsSavedLocationKeys.community.rawValue] ?? "")
+            DispatchQueue.main.async() {
+                self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
+            }
+        }
+        creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
+    }
+    
+    private func setUIForCurrents() {
+        if let loc = creationManager.getLocationOrNil() {
             whereTextField.text = loc.displayName()
         }
         // Get last saved location from defaults?
         /// Country is USA by default
     }
 
-     // MARK: IBActions
+     // MARK: - IBActions
     @IBAction func dismissOnTap(_ sender: Any) {
         if categoriesPopOver.isHidden == false {
             categoriesPopOver.isHidden = true
@@ -132,34 +127,53 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
         // UI and CoreData elements are handled in didSet()
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
-        
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
-        guard let c = creationManager else { fatalError() }
-        
-        switch currentNeedHaveSelectedSegmentIndex {
-        case 1:
-            let haveItem = createHaveItem()
-            haveItem.headline = headlineTextField.text
-            haveItem.desc = descriptionTextView.text
-            c.setHaveItem(item: haveItem)
-            if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
-        default:
-            let needItem = createNeedItem()
-            needItem.headline = headlineTextField.text
-            needItem.desc = descriptionTextView.text
-            c.setNeedItem(item: needItem)
-            if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
+        let success = creationManager.checkPrimaryNavigationParameters()
+        if success {
+            switch currentNeedHaveSelectedSegmentIndex {
+            case 1:
+                let haveItem = createHaveItem()
+                haveItem.headline = headlineTextField.text
+                haveItem.desc = descriptionTextView.text
+                creationManager.setHaveItem(item: haveItem)
+                if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
+            default:
+                let needItem = createNeedItem()
+                needItem.headline = headlineTextField.text
+                needItem.desc = descriptionTextView.text
+                creationManager.setNeedItem(item: needItem)
+                if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
+            }
+        } else {
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
+        }
+    }
+    
+    @IBAction func seeMatchingNeeds(_ sender: Any) {
+        let success = creationManager.checkPrimaryNavigationParameters()
+        if success {
+            fetchMatchingNeeds()
+        } else {
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
+        }
+    }
+
+    @IBAction func seeMatchingHaves(_ sender: Any) {
+        let success = creationManager.checkPrimaryNavigationParameters()
+        if success {
+            fetchMatchingHaves()
+        } else {
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
         }
     }
 
      // MARK: Private Functions
     private func createNeedItem() -> NeedItem {
         /// create new needs
-        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager.getCategory()?.databaseValue() else { fatalError() }
         let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-        let cat = c.getCategory().databaseValue()
         var emailString: String = "artmayes167@gmail.com"
         if let emails = AppDelegate.user().emails {
             if let primaryEmail: Email = emails.first(where: {
@@ -181,23 +195,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func createHaveItem() -> HaveItem {
         /// create new needs
-        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager.getCategory()?.databaseValue() else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-        let cat = c.getCategory().databaseValue()
         let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == DefaultsKeys.taloneEmail.rawValue}) as! Email
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
 
         let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
         let newHave = HaveItem.createHaveItem(item: have)
         return newHave
-    }
-
-    @IBAction func seeMatchingNeeds(_ sender: Any) {
-        fetchMatchingNeeds()
-    }
-
-    @IBAction func seeMatchingHaves(_ sender: Any) {
-        fetchMatchingHaves()
     }
 
     // MARK: NeedSelectionDelegate
@@ -207,11 +212,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         seeMatchingNeedsButton.isEnabled = true
         seeMatchingHavesButton.isEnabled = true
 
-        if let c = creationManager {
-           c.setCategory(need)
-        } else {
-            creationManager = PurposeCreationManager(type: need, city: "", state: "")
-        }
+        creationManager.setCategory(need)
 
         dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
@@ -225,13 +226,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             needsTVC.delegate = self
         case "toNeedsCollection":
             guard let s = sender as? [NeedsBase.NeedItem] else { fatalError() }
-            guard let _ = creationManager?.getLocationOrNil() else { fatalError() }
+            guard let _ = creationManager.getLocationOrNil() else { fatalError() }
             let vc = segue.destination as! NeedsSearchDisplayVC
             vc.needs = s
             vc.creationManager = creationManager
         case "toHavesCollection":
             guard let h = sender as? [HavesBase.HaveItem] else { fatalError() }
-            guard let _ = creationManager?.getLocationOrNil() else { fatalError() }
+            guard let _ = creationManager.getLocationOrNil() else { fatalError() }
             let vc = segue.destination as! HavesSearchDisplayVC
             vc.haves = h
             vc.creationManager = creationManager
@@ -246,17 +247,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
             var loc = s.selectedLocation
             guard let city = loc[.city], let state = loc[.state] else { fatalError() }
-            if let c = creationManager {
-                c.setLocation(city: city, state: state, country: loc[.country] ?? "USA")
-            } else {
-                var type: NeedType = .none
-                if let t = categoryTextField.text?.lowercased() {
-                    type = NeedType(rawValue: t) ?? type
-                }
-                creationManager = PurposeCreationManager(type: type, city: city, state: state)
-            }
+            creationManager.setLocation(city: city, state: state, country: loc[.country] ?? "USA", community: loc[.community] ?? "")
 
-            loc[.display] = creationManager!.getLocationOrNil()?.displayName()
+            loc[.display] = creationManager.getLocationOrNil()?.displayName()
             whereTextField.text = loc[.display]
             var dict: [String: String] = [:]
             for (key, value) in loc {
@@ -269,7 +262,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: Save Functions
     private func saveFor(_ type: SaveType) {
-        guard let c = creationManager, let loc = c.getLocationOrNil() else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
             let user = AppDelegate.user()
             // Use core data
@@ -282,11 +275,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Private Functions
     private func checkPreconditionsAndAlert(light: Bool) -> Bool {
-        guard let c = creationManager else {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
-            return false
-        }
-        if !c.areAllRequiredFieldsFilled(light: light) {
+        if !creationManager.areAllRequiredFieldsFilled(light: light) {
             showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return false
         }
@@ -294,10 +283,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func fetchMatchingNeeds() {
-        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
 
         NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
-            let newArray = array.filter { $0.category.lowercased() == c.getCategory().rawValue }
+            guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
+            let newArray = array.filter { $0.category.lowercased() ==  cat}
             if newArray.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
             } else {
@@ -307,9 +297,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func fetchMatchingHaves() {
-        guard let c = creationManager, let loc = c.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
-
-        HavesDbFetcher().fetchHaves(matching: [c.getCategory().databaseValue()], city, state, country) { array in
+        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        guard let v = creationManager.getCategory()?.databaseValue() else { fatalError() }
+        HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
             if array.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
             } else {
@@ -321,16 +311,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeNeedToDatabase() {
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
-        }
+        guard let loc = creationManager.getLocationOrNil()?.locationInfo(), let cat = creationManager.getCategory() else { fatalError() }
 
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
-        let cat = c.getCategory()
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
-                                          description: c.getDescription(),
+                                          description: creationManager.getDescription(),
                                           validUntil: defaultValidUntilDate,
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
@@ -341,9 +329,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
                 let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
-                c.setNeed(n)
+                self.creationManager.setNeed(n)
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
+                if let p = self.creationManager.getSavedPurpose() {
                     AppDelegate.user().addToPurposes(p)
                     if appDelegate.save() {
                         self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
@@ -365,10 +353,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     private func storeHaveToDatabase() {
         guard checkPreconditionsAndAlert(light: true) == true else { return }
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil()?.locationInfo, let cat = creationManager.getCategory() else { fatalError() }
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        let cat = c.getCategory()
         let defaultValidUntilDate = Date(timeIntervalSinceNow: 30*24*60*60)
         let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
                                           description: descriptionTextView.text.trimmingCharacters(in: [" "]),
@@ -382,9 +369,9 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         havesWriter.addHave(have, completion: { error in
             if error == nil {
                 let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
-                c.setHave(h)
+                self.creationManager.setHave(h)
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
+                if let p = self.creationManager.getSavedPurpose() {
                     AppDelegate.user().addToPurposes(p)
                     if appDelegate.save() {
                         self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
@@ -418,7 +405,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == headlineTextField {
-            creationManager?.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+            creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         }
     }
     
@@ -438,7 +425,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView == descriptionTextView {
-            creationManager?.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+            creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         }
     }
 }

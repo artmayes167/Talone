@@ -78,10 +78,18 @@ class ViewIndividualNeedVC: UIViewController {
      // MARK: - Actions
 
     @IBAction func joinThisNeed(_ sender: Any) {
-        guard let item = needItem else {
+        guard let c = creationManager, let item = needItem else {
             fatalError()
         }
-        storeJoiningNeedToDatabase(needItem: item)
+        switch c.currentCreationType() {
+        case .need:
+            storeJoiningNeedToDatabase(needItem: item)
+        case .have:
+            storeJoiningHaveToDatabase(needItem: item)
+        default:
+            print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
+        }
+        
     }
 
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
@@ -113,7 +121,51 @@ class ViewIndividualNeedVC: UIViewController {
                         DispatchQueue.main.async {
                             self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
                                 // TODO: - Create unwind segue to my needs
-                                //self.performSegue(withIdentifier: "bob", sender: nil)
+                                self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
+                            }
+                        }
+                    } else {
+                        fatalError()
+                    }
+                } else {
+                    fatalError()
+                }
+                
+            } else {
+                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        })
+    }
+    
+    private func storeJoiningHaveToDatabase(needItem: NeedsBase.NeedItem) {
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
+        }
+
+        // if need-type nor location is not selected, display an error message
+        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
+
+        let have = HavesDbWriter.HaveItem(category: needItem.category,
+                                          description: c.getDescription() ?? needItem.description,
+                                          validUntil: needItem.validUntil, //valid until next 7 days
+                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
+                                          createdBy: user.uid,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+
+        let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
+
+        havesWriter.addHave(have, completion: { error in
+            if error == nil {
+                let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
+                c.setHave(h)
+                c.setParentNeed(Need.createNeed(item: NeedItem.createNeedItem(item: needItem)))
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                if let p = c.getSavedPurpose() {
+                    AppDelegate.user().addToPurposes(p)
+                    if appDelegate.save() {
+                        DispatchQueue.main.async {
+                            self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                                // TODO: - Create unwind segue to my needs
+                                self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                             }
                         }
                     } else {

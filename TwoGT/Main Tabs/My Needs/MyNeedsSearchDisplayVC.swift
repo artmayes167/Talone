@@ -21,13 +21,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
     
-    var needs: [Need] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
-    }
+    var needs: [Need] = []
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {

@@ -41,7 +41,7 @@ class NeedsSearchDisplayVC: UIViewController {
     
     func populateUI() {
         guard let c = creationManager else { fatalError() }
-        categoryLabel.text = c.getCategory().rawValue.capitalized
+        categoryLabel.text = c.getCategory()?.rawValue.capitalized
         if c.getLocationOrNil() != nil {
             cityStateLabel.text = c.getLocationOrNil()?.displayName()
         }

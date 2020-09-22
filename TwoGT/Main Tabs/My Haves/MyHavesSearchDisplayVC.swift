@@ -20,13 +20,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
     
-    var haves: [Have] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
-    }
+    var haves: [Have] = []
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {

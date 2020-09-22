@@ -11,7 +11,8 @@ import CoreData
 
 extension Purpose {
 
-    class func create(type: String, city: String, state: String, country: String = "USA", community: String = "") -> Purpose {
+    class func create(type: String, cityState: CityState) -> Purpose {
+        print("Started Purpose -> create")
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -21,8 +22,7 @@ extension Purpose {
 
        let purpose = Purpose(entity: entity, insertInto: managedContext)
         purpose.setValue(type, forKey: "category")
-        let c = CityState.create(city: city, state: state, country: country, communityName: community)
-        purpose.setValue(c, forKey: "cityState")
+        purpose.setValue(cityState, forKey: "cityState")
         print("---------This is what the purpose looks like after adding values in Purpose extension------- \(purpose)")
         do {
           try managedContext.save()
@@ -117,6 +117,10 @@ extension User {
             if !alternate.isEmpty { dict["alternate"] = alternate }
         }
         return dict
+    }
+    
+    func purposeFor(cityState: CityState, category: String) {
+        
     }
 }
 
