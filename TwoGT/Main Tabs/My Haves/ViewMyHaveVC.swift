@@ -23,7 +23,7 @@ class ViewMyHaveVC: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var doYouLabel: UILabel!
-    @IBOutlet weak var needDescriptionTextView: UITextView!
+    @IBOutlet weak var haveDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
 
     // MARK: - IBActions
@@ -52,6 +52,7 @@ class ViewMyHaveVC: UIViewController {
     func populateUI() {
         guard let c = have?.haveItem?.category, let cityState = have?.purpose?.cityState else { return }
         locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
+        haveDescriptionTextView.text = have?.haveItem?.desc ?? "No description"
         view.layoutIfNeeded()
     }
 
