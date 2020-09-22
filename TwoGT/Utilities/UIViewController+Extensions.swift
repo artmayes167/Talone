@@ -24,7 +24,9 @@ extension UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action1 = UIAlertAction(title: "Ok", style: .cancel, handler: handler)
         alert.addAction(action1)
-        present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     /// Show and Alert with an "Ok" button and a "Cancel" button.

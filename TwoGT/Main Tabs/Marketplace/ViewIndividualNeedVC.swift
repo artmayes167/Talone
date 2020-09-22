@@ -110,9 +110,11 @@ class ViewIndividualNeedVC: UIViewController {
                 if let p = c.getSavedPurpose() {
                     AppDelegate.user().addToPurposes(p)
                     if appDelegate.save() {
-                        self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                            // TODO: - Create unwind segue to my needs
-                            //self.performSegue(withIdentifier: "bob", sender: nil)
+                        DispatchQueue.main.async {
+                            self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                                // TODO: - Create unwind segue to my needs
+                                //self.performSegue(withIdentifier: "bob", sender: nil)
+                            }
                         }
                     } else {
                         fatalError()

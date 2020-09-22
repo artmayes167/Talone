@@ -49,3 +49,5 @@
 // give by Lnhi from the Noun Project (haveForTab)
 
 // transfer by Adrien Coquet from the Noun Project
+
+// Aperture by P Thanga Vignesh from the Noun Project
