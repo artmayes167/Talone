@@ -34,10 +34,17 @@ class PurposeCreationManager: NSObject {
             }
             return false
         })
-        if p.isEmpty { print("Query failed in PurposeCreationManager -> createPurpose-- Return array was empty" ) }
+        var newCityState: NSManagedObject?
+        if p.isEmpty {
+            print("Query failed in PurposeCreationManager -> createPurpose-- Return array was empty" )
+            newCityState = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!)
+        }
         guard let newPurpose = p.first ?? Purpose.create(type: type.rawValue, cityState: cityState) else {
             print("Failed to create new purpose in PurposeCreationManager -> createPurpose")
             return false }
+        if let c = newCityState as? CityState {
+            newPurpose.setValue(c, forKeyPath: "cityState")
+        }
         self.purpose = newPurpose
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         let success = appDelegate.save()
@@ -50,6 +57,7 @@ class PurposeCreationManager: NSObject {
         return true
     }
     
+    ///This function calls createPurpose()
     func checkPrimaryNavigationParameters() -> Bool {
         guard let c = cityState, let t = category, creationType != .unknown else  {
             print("---------Missing values in PurposeCreationManager -> checkPrimaryNavigationParameters.  cityState = \(String(describing: cityState)), category = \(String(describing: category)), creationType = \(creationType.rawValue)")
@@ -141,19 +149,20 @@ class PurposeCreationManager: NSObject {
     }
     
     func setLocation(cityState: CityState) {
-        self.cityState = cityState
+        let c: NSManagedObject = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!)
+        self.cityState = c as? CityState
     }
     
     func setLocation(location: AppLocationInfo, communityName: String) -> Bool {
         guard let city = location.city, let state = location.state, let country = location.country else { return false }
-        let c = CityState.create(city: city, state: state, country: country, communityName: communityName)
-        cityState = c
+        let c: NSManagedObject = CityState.create(city: city, state: state, country: country, communityName: communityName)
+        cityState = c as? CityState
         return true
     }
     
     func setLocation(city: String, state: String, country: String, community: String) {
-        let c = CityState.create(city: city, state: state, country: country, communityName: community)
-        self.cityState = c
+        let c: NSManagedObject = CityState.create(city: city, state: state, country: country, communityName: community)
+        cityState = c as? CityState
     }
     
     func setCommunity(_ community: String) {
@@ -256,15 +265,17 @@ class PurposeCreationManager: NSObject {
     
     func prepareForSave() -> Bool {
         switch creationType {
-        case .have:
-            guard let h = have else { print("Have Not Set when preparing for save!!!!"); return false }
-            purpose.addToHaves(h)
-            print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
-            return true
         case .need:
             guard let n = need else { print("---------Need Not Set when preparing for save!!!!"); return false }
             purpose.addToNeeds(n)
+            
             print("---------Preparing purpose for save, successfully: \(purpose.needs!.contains(n))")
+            return true
+        case .have:
+            guard let h = have else { print("Have Not Set when preparing for save!!!!"); return false }
+            purpose.addToHaves(h)
+            
+            print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
             return true
         default:
             print("---------Creation Type Not Set when preparing for save!!!!")

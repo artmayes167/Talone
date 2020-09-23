@@ -24,9 +24,9 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) var context: NSManagedObjectContext
     @Environment(\.imageCache) var cache: ImageCache
-    @State var name = AppDelegate.user().handle ?? "YOU!"
+    @State var name = AppDelegate.user.handle ?? "YOU!"
     @State var email: String = { () -> String in
-        if let emails = AppDelegate.user().emails {
+        if let emails = AppDelegate.user.emails {
             let x = emails.filter {
                 if let e = ($0 as? Email) {
                     return e.name == "primary"

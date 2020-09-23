@@ -128,7 +128,7 @@ class ViewIndividualHaveVC: UIViewController {
                 c.setNeedParentHave(Have.createHave(item: HaveItem.createHaveItem(item: haveItem)))
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
@@ -172,7 +172,7 @@ class ViewIndividualHaveVC: UIViewController {
                 c.setHaveParentHave(Have.createHave(item: HaveItem.createHaveItem(item: haveItem)))
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
@@ -213,7 +213,7 @@ class ViewIndividualHaveVC: UIViewController {
 //
 //        guard let have = haveItem else { return }
 //
-//        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user().handle ?? "Anonymous") { (error, needItem) in
+//        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user.handle ?? "Anonymous") { (error, needItem) in
 //            if error == nil {
 //                // Show success
 //                self.view.makeToast("Created a need and linked it to this Have", duration: 2.0, position: .center) {_ in

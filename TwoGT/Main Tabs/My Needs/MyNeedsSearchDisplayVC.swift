@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftDate
+import CoreData
 
 class MyNeedsSearchDisplayVC: UIViewController {
     
@@ -15,7 +16,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     @IBOutlet weak var categoryLabel: UILabel!
     
     var purposes: Set<Purpose>? = {
-        return AppDelegate.user().purposes as? Set<Purpose>
+        return AppDelegate.user.purposes as? Set<Purpose>
     }()
 
     let spacer = CGFloat(1)
@@ -38,15 +39,23 @@ class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func getNeeds() {
-        var array: [Need] = []
-        for p in purposes ?? [] {
-            if let needs = p.needs as? Set<Need> {
-                for n in needs {
-                    array.append(n)
+        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = d.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Need> = Need.fetchRequest()
+        do {
+            let u = try managedContext.fetch(fetchRequest)
+            
+            needs = u.filter {
+                if let item = $0.needItem {
+                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
+                } else {
+                    print("----------No needItem found on Need")
+                    return false
                 }
             }
+        } catch _ as NSError {
+          fatalError()
         }
-        needs = array
         if isViewLoaded {
             collectionView.reloadData()
             populateUI()

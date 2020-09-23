@@ -134,7 +134,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        let success = creationManager.checkPrimaryNavigationParameters()
+        let success = creationManager.checkPrimaryNavigationParameters() // also creates purpose
         if success {
             switch creationManager.currentCreationType() {
             case .need:
@@ -227,7 +227,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func saveFor(_ type: SaveType) {
         guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
-            let user = AppDelegate.user()
+            let user = AppDelegate.user
             // Use core data
             guard let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
             let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country)

@@ -31,10 +31,10 @@ class MarketplaceModel: NSObject {
             if error == nil {
                 let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
                 self.creationManager?.setNeed(n)
+                _ = self.creationManager?.prepareForSave()
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = self.creationManager?.getSavedPurpose() {
-                    p.addToNeeds(n)
-                    AppDelegate.user().addToPurposes(p)
+                if let p = self.creationManager?.getSavedPurpose() { // adds to needs
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             controller.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
@@ -63,10 +63,10 @@ class MarketplaceModel: NSObject {
             if error == nil {
                 let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
                 self.creationManager?.setHave(h)
+                _ = self.creationManager?.prepareForSave()
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = self.creationManager?.getSavedPurpose() {
-                    p.addToHaves(h)
-                    AppDelegate.user().addToPurposes(p)
+                if let p = self.creationManager?.getSavedPurpose() { // adds to have
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
@@ -102,7 +102,7 @@ class MarketplaceModel: NSObject {
        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
        let headline = creationManager?.getHeadline()
        let desc = creationManager?.getDescription()
-       let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
+       let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
        return need
    }
     
@@ -114,13 +114,13 @@ class MarketplaceModel: NSObject {
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
         let desc = creationManager?.getDescription()
-        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
+        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
         return have
     }
    
    private func getPrimaryEmail() -> String {
        var emailString = "artmayes167@icloud.com"
-       if let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == DefaultsKeys.taloneEmail.rawValue}) as? Email {
+       if let primaryEmail: Email = AppDelegate.user.emails?.first(where: { ($0 as! Email).name == DefaultsKeys.taloneEmail.rawValue}) as? Email {
                if let pEmail = primaryEmail.emailString {
                emailString = pEmail
            } else {

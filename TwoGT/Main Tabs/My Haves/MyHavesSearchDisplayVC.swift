@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MyHavesSearchDisplayVC: UIViewController {
 
@@ -14,7 +15,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     @IBOutlet weak var categoryLabel: UILabel!
     
     var purposes: Set<Purpose>? = {
-        return AppDelegate.user().purposes as? Set<Purpose>
+        return AppDelegate.user.purposes as? Set<Purpose>
     }()
 
     let spacer = CGFloat(1)
@@ -37,15 +38,23 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
     
     func getHaves() {
-        var array: [Have] = []
-        for p in purposes ?? [] {
-            if let haves = p.haves as? Set<Have> {
-                for h in haves {
-                    array.append(h)
+        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = d.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Have> = Have.fetchRequest()
+        do {
+            let u = try managedContext.fetch(fetchRequest)
+            
+            haves = u.filter {
+                if let item = $0.haveItem {
+                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
+                } else {
+                    print("----------No needItem found on Need")
+                    return false
                 }
             }
+        } catch _ as NSError {
+          fatalError()
         }
-        haves = array
         if isViewLoaded {
             collectionView.reloadData()
             populateUI()

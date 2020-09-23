@@ -156,7 +156,7 @@
 //            return
 //        }
 //        if !(type == .none) {
-//            let user = AppDelegate.user()
+//            let user = AppDelegate.user
 //            let s = SearchLocation()
 //            s.city = loc.city
 //            s.state = loc.state

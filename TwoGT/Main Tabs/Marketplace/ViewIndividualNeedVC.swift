@@ -116,7 +116,7 @@ class ViewIndividualNeedVC: UIViewController {
                 c.setParentNeed(Need.createNeed(item: NeedItem.createNeedItem(item: needItem)))
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
@@ -160,7 +160,7 @@ class ViewIndividualNeedVC: UIViewController {
                 c.setParentNeed(Need.createNeed(item: NeedItem.createNeedItem(item: needItem)))
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
+                    AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
                             self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in

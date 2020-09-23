@@ -40,7 +40,7 @@ class CityStateSearchVC: UIViewController {
     
     // let marketplaceSegueIdentifier = "toMarketplaceSearch"
     
-    let user = AppDelegate.user()
+    let user = AppDelegate.user
     
     var statesTVC: LocationPickerTVC?
     var citiesTVC: LocationPickerTVC?

@@ -15,7 +15,7 @@ import Firebase
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    class func user() -> User  {
+    class func getUser() -> User  {
         guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         let managedContext = d.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
@@ -59,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             fatalError()
         }
     }
+    
+    static let user = AppDelegate.getUser()
 
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
@@ -138,7 +140,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func save() -> Bool {
         if persistentContainer.viewContext.hasChanges {
-            persistentContainer.viewContext.insert(AppDelegate.user())
+            persistentContainer.viewContext.insert(AppDelegate.user)
             do {
                 try persistentContainer.viewContext.save()
                 return true

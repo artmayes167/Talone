@@ -21,8 +21,11 @@ extension Purpose {
                                      in: managedContext)!
 
        let purpose = Purpose(entity: entity, insertInto: managedContext)
-        purpose.setValue(type, forKey: "category")
-        purpose.setValue(cityState, forKey: "cityState")
+        purpose.setValue(type, forKeyPath: "category")
+        
+        let cs: NSManagedObject = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!, communityName: "")
+        
+        purpose.setValue(cs as? CityState, forKeyPath: "cityState")
         print("---------This is what the purpose looks like after adding values in Purpose extension------- \(purpose)")
         do {
           try managedContext.save()
@@ -48,15 +51,15 @@ extension CityState {
         let entity = NSEntityDescription.entity(forEntityName: "CityState",
                                      in: managedContext)!
 
-        let cityState = CityState(entity: entity, insertInto: managedContext) as CityState
+        let cityState: CityState = CityState(entity: entity, insertInto: managedContext) as CityState
 
         let community = Community.create(communityName: communityName)
 
-        cityState.country = country
-        cityState.city = city
-        cityState.state = state
+        cityState.setValue(country, forKeyPath: "country")
+        cityState.setValue(city, forKeyPath: "city")
+        cityState.setValue(state, forKeyPath: "state")
+        cityState.setValue(country, forKeyPath: "country")
         cityState.addToCommunities(community)
-
         do {
           try managedContext.save()
             return cityState
@@ -92,7 +95,7 @@ extension Community {
                                                 fatalError()
         }
 
-        community.name = communityName
+        community.setValue(communityName, forKeyPath: "name")
 
         do {
           try managedContext.save()
@@ -118,10 +121,6 @@ extension User {
         }
         return dict
     }
-    
-    func purposeFor(cityState: CityState, category: String) {
-        
-    }
 }
 
 extension Email {
@@ -137,9 +136,8 @@ extension Email {
                                               insertInto: managedContext) as? Email else {
                                                 fatalError()
         }
-
-        email.name = name
-        email.emailString = emailAddress
+        email.setValue(name, forKeyPath: "name")
+        email.setValue(emailAddress, forKeyPath: "emailString")
 
         do {
           try managedContext.save()
@@ -174,10 +172,10 @@ extension SearchLocation {
                                               insertInto: managedContext) as? SearchLocation else {
                                                 fatalError()
         }
-        searchLocation.city = city
-        searchLocation.state = state
-        searchLocation.country = country
-        searchLocation.community = community
+        searchLocation.setValue(city, forKeyPath: "city")
+        searchLocation.setValue(state, forKeyPath: "state")
+        searchLocation.setValue(country, forKeyPath: "country")
+        searchLocation.setValue(community, forKeyPath: "community")
         do {
           try managedContext.save()
             return searchLocation
@@ -207,7 +205,7 @@ extension Address {
                                               insertInto: managedContext) as? Address else {
                                                 fatalError()
         }
-        address.type = type
+        address.setValue(type, forKeyPath: "type")
         do {
           try managedContext.save()
             return address
@@ -238,13 +236,13 @@ extension NeedItem {
                                               insertInto: managedContext) as? NeedItem else {
                                                 fatalError()
         }
-        needItem.category = item.category
-        needItem.desc = item.description
-        needItem.validUntil = item.validUntil.dateValue()
-        needItem.owner = item.owner
-        needItem.createdBy = item.createdBy
-        needItem.createdAt = item.createdAt?.dateValue()
-        needItem.id = item.id
+        needItem.setValue(item.category, forKeyPath: "category")
+        needItem.setValue(item.description, forKeyPath: "desc")
+        needItem.setValue(item.validUntil.dateValue(), forKeyPath: "validUntil")
+        needItem.setValue(item.owner, forKeyPath: "owner")
+        needItem.setValue(item.createdBy, forKeyPath: "createdBy")
+        needItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
+        needItem.setValue(item.id, forKeyPath: "id")
         do {
           try managedContext.save()
             return needItem
@@ -301,13 +299,13 @@ extension HaveItem {
                                               insertInto: managedContext) as? HaveItem else {
                                                 fatalError()
         }
-        haveItem.category = item.category
-        haveItem.desc = item.description
-        haveItem.validUntil = item.validUntil?.dateValue()
-        haveItem.owner = item.owner
-        haveItem.createdBy = item.createdBy
-        haveItem.createdAt = item.createdAt?.dateValue()
-        haveItem.id = item.id
+        haveItem.setValue(item.category, forKeyPath: "category")
+        haveItem.setValue(item.description, forKeyPath: "desc")
+        haveItem.setValue(item.validUntil?.dateValue(), forKeyPath: "validUntil")
+        haveItem.setValue(item.owner, forKeyPath: "owner")
+        haveItem.setValue(item.createdBy, forKeyPath: "createdBy")
+        haveItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
+        haveItem.setValue(item.id, forKeyPath: "id")
         do {
           try managedContext.save()
             return haveItem
@@ -332,7 +330,7 @@ extension Have {
                                               insertInto: managedContext) as? Have else {
                                                 fatalError()
         }
-        have.haveItem = item
+        have.setValue(item, forKeyPath: "haveItem")
         do {
           try managedContext.save()
             return have
@@ -363,9 +361,9 @@ extension AppLocationInfo {
 
         let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
 
-        locationInfo.country = country
-        locationInfo.city = city
-        locationInfo.state = state
+        locationInfo.setValue(country, forKeyPath: "country")
+        locationInfo.setValue(city, forKeyPath: "city")
+        locationInfo.setValue(state, forKeyPath: "state")
 
         do {
           try managedContext.save()
