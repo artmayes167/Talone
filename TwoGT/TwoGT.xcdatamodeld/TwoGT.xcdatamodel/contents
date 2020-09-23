@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Address" representedClassName="Address" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="street1" optional="YES" attributeType="String"/>
         <attribute name="street2" optional="YES" attributeType="String"/>
@@ -31,12 +31,19 @@
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="events" inverseEntity="Purpose"/>
     </entity>
     <entity name="Have" representedClassName="Have" syncable="YES">
+        <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
-        <relationship name="childHaves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Have" inverseName="parentHave" inverseEntity="Have"/>
-        <relationship name="childNeeds" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="parentHave" inverseEntity="Need"/>
         <relationship name="haveItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HaveItem" inverseName="have" inverseEntity="HaveItem"/>
-        <relationship name="parentHave" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="childHaves" inverseEntity="Have"/>
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="haves" inverseEntity="Purpose"/>
+        <fetchedProperty name="childHaves" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="parentHaveItemId  == $FETCH_SOURCE.haveItem.id"/>
+        </fetchedProperty>
+        <fetchedProperty name="childNeeds" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="self == $FETCH_SOURCE.parentHave"/>
+        </fetchedProperty>
+        <fetchedProperty name="parentHave" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="SELF.haveItem.id=$FETCH_SOURCE.parentHaveItemId"/>
+        </fetchedProperty>
     </entity>
     <entity name="HaveItem" representedClassName="HaveItem" parentEntity="Item" syncable="YES">
         <relationship name="have" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="haveItem" inverseEntity="Have"/>
@@ -59,12 +66,20 @@
         <attribute name="validUntil" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="Need" representedClassName="Need" syncable="YES">
+        <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
+        <attribute name="parentNeedItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String" defaultValueString=""/>
-        <relationship name="childNeeds" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="parentNeed" inverseEntity="Need"/>
         <relationship name="needItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NeedItem" inverseName="need" inverseEntity="NeedItem"/>
-        <relationship name="parentHave" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="childNeeds" inverseEntity="Have"/>
-        <relationship name="parentNeed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Need" inverseName="childNeeds" inverseEntity="Need"/>
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="needs" inverseEntity="Purpose"/>
+        <fetchedProperty name="childNeeds" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.needItem.id"/>
+        </fetchedProperty>
+        <fetchedProperty name="parentHave" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="SELF.haveItem.id=$FETCH_SOURCE.parentHaveItemId"/>
+        </fetchedProperty>
+        <fetchedProperty name="parentNeed" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="SELF.needItem.id=$FETCH_SOURCE.parentNeedItemId"/>
+        </fetchedProperty>
     </entity>
     <entity name="NeedItem" representedClassName="NeedItem" parentEntity="Item" syncable="YES">
         <relationship name="need" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="needItem" inverseEntity="Need"/>
@@ -113,12 +128,12 @@
         <element name="Community" positionX="-494.88671875" positionY="-653.93359375" width="128" height="73"/>
         <element name="Email" positionX="-1454.9765625" positionY="-863.55859375" width="128" height="88"/>
         <element name="Event" positionX="-979.62890625" positionY="-528.1171875" width="128" height="58"/>
-        <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="133"/>
-        <element name="HaveItem" positionX="-1237.38671875" positionY="-338.1328125" width="128" height="58"/>
+        <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="161"/>
+        <element name="HaveItem" positionX="-1144.36328125" positionY="-302.9140625" width="128" height="58"/>
         <element name="ImageInfo" positionX="-1267.96875" positionY="-958.3203125" width="128" height="118"/>
         <element name="Item" positionX="-1302.953125" positionY="-266.1953125" width="128" height="163"/>
-        <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="133"/>
-        <element name="NeedItem" positionX="-1404.7421875" positionY="-334.01171875" width="128" height="58"/>
+        <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="176"/>
+        <element name="NeedItem" positionX="-1452.00390625" positionY="-283.90234375" width="128" height="58"/>
         <element name="PhoneNumber" positionX="-1466.59765625" positionY="-975.2109375" width="128" height="88"/>
         <element name="Purpose" positionX="-1405.515625" positionY="-677.41796875" width="128" height="133"/>
         <element name="SearchLocation" positionX="-687.8359375" positionY="-951.875" width="128" height="88"/>

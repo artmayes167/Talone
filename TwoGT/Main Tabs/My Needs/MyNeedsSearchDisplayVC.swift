@@ -94,9 +94,13 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyNeedCell
-       
-        cell.configure(needs[indexPath.item].needItem!)
+        let need = needs[indexPath.item]
+        managedObjectContext.refresh(need, mergeChanges: true)
+        cell.configure(need.needItem!)
        
         return cell
     }
@@ -120,6 +124,7 @@ class MyNeedCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var createdAtLabel: UILabel!
+    @IBOutlet weak var joinedLabel: UILabel?
     
     func configure(_ need: NeedItem) {
         
@@ -130,5 +135,13 @@ class MyNeedCell: UICollectionViewCell {
         locationLabel.text = need.need?.purpose?.cityState?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())
+        
+        // This works and returns [Stat] type
+        
+        if let cn: Set<Need> = need.need?.childNeeds as? Set<Need> {
+            joinedLabel?.text = "\(cn.count)"
+        } else {
+            joinedLabel?.text = ""
+        }
     }
 }

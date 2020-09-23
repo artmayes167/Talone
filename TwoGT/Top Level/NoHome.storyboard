@@ -2571,7 +2571,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Headline" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2G-zg-WHe">
-                                                    <rect key="frame" x="12" y="8" width="390" height="48"/>
+                                                    <rect key="frame" x="136" y="8" width="266" height="48"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.10865006196334309" green="0.0" blue="0.17894827869543151" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2594,11 +2594,19 @@
                                                     <color key="textColor" red="0.10865006200000001" green="0.0" blue="0.17894827869999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaY-We-fMf">
+                                                    <rect key="frame" x="57.5" y="49.5" width="13.5" height="29"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.97041004900000005" green="0.95314436378338085" blue="0.60532751443018862" alpha="0.43605522260273971" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
+                                                <constraint firstItem="d2G-zg-WHe" firstAttribute="leading" secondItem="Esf-LJ-uL6" secondAttribute="trailing" constant="8" symbolic="YES" id="98G-nM-ms7"/>
+                                                <constraint firstItem="JaY-We-fMf" firstAttribute="centerY" secondItem="Esf-LJ-uL6" secondAttribute="centerY" id="DwW-HE-ZRC"/>
                                                 <constraint firstAttribute="trailing" secondItem="hWa-cM-lHP" secondAttribute="trailing" constant="8" id="FMS-TW-SYD"/>
-                                                <constraint firstItem="d2G-zg-WHe" firstAttribute="leading" secondItem="zKW-QE-cQV" secondAttribute="leading" constant="12" id="Hni-re-rVc"/>
+                                                <constraint firstItem="JaY-We-fMf" firstAttribute="centerX" secondItem="Esf-LJ-uL6" secondAttribute="centerX" id="GdY-mT-TOP"/>
                                                 <constraint firstAttribute="bottom" secondItem="Esf-LJ-uL6" secondAttribute="bottom" id="LUt-fF-Gxd"/>
                                                 <constraint firstItem="hWa-cM-lHP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zKW-QE-cQV" secondAttribute="leading" constant="12" id="P1g-qG-bdf"/>
                                                 <constraint firstAttribute="trailing" secondItem="d2G-zg-WHe" secondAttribute="trailing" constant="12" id="ZhM-QP-Tok"/>
@@ -2617,6 +2625,7 @@
                                         <connections>
                                             <outlet property="categoryImage" destination="Esf-LJ-uL6" id="arb-96-SNh"/>
                                             <outlet property="createdAtLabel" destination="1Wf-yf-wDE" id="ztG-FS-PdY"/>
+                                            <outlet property="joinedLabel" destination="JaY-We-fMf" id="sAd-O9-YhY"/>
                                             <outlet property="locationLabel" destination="hWa-cM-lHP" id="4fJ-uL-ZcE"/>
                                             <outlet property="titleLabel" destination="d2G-zg-WHe" id="WtK-lF-wMU"/>
                                         </connections>

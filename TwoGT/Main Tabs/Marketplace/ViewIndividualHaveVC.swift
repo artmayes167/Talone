@@ -91,41 +91,36 @@ class ViewIndividualHaveVC: UIViewController {
 
         // Decide whether we need to create a Need for this; or we just associate the userId to the Have
         // object
-        guard let c = creationManager, let item = haveItem else {
+        guard let c = creationManager else {
             fatalError()
         }
         switch c.currentCreationType() {
         case .need:
-            storeJoiningNeedToDatabase(haveItem: item)
+            storeJoiningNeedToDatabase()
         case .have:
-            storeJoiningHaveToDatabase(haveItem: item)
+            storeJoiningHaveToDatabase()
         default:
             print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
         }
     }
-
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    private func storeJoiningNeedToDatabase(haveItem: HavesBase.HaveItem) {
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo()  else { fatalError()
+    
+    private func storeJoiningNeedToDatabase() {
+        guard let c = creationManager, let have = haveItem  else { fatalError()
         }
 
         // if need-type nor location is not selected, display an error message
-        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        
-        let need = NeedsDbWriter.NeedItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
-                                          description: c.getDescription() ?? haveItem.description,
-                                          validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
-                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+//        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-        needsWriter.addNeed(need, completion: { error in
-            if error == nil {
-                let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
+        // add Need to DB
+        needsWriter.createNeedAndJoinHave(have, usingHandle: AppDelegate.user.handle ?? "Anonymous") { (error, firebaseNeedItem) in
+            if error == nil, let needItem = firebaseNeedItem {
+                let n = Need.createNeed(item: NeedItem.createNeedItem(item: needItem))
+                let h = HaveItem.createHaveItem(item: have)
+                let _ = Have.createHave(item: h)
+                n.parentHaveItemId = have.id
                 c.setNeed(n)
-                c.setNeedParentHave(Have.createHave(item: HaveItem.createHaveItem(item: haveItem)))
+
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
                     AppDelegate.user.addToPurposes(p)
@@ -146,30 +141,35 @@ class ViewIndividualHaveVC: UIViewController {
             } else {
                 self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
-        })
+        }
     }
     
-    private func storeJoiningHaveToDatabase(haveItem: HavesBase.HaveItem) {
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo() else { fatalError()
+    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
+    private func storeJoiningHaveToDatabase() {
+        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo()  else { fatalError()
         }
 
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-
-        let have = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
+        guard let haveItem = haveItem else { fatalError() }
+        /// Create new Db needItem, based on the parent Have's haveItem
+        let h = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
                                           description: c.getDescription() ?? haveItem.description,
-                                          validUntil: haveItem.validUntil, //valid until next 7 days
+                                          validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
                                           locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
 
-        let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-        havesWriter.addHave(have, completion: { error in
+        let havesWriter = HavesDbWriter()
+        /// Create a new backend need
+        havesWriter.addHave(h, completion: { error in
             if error == nil {
-                let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
-                c.setHave(h)
-                c.setHaveParentHave(Have.createHave(item: HaveItem.createHaveItem(item: haveItem)))
+                // Create CD Have and HaveItem
+                let cdHave = Have.createHave(item: HaveItem.createHaveItem(item: h))
+                
+                // Set have in creationManager
+                c.setHave(cdHave)
+                
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if let p = c.getSavedPurpose() {
                     AppDelegate.user.addToPurposes(p)

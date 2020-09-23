@@ -106,8 +106,8 @@ class NeedsDbWriter: NeedsBase {
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         if let userId = Auth.auth().currentUser?.uid {
             // TODO: This needsItem needs to derive data from MarketPlaceVC, as user may have entered description/header etc.
-            let description = "\(have.owner)'s have: \(have.description ?? "")"
-            let needItem = NeedsBase.NeedItem(category: have.category, description: description, validUntil: defaultValidUntilDate, owner: userHandle, createdBy: userId, locationInfo: have.locationInfo)
+            let description = have.description
+            let needItem = NeedsBase.NeedItem(category: have.category, headline: have.headline, description: description, validUntil: defaultValidUntilDate, owner: userHandle, createdBy: userId, locationInfo: have.locationInfo)
 
             addNeed(needItem) { error in
                 if error == nil, let needId = needItem.id, let haveId = have.id {

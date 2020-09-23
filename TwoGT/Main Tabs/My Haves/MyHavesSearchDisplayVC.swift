@@ -93,9 +93,14 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyHaveCell
+        let have = haves[indexPath.item]
+        managedObjectContext.refresh(have, mergeChanges: true)
        
-        cell.configure(haves[indexPath.item].haveItem!)
+        cell.configure(have.haveItem!)
        
         return cell
     }
