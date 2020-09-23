@@ -19,6 +19,7 @@ extension Item {
 
     @NSManaged public var category: String?
     @NSManaged public var createdAt: Date?
+    @NSManaged public var modifiedAt: Date?
     @NSManaged public var createdBy: String?
     @NSManaged public var desc: String?
     @NSManaged public var headline: String?
