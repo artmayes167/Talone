@@ -116,7 +116,7 @@ class MyHaveCell: UICollectionViewCell {
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: (have.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
-        titleLabel.text = have.desc // different identifier needed?
+        titleLabel.text = have.headline
         locationLabel.text = have.have?.purpose?.cityState?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: have.createdAt ?? Date())

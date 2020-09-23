@@ -117,7 +117,7 @@ class MyNeedCell: UICollectionViewCell {
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: (need.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
-        titleLabel.text = need.desc // different identifier needed?
+        titleLabel.text = need.headline 
         locationLabel.text = need.need?.purpose?.cityState?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())

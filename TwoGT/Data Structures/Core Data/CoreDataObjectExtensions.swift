@@ -268,7 +268,7 @@ extension Need {
                                               insertInto: managedContext) as? Need else {
                                                 fatalError()
         }
-        need.needItem = item
+        need.setValue(item, forKey: "needItem")
         do {
           try managedContext.save()
             return need

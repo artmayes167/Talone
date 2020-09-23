@@ -22,8 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         do {
             if let u = try managedContext.fetch(fetchRequest).first {
+                print("Successfully fetched User")
                 return u
             } else {
+                print("Creating new User")
                 return AppDelegate.createUser(inContext: managedContext)
             }
         } catch _ as NSError {
@@ -42,11 +44,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 fatalError()
         }
         
-//        user.setValue(name, forKeyPath: "name")
-//        user.setValue(cuisine, forKey: "cuisine")
+        user.setValue(UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue), forKey: "handle")
+        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) {
+            let e = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
+            user.addToEmails(e)
+        }
         
         do {
           try managedContext.save()
+            print("Successfully created User")
             return user
         } catch let error as NSError {
           print("Could not save. \(error), \(error.userInfo)")

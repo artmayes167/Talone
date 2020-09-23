@@ -50,7 +50,7 @@ enum CustomTheme: String, CaseIterable, DatabaseReady {
 }
 
 enum NeedType: String, CaseIterable, DatabaseReady {
-    case none, food, clothes, shelter, furniture, miscellany
+    case none, food, clothes, shelter, furniture, service, miscellany
 }
 
 enum AddressType: String, CaseIterable, DatabaseReady {

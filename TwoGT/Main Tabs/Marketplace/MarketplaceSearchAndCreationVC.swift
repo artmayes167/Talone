@@ -35,6 +35,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Variables
     var creationManager: PurposeCreationManager = PurposeCreationManager()
+    var model: MarketplaceModel?
     
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
@@ -69,6 +70,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
             }
         }
+        
+        model = MarketplaceModel(creationManager: creationManager)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -130,21 +133,16 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
+        creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         let success = creationManager.checkPrimaryNavigationParameters()
         if success {
-            switch currentNeedHaveSelectedSegmentIndex {
-            case 1:
-                let haveItem = createHaveItem()
-                haveItem.headline = headlineTextField.text
-                haveItem.desc = descriptionTextView.text
-                creationManager.setHaveItem(item: haveItem)
-                if checkPreconditionsAndAlert(light: false) { storeHaveToDatabase() }
+            switch creationManager.currentCreationType() {
+            case .need:
+                model?.storeNeedToDatabase(controller: self)
+            case .have:
+                model?.storeHaveToDatabase(controller: self)
             default:
-                let needItem = createNeedItem()
-                needItem.headline = headlineTextField.text
-                needItem.desc = descriptionTextView.text
-                creationManager.setNeedItem(item: needItem)
-                if checkPreconditionsAndAlert(light: false) { storeNeedToDatabase() }
+                print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
             }
         } else {
             view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
@@ -169,43 +167,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
-     // MARK: Private Functions
-    private func createNeedItem() -> NeedItem {
-        /// create new needs
-        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager.getCategory()?.databaseValue() else { fatalError() }
-        let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-        var emailString: String = "artmayes167@gmail.com"
-        if let emails = AppDelegate.user().emails {
-            if let primaryEmail: Email = emails.first(where: {
-                if let e = ($0 as? Email) {
-                    return e.name == "primary"
-                }
-                return false
-            }) as? Email {
-                if let pEmail = primaryEmail.emailString {
-                    emailString = pEmail
-                }
-            }
-        }
-        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
-        let need = NeedsDbWriter.NeedItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
-        let newNeed = NeedItem.createNeedItem(item: need)
-        return newNeed
-    }
-
-    private func createHaveItem() -> HaveItem {
-        /// create new needs
-        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager.getCategory()?.databaseValue() else { fatalError() }
-        let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-        let primaryEmail: Email = AppDelegate.user().emails?.first(where: { ($0 as! Email).name == DefaultsKeys.taloneEmail.rawValue}) as! Email
-        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
-
-        let have = HavesDbWriter.HaveItem(category: cat, description: String(format: "\(city), \(state), \(cat)"), validUntil: defaultValidUntilDate, owner: AppDelegate.user().handle ?? "AnonymousUser", createdBy: primaryEmail.emailString ?? "artmayes167@gmail.com", locationInfo: locData)
-        let newHave = HaveItem.createHaveItem(item: have)
-        return newHave
-    }
-
-    // MARK: NeedSelectionDelegate
+     
+    // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
         categoryTextField.text = need.rawValue.capitalized
         categoriesPopOver.isHidden = true
@@ -274,13 +237,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
      // MARK: - Private Functions
-    private func checkPreconditionsAndAlert(light: Bool) -> Bool {
-        if !creationManager.areAllRequiredFieldsFilled(light: light) {
-            showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
-            return false
-        }
-        return true
-    }
 
     private func fetchMatchingNeeds() {
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
@@ -308,88 +264,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
     }
-
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    private func storeNeedToDatabase() {
-        guard let loc = creationManager.getLocationOrNil()?.locationInfo(), let cat = creationManager.getCategory() else { fatalError() }
-
-        // if need-type nor location is not selected, display an error message
-        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-
-        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
-        let need = NeedsDbWriter.NeedItem(category: cat.databaseValue(),
-                                          description: creationManager.getDescription(),
-                                          validUntil: defaultValidUntilDate,
-                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
-
-        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-        needsWriter.addNeed(need, completion: { error in
-            if error == nil {
-                let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
-                self.creationManager.setNeed(n)
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = self.creationManager.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
-                    if appDelegate.save() {
-                        self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                            self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                        }
-                    } else {
-                        fatalError()
-                    }
-                } else {
-                    fatalError()
-                }
-                
-            } else {
-                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
-            }
-        })
-    }
-
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    private func storeHaveToDatabase() {
-        guard checkPreconditionsAndAlert(light: true) == true else { return }
-        guard let loc = creationManager.getLocationOrNil()?.locationInfo, let cat = creationManager.getCategory() else { fatalError() }
-        // if need-type nor location is not selected, display an error message
-        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        let defaultValidUntilDate = Date(timeIntervalSinceNow: 30*24*60*60)
-        let have = HavesDbWriter.HaveItem(category: cat.databaseValue(),
-                                          description: descriptionTextView.text.trimmingCharacters(in: [" "]),
-                                          validUntil: Timestamp(date: defaultValidUntilDate),
-                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc()))
-
-        let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
-        havesWriter.addHave(have, completion: { error in
-            if error == nil {
-                let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
-                self.creationManager.setHave(h)
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = self.creationManager.getSavedPurpose() {
-                    AppDelegate.user().addToPurposes(p)
-                    if appDelegate.save() {
-                        self.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                            // TODO: - Create unwind segue to my needs
-                            self.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
-                        }
-                    } else {
-                        fatalError()
-                    }
-                } else {
-                    fatalError()
-                }
-            } else {
-                self.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
-            }
-        })
-    }
-
 }
 
  // MARK: - UITextFieldDelegate, UITextViewDelegate
@@ -409,6 +283,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         }
     }
     
+     // MARK: TextView
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView == descriptionTextView {
             return true

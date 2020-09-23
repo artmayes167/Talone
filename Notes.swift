@@ -53,3 +53,5 @@
 // Aperture by P Thanga Vignesh from the Noun Project
 
 // tab by Zach Bogart from the Noun Project
+
+// service by Manohara from the Noun Project

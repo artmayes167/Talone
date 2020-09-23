@@ -134,10 +134,7 @@ class EnterHandleVC: UIViewController {
         // TODO: - Set the handle on the back end
         // completion
         UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
-        guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
-        let e = Email.create(name: "talone", emailAddress: email)
-        AppDelegate.user().addToEmails(e)
-        AppDelegate.user().handle = textField.text
+        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
         
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
             self.performSegue(withIdentifier: "toBase", sender: nil)

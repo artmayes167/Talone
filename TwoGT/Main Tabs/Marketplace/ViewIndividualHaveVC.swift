@@ -112,7 +112,7 @@ class ViewIndividualHaveVC: UIViewController {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
         
-        let need = NeedsDbWriter.NeedItem(category: haveItem.category,
+        let need = NeedsDbWriter.NeedItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
                                           description: c.getDescription() ?? haveItem.description,
                                           validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
@@ -156,7 +156,7 @@ class ViewIndividualHaveVC: UIViewController {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
-        let have = HavesDbWriter.HaveItem(category: haveItem.category,
+        let have = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
                                           description: c.getDescription() ?? haveItem.description,
                                           validUntil: haveItem.validUntil, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",

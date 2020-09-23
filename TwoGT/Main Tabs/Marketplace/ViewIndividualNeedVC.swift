@@ -100,7 +100,7 @@ class ViewIndividualNeedVC: UIViewController {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
-        let need = NeedsDbWriter.NeedItem(category: needItem.category,
+        let need = NeedsDbWriter.NeedItem(category: needItem.category, headline: c.getHeadline() ?? needItem.headline,
                                           description: c.getDescription() ?? needItem.description,
                                           validUntil: needItem.validUntil, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
@@ -132,7 +132,7 @@ class ViewIndividualNeedVC: UIViewController {
                 }
                 
             } else {
-                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+                self.showOkayAlert(title: "", message: "Error while adding a Need in ViewIndividualNeed. Error: \(error!.localizedDescription)", handler: nil)
             }
         })
     }
@@ -144,7 +144,7 @@ class ViewIndividualNeedVC: UIViewController {
         // if need-type nor location is not selected, display an error message
         guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
 
-        let have = HavesDbWriter.HaveItem(category: needItem.category,
+        let have = HavesDbWriter.HaveItem(category: needItem.category, headline: c.getHeadline() ?? needItem.headline,
                                           description: c.getDescription() ?? needItem.description,
                                           validUntil: needItem.validUntil, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",

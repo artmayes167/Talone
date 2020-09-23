@@ -240,14 +240,18 @@ class PurposeCreationManager: NSObject {
     }
     
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
-        switch creationType {
-        case .have:
-            return have?.haveItem?.areAllRequiredFieldsFilled(light: light) ?? false
-        case .need:
-            return need?.needItem?.areAllRequiredFieldsFilled(light: light) ?? false
-        default:
-            return false
+        let success = prepareForSave()
+        if success {
+            switch creationType {
+            case .have:
+                return have?.haveItem?.areAllRequiredFieldsFilled(light: light) ?? false
+            case .need:
+                return need?.needItem?.areAllRequiredFieldsFilled(light: light) ?? false
+            default:
+                return false
+            }
         }
+        return false
     }
     
     func prepareForSave() -> Bool {
