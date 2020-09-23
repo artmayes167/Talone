@@ -21,6 +21,8 @@ class PurposeCreationManager: NSObject {
     private var creationType: CurrentCreationType = .unknown
     private var category: NeedType?
     private var cityState: CityState?
+    private var headline: String?
+    private var desc: String?
     
     // TODO: - Rethink these inits to require city and state
     private func createPurpose(type: NeedType, cityState: CityState) -> Bool {
@@ -176,40 +178,16 @@ class PurposeCreationManager: NSObject {
     }
     
     func setHeadline(_ headline: String?, description: String?) {
-        switch creationType {
-        case .have:
-            guard let h = have?.haveItem else { return }
-            h.headline = headline
-            h.desc = description
-        case .need:
-            guard let n = need?.needItem else { return }
-            n.headline = headline
-            n.desc = description
-        default:
-            return
-        }
+        self.headline = headline
+        self.desc = description
     }
     
     func getHeadline() -> String? {
-        switch creationType {
-        case .have:
-            return have?.haveItem?.headline
-        case .need:
-            return need?.needItem?.headline
-        default:
-            return nil
-        }
+        return headline
     }
     
     func getDescription() -> String? {
-        switch creationType {
-        case .have:
-            return have?.haveItem?.desc
-        case .need:
-            return need?.needItem?.desc
-        default:
-            return nil
-        }
+        return desc
     }
     
     func setNeed(_ need: Need) {
@@ -267,12 +245,18 @@ class PurposeCreationManager: NSObject {
         switch creationType {
         case .need:
             guard let n = need else { print("---------Need Not Set when preparing for save!!!!"); return false }
+            guard let item = n.needItem else { print("---------NeedItem Not Set when preparing for save!!!!"); return false}
+            item.desc = desc
+            item.headline = headline
             purpose.addToNeeds(n)
             
             print("---------Preparing purpose for save, successfully: \(purpose.needs!.contains(n))")
             return true
         case .have:
             guard let h = have else { print("Have Not Set when preparing for save!!!!"); return false }
+            guard let item = h.haveItem else { print("---------HaveItem Not Set when preparing for save!!!!"); return false}
+            item.desc = desc
+            item.headline = headline
             purpose.addToHaves(h)
             
             print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
