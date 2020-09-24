@@ -242,6 +242,7 @@ extension NeedItem {
         needItem.setValue(item.owner, forKeyPath: "owner")
         needItem.setValue(item.createdBy, forKeyPath: "createdBy")
         needItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
+        needItem.setValue(item.modifiedAt?.dateValue(), forKeyPath: "modifiedAt")
         needItem.setValue(item.id, forKeyPath: "id")
         do {
           try managedContext.save()
@@ -305,6 +306,7 @@ extension HaveItem {
         haveItem.setValue(item.owner, forKeyPath: "owner")
         haveItem.setValue(item.createdBy, forKeyPath: "createdBy")
         haveItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
+        haveItem.setValue(item.modifiedAt?.dateValue(), forKeyPath: "modifiedAt")
         haveItem.setValue(item.id, forKeyPath: "id")
         do {
           try managedContext.save()
