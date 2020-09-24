@@ -18,8 +18,7 @@ class HavesBase: FirebaseGeneric {
         var category: String
         var headline: String?
         var description: String?
-        var needs: [String]? // Need Ids
-        var users: [String]? // user.uids
+        var needs: [NeedStub]?      // Need Ids, userIds and handles
         var validUntil: Timestamp?
         var owner: String
         var createdBy: String
@@ -27,6 +26,18 @@ class HavesBase: FirebaseGeneric {
         @ServerTimestamp var modifiedAt: Timestamp?
         var status: String? = "Active"
         var locationInfo: LocationInfo
+    }
+    
+    struct NeedStub: Codable {
+        var owner: String
+        var id: String
+        var createdBy: String
+        
+        enum CodingKeys: String, CodingKey { // example code to show how to handle differing attribute names.
+            case owner = "handle"
+            case createdBy = "uid"
+            case id
+        }
     }
 }
 
@@ -37,7 +48,6 @@ class HavesDbWriter: HavesBase {
         do {
             try db.collection("haves").document(have.id ?? "").setData(from: have)
         } catch {
-            // handle the error here
             print(error.localizedDescription  + "in HaveWriter -> addHave")
             completion(error)
         }
@@ -46,8 +56,7 @@ class HavesDbWriter: HavesBase {
 
     func associateNeedId(_ needId: String, withHaveId haveId: String, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
-        //do {
-            let ref = db.collection("haves").document(haveId)
+        let ref = db.collection("haves").document(haveId)
         ref.updateData(["needs": FieldValue.arrayUnion([needId])]) { error in
             print(error.debugDescription + "in HaveWriter -> associateNeedId")
             completion(error)
@@ -57,7 +66,7 @@ class HavesDbWriter: HavesBase {
     func associateUserId(_ userId: String, withHaveId haveId: String, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let ref = db.collection("haves").document(haveId)
-        ref.updateData(["interestedUsers": FieldValue.arrayUnion([userId])]) { error in
+        ref.updateData(["needs": FieldValue.arrayUnion([userId])]) { error in
             print(error.debugDescription + "in HaveWriter -> associateUserId")
             completion(error)
         }
@@ -67,7 +76,7 @@ class HavesDbWriter: HavesBase {
         if let userId = Auth.auth().currentUser?.uid {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(haveId)
-            ref.updateData(["interestedUsers": FieldValue.arrayUnion([userId])]) { error in
+            ref.updateData(["needs": FieldValue.arrayUnion([userId])]) { error in
                 completion(error)
             }
         } else {
@@ -75,12 +84,13 @@ class HavesDbWriter: HavesBase {
         }
     }
 
-    func associateAuthUserHavingNeedId(_ needId: String, toHaveId haveId: String, completion: @escaping (Error?) -> Void) {
-        if let userId = Auth.auth().currentUser?.uid {
+    func associateAuthUserHavingNeed(_ needItem: NeedsBase.NeedItem, toHaveId haveId: String, completion: @escaping (Error?) -> Void) {
+        if let _ = Auth.auth().currentUser?.uid {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(haveId)
-            let data = ["uid": userId, "need": needId]
-            ref.updateData(["interestedUsers": FieldValue.arrayUnion([data])]) { error in
+            let data = ["uid": needItem.createdBy, "id": needItem.id, "handle": needItem.owner]
+print("JYRKIAsso: \(data)")
+            ref.updateData(["needs": FieldValue.arrayUnion([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
         } else {
@@ -88,12 +98,13 @@ class HavesDbWriter: HavesBase {
         }
     }
 
-    func disassociateAuthUserHavingNeedId(_ id: String, fromHaveId: String, completion: @escaping (Error?) -> Void) {
+    func disassociateAuthUserHavingNeedId(_ id: String, handle: String, fromHaveId: String, completion: @escaping (Error?) -> Void) {
         if let userId = Auth.auth().currentUser?.uid {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(fromHaveId)
-            let data = ["uid": userId, "need": id]
-            ref.updateData(["interestedUsers": FieldValue.arrayRemove([data])]) { error in
+            let data = ["uid": userId, "id": id, "handle": handle]
+print("JYRKIdisasso: \(data)")
+            ref.updateData(["needs": FieldValue.arrayRemove([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
         } else {

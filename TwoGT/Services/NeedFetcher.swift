@@ -36,6 +36,30 @@ class NeedsDbFetcher: NeedsBase {
                 }
             }
     }
+
+    func fetchNeed(id: String, completion: @escaping (NeedItem?) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("needs").whereField("id", isEqualTo: id)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    print(error)
+                } else if let snapshot = snapshot {
+                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
+                        print(document)
+                        var item: NeedItem?
+                        do {
+                            item = try document.data(as: NeedItem.self)
+                        } catch {
+                            print(error)
+                        }
+                        return item
+                    }
+                    completion(needs.count > 0 ? needs[0] : nil)
+                }
+            }
+    }
+
     
     // Convenience function
     func fetchMyNeeds(city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
