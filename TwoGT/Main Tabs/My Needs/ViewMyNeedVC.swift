@@ -80,10 +80,12 @@ class ViewMyNeedVC: UIViewController {
 
     private func deleteCurrentNeed() {
         guard let needItem = need?.needItem else { return }
+        let parentHave = need?.parentHaveItemId
+        let handle = AppDelegate.user.handle ?? "Anonymous"
 
-        need?.deleteNeed()
-
-        NeedsDbWriter().deleteNeed(id: needItem.id!, creator: needItem.createdBy ?? "") { error in
+        need?.deleteNeed()          // Remove from CoreData
+        // Remove from Remote database
+        NeedsDbWriter().deleteNeed(id: needItem.id!, userHandle: handle, associatedHaveId: parentHave) { error in
             if error == nil {
                 self.view.makeToast("You have Deleted the Need", duration: 1.0, position: .center) {_ in
                     self.performSegue(withIdentifier: "dismissToMyNeeds", sender: self)

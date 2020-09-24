@@ -111,7 +111,7 @@ class NeedsDbWriter: NeedsBase {
 
             addNeed(needItem) { error in
                 if error == nil, let needId = needItem.id, let haveId = have.id {
-                    HavesDbWriter().associateAuthUserHavingNeedId(needId, toHaveId: haveId) { error in
+                    HavesDbWriter().associateAuthUserHavingNeed(needItem, toHaveId: haveId) { error in
                         // call completion
                         completion(error, needItem)
                     }
@@ -122,20 +122,19 @@ class NeedsDbWriter: NeedsBase {
         }
     }
 
-    func deleteNeed(id: String, creator: String, associatedHaveId: String? = nil, completion: @escaping (Error?) -> Void) {
+    func deleteNeed(id: String, userHandle: String, associatedHaveId: String? = nil, completion: @escaping (Error?) -> Void) {
+        // TODO: because of the way associated need is stored to a Have, we need
+        // to provide uid, needId and Handle to remove the association. This shall be
+        // refactored later.
         guard let userId = Auth.auth().currentUser?.uid else {
             completion(GenericFirebaseError.noAuthUser)
             return
         }
 
-        if creator != userId {
-            completion(GenericFirebaseError.unauthorized)
-        }
-
         let db = Firestore.firestore()
         db.collection("needs").document(id).delete { err in
             if let haveId = associatedHaveId {
-                HavesDbWriter().disassociateAuthUserHavingNeedId(id, fromHaveId: haveId) { error in
+                HavesDbWriter().disassociateAuthUserHavingNeedId(id, handle: userHandle, fromHaveId: haveId) { error in
                     // call completion
                     completion(error)
                 }
