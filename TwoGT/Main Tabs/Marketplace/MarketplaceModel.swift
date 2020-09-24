@@ -94,27 +94,27 @@ class MarketplaceModel: NSObject {
     }
     
     // MARK: Private Creation Functions
-   private func createNeedItem() -> NeedsBase.NeedItem {
-       /// create new needs
-       guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.databaseValue() else { fatalError() }
-       let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-       let emailString = getPrimaryEmail()
-       let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
-       let headline = creationManager?.getHeadline()
-       let desc = creationManager?.getDescription()
-       let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
-       return need
-   }
+    private func createNeedItem() -> NeedsBase.NeedItem {
+        /// create new needs
+        guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.databaseValue() else { fatalError() }
+        let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
+        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
+        let headline = creationManager?.getHeadline()
+        let desc = creationManager?.getDescription()
+        let uid = Auth.auth().currentUser?.uid ?? "Anonymous"
+        let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: uid, locationInfo: locData)
+        return need
+    }
     
     private func createHaveItem() -> HavesBase.HaveItem {
         /// create new needs
         guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.databaseValue() else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
-        let emailString = getPrimaryEmail()
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
         let desc = creationManager?.getDescription()
-        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: emailString, locationInfo: locData)
+        let uid = Auth.auth().currentUser?.uid ?? "Anonymous"
+        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegate.user.handle ?? "AnonymousUser", createdBy: uid, locationInfo: locData)
         return have
     }
    

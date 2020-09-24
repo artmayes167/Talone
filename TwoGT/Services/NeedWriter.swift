@@ -126,7 +126,7 @@ class NeedsDbWriter: NeedsBase {
         // TODO: because of the way associated need is stored to a Have, we need
         // to provide uid, needId and Handle to remove the association. This shall be
         // refactored later.
-        guard let userId = Auth.auth().currentUser?.uid else {
+        guard let _ = Auth.auth().currentUser?.uid else {
             completion(GenericFirebaseError.noAuthUser)
             return
         }

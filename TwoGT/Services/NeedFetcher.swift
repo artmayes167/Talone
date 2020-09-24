@@ -14,7 +14,7 @@ import FirebaseFirestoreSwift
 class NeedsDbFetcher: NeedsBase {
     func fetchNeeds(city: String, state: String, _ country: String?, completion: @escaping ([NeedItem]) -> Void) {
         let db = Firestore.firestore()
-        
+
         db.collection("needs").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country ?? "USA")
@@ -39,7 +39,7 @@ class NeedsDbFetcher: NeedsBase {
 
     func fetchNeed(id: String, completion: @escaping (NeedItem?) -> Void) {
         let db = Firestore.firestore()
-        
+
         db.collection("needs").whereField("id", isEqualTo: id)
             .getDocuments { (snapshot, error) in
                 if let error = error {
@@ -60,14 +60,13 @@ class NeedsDbFetcher: NeedsBase {
             }
     }
 
-    
     // Convenience function
     func fetchMyNeeds(city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
         if let userId = Auth.auth().currentUser?.uid {
             fetchUserNeeds(userId: userId, city: city, state: state, country, since: since, completion: completion)
          }
     }
-    
+
     // NOTE: FOLLOWING QUERY REQUIRES COMPOSITE INDEX WHICH CURRENTLY IS MISSING.
     // Consider if this query is required. We can have certain amount of composite indexes, that's fine.
     // Index can be created:
@@ -75,9 +74,9 @@ class NeedsDbFetcher: NeedsBase {
     func fetchUserNeeds(userId: String, city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
         let db = Firestore.firestore()
         var sinceEpoch = 0
-        
+
         if since != nil { sinceEpoch = Int(since?.timeIntervalSince1970 ?? 0 * 1000) }
-        
+
         db.collection("needs").whereField("createdBy", isEqualTo: userId)
             .whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
