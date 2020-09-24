@@ -20,6 +20,8 @@
 
 // avatar by Jasfart from the Noun Project
 
+// --- Added up to here to creativeCommons.json
+
 // stack by Gianluca Lanzetta from the Noun Project
 
 // chevron right by arjuazka from the Noun Project
@@ -55,3 +57,5 @@
 // tab by Zach Bogart from the Noun Project
 
 // service by Manohara from the Noun Project
+
+// Picture Frame by Vectorstall from the Noun Project
