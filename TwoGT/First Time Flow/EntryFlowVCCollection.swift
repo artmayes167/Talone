@@ -16,6 +16,20 @@ class EnterEmailVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var confirmEmailExistsAlready: DesignableButton!
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        confirmEmailExistsAlready.isEnabled = UserDefaults.standard.string(forKey: "Link") != nil ? true : false
+    }
+    @IBAction func forgetIt(_ sender: Any) {
+        view.makeToast("See you later?") { _ in
+            abort()
+        }
+    }
+    
     @IBAction func submitEmail(_ sender: Any) {
 
         if let email = self.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
@@ -43,15 +57,6 @@ class EnterEmailVC: UIViewController {
         } else {
             self.showOkayAlert(title: "", message: "Email can't be empty", handler: nil)
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        confirmEmailExistsAlready.isEnabled = UserDefaults.standard.string(forKey: "Link") != nil ? true : false
     }
 }
 

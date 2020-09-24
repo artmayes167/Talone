@@ -131,26 +131,31 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // UI and CoreData elements are handled in didSet()
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
     }
+    
+     // MARK: - IBActions
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
-        creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        let success = creationManager.checkPrimaryNavigationParameters() // also creates purpose
+        let success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         if success {
-            switch creationManager.currentCreationType() {
-            case .need:
-                model?.storeNeedToDatabase(controller: self)
-            case .have:
-                model?.storeHaveToDatabase(controller: self)
-            default:
-                print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
+            let success2 = creationManager.checkPrimaryNavigationParameters(save: true) // also creates purpose
+            if success2 {
+                switch creationManager.currentCreationType() {
+                case .need:
+                    model?.storeNeedToDatabase(controller: self)
+                case .have:
+                    model?.storeHaveToDatabase(controller: self)
+                default:
+                    print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
+                }
             }
+        
         } else {
             view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
         }
     }
     
     @IBAction func seeMatchingNeeds(_ sender: Any) {
-        let success = creationManager.checkPrimaryNavigationParameters()
+        let success = creationManager.checkPrimaryNavigationParameters(save: true)
         if success {
             fetchMatchingNeeds()
         } else {
@@ -159,7 +164,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func seeMatchingHaves(_ sender: Any) {
-        let success = creationManager.checkPrimaryNavigationParameters()
+        let success = creationManager.checkPrimaryNavigationParameters(save: true)
         if success {
             fetchMatchingHaves()
         } else {
@@ -172,16 +177,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     func didSelect(_ need: NeedType) {
         categoryTextField.text = need.rawValue.capitalized
         categoriesPopOver.isHidden = true
-        seeMatchingNeedsButton.isEnabled = true
-        seeMatchingHavesButton.isEnabled = true
 
         creationManager.setCategory(need)
-
+        setSearchButtons()
         dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
     }
 
-     // MARK: Navigation
+     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "needsPO":
@@ -219,11 +222,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 dict[key.rawValue] = value
             }
             UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
+            setSearchButtons()
             saveFor(s.saveType)
         }
     }
 
      // MARK: Save Functions
+    /// Used by unwind segue from state/city selector
     private func saveFor(_ type: SaveType) {
         guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
@@ -264,6 +269,22 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
     }
+    
+    private func checkSaveButton() {
+        // Check cityState and category, but don't save
+        var success = creationManager.checkPrimaryNavigationParameters(save: false)
+        if success {
+            // returns true if able to set both headline and description
+            success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+            createNewNeedHaveButton.isEnabled = success
+        }
+    }
+    
+    private func setSearchButtons() {
+        let success = creationManager.checkPrimaryNavigationParameters(save: false)
+        seeMatchingHavesButton.isEnabled = success
+        seeMatchingNeedsButton.isEnabled = success
+    }
 }
 
  // MARK: - UITextFieldDelegate, UITextViewDelegate
@@ -279,7 +300,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == headlineTextField {
-            creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+            checkSaveButton()
         }
     }
     
@@ -300,7 +321,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView == descriptionTextView {
-            creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+            checkSaveButton()
         }
     }
 }
@@ -337,9 +358,7 @@ class NeedsTVC: UITableViewController {
 }
 
 class SimpleSearchCell: UITableViewCell {
-
     @IBOutlet weak var basicLabel: UILabel!
     @IBOutlet weak var colorBar: UIView!
-
 }
 

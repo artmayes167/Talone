@@ -139,7 +139,6 @@ class ContributorCell: UICollectionViewCell {
     
     
     func configure(_ contributor: Contributor) {
-        //let size = CGSize(width: 200.0, height: 200.0)
         
         if let url = contributor.imageUrl {
             if let imageURL = URL(string: url), let placeholder = UIImage(named: contributor.imageName) {

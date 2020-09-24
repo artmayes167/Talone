@@ -60,13 +60,17 @@ class PurposeCreationManager: NSObject {
     }
     
     ///This function calls createPurpose()
-    func checkPrimaryNavigationParameters() -> Bool {
+    /// - Returns: `true` if `cityState` and  `category` have been previously set,` false` otherwise
+    func checkPrimaryNavigationParameters(save: Bool) -> Bool {
         guard let c = cityState, let t = category, creationType != .unknown else  {
             print("---------Missing values in PurposeCreationManager -> checkPrimaryNavigationParameters.  cityState = \(String(describing: cityState)), category = \(String(describing: category)), creationType = \(creationType.rawValue)")
             return false
         }
-        let success = createPurpose(type: t, cityState: c)
-        return success
+        if save {
+            let success = createPurpose(type: t, cityState: c)
+            return success
+        }
+        return true
     }
     
     /*
@@ -177,9 +181,15 @@ class PurposeCreationManager: NSObject {
         return cityState
     }
     
-    func setHeadline(_ headline: String?, description: String?) {
+    /// - Returns: `true` if able to set both headline and description,` false` otherwise
+    func setHeadline(_ headline: String?, description: String?) -> Bool {
         self.headline = headline
         self.desc = description
+        if let h = headline, !h.isEmpty, let d = description, !d.isEmpty {
+            return true
+        } else {
+            return false
+        }
     }
     
     func getHeadline() -> String? {
@@ -226,6 +236,7 @@ class PurposeCreationManager: NSObject {
         h.haveItem = item
     }
     
+    /// - Returns: `true` if the item contains all required information,` false` otherwise
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
         let success = prepareForSave()
         if success {
@@ -241,6 +252,7 @@ class PurposeCreationManager: NSObject {
         return false
     }
     
+    /// - Returns: `true` if the relevant `Have` or `Need` has been created properly,` false` otherwise
     func prepareForSave() -> Bool {
         switch creationType {
         case .need:
@@ -267,6 +279,7 @@ class PurposeCreationManager: NSObject {
         }
     }
     
+    /// - Returns: `Purpose` object , if corresponding item has been properly created,` nil` otherwise
     func getSavedPurpose() -> Purpose? {
         if !prepareForSave() { return nil }
         return purpose
