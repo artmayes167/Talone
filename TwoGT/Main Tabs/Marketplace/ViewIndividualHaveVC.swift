@@ -89,125 +89,30 @@ class ViewIndividualHaveVC: UIViewController {
         // show textView for Headline and description (Required?)
         // Create a Have in the database linked to the current Have
 
-        // Decide whether we need to create a Need for this; or we just associate the userId to the Have
-        // object
-        guard let c = creationManager else {
-            fatalError()
-        }
-        switch c.currentCreationType() {
-        case .need:
-            storeJoiningNeedToDatabase()
-        case .have:
-            storeJoiningHaveToDatabase()
-        default:
-            print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
-        }
+        performSegue(withIdentifier: "toAddHeadline", sender: nil)
     }
     
-    private func storeJoiningNeedToDatabase() {
-        guard let c = creationManager, let have = haveItem  else { fatalError()
-        }
-
-        // if need-type nor location is not selected, display an error message
-//        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-
-        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-        // add Need to DB
-        needsWriter.createNeedAndJoinHave(have, usingHandle: AppDelegate.user.handle ?? "Anonymous") { (error, firebaseNeedItem) in
-            if error == nil, let needItem = firebaseNeedItem {
-                let n = Need.createNeed(item: NeedItem.createNeedItem(item: needItem))
-                let h = HaveItem.createHaveItem(item: have)
-                let _ = Have.createHave(item: h)
-                n.parentHaveItemId = have.id
-                c.setNeed(n)
-
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                            }
-                        }
-                    } else {
-                        fatalError()
-                    }
-                } else {
-                    fatalError()
-                }
-                
-            } else {
-                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
-            }
-        }
-    }
     
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    private func storeJoiningHaveToDatabase() {
-        guard let c = creationManager, let loc = c.getLocationOrNil()?.locationInfo()  else { fatalError()
-        }
-
-        // if need-type nor location is not selected, display an error message
-        guard let user = Auth.auth().currentUser else { print("ERROR!!!!"); return } // TODO: proper error message / handling here.
-        guard let haveItem = haveItem else { fatalError() }
-        /// Create new Db needItem, based on the parent Have's haveItem
-        let h = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
-                                          description: c.getDescription() ?? haveItem.description,
-                                          validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
-                                          owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
-
-        let havesWriter = HavesDbWriter()
-        /// Create a new backend need
-        havesWriter.addHave(h, completion: { error in
-            if error == nil {
-                // Create CD Have and HaveItem
-                let cdHave = Have.createHave(item: HaveItem.createHaveItem(item: h))
-                
-                // Set have in creationManager
-                c.setHave(cdHave)
-                
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            self.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                self.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                            }
-                        }
-                    } else {
-                        fatalError()
-                    }
-                } else {
-                    fatalError()
-                }
-                
-            } else {
-                self.showOkayAlert(title: "", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
-            }
-        })
-    }
 
     @IBAction func sendCard(_ sender: Any) {
     }
 
-    @IBAction func saveNotes(_ sender: Any) {
+    @IBAction func seeCard(_ sender: Any) {
     }
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "toAddHeadline" {
+            guard let vc = segue.destination as? AddHaveToWatchVC else { fatalError() }
+            vc.creationManager = creationManager
+            vc.haveItem = haveItem
+        }
     }
-    */
+    
+    
+    @IBAction func unwindToViewIndividualHaveVC( _ segue: UIStoryboardSegue) {}
 
 //    private func joinTheHave() {
 //

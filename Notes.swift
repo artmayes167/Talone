@@ -20,10 +20,6 @@
 
 // avatar by Jasfart from the Noun Project
 
-// --- Added up to here to creativeCommons.json
-
-// stack by Gianluca Lanzetta from the Noun Project
-
 // chevron right by arjuazka from the Noun Project
 
 // square by SAS37 ICON from the Noun Project
@@ -36,15 +32,11 @@
 
 // Arrow by Ghiyats Mujtaba from the Noun Project (downArrow)
 
-// confused by Kevin from the Noun Project
-
 // marketplace by Vectors Market from the Noun Project
 
 // event by Saifurrijal from the Noun Project
 
 // internship by Ralf Schmitzer from the Noun Project
-
-// dashboard by Kokota from the Noun Project
 
 // Hand by taamir468 from the Noun Project (needForTab)
 
@@ -57,5 +49,7 @@
 // tab by Zach Bogart from the Noun Project
 
 // service by Manohara from the Noun Project
-
+// --- Added up to here to creativeCommons.json
 // Picture Frame by Vectorstall from the Noun Project
+
+// dashboard by Kokota from the Noun Project
