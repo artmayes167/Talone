@@ -27,12 +27,12 @@ class HavesBase: FirebaseGeneric {
         var status: String? = "Active"
         var locationInfo: LocationInfo
     }
-    
+
     struct NeedStub: Codable {
         var owner: String
         var id: String
         var createdBy: String
-        
+
         enum CodingKeys: String, CodingKey { // example code to show how to handle differing attribute names.
             case owner = "handle"
             case createdBy = "uid"
@@ -89,7 +89,6 @@ class HavesDbWriter: HavesBase {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(haveId)
             let data = ["uid": needItem.createdBy, "id": needItem.id, "handle": needItem.owner]
-print("JYRKIAsso: \(data)")
             ref.updateData(["needs": FieldValue.arrayUnion([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
@@ -103,7 +102,6 @@ print("JYRKIAsso: \(data)")
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(fromHaveId)
             let data = ["uid": userId, "id": id, "handle": handle]
-print("JYRKIdisasso: \(data)")
             ref.updateData(["needs": FieldValue.arrayRemove([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
