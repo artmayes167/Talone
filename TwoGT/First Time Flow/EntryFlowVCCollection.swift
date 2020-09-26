@@ -32,7 +32,7 @@ class EnterEmailVC: UIViewController {
     
     @IBAction func submitEmail(_ sender: Any) {
 
-        if let email = self.textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+        if let email = self.textField.text?.pure() {
             let actionCodeSettings = ActionCodeSettings() //https://talone.page.link/85EH
             actionCodeSettings.url = URL(string: "https://talone-23f99.firebaseapp.com")  //https://talone.page.link"
             // The sign-in operation has to always be completed in the app.
@@ -135,7 +135,7 @@ class EnterHandleVC: UIViewController {
             showOkayAlert(title: "Oops", message: "Please choose a handle with 4 or more characters") { _ in }
             return
         }
-        let handle = t.trimmingCharacters(in: .whitespacesAndNewlines)
+        let handle = t.pure()
         // TODO: - Set the handle on the back end
         // completion
         UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)

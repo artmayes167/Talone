@@ -16,4 +16,9 @@ extension String {
     func taloneDatabaseValue() -> String {
         return self.capitalized
     }
+    
+    /// - Returns:self .trimmingCharacters(in: .whitespacesAndNewlines)
+    func pure() -> String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }

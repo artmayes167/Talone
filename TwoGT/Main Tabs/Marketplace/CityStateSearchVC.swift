@@ -38,8 +38,6 @@ class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var statesCoverView: UIView?
     
-    // let marketplaceSegueIdentifier = "toMarketplaceSearch"
-    
     let user = AppDelegate.user
     
     var statesTVC: LocationPickerTVC?
@@ -53,6 +51,8 @@ class CityStateSearchVC: UIViewController {
     var stateSelector: LocationPickerTVC?
     var citySelector: LocationPickerTVC?
 
+    /// To be set by presenting controller, defaults to `unwindToMarketplaceSearch`
+    var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -117,7 +117,7 @@ class CityStateSearchVC: UIViewController {
     }
     
     @IBAction func saveSearchLocation(_ sender: Any) {
-        
+        performSegue(withIdentifier: unwindSegueIdentifier, sender: nil)
     }
     
     

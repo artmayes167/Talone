@@ -11,15 +11,15 @@ import FBSDKLoginKit
 import AlamofireImage
 import CoreData
 
-///     @Environment(\.colorScheme) var colorScheme: ColorScheme
-///
-///     var body: some View {
-///         if colorScheme == .dark {
-///             DarkContent()
-///         } else {
-///             LightContent()
-///         }
-///     }
+//     @Environment(\.colorScheme) var colorScheme: ColorScheme
+//
+//     var body: some View {
+//         if colorScheme == .dark {
+//             DarkContent()
+//         } else {
+//             LightContent()
+//         }
+//     }
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var context: NSManagedObjectContext
@@ -29,7 +29,7 @@ struct ContentView: View {
         if let emails = AppDelegate.user.emails {
             let x = emails.filter {
                 if let e = ($0 as? Email) {
-                    return e.name == "primary"
+                    return e.name == DefaultsKeys.taloneEmail.rawValue
                 }
                 return false
             }

@@ -193,27 +193,30 @@ extension SearchLocation {
 }
 
 extension Address {
-    class func createAddress(city: String, state: String, country: String = "USA", type: String = "home") -> Address {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Address",
-                                     in: managedContext)!
-
-       guard let address = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Address else {
-                                                fatalError()
-        }
-        address.setValue(type, forKeyPath: "type")
-        do {
-          try managedContext.save()
-            return address
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+    func displayName() -> String {
+        return String(format: "\(street1!) \n\(city!), \(state!)")
     }
+//    class func createAddress(city: String, state: String, country: String = "USA", type: String = "home") -> Address {
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+//
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//
+//        let entity = NSEntityDescription.entity(forEntityName: "Address",
+//                                     in: managedContext)!
+//
+//       guard let address = NSManagedObject(entity: entity,
+//                                              insertInto: managedContext) as? Address else {
+//                                                fatalError()
+//        }
+//        address.setValue(type, forKeyPath: "type")
+//        do {
+//          try managedContext.save()
+//            return address
+//        } catch let error as NSError {
+//            print("Could not save. \(error), \(error.userInfo)")
+//            fatalError()
+//        }
+//    }
 
     func locationInfoOrNil() -> AppLocationInfo? {
         if let _ = city, let _ = state, let _ = country {

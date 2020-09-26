@@ -4,6 +4,7 @@
         <attribute name="street1" optional="YES" attributeType="String"/>
         <attribute name="street2" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="zip" optional="YES" attributeType="String"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="addresses" inverseEntity="User"/>
     </entity>
     <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES">
@@ -122,7 +123,7 @@
         <relationship name="socialMediaInfo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SocialMedia" inverseName="user" inverseEntity="SocialMedia"/>
     </entity>
     <elements>
-        <element name="Address" positionX="-681.8125" positionY="-854.70703125" width="128" height="103"/>
+        <element name="Address" positionX="-681.83203125" positionY="-838.77734375" width="128" height="118"/>
         <element name="AppLocationInfo" positionX="-495.3125" positionY="-846.609375" width="128" height="88"/>
         <element name="Card" positionX="-1103.32421875" positionY="-930.5546875" width="128" height="58"/>
         <element name="CityState" positionX="-493.51171875" positionY="-739.9609375" width="128" height="73"/>

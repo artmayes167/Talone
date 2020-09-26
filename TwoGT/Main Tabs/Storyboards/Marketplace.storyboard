@@ -895,7 +895,7 @@
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                                 <connections>
-                                                                    <segue destination="8Hd-dx-4BW" kind="unwind" identifier="toMarketplaceSearch" unwindAction="unwindToMarketplaceSearchAndCreationVC:" id="XpR-vr-H7f"/>
+                                                                    <action selector="saveSearchLocation:" destination="MmC-33-bzH" eventType="touchUpInside" id="DNv-AR-Unn"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -968,6 +968,8 @@
                         <outlet property="stateContainer" destination="ina-FH-TaA" id="sPQ-h2-tcb"/>
                         <outlet property="stateTextField" destination="ZGE-jT-7xl" id="nfG-N3-wTz"/>
                         <outlet property="typeOfSaveSegmentedControl" destination="6SK-hm-PqA" id="2u0-ON-sRh"/>
+                        <segue destination="8Hd-dx-4BW" kind="unwind" identifier="unwindToMarketplaceSearch" unwindAction="unwindToMarketplaceSearchAndCreationVC:" id="aOZ-sL-ZDE"/>
+                        <segue destination="8Hd-dx-4BW" kind="unwind" identifier="unwindToNewAddress" unwindAction="unwindToAddNewAddress:" id="BF5-N2-iDI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v3P-51-98K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

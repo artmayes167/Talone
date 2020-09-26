@@ -49,6 +49,8 @@
 // tab by Zach Bogart from the Noun Project
 
 // service by Manohara from the Noun Project
+
+// roof by Andrejs Kirma from the Noun Project
 // --- Added up to here to creativeCommons.json
 // Picture Frame by Vectorstall from the Noun Project
 
