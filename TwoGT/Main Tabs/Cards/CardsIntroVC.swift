@@ -33,9 +33,12 @@ class CardsIntroVC: UIViewController {
             appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
             let mainStoryboard = UIStoryboard(name: "Cards", bundle: nil)
             let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main Card VC") as! CardsBaseSwipeVC
-
+            mainVC.view.alpha = 0
             appDelegate.window?.rootViewController = mainVC
             appDelegate.window?.makeKeyAndVisible()
+            UIView.animate(withDuration: 0.5) {
+                mainVC.view.alpha = 1
+            }
         }
     }
     
