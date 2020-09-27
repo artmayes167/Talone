@@ -142,7 +142,18 @@ class EnterHandleVC: UIViewController {
         guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
         
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
-            self.performSegue(withIdentifier: "toBase", sender: nil)
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+            DispatchQueue.main.async() {
+                appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
+                let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
+                let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
+                mainVC.view.alpha = 0
+                appDelegate.window?.rootViewController = mainVC
+                appDelegate.window?.makeKeyAndVisible()
+                UIView.animate(withDuration: 0.5) {
+                    mainVC.view.alpha = 1
+                }
+            }
         }
     }
 
