@@ -16,12 +16,8 @@ class AddNewEmailVC: UIViewController {
     
     private var emails: [Email] {
         get {
-            guard let ems =  AppDelegate.user.emails else { fatalError() }
-            var allEms: [Email] = []
-            for e in ems {
-                allEms.append(e as! Email)
-            }
-            return allEms.sorted { return $0.name! < $1.name! }
+            let ems =  AppDelegate.user.emails
+            return ems.sorted { return $0.name! < $1.name! }
         }
     }
     
@@ -36,7 +32,7 @@ class AddNewEmailVC: UIViewController {
 
         newEmail.name = labelTextField.text?.lowercased().pure()
         newEmail.emailString = emailTextField.text?.pure()
-        AppDelegate.user.addToEmails(newEmail) // Make sure this works and is necessary
+        newEmail.uid = AppDelegate.user.uid
 
         if adder.saveContext() {
             performSegue(withIdentifier: "unwindToYou", sender: nil)

@@ -17,12 +17,8 @@ class AddNewPhoneNumberVC: UIViewController {
     
     private var phoneNumbers: [PhoneNumber] {
         get {
-            guard let phones =  AppDelegate.user.phoneNumbers else { fatalError() }
-            var allPhones: [PhoneNumber] = []
-            for p in phones {
-                allPhones.append(p as! PhoneNumber)
-            }
-            return allPhones.sorted { return $0.title! < $1.title! }
+            let phones =  AppDelegate.user.phoneNumbers
+            return phones.sorted { return $0.title! < $1.title! }
         }
     }
     
@@ -37,7 +33,7 @@ class AddNewPhoneNumberVC: UIViewController {
 
         newPhone.title = labelTextField.text?.lowercased().pure()
         newPhone.number = numberTextField.text?.pure()
-        AppDelegate.user.addToPhoneNumbers(newPhone) // Make sure this works and is necessary
+        newPhone.uid = AppDelegate.user.uid
 
         if adder.saveContext() {
             performSegue(withIdentifier: "unwindToYou", sender: nil)

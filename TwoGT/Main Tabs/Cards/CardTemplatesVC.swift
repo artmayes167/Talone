@@ -9,7 +9,17 @@
 import UIKit
 
 class CardTemplatesVC: UIViewController {
+    
+    private var cardTemplates: [Card] {
+        get {
+            let cards =  AppDelegate.user.cardTemplates
+            return cards.sorted { return $0.title! < $1.title! }
+        }
+    }
+    
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         cardHeaderView.setTitleText("templates")
@@ -27,4 +37,24 @@ class CardTemplatesVC: UIViewController {
     }
     */
 
+}
+
+extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return cardTemplates.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let reuseIdentifier = String(format: "cell%i", indexPath.item%2)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        
+        
+        return UICollectionViewCell()
+    }
+    
+    
+    
+    
+    
 }

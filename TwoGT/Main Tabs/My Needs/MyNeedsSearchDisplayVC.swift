@@ -136,7 +136,7 @@ class MyNeedCell: UICollectionViewCell {
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())
         
-        // This works and returns [Stat] type
+        // This works and returns [Need] type
         
         if let cn = need.need?.childNeeds, !cn.isEmpty {
             joinedLabel?.text = "\(cn.count)"

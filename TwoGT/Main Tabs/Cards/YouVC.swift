@@ -22,34 +22,22 @@ enum AddressSections: Int, CaseIterable {
     
     private var addresses: [Address] {
         get {
-            guard let adds =  AppDelegate.user.addresses else { fatalError() }
-            var allAdds: [Address] = []
-            for a in adds {
-                allAdds.append(a as! Address)
-            }
-            return allAdds.sorted { return $0.type! < $1.type! }
+            let adds =  AppDelegate.user.addresses
+            return adds.sorted { return $0.type! < $1.type! }
         }
     }
     
     private var phoneNumbers: [PhoneNumber] {
         get {
-            guard let phones =  AppDelegate.user.phoneNumbers else { fatalError() }
-            var allPhones: [PhoneNumber] = []
-            for p in phones {
-                allPhones.append(p as! PhoneNumber)
-            }
-            return allPhones.sorted { return $0.title! < $1.title! }
+            let phones =  AppDelegate.user.phoneNumbers
+            return phones.sorted { return $0.title! < $1.title! }
         }
     }
     
     private var emails: [Email] {
         get {
-            guard let ems =  AppDelegate.user.emails else { fatalError() }
-            var allEms: [Email] = []
-            for e in ems {
-                allEms.append(e as! Email)
-            }
-            return allEms.sorted { return $0.name! < $1.name! }
+            let ems =  AppDelegate.user.emails
+            return ems.sorted { return $0.name! < $1.name! }
         }
     }
 
@@ -66,6 +54,8 @@ enum AddressSections: Int, CaseIterable {
             newImage = UIImage(named: "avatar")
         }
         imageButton.setImage(newImage!, for: .normal)
+        
+        handleLabel.text = AppDelegate.user.handle
     }
     
     @IBAction @objc func changeImage(_ sender: UIButton) {

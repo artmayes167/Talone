@@ -136,8 +136,9 @@ extension Email {
                                               insertInto: managedContext) as? Email else {
                                                 fatalError()
         }
-        email.setValue(name, forKeyPath: "name")
-        email.setValue(emailAddress, forKeyPath: "emailString")
+        email.name = name
+        email.emailString = emailAddress
+        email.uid = AppDelegate.user.uid
 
         do {
           try managedContext.save()

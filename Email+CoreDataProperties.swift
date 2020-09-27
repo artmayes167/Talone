@@ -2,7 +2,7 @@
 //  Email+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/17/20.
+//  Created by Arthur Mayes on 9/27/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -17,9 +17,9 @@ extension Email {
         return NSFetchRequest<Email>(entityName: "Email")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var emailString: String?
-    @NSManaged public var user: User?
+    @NSManaged public var name: String?
+    @NSManaged public var uid: String?
 
 }
 

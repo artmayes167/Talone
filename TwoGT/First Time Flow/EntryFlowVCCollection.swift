@@ -96,7 +96,7 @@ class EnterVerificationVC: UIViewController {
 
     private func trySignInWithEmailLink() {
         if let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let link = UserDefaults.standard.string(forKey: "Link") {
-            Auth.auth().signIn(withEmail: email, link: link) { (_, error) in
+            Auth.auth().signIn(withEmail: email, link: link) { (result , error) in
                 if let error = error {
                     self.showOkayAlert(title: "", message: error.localizedDescription) { (_ action: UIAlertAction) in
                         // TODO: Check the error and invalidate link only if the error is specifically about
@@ -106,7 +106,8 @@ class EnterVerificationVC: UIViewController {
                         self.navigationController?.popViewController(animated: true)
                     }
                     return
-                } else {
+                } else if let r = result {
+                    UserDefaults.standard.setValue(r.user.uid, forKey: "uid")
                     self.view.makeToast("You have successfully signed up!", duration: 2.0, position: .center) { (_) in
                         self.performSegue(withIdentifier: "toHandle", sender: nil)
                     }
@@ -136,7 +137,8 @@ class EnterHandleVC: UIViewController {
         // TODO: - Set the handle on the back end
         // completion
         UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
-        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
+        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: "uid") else { fatalError() }
+        AppDelegate.user.uid = uid
         
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }

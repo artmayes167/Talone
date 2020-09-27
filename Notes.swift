@@ -54,4 +54,10 @@
 // --- Added up to here to creativeCommons.json
 // Picture Frame by Vectorstall from the Noun Project
 
-// dashboard by Kokota from the Noun Project
+// iphone xs max by Jamison Wieser from the Noun Project
+
+// Phone by NOVITA ASTRI from the Noun Project
+
+// Email by Rahmat Hidayat from the Noun Project
+
+// Chicago Skyline by Blaise Sewell from the Noun Project

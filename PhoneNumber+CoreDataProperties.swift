@@ -2,7 +2,7 @@
 //  PhoneNumber+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/17/20.
+//  Created by Arthur Mayes on 9/27/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -17,9 +17,9 @@ extension PhoneNumber {
         return NSFetchRequest<PhoneNumber>(entityName: "PhoneNumber")
     }
 
-    @NSManaged public var title: String?
     @NSManaged public var number: String?
-    @NSManaged public var address: Address?
+    @NSManaged public var title: String?
+    @NSManaged public var uid: String?
 
 }
 

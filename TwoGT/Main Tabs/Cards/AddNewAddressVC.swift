@@ -36,12 +36,8 @@ class AddNewAddressVC: UIViewController {
     
     private var addresses: [Address] {
         get {
-            guard let adds =  AppDelegate.user.addresses else { fatalError() }
-            var allAdds: [Address] = []
-            for a in adds {
-                allAdds.append(a as! Address)
-            }
-            return allAdds.sorted { return $0.type! < $1.type! }
+            let adds =  AppDelegate.user.addresses
+            return adds.sorted { return $0.type! < $1.type! }
         }
     }
 
@@ -68,7 +64,7 @@ class AddNewAddressVC: UIViewController {
         newAddress.city = city
         newAddress.state = state
         newAddress.zip = zipTextField.text?.pure()
-        AppDelegate.user.addToAddresses(newAddress) // Make sure this works and is necessary
+        newAddress.uid = AppDelegate.user.uid
 
         if adder.saveContext() {
             performSegue(withIdentifier: "unwindToYou", sender: nil)

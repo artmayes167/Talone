@@ -26,15 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return u
             } else {
                 print("Creating new User")
-                return AppDelegate.createUser(inContext: managedContext)
+                return AppDelegate.createUser()
             }
         } catch _ as NSError {
           return User()
         }
     }
     
-    class func createUser(inContext managedContext: NSManagedObjectContext) -> User {
-        
+    class func createUser() -> User {
+        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = d.persistentContainer.viewContext
         let entity =
           NSEntityDescription.entity(forEntityName: "User",
                                      in: managedContext)!
@@ -45,17 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         user.setValue(UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue), forKey: "handle")
-        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) {
-            let e = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
-            user.addToEmails(e)
-        }
-        
-        do {
-          try managedContext.save()
-            print("Successfully created User")
+        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),  let uid = UserDefaults.standard.string(forKey: "uid")  {
+            user.uid = uid
+            _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
             return user
-        } catch let error as NSError {
-          print("Could not save. \(error), \(error.userInfo)")
+        } else {
             fatalError()
         }
     }
