@@ -13,6 +13,9 @@ class SpinnerVC: UIViewController {
     @IBOutlet weak var spinner: DesignableImage!
     @IBOutlet weak var spinnerWidthConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var lookLabel: UILabel!
+    @IBOutlet weak var swipeLabel: UILabel!
+    
     func animate() {
 
         let alphaPulseAnimation = CABasicAnimation(keyPath: "opacity")
@@ -24,14 +27,14 @@ class SpinnerVC: UIViewController {
         alphaPulseAnimation.repeatCount = .greatestFiniteMagnitude
         spinner.layer.add(alphaPulseAnimation, forKey: "opacityAnimation")
         
-//        let sizePulseAnimation = CABasicAnimation(keyPath: "transform.scale.x")
-//        sizePulseAnimation.duration = 25
-//        sizePulseAnimation.fromValue = 1
-//        sizePulseAnimation.toValue = 0.4
-//        sizePulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-//        sizePulseAnimation.autoreverses = true
+        let sizePulseAnimation = CABasicAnimation(keyPath: "transform.scale.x")
+        sizePulseAnimation.duration = 3
+        sizePulseAnimation.fromValue = 0.1
+        sizePulseAnimation.toValue = 1
+        sizePulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        sizePulseAnimation.autoreverses = false
 //        sizePulseAnimation.repeatCount = .greatestFiniteMagnitude
-//        spinner.layer.add(sizePulseAnimation, forKey: "sizeAnimation")
+        lookLabel.layer.add(sizePulseAnimation, forKey: "sizeAnimation")
         
         let rotation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         rotation.toValue = NSNumber(value: Double.pi * 2)
@@ -39,6 +42,16 @@ class SpinnerVC: UIViewController {
         rotation.isCumulative = true
         rotation.repeatCount = .greatestFiniteMagnitude
         spinner.layer.add(rotation, forKey: "rotationAnimation")
+        
+        lookLabel.alpha = 0.1
+        swipeLabel.alpha = 0
+        UIView.animate(withDuration: 3) {
+            self.lookLabel.alpha = 1
+        } completion: { (_) in
+            UIView.animate(withDuration: 3) {
+                self.swipeLabel.alpha = 1
+            }
+        }
     }
     
     override func didMove(toParent parent: UIViewController?) {

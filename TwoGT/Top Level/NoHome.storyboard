@@ -524,8 +524,14 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Look at the spinny thing.  Swipe down when you're ready to get back to the app" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K0s-yG-l40">
-                                <rect key="frame" x="24" y="52" width="366" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Look at the spinny thing. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K0s-yG-l40">
+                                <rect key="frame" x="24" y="52" width="366" height="29"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe down when you're ready to get back to the app" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2Z-hK-d5T">
+                                <rect key="frame" x="24" y="231" width="366" height="48"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -535,9 +541,12 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.76872859589041098" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="j2Z-hK-d5T" firstAttribute="leading" secondItem="JC6-AP-JbZ" secondAttribute="leading" constant="24" id="4e3-mX-GLK"/>
                             <constraint firstItem="Wkq-eT-O9X" firstAttribute="centerX" secondItem="fe5-te-BLh" secondAttribute="centerX" id="52D-hu-drP"/>
+                            <constraint firstItem="Wkq-eT-O9X" firstAttribute="top" secondItem="j2Z-hK-d5T" secondAttribute="bottom" constant="119" id="6nr-lu-yIY"/>
                             <constraint firstItem="Wkq-eT-O9X" firstAttribute="centerY" secondItem="fe5-te-BLh" secondAttribute="centerY" id="F9P-Y8-Rla"/>
                             <constraint firstItem="JC6-AP-JbZ" firstAttribute="trailing" secondItem="K0s-yG-l40" secondAttribute="trailing" constant="24" id="LSQ-Gl-gfF"/>
+                            <constraint firstItem="JC6-AP-JbZ" firstAttribute="trailing" secondItem="j2Z-hK-d5T" secondAttribute="trailing" constant="24" id="c2z-MU-sT2"/>
                             <constraint firstItem="K0s-yG-l40" firstAttribute="top" secondItem="JC6-AP-JbZ" secondAttribute="top" constant="8" id="cnT-ez-ncS"/>
                             <constraint firstItem="K0s-yG-l40" firstAttribute="leading" secondItem="JC6-AP-JbZ" secondAttribute="leading" constant="24" id="sev-U9-Z7t"/>
                         </constraints>
@@ -546,8 +555,10 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="lookLabel" destination="K0s-yG-l40" id="c86-9K-sIk"/>
                         <outlet property="spinner" destination="Wkq-eT-O9X" id="uOd-Vw-ZMp"/>
                         <outlet property="spinnerWidthConstraint" destination="oOo-Tm-Nv4" id="jOK-zX-UOM"/>
+                        <outlet property="swipeLabel" destination="j2Z-hK-d5T" id="d2o-SG-RUd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vdS-Ma-2BJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

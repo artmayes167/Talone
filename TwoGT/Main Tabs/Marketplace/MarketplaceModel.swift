@@ -22,8 +22,8 @@ class MarketplaceModel: NSObject {
     }
     
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    func storeNeedToDatabase(controller: UIViewController) {
-        controller.showSpinner()
+    func storeNeedToDatabase(controller: UIViewController?) {
+        controller?.showSpinner()
         let need: NeedsBase.NeedItem = self.createNeedItem()
 
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
@@ -38,9 +38,9 @@ class MarketplaceModel: NSObject {
                     AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                                controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                                controller.hideSpinner()
+                            controller?.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                                controller?.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
+                                controller?.hideSpinner()
                             }
                         }
                     } else {
@@ -51,20 +51,20 @@ class MarketplaceModel: NSObject {
                 }
                 
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Need in Marketplace. Error: \(error!.localizedDescription)") { (_) in
-                    controller.hideSpinner()
+                controller?.showOkayAlert(title: "", message: "Error while adding a Need in Marketplace. Error: \(error!.localizedDescription)") { (_) in
+                    controller?.hideSpinner()
                 }
             }
         })
     }
 
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
-    func storeHaveToDatabase(controller: UIViewController) {
-        controller.showSpinner()
+    func storeHaveToDatabase(controller: UIViewController?) {
+        controller?.showSpinner()
         let have: HavesBase.HaveItem = self.createHaveItem()
         let havesWriter = HavesDbWriter()
 
-        havesWriter.addHave(have, completion: { error in
+        havesWriter.addHave(have, completion: { [unowned controller] error in
             if error == nil {
                 let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
                 self.creationManager?.setHave(h)
@@ -74,9 +74,9 @@ class MarketplaceModel: NSObject {
                     AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                                controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
-                                controller.hideSpinner()
+                            controller?.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
+                                controller?.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
+                                controller?.hideSpinner()
                             }
                         }
                     } else {
@@ -86,16 +86,16 @@ class MarketplaceModel: NSObject {
                     fatalError()
                 }
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)") { (_) in
-                    controller.hideSpinner()
+                controller?.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)") { (_) in
+                    controller?.hideSpinner()
                 }
             }
         })
     }
     
-    private func checkPreconditionsAndAlert(light: Bool, controller: UIViewController) -> Bool {
+    private func checkPreconditionsAndAlert(light: Bool, controller: UIViewController?) -> Bool {
         if !(creationManager?.areAllRequiredFieldsFilled(light: light) ?? false) {
-            controller.showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
+            controller?.showOkayAlert(title: "", message: "Please complete all fields before trying to search", handler: nil)
             return false
         }
         return true
