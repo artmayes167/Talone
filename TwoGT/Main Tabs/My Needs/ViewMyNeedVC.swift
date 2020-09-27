@@ -21,13 +21,10 @@ class ViewMyNeedVC: UIViewController {
     // Manages live activity in the app
     var creationManager: PurposeCreationManager?
 
-    @IBOutlet weak var headerTitleLabel: UILabel!
+    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
 
     @IBOutlet weak var scrollView: UIScrollView!
-
-    @IBOutlet weak var needTypeLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
-
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
 
@@ -44,10 +41,6 @@ class ViewMyNeedVC: UIViewController {
         // Notifications
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
-        if let owner = need?.needItem?.owner ?? AppDelegate.user.handle {
-            headerTitleLabel.text = String(format: "%@'s Need", owner)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +52,8 @@ class ViewMyNeedVC: UIViewController {
     func populateUI() {
         guard let n = need?.needItem?.category, let cityState = need?.purpose?.cityState else { return }
         locationLabel.text = n + " in " + cityState.displayName()
-        needDescriptionTextView.text = need?.needItem?.desc ?? "No description"
+        pageHeaderView.setTitleText(need?.needItem?.headline ?? "No Headline!")
+        needDescriptionTextView.text = need?.needItem?.desc ?? "No Description!"
     }
 
     // MARK: - Keyboard Notifications

@@ -22,9 +22,9 @@ class ViewMyHaveVC: UIViewController {
     @IBOutlet weak var headerTitleLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var doYouLabel: UILabel!
     @IBOutlet weak var haveDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
+    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
 
     // MARK: - IBActions
     @IBAction func deleteHave(_ sender: Any) {
@@ -52,7 +52,8 @@ class ViewMyHaveVC: UIViewController {
     func populateUI() {
         guard let c = have?.haveItem?.category, let cityState = have?.purpose?.cityState else { return }
         locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
-        haveDescriptionTextView.text = have?.haveItem?.desc ?? "No description"
+        pageHeaderView.setTitleText(have?.haveItem?.headline ?? "No Headline!")
+        haveDescriptionTextView.text = have?.haveItem?.desc ?? "No Description!"
         view.layoutIfNeeded()
     }
 

@@ -245,27 +245,33 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func fetchMatchingNeeds() {
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
-
+        showSpinner()
         NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
             guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
             let newArray = array.filter { $0.category.lowercased() ==  cat}
             if newArray.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
+                    self.hideSpinner()
+                }
             } else {
                 self.performSegue(withIdentifier: "toNeedsCollection", sender: newArray)
+                self.hideSpinner()
             }
         }
     }
 
     private func fetchMatchingHaves() {
+        showSpinner()
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
         guard let v = creationManager.getCategory()?.databaseValue() else { fatalError() }
         HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
             if array.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!", handler: nil)
+                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
+                    self.hideSpinner()
+                }
             } else {
                 self.performSegue(withIdentifier: "toHavesCollection", sender: array)
-                //self.showOkayAlert(title: "", message: "Arthur will implement Matching Haves view!", handler: nil)
+                self.hideSpinner()
             }
         }
     }

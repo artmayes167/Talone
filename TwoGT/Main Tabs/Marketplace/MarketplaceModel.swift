@@ -23,6 +23,7 @@ class MarketplaceModel: NSObject {
     
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     func storeNeedToDatabase(controller: UIViewController) {
+        controller.showSpinner()
         let need: NeedsBase.NeedItem = self.createNeedItem()
 
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
@@ -39,6 +40,7 @@ class MarketplaceModel: NSObject {
                         DispatchQueue.main.async {
                             controller.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
                                 controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
+                                controller.hideSpinner()
                             }
                         }
                     } else {
@@ -49,13 +51,16 @@ class MarketplaceModel: NSObject {
                 }
                 
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Need in Marketplace. Error: \(error!.localizedDescription)", handler: nil)
+                controller.showOkayAlert(title: "", message: "Error while adding a Need in Marketplace. Error: \(error!.localizedDescription)") { (_) in
+                    controller.hideSpinner()
+                }
             }
         })
     }
 
     /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     func storeHaveToDatabase(controller: UIViewController) {
+        controller.showSpinner()
         let have: HavesBase.HaveItem = self.createHaveItem()
         let havesWriter = HavesDbWriter()
 
@@ -71,6 +76,7 @@ class MarketplaceModel: NSObject {
                         DispatchQueue.main.async {
                             controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
                                 controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
+                                controller.hideSpinner()
                             }
                         }
                     } else {
@@ -80,7 +86,9 @@ class MarketplaceModel: NSObject {
                     fatalError()
                 }
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
+                controller.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)") { (_) in
+                    controller.hideSpinner()
+                }
             }
         })
     }

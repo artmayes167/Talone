@@ -79,6 +79,26 @@ extension UIViewController {
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
+    
+    func showSpinner() {
+        let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
+        let spinner = mainStoryboard.instantiateViewController(withIdentifier: "Spinner") as! SpinnerVC
+        spinner.willMove(toParent: self)
+        spinner.view.frame = UIScreen.main.bounds
+        view.addSubview(spinner.view)
+        addChild(spinner)
+        spinner.didMove(toParent: self)
+    }
+    
+    func hideSpinner() {
+        for vc in children {
+            if let s = vc as? SpinnerVC {
+                s.willMove(toParent: nil)
+                s.removeFromParent()
+                s.view.removeFromSuperview()
+            }
+        }
+    }
 }
 
 extension UIViewController: UITextFieldDelegate {
