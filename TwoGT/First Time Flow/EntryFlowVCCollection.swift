@@ -14,7 +14,6 @@ import CoreData
 class EnterEmailVC: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var confirmEmailExistsAlready: DesignableButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +21,6 @@ class EnterEmailVC: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        confirmEmailExistsAlready.isEnabled = UserDefaults.standard.string(forKey: "Link") != nil ? true : false
     }
     @IBAction func forgetIt(_ sender: Any) {
         view.makeToast("See you later?") { _ in
@@ -61,7 +59,6 @@ class EnterEmailVC: UIViewController {
 }
 
 class EnterVerificationVC: UIViewController {
-    @IBOutlet weak var textField: UITextField!
 
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
