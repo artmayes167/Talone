@@ -13,7 +13,7 @@ import CoreData
 class MyNeedsSearchDisplayVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var pageHeader: PageHeader!
     
     var purposes: Set<Purpose>? = {
         return AppDelegate.user.purposes as? Set<Purpose>
@@ -63,7 +63,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func populateUI() {
-        categoryLabel.text = "All \(needs.count) of My Needs"
+        pageHeader.setTitleText("All \(needs.count) of My Needs") 
     }
     
     // MARK: - Navigation
@@ -138,7 +138,7 @@ class MyNeedCell: UICollectionViewCell {
         
         // This works and returns [Stat] type
         
-        if let cn: Set<Need> = need.need?.childNeeds as? Set<Need> {
+        if let cn = need.need?.childNeeds, !cn.isEmpty {
             joinedLabel?.text = "\(cn.count)"
         } else {
             joinedLabel?.text = ""

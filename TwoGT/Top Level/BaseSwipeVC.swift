@@ -40,13 +40,22 @@ class BaseSwipeVC: UIViewController {
         }
     }
 
-    @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) {
-    
-    }
+    @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) { }
 }
 
-class CardsBaseSwipeVC: UIViewController {
-    @IBAction func unwindToCardMainFlow( _ segue: UIStoryboardSegue) {
+class CardsBaseSwipeVC: BaseSwipeVC {
+    @IBAction func unwindToCardMainFlow( _ segue: UIStoryboardSegue) { }
     
+    @IBAction func exitCardsFlow(_ sender: Any) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        DispatchQueue.main.async() {
+            appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
+            let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
+            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
+
+            appDelegate.window?.rootViewController = mainVC
+            appDelegate.window?.makeKeyAndVisible()
+        }
     }
+    
 }

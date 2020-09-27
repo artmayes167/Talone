@@ -27,6 +27,18 @@ class CardsIntroVC: UIViewController {
     }
     */
     
+    @IBAction func navigateToCards(_ sender: UIButton) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        DispatchQueue.main.async() {
+            appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
+            let mainStoryboard = UIStoryboard(name: "Cards", bundle: nil)
+            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main Card VC") as! CardsBaseSwipeVC
+
+            appDelegate.window?.rootViewController = mainVC
+            appDelegate.window?.makeKeyAndVisible()
+        }
+    }
+    
     @IBAction func unwindToCardIntro( _ segue: UIStoryboardSegue) {
     
     }

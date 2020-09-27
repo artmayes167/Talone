@@ -12,7 +12,7 @@ import CoreData
 class MyHavesSearchDisplayVC: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var pageHeader: PageHeader!
     
     var purposes: Set<Purpose>? = {
         return AppDelegate.user.purposes as? Set<Purpose>
@@ -62,7 +62,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
     
     func populateUI() {
-        categoryLabel.text = "All \(haves.count) of My Haves"
+        pageHeader.setTitleText("All \(haves.count) of My Haves")
     }
     
     // MARK: - Navigation

@@ -8,6 +8,19 @@
 
 import UIKit
 
+class AddressAdder: NSObject {
+    let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    func saveContext() -> Bool {
+      do {
+        try managedObjectContext.save()
+        return true
+      } catch {
+        fatalError()
+      }
+    }
+}
+
 class AddNewAddressVC: UIViewController {
     
      // MARK: - IBOutlets
@@ -19,7 +32,18 @@ class AddNewAddressVC: UIViewController {
     @IBOutlet weak var zipTextField: DesignableTextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let adder = AddressAdder()
+    
+    private var addresses: [Address] {
+        get {
+            guard let adds =  AppDelegate.user.addresses else { fatalError() }
+            var allAdds: [Address] = []
+            for a in adds {
+                allAdds.append(a as! Address)
+            }
+            return allAdds.sorted { return $0.type! < $1.type! }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,23 +53,6 @@ class AddNewAddressVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    private func showReplaceAlert() {
-        showOkayOrCancelAlert(title: "Uh Oh", message: "An address with this label already exists. Replace??", okayHandler: { (_) in
-            self.addAddress()
-        }, cancelHandler: nil)
-    }
-    
-    private func checkValidity() -> Bool {
-        let outletCollection = [labelTextField, street1TextField, cityStateTextField, zipTextField]
-        for tf in outletCollection {
-            guard let x = tf!.text?.pure(), !x.isEmpty else {
-                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.", handler: nil)
-                return false
-            }
-        }
-        return true
-    }
-    
     @IBAction func saveTouched(_ sender: Any) {
         if checkValidity() {
             addAddress()
@@ -53,11 +60,9 @@ class AddNewAddressVC: UIViewController {
     }
     
     func addAddress() {
-      // 1
-      let newAddress = Address(context: managedObjectContext)
+        let newAddress = Address(context: adder.managedObjectContext)
 
-      // 2
-        newAddress.type = labelTextField.text?.pure()
+        newAddress.type = labelTextField.text?.lowercased().pure()
         newAddress.street1 = street1TextField.text?.pure()
         newAddress.street2 = street2TextField.text?.pure()
         newAddress.city = city
@@ -65,21 +70,10 @@ class AddNewAddressVC: UIViewController {
         newAddress.zip = zipTextField.text?.pure()
         AppDelegate.user.addToAddresses(newAddress) // Make sure this works and is necessary
 
-      // 3
-        if saveContext() {
+        if adder.saveContext() {
             performSegue(withIdentifier: "unwindToYou", sender: nil)
         }
     }
-    
-    func saveContext() -> Bool {
-      do {
-        try managedObjectContext.save()
-        return true
-      } catch {
-        fatalError()
-      }
-    }
-
     
     // MARK: - Navigation
 
@@ -105,26 +99,53 @@ class AddNewAddressVC: UIViewController {
     }
     
     // MARK: - Keyboard Notifications
-    var initialContentInset: UIEdgeInsets?
+    var initialContentInset: UIEdgeInsets = UIEdgeInsets()
    @objc func keyboardWillShow(notification: NSNotification) {
        let userInfo = notification.userInfo!
        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-    if initialContentInset == nil {
         var contentInset = self.scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height + 20
-        initialContentInset = contentInset
-    }
+        if initialContentInset == UIEdgeInsets() {
+            initialContentInset = self.scrollView.contentInset
+        }
        
-       scrollView.contentInset = initialContentInset!
+        scrollView.contentInset = contentInset
    }
 
    @objc func keyboardWillHide(notification: NSNotification) {
-       let contentInset: UIEdgeInsets = initialContentInset!
-       scrollView.contentInset = contentInset
+       scrollView.contentInset = initialContentInset
    }
 }
 
+extension AddNewAddressVC {
+    private func showReplaceAlert() {
+        showOkayOrCancelAlert(title: "Uh Oh", message: "An address with this label already exists. Replace??", okayHandler: { (_) in
+            self.addAddress()
+        }, cancelHandler: nil)
+    }
+    
+    private func checkValidity() -> Bool {
+        for a in addresses {
+            if a.type == labelTextField.text?.lowercased().pure() {
+                showReplaceAlert()
+                return false
+            }
+        }
+        
+        
+        let outletCollection = [labelTextField, street1TextField, cityStateTextField, zipTextField]
+        for tf in outletCollection {
+            guard let x = tf!.text?.pure(), !x.isEmpty else {
+                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.", handler: nil)
+                return false
+            }
+        }
+        return true
+    }
+}
+
+ // MARK: - UITextFieldDelegate
 extension AddNewAddressVC {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == cityStateTextField {

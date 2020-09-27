@@ -623,7 +623,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="OBN-7N-elK">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="OBN-7N-elK" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="12" y="757.5" width="350" height="121"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="tintColor" red="0.0" green="0.2035664022" blue="0.73920643330000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1082,17 +1082,6 @@
             <point key="canvasLocation" x="1264" y="1573"/>
         </scene>
         <!--Cards-->
-        <scene sceneID="OnW-uu-9Ss">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Cards" id="UoP-Wh-x6a" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" image="person.crop.square" catalog="system" id="Vw2-uS-zG9"/>
-                    <navigationItem key="navigationItem" id="gCb-cx-A7v"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sZ4-kG-mUO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2429" y="1595"/>
-        </scene>
-        <!--Cards-->
         <scene sceneID="VRw-jB-rTp">
             <objects>
                 <viewController storyboardIdentifier="Card Intro View Controller" title="Cards" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yD4-s7-522" customClass="CardsIntroVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
@@ -1118,7 +1107,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="xRr-ra-7Ef">
                                         <rect key="frame" x="24" y="0.0" width="366" height="606"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-3d-hL9" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-3d-hL9" customClass="PageHeader" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="77"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cards" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6m-hg-p5K">
@@ -1146,6 +1135,9 @@
                                                         <real key="value" value="3"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <outlet property="titleLabel" destination="q6m-hg-p5K" id="Cbg-oz-pdO"/>
+                                                </connections>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1. This section of the app is invisible to the backend." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F3V-dd-WUI">
                                                 <rect key="frame" x="0.0" y="97" width="366" height="41"/>
@@ -1224,7 +1216,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <segue destination="UoP-Wh-x6a" kind="show" id="aYy-w9-tnt"/>
+                                                    <action selector="navigateToCards:" destination="yD4-s7-522" eventType="touchUpInside" id="d3u-1C-pai"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2686,7 +2678,7 @@
                                     <outlet property="delegate" destination="FpY-Hj-jld" id="Kr5-55-DkD"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fdk-vg-fe8">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fdk-vg-fe8" customClass="PageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All 300 of My Needs" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wis-uJ-Qf5">
@@ -2704,6 +2696,9 @@
                                     <constraint firstAttribute="trailing" secondItem="Wis-uJ-Qf5" secondAttribute="trailing" constant="12" id="c5Y-bA-tm4"/>
                                     <constraint firstAttribute="bottom" secondItem="Wis-uJ-Qf5" secondAttribute="bottom" constant="12" id="vsv-X6-lwe"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="titleLabel" destination="Wis-uJ-Qf5" id="uGF-cX-YQK"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Yt-Xf-Iy8">
                                 <rect key="frame" x="0.0" y="121" width="414" height="40"/>
@@ -2731,8 +2726,8 @@
                     <tabBarItem key="tabBarItem" title="My Needs" image="needForTab" id="muK-ft-hSC"/>
                     <navigationItem key="navigationItem" id="ESM-EU-1Oo"/>
                     <connections>
-                        <outlet property="categoryLabel" destination="Wis-uJ-Qf5" id="05a-7Z-dsT"/>
                         <outlet property="collectionView" destination="rBX-cr-kbI" id="QZk-YF-cem"/>
+                        <outlet property="pageHeader" destination="Fdk-vg-fe8" id="N63-6B-PA2"/>
                         <segue destination="P1s-0b-Pxg" kind="presentation" identifier="viewNeed" id="fkt-5c-U3w"/>
                     </connections>
                 </viewController>
@@ -2828,7 +2823,7 @@
                                     <outlet property="delegate" destination="exQ-bi-vfq" id="pFc-Sp-AKj"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQ0-ce-0Im">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQ0-ce-0Im" customClass="PageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All 300 of My Haves" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JB8-wq-Toc">
@@ -2846,6 +2841,9 @@
                                     <constraint firstItem="JB8-wq-Toc" firstAttribute="top" secondItem="YQ0-ce-0Im" secondAttribute="top" constant="12" id="hDu-yz-zDJ"/>
                                     <constraint firstItem="JB8-wq-Toc" firstAttribute="leading" secondItem="YQ0-ce-0Im" secondAttribute="leading" constant="12" id="qDs-42-I4E"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="titleLabel" destination="JB8-wq-Toc" id="UIh-JA-ETs"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q3e-PC-DvJ">
                                 <rect key="frame" x="0.0" y="121" width="414" height="40"/>
@@ -2873,8 +2871,8 @@
                     <tabBarItem key="tabBarItem" title="My Haves" image="haveForTab" id="ZSk-2Q-DVv"/>
                     <navigationItem key="navigationItem" id="pXN-FG-4jk"/>
                     <connections>
-                        <outlet property="categoryLabel" destination="JB8-wq-Toc" id="RbP-Ai-sEv"/>
                         <outlet property="collectionView" destination="bLj-GE-sjN" id="X98-v4-GM9"/>
+                        <outlet property="pageHeader" destination="YQ0-ce-0Im" id="Ty8-bZ-aBz"/>
                         <segue destination="kHO-PJ-agu" kind="show" identifier="viewHave" id="SqO-M6-FP7"/>
                     </connections>
                 </viewController>
@@ -2890,7 +2888,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="RlK-YV-QAT">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="RlK-YV-QAT" customClass="TopCap" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="91"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                             </imageView>
@@ -3061,7 +3059,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="elO-sZ-pKA">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="elO-sZ-pKA" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="12" y="524" width="350" height="121"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="Zfb-QD-tAA"/>
@@ -3454,7 +3452,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="91"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="obZ-H8-1Cr" userLabel="Title View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -3595,7 +3593,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-5T-V5V">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-5T-V5V" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="-20" y="507" width="414" height="121"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="C1n-x2-C0u"/>
@@ -4040,7 +4038,7 @@
             <size key="intrinsicContentSize" width="100" height="36"/>
         </designable>
         <designable name="TKH-AD-Wdu">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="YL6-H6-cv3">
             <size key="intrinsicContentSize" width="210" height="36"/>
@@ -4070,7 +4068,7 @@
             <size key="intrinsicContentSize" width="123" height="41"/>
         </designable>
         <designable name="vnT-3S-yc3">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="xZ6-wA-8F1">
             <size key="intrinsicContentSize" width="50" height="34"/>
@@ -4093,7 +4091,6 @@
         <image name="internshipForTab" width="28" height="26"/>
         <image name="marketplaceForTab" width="25" height="25"/>
         <image name="needForTab" width="29" height="25"/>
-        <image name="person.crop.square" catalog="system" width="128" height="114"/>
         <image name="roof" width="600" height="317"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>

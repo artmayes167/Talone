@@ -668,7 +668,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J9t-hI-Q35" userLabel="Title View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J9t-hI-Q35" userLabel="Title View" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="20" y="0.0" width="374" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invite A Tester" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g8b-J6-i6c">
@@ -690,7 +690,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="0.77191245720000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.84705882352941175" green="0.80784313725490198" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="g8b-J6-i6c" firstAttribute="leading" secondItem="J9t-hI-Q35" secondAttribute="leading" id="4xs-72-Ouz"/>
                                     <constraint firstAttribute="trailing" secondItem="g8b-J6-i6c" secondAttribute="trailing" id="EMb-qy-9gk"/>
@@ -708,6 +708,9 @@
                                         <real key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="titleLabel" destination="g8b-J6-i6c" id="eEm-S4-pmf"/>
+                                </connections>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ci8-QJ-Pe4">
                                 <rect key="frame" x="0.0" y="77" width="414" height="765"/>
@@ -1178,6 +1181,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ewa-Bt-T3D"/>
+                    <connections>
+                        <outlet property="pageHeaderView" destination="J9t-hI-Q35" id="rNl-01-9rn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IW3-yv-5IJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="d1a-TD-8lF" userLabel="Exit" sceneMemberID="exit"/>
@@ -1676,7 +1682,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="hxF-ZO-Lpn">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="hxF-ZO-Lpn" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="12" y="757.5" width="350" height="121"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="tintColor" red="0.0" green="0.2035664022" blue="0.73920643330000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2447,13 +2453,13 @@
             <size key="intrinsicContentSize" width="375" height="35.5"/>
         </designable>
         <designable name="65h-2u-iJT">
-            <size key="intrinsicContentSize" width="34" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="84M-ix-YLg">
             <size key="intrinsicContentSize" width="4032" height="3024"/>
         </designable>
         <designable name="9Vw-bl-IvU">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="B6b-eS-Qyi">
             <size key="intrinsicContentSize" width="136" height="41"/>
@@ -2471,7 +2477,7 @@
             <size key="intrinsicContentSize" width="210" height="36"/>
         </designable>
         <designable name="HbU-UQ-3pW">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="J1r-2r-UQp">
             <size key="intrinsicContentSize" width="30" height="41"/>
@@ -2492,13 +2498,13 @@
             <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
         <designable name="gHp-za-Dc9">
-            <size key="intrinsicContentSize" width="34" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="kRP-x7-BqW">
             <size key="intrinsicContentSize" width="131" height="30"/>
         </designable>
         <designable name="lLn-7C-wD9">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="mZI-ps-I4y">
             <size key="intrinsicContentSize" width="580" height="580"/>

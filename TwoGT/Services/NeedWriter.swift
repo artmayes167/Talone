@@ -110,7 +110,7 @@ class NeedsDbWriter: NeedsBase {
             let needItem = NeedsBase.NeedItem(category: have.category, headline: have.headline, description: description, validUntil: defaultValidUntilDate, owner: userHandle, createdBy: userId, locationInfo: have.locationInfo)
 
             addNeed(needItem) { error in
-                if error == nil, let needId = needItem.id, let haveId = have.id {
+                if error == nil, let _ = needItem.id, let haveId = have.id {
                     HavesDbWriter().associateAuthUserHavingNeed(needItem, toHaveId: haveId) { error in
                         // call completion
                         completion(error, needItem)

@@ -160,7 +160,8 @@ class AddNeedToWatchVC: UIViewController {
         guard let c = creationManager, let need = needItem else {
             fatalError()
         }
-        c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+        let success = c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+        if !success { fatalError() }
         switch c.currentCreationType() {
         case .need:
             model.storeWatchingNeedToDatabase(item: need, creationManager: c, controller: self)

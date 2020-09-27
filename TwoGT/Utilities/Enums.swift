@@ -44,11 +44,6 @@ enum ProfileButtonType {
     case me, card
 }
 
-enum CustomTheme: String, CaseIterable, DatabaseReady {
-    
-    case defaultTheme
-}
-
 enum NeedType: String, CaseIterable, DatabaseReady {
     case none, food, clothes, shelter, furniture, service, miscellany
 }

@@ -27,10 +27,10 @@ extension UIColor {
     let bString = cString.substring(with: range)
     
     // Scan values
-    var r: UInt32 = 0, g: UInt32 = 0, b: UInt32 = 0
-    Scanner(string: rString).scanHexInt32(&r)
-    Scanner(string: gString).scanHexInt32(&g)
-    Scanner(string: bString).scanHexInt32(&b)
+    var r: UInt64 = 0, g: UInt64 = 0, b: UInt64 = 0
+    Scanner(string: rString).scanHexInt64(&r)
+    Scanner(string: gString).scanHexInt64(&g)
+    Scanner(string: bString).scanHexInt64(&b)
     
     return UIColor(red: CGFloat(r)/255.0, green: CGFloat(g)/255.0, blue: CGFloat(b)/255.0, alpha: 1.0)
   }

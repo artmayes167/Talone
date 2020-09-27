@@ -55,8 +55,11 @@ class CityStateSearchVC: UIViewController {
     var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
     
      // MARK: - View Life Cycle
+    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
     override func viewDidLoad() {
         super.viewDidLoad()
+        pageHeaderView.setTitleText("Search Location")
+        
         if let s = statesCoverView {
             view.bringSubviewToFront(s)
         }

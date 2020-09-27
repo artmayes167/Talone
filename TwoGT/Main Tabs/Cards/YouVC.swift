@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-enum AddressSections: Int {
+enum AddressSections: Int, CaseIterable {
     case address, phoneNumber, email
 }
 
@@ -20,7 +20,7 @@ enum AddressSections: Int {
     @IBOutlet weak var tableView: UITableView!
     
     
-    var addresses: [Address] {
+    private var addresses: [Address] {
         get {
             guard let adds =  AppDelegate.user.addresses else { fatalError() }
             var allAdds: [Address] = []
@@ -31,7 +31,7 @@ enum AddressSections: Int {
         }
     }
     
-    var phoneNumbers: [PhoneNumber] {
+    private var phoneNumbers: [PhoneNumber] {
         get {
             guard let phones =  AppDelegate.user.phoneNumbers else { fatalError() }
             var allPhones: [PhoneNumber] = []
@@ -42,7 +42,7 @@ enum AddressSections: Int {
         }
     }
     
-    var emails: [Email] {
+    private var emails: [Email] {
         get {
             guard let ems =  AppDelegate.user.emails else { fatalError() }
             var allEms: [Email] = []
@@ -56,7 +56,7 @@ enum AddressSections: Int {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 50
+        tableView.estimatedRowHeight = 62
         
         let image = CoreDataImageHelper.shareInstance.fetchImage()
         var newImage: UIImage?
@@ -68,7 +68,7 @@ enum AddressSections: Int {
         imageButton.setImage(newImage!, for: .normal)
     }
     
-    @IBAction @objc func changeImage() {
+    @IBAction @objc func changeImage(_ sender: UIButton) {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
         picker.delegate = self
@@ -106,6 +106,11 @@ enum AddressSections: Int {
 }
 
 extension YouVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return AddressSections.allCases.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch AddressSections(rawValue: section) {
         case .address:
@@ -124,23 +129,27 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         // Included switch statement, because other cells may be used if the format changes
         switch AddressSections(rawValue: indexPath.section) {
         case .address:
-            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier) as! AddressCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
             let address = addresses[indexPath.row]
             cell.configure(name: address.type, details: address.displayName())
             return cell
         case .phoneNumber:
-            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier) as! AddressCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
             let phoneNumber = phoneNumbers[indexPath.row]
             cell.configure(name: phoneNumber.title, details: phoneNumber.number)
             return cell
         case .email:
-            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier) as! AddressCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
             let email = emails[indexPath.row]
             cell.configure(name: email.name, details: email.emailString)
             return cell
         default:
             fatalError()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -158,6 +167,10 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         }
         cell.configure(str)
         return cell.contentView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 62
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -189,7 +202,13 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
                 managedObjectContext.delete(p)
             case .email:
                 let e = emails[indexPath.row]
-                managedObjectContext.delete(e)
+                if e.name != DefaultsKeys.taloneEmail.rawValue {
+                    managedObjectContext.delete(e)
+                } else {
+                    showOkayAlert(title: "Sorry", message: "Can't touch this email.  It's special.", handler: nil)
+                    return // don't want to crash because we're deleting a row that shouldn't be
+                }
+                
             default:
                 fatalError()
             }
@@ -234,13 +253,16 @@ class YouFooterCell: UITableViewCell {
 }
 
 class AddressCell: UITableViewCell {
-    static let identifier = "address"
+    static func identifier(_ indexPath: IndexPath) -> String {
+        print(String(format: "address%i", abs(indexPath.row%2)))
+        return String(format: "address%i", abs(indexPath.row%2))
+    }
     
     @IBOutlet weak var detailsLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
     func configure(name: String?, details: String?) {
-        nameLabel.text = name
+        nameLabel.text = name == "taloneEmail" ? "secret" : name
         detailsLabel.text = details
     }
 }
@@ -263,8 +285,6 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
         if let imageData = userPickedImage.pngData() {
             CoreDataImageHelper.shareInstance.saveImage(data: imageData)
            }
-        
-        
         picker.dismiss(animated: true)
     }
 }

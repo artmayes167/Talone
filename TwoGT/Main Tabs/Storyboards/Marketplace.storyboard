@@ -70,7 +70,7 @@
                                     <outlet property="delegate" destination="aRe-0g-ol0" id="aqU-mY-zO2"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cpf-Qu-wa9">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cpf-Qu-wa9" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Needs: Miscelleny" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkD-oV-Udk">
@@ -101,6 +101,9 @@
                                     <constraint firstAttribute="trailing" secondItem="rkD-oV-Udk" secondAttribute="trailing" constant="12" id="rLm-3M-nzO"/>
                                     <constraint firstItem="rkD-oV-Udk" firstAttribute="leading" secondItem="cpf-Qu-wa9" secondAttribute="leading" constant="12" id="s8n-dL-E0O"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="titleLabel" destination="rkD-oV-Udk" id="Urt-G0-8aO"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALa-Uy-XhH">
                                 <rect key="frame" x="0.0" y="121" width="414" height="40"/>
@@ -374,7 +377,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2l-Tq-hNp" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2l-Tq-hNp" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="20" y="44" width="374" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxc-3f-KMy">
@@ -411,6 +414,9 @@
                                         <real key="value" value="3"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="titleLabel" destination="Jxc-3f-KMy" id="git-gh-dfa"/>
+                                </connections>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5v-fW-1Z9">
                                 <rect key="frame" x="0.0" y="121" width="414" height="741"/>
@@ -962,6 +968,7 @@
                         <outlet property="cityInputView" destination="kqo-CA-xOl" id="G2a-4x-1MD"/>
                         <outlet property="cityTextField" destination="AKH-s3-s76" id="2VG-8x-tGm"/>
                         <outlet property="newCreationStack" destination="11T-BJ-5cV" id="lg5-Zt-49x"/>
+                        <outlet property="pageHeaderView" destination="q2l-Tq-hNp" id="Hs7-1y-eIx"/>
                         <outlet property="savedLocationTableView" destination="whQ-CP-Mph" id="YiH-wG-GOP"/>
                         <outlet property="savedLocationView" destination="oHy-Hf-4zc" id="9FX-KJ-q0h"/>
                         <outlet property="searchButton" destination="5vZ-tK-zdu" id="3Zf-re-mr8"/>
@@ -1261,7 +1268,7 @@
                                     <outlet property="delegate" destination="QsO-sN-3fW" id="n5T-kZ-fR2"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rol-pS-4hY">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rol-pS-4hY" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Haves: Miscelleny" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S42-wt-ddD">
@@ -1293,6 +1300,9 @@
                                     <constraint firstItem="4OS-eP-piV" firstAttribute="leading" secondItem="rol-pS-4hY" secondAttribute="leading" constant="12" id="wS4-OP-fGd"/>
                                     <constraint firstAttribute="height" constant="77" id="zGL-GN-sgh"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="titleLabel" destination="S42-wt-ddD" id="JEJ-We-O4q"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Wr-NC-I3U">
                                 <rect key="frame" x="0.0" y="121" width="414" height="40"/>
@@ -1350,7 +1360,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="rd1-6W-1Q4">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="rd1-6W-1Q4" customClass="TopCap" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="91"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                             </imageView>
@@ -1521,7 +1531,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="uaD-ne-WBg">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="uaD-ne-WBg" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="12" y="556" width="350" height="121"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="njP-eo-wHr"/>
@@ -1626,7 +1636,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fHr-7G-xJo">
                                                         <rect key="frame" x="0.0" y="32" width="390" height="100"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Wu-Cp-1Xm" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Wu-Cp-1Xm" customClass="InactiveTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="22" y="0.0" width="346" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" systemColor="labelColor"/>
@@ -1686,7 +1696,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JyV-Ja-6K5">
                                                                 <rect key="frame" x="0.0" y="24" width="390" height="128"/>
                                                                 <subviews>
-                                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="s8g-fD-feD" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="s8g-fD-feD" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="22" y="0.0" width="346" height="128"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <color key="textColor" systemColor="labelColor"/>
@@ -1918,7 +1928,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="HHb-Is-7PS">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="HHb-Is-7PS" customClass="TopCap" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="91"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sla-kp-h6I" userLabel="Title View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -2059,7 +2069,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="oGZ-He-tcd">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="oGZ-He-tcd" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="-20" y="595" width="414" height="121"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="121" id="US3-e4-Pu3"/>
@@ -2210,7 +2220,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="btL-BM-Arv">
                                                         <rect key="frame" x="0.0" y="32" width="390" height="100"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OGJ-XP-PqC" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OGJ-XP-PqC" customClass="InactiveTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="0.0" width="342" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" systemColor="labelColor"/>
@@ -2275,7 +2285,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mst-Qx-REd">
                                                                 <rect key="frame" x="0.0" y="24" width="390" height="128"/>
                                                                 <subviews>
-                                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VHP-rY-QgB" customClass="DesignableTextView" customModule="Talone" customModuleProvider="target">
+                                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VHP-rY-QgB" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="24" y="0.0" width="342" height="128"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <color key="textColor" systemColor="labelColor"/>
@@ -2718,10 +2728,10 @@
             <size key="intrinsicContentSize" width="150" height="36"/>
         </designable>
         <designable name="4OS-eP-piV">
-            <size key="intrinsicContentSize" width="637" height="542"/>
+            <size key="intrinsicContentSize" width="30" height="34"/>
         </designable>
         <designable name="4ku-Bn-DQq">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="5vZ-tK-zdu">
             <size key="intrinsicContentSize" width="216" height="30"/>
@@ -2733,16 +2743,16 @@
             <size key="intrinsicContentSize" width="51" height="41"/>
         </designable>
         <designable name="GM2-rd-qAx">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="OIy-DT-gBa">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="QHG-XL-Yvf">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="UM5-c8-aMl">
-            <size key="intrinsicContentSize" width="46" height="30"/>
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="ZGE-jT-7xl">
             <size key="intrinsicContentSize" width="32" height="34"/>

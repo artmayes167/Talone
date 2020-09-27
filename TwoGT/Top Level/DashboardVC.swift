@@ -58,9 +58,10 @@ class DashboardVC: UIViewController {
     }
     
     @IBAction func submitHandle() {
-        let handle = newHandleTextField.text
+        let _ = newHandleTextField.text
         
     }
+    
     var timer: Timer?
     var adminCounter = 0
     @IBAction func adminTapped(_ sender: Any) {

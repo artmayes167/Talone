@@ -1,19 +1,19 @@
 //
-//  InviteATesterVC.swift
+//  AllReceivedCardsVC.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/20/20.
+//  Created by Arthur Mayes on 9/26/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 
 import UIKit
 
-class InviteATesterVC: UIViewController {
+class AllReceivedCardsVC: UIViewController {
 
-    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
+    @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     override func viewDidLoad() {
         super.viewDidLoad()
-        pageHeaderView.setTitleText("invite a tester")
+        cardHeaderView.setTitleText("all cards")
         // Do any additional setup after loading the view.
     }
     
