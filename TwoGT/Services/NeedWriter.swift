@@ -135,10 +135,16 @@ class NeedsDbWriter: NeedsBase {
         db.collection("needs").document(id).delete { err in
             if let haveId = associatedHaveId {
                 HavesDbWriter().disassociateAuthUserHavingNeedId(id, handle: userHandle, fromHaveId: haveId) { error in
-                    // call completion
-                    completion(error)
+                    // Error about modifying Have. Have may have been deleted, so updating it may fail.
+                    if error?._code == 5 {
+                        // Have been deleted, we can omit this error
+                        completion(nil)
+                    } else {
+                        completion(error)
+                    }
                 }
             } else {
+                // Error about deleting the Need
                 completion(err)
             }
         }
