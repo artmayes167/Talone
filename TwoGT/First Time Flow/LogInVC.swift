@@ -58,6 +58,7 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
             authenticationWithTouchID() { (success, error) in
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                 if success {
+                    // May move to AppDelegate
                     DispatchQueue.main.async() {
                         appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
                         let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)

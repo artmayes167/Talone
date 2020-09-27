@@ -152,6 +152,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func setToFlow(storyboardName: String, identifier viewControllerIdentifier: String) {
+        DispatchQueue.main.async() {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let mainStoryboard = UIStoryboard(name: storyboardName, bundle: nil)
+            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as! BaseSwipeVC
+            mainVC.view.alpha = 0
+            self.window?.rootViewController = mainVC
+            self.window?.makeKeyAndVisible()
+            UIView.animate(withDuration: 0.5) {
+                mainVC.view.alpha = 1
+            }
+        }
+    }
+    
     // MARK: UISceneSession Lifecycle
 
 //    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

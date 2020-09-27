@@ -48,17 +48,8 @@ class CardsBaseSwipeVC: BaseSwipeVC {
     
     @IBAction func exitCardsFlow(_ sender: Any) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        DispatchQueue.main.async() {
-            appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
-            let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
-            let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
-            mainVC.view.alpha = 0
-            appDelegate.window?.rootViewController = mainVC
-            appDelegate.window?.makeKeyAndVisible()
-            UIView.animate(withDuration: 0.5) {
-                mainVC.view.alpha = 1
-            }
-        }
+        
+        appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
     }
     
 }
