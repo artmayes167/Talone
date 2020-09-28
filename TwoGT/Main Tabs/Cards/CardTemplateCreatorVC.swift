@@ -181,6 +181,8 @@ extension CardTemplateCreatorVC: UITableViewDragDelegate, UITableViewDropDelegat
          supports accessing the dropped items, updating the table view, and specifying
          optional animations. Local drags with one item go through the existing
          `tableView(_:moveRowAt:to:)` method on the data source.
+     
+        Calls `model.addItem`, which processes the move and sets the corresponding array values
     */
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         var destinationIndexPath: IndexPath

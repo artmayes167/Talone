@@ -12,7 +12,10 @@ extension CardTemplateModel {
     /**
          A helper function that serves as an interface to the data model,
          called by the implementation of the `tableView(_ canHandle:)` method.
+     
+     This is really a fake-out, because we have to work around `session` in order to implement drag and drop with a custom object
     */
+    
     func canHandle(_ session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSString.self)
     }
@@ -20,6 +23,8 @@ extension CardTemplateModel {
     /**
          A helper function that serves as an interface to the data mode, called
          by the `tableView(_:itemsForBeginning:at:)` method.
+     
+        Calls internal method `moveStarted`, setting values for the `movingObject` and the `sourceIndexPath`
     */
     mutating func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
         guard let added = allAdded, let possibles = allPossibles else { fatalError() }
