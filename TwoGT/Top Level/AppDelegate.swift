@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return AppDelegate.createUser()
             }
         } catch _ as NSError {
-          return User()
+          return AppDelegate.createUser()
         }
     }
     
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 fatalError()
         }
         
-        user.setValue(UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue), forKey: "handle")
+        user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)
         if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),  let uid = UserDefaults.standard.string(forKey: "uid")  {
             user.uid = uid
             _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)

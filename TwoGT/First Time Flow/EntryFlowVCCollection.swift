@@ -137,8 +137,8 @@ class EnterHandleVC: UIViewController {
         // TODO: - Set the handle on the back end
         // completion
         UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
-        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: "uid") else { fatalError() }
-        AppDelegate.user.uid = uid
+        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let _ = UserDefaults.standard.string(forKey: "uid") else { fatalError() }
+        let _ = AppDelegate.user
         
         showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
