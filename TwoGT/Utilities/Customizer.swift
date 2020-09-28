@@ -51,6 +51,9 @@ public class Customizer: NSObject {
         case .topCap, .bottomCap:
             guard let v = view as? DesignableImage else { fatalError() }
             configure(imageView: v)
+        case .addressCell, .phoneCell, .emailCell:
+            guard let v = view as? UITableViewCell else { fatalError() }
+            configure(tableCell: v)
         }
     }
 }
@@ -134,6 +137,18 @@ extension Customizer {
         else if let v = imageView as? BottomCap {
             v.image = UIImage(named: "sunBottom")
             v.tintColor = .systemBlue
+        }
+    }
+    
+    fileprivate func configure(tableCell: UITableViewCell) {
+        if let v = tableCell as? ParentAddressTableViewCell {
+            v.contentView.backgroundColor = UIColor.hex("CEDCCF")
+        }
+        else if let v = tableCell as? ParentAddressTableViewCell {
+            v.contentView.backgroundColor = UIColor.hex("BECBE3")
+        }
+        else if let v = tableCell as? ParentAddressTableViewCell {
+            v.contentView.backgroundColor = UIColor.hex("DBD9DE")
         }
     }
 }

@@ -138,7 +138,7 @@ extension Email {
         }
         email.name = name
         email.emailString = emailAddress
-        email.uid = AppDelegate.user.uid
+        email.uid = UserDefaults.standard.string(forKey: "uid")
 
         do {
           try managedContext.save()

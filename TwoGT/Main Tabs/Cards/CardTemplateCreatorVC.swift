@@ -12,46 +12,11 @@ import CoreData
 
 class CardTemplateCreatorVC: UIViewController {
     
+    var model = CardTemplateModel()
+    
     @IBOutlet weak var availableTableView: UITableView!
-    @IBOutlet weak var addedTableView: UITableView!
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
-    
-    private var addresses: [Address] {
-        get {
-            let adds =  AppDelegate.user.addresses
-            return adds.sorted { return $0.type! < $1.type! }
-        }
-    }
-    
-    private var phoneNumbers: [PhoneNumber] {
-        get {
-            let phones =  AppDelegate.user.phoneNumbers
-            return phones.sorted { return $0.title! < $1.title! }
-        }
-    }
-    
-    private var emails: [Email] {
-        get {
-            let ems =  AppDelegate.user.emails
-            return ems.sorted { return $0.name! < $1.name! }
-        }
-    }
-    
-     // MARK: - Array Management
-    var allPossibles: [NSManagedObject]?
-    var allAdded: [NSManagedObject]?
-    func setAllPossibles() {
-        var arr: [NSManagedObject] = []
-        let allArrays: [[NSManagedObject]] = [addresses, phoneNumbers, emails]
-        for array in allArrays {
-            for x in array {
-                arr.append(x)
-            }
-        }
-        allPossibles = arr
-        allAdded = []
-    }
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -69,18 +34,15 @@ class CardTemplateCreatorVC: UIViewController {
         }
         imageButton.setImage(newImage!, for: .normal)
         handleLabel.text = AppDelegate.user.handle
-        setAllPossibles()
+        model.configure()
+        availableTableView.reloadData()
         setDragAndDropDelegates()
     }
     
     func setDragAndDropDelegates() {
         availableTableView.dragDelegate = self
         availableTableView.dropDelegate = self
-        addedTableView.dragDelegate = self
-        addedTableView.dropDelegate = self
-
         availableTableView.dragInteractionEnabled = true
-        addedTableView.dragInteractionEnabled = true
     }
 
     enum CardElementTypes: String, RawRepresentable {
@@ -121,38 +83,36 @@ class CardTemplateCreatorVC: UIViewController {
 extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch tableView {
-        case availableTableView:
-            return allPossibles?.count ?? 0
-        case addedTableView:
-            return allAdded?.count ?? 0
+        switch section {
+        case 0:
+            return model.allAdded!.count
         default:
-            fatalError()
+            return model.allPossibles!.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let array = tableView == availableTableView ? allPossibles : allAdded
+        let array = indexPath.section == 0 ? model.allAdded : model.allPossibles
         let object = array![indexPath.row]
         
         // Included switch statement, because other cells may be used if the format changes
         switch typeForClass(object.entity.name) {
         case .address:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
             guard let a = object as? Address else { fatalError() }
             cell.detailsLabel.text = a.type
             return cell
         case .phoneNumber:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplateCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
             guard let p = object as? PhoneNumber else { fatalError() }
             cell.detailsLabel.text = p.title
             return cell
         case .email:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
             guard let e = object as? Email else { fatalError() }
             cell.detailsLabel.text = e.name
             return cell
@@ -176,138 +136,83 @@ extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell
+        cell.configure(section == 0 ? "added": "available")
         return cell.contentView
     }
 }
 
 extension CardTemplateCreatorVC: UITableViewDragDelegate, UITableViewDropDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let possibles = allPossibles, let added = allAdded else { fatalError() }
-        let object: NSManagedObject = tableView == availableTableView ? possibles[indexPath.row] : added[indexPath.row]
-        
-        let carrier = ObjectCarrier(className: object.entity.name!, objectIdentifier: object.value(forKeyPath: keyForDefiningAttribute(object: object)) as! String)
-            
-        do {
-            if let data = try? NSKeyedArchiver.archivedData(withRootObject: carrier, requiringSecureCoding: false) {
-                let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
-                return [UIDragItem(itemProvider: itemProvider)]
-            }
-        }
-        fatalError()
+        return model.dragItems(for: indexPath)
+    }
+    
+    // MARK: - UITableViewDropDelegate
+    
+    /**
+         Ensure that the drop session contains a drag item with a data representation
+         that the view can consume.
+    */
+    func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+        return model.canHandle(session)
     }
 
+    /**
+         A drop proposal from a table view includes two items: a drop operation,
+         typically .move or .copy; and an intent, which declares the action the
+         table view will take upon receiving the items. (A drop proposal from a
+         custom view does includes only a drop operation, not an intent.)
+    */
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        // The .move operation is available only for dragging within a single app.
+        if tableView.hasActiveDrag {
+            if session.items.count > 1 {
+                return UITableViewDropProposal(operation: .cancel)
+            } else {
+                return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
+        } else {
+            return UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+        }
+    }
+    
+    /**
+         This delegate method is the only opportunity for accessing and loading
+         the data representations offered in the drag item. The drop coordinator
+         supports accessing the dropped items, updating the table view, and specifying
+         optional animations. Local drags with one item go through the existing
+         `tableView(_:moveRowAt:to:)` method on the data source.
+    */
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         var destinationIndexPath: IndexPath
-
+//
         if let indexPath = coordinator.destinationIndexPath {
             destinationIndexPath = indexPath
         } else {
+            // Get last index path of table view.
             let section = tableView.numberOfSections - 1
             let row = tableView.numberOfRows(inSection: section)
             destinationIndexPath = IndexPath(row: row, section: section)
         }
-        // attempt to load strings from the drop coordinator
-        coordinator.session.loadObjects(ofClass: ObjectCarrier.self) { items in
-            // convert the item provider array to a string array or bail out
-            guard let strings = items as? [ObjectCarrier] else { return }
-
-            // create an empty array to track rows we've copied
-            var indexPaths = [IndexPath]()
-
-            // loop over all the strings we received
-            for (carrier) in strings.enumerated() {
-                // create an index path for this new row, moving it down depending on how many we've already inserted
-                let indexPath = IndexPath(row: destinationIndexPath.row, section: destinationIndexPath.section)
-
-                guard var a = self.allAdded, var p = self.allPossibles else { fatalError() }
-                // insert the copy into the correct array
-                if tableView == self.availableTableView {
-                    for mo in a {
-                        let z = self.typeForClass(mo.entity.name)
-                        if z.rawValue == carrier.element.className.lowercased(), mo.value(forKeyPath: self.keyForDefiningAttribute(object: mo)) as! String == carrier.element.objectIdentifier {
-                            p.insert(mo, at: indexPath.row)
-                        }
-                    }
-                    
-                } else {
-                    for mo in p {
-                        let z = self.typeForClass(mo.entity.name)
-                        if z.rawValue == carrier.element.className.lowercased(), mo.value(forKeyPath: self.keyForDefiningAttribute(object: mo)) as! String == carrier.element.objectIdentifier {
-                            a.insert(mo, at: indexPath.row)
-                            return
-                        }
-                    }
-                }
-
-                // keep track of this new row
-                indexPaths.append(indexPath)
-            }
-
-            // insert them all into the table view at once
-            tableView.insertRows(at: indexPaths, with: .automatic)
+                self.model.addItem(at: destinationIndexPath)
+        
+        tableView.performBatchUpdates {
+            tableView.deleteRows(at: [model.sourceIndexPath!], with: .automatic)
+            tableView.insertRows(at: [destinationIndexPath], with: .automatic)
+        } completion: { (_) in
+            tableView.reloadData()
         }
     }
 }
 
-class TemplateCell: UITableViewCell {
+class TemplateAddressCell: ParentAddressTableViewCell {
     @IBOutlet weak var detailsLabel: UILabel!
 }
 
-class Carrier: NSObject {
+class TemplatePhoneCell: ParentPhoneTableViewCell {
+    @IBOutlet weak var detailsLabel: UILabel!
 }
 
-final class ObjectCarrier: Carrier, NSItemProviderWriting, NSItemProviderReading, Codable {
-    
-    enum CodingKeys: String, CodingKey {
-        case className, objectIdentifier
-    }
-    
-    var className: String
-    var objectIdentifier: String
-    
-    init(className: String, objectIdentifier: String) {
-        self.className = className
-        self.objectIdentifier = objectIdentifier
-    }
-    
-    required init(from decoder: Decoder) throws {
-            let values = try decoder.container(keyedBy: CodingKeys.self)
-            className = try values.decode(String.self, forKey: .className)
-            objectIdentifier = try values.decode(String.self, forKey: .objectIdentifier)
-        }
-    
-    static var writableTypeIdentifiersForItemProvider: [String] {
-        //We know that we want to represent our object as a data type, so we'll specify that
-        return [(kUTTypeData as String)]
-    }
-    
-    func loadData(withTypeIdentifier typeIdentifier: String, forItemProviderCompletionHandler completionHandler: @escaping (Data?, Error?) -> Void) -> Progress? {
-        let progress = Progress(totalUnitCount: 100)
-        do {
-            //Here the object is encoded to a JSON data object and sent to the completion handler
-            let data = try JSONEncoder().encode(self)
-            progress.completedUnitCount = 100
-            completionHandler(data, nil)
-        } catch {
-            completionHandler(nil, error)
-        }
-        return progress
-    }
-    static var readableTypeIdentifiersForItemProvider: [String] {
-        //We know we want to accept our object as a data representation, so we'll specify that here
-        return [(kUTTypeData) as String]
-    }
-    
-    //This function actually has a return type of Self, but that really messes things up when you are trying to return your object, so if you mark your class as final as I've done above, the you can change the return type to return your class type.
-    static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> ObjectCarrier {
-        let decoder = JSONDecoder()
-        do {
-            //Here we decode the object back to it's class representation and return it
-            let object = try decoder.decode(ObjectCarrier.self, from: data)
-            return object
-        } catch {
-            fatalError(error.localizedDescription)
-        }
-    }
+class TemplateEmailCell: ParentEmailTableViewCell {
+    @IBOutlet weak var detailsLabel: UILabel!
 }
 

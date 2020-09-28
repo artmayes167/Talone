@@ -15,6 +15,7 @@ enum UITextModifiers: Int {
 enum UIGroup: String, CaseIterable, DatabaseReady {
     case pageHeader, secondaryPageHeader, cardPrimaryHeader, activeTextView, inactiveTextView, modalBackButton
     case topCap, bottomCap
+    case phoneCell, emailCell, addressCell
 }
 
 /// Any `UITextView `that the user can type in should subclass this
@@ -100,6 +101,36 @@ class TopCap: DesignableImage, CustomizedObject {
 class BottomCap: DesignableImage, CustomizedObject {
     func key() -> UIGroup {
         return .bottomCap
+    }
+    override func didMoveToSuperview() {
+        Customizer.shared.customize(self)
+        super.didMoveToSuperview()
+    }
+}
+
+class ParentPhoneTableViewCell: UITableViewCell, CustomizedObject {
+    func key() -> UIGroup {
+        return .phoneCell
+    }
+    override func didMoveToSuperview() {
+        Customizer.shared.customize(self)
+        super.didMoveToSuperview()
+    }
+}
+
+class ParentAddressTableViewCell: UITableViewCell, CustomizedObject {
+    func key() -> UIGroup {
+        return .addressCell
+    }
+    override func didMoveToSuperview() {
+        Customizer.shared.customize(self)
+        super.didMoveToSuperview()
+    }
+}
+
+class ParentEmailTableViewCell: UITableViewCell, CustomizedObject {
+    func key() -> UIGroup {
+        return .emailCell
     }
     override func didMoveToSuperview() {
         Customizer.shared.customize(self)

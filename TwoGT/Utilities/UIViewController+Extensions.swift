@@ -107,3 +107,15 @@ extension UIViewController: UITextFieldDelegate {
         return true
     }
 }
+
+/// Add VCs to enable Toast
+class ModalContainerVC: UIViewController {
+    func addViewController(_ vc: UIViewController) {
+        vc.willMove(toParent: self)
+        view.addSubview(vc.view)
+        addChild(vc)
+        vc.didMove(toParent: self)
+    }
+    
+    // Copy Toast code from BaseSwipeVC
+}
