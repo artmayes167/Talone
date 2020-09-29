@@ -91,6 +91,20 @@ class AddNewAddressVC: UIViewController {
             city = c
             state = s
             cityStateTextField.text = c.capitalized + ", " + s.capitalized
+            save(location: loc, vc.saveType)
+        }
+    }
+
+     // MARK: Save Functions
+    /// Used by unwind segue from state/city selector
+    private func save(location loc: [DefaultsSavedLocationKeys: String], _ type: SaveType) {
+        if !(type == .none) {
+            let user = AppDelegate.user
+            // Use core data
+            guard let city = loc[.city], let state = loc[.state], let country = loc[.country] else { fatalError() }
+            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country)
+            s.type = ["home", "alternate"][type.rawValue]
+            user.addToSearchLocations(s)
         }
     }
     
