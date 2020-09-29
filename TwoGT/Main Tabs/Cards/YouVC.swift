@@ -201,11 +201,9 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
                     showOkayAlert(title: "Sorry", message: "Can't touch this email.  It's special.", handler: nil)
                     return // don't want to crash because we're deleting a row that shouldn't be
                 }
-                
             default:
                 fatalError()
             }
-            
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Nope
@@ -279,34 +277,5 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
             CoreDataImageHelper.shareInstance.saveImage(data: imageData)
            }
         picker.dismiss(animated: true)
-    }
-}
-
-class CoreDataImageHelper: NSObject {
-    static let shareInstance = CoreDataImageHelper()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    func saveImage(data: Data) {
-        let imageInfo = ImageInfo(context: context)
-        imageInfo.image = data
-        imageInfo.type = "userImage"
-        AppDelegate.user.addToImages(imageInfo)
-        do {
-            try context.save()
-            print("Image is saved")
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func fetchImage() -> ImageInfo? {
-        var fetchingImage = [ImageInfo]()
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ImageInfo")
-        do {
-            fetchingImage = try context.fetch(fetchRequest) as! [ImageInfo]
-        } catch {
-            print("Error while fetching the image")
-        }
-        return fetchingImage.first(where: { $0.type == "userImage" })
     }
 }

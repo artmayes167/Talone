@@ -63,10 +63,7 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="parentHaveItemId  == $FETCH_SOURCE.haveItem.id"/>
         </fetchedProperty>
         <fetchedProperty name="childNeeds" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="self == $FETCH_SOURCE.parentHave"/>
-        </fetchedProperty>
-        <fetchedProperty name="parentHave" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="SELF.haveItem.id=$FETCH_SOURCE.parentHaveItemId"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentHaveItemId  == $FETCH_SOURCE.haveItem.id"/>
         </fetchedProperty>
     </entity>
     <entity name="HaveItem" representedClassName="HaveItem" parentEntity="Item" syncable="YES">
@@ -98,12 +95,6 @@
         <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="needs" inverseEntity="Purpose"/>
         <fetchedProperty name="childNeeds" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.needItem.id"/>
-        </fetchedProperty>
-        <fetchedProperty name="parentHave" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="SELF.haveItem.id=$FETCH_SOURCE.parentHaveItemId"/>
-        </fetchedProperty>
-        <fetchedProperty name="parentNeed" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="SELF.needItem.id=$FETCH_SOURCE.parentNeedItemId"/>
         </fetchedProperty>
     </entity>
     <entity name="NeedItem" representedClassName="NeedItem" parentEntity="Item" syncable="YES">
@@ -161,23 +152,23 @@
         <element name="Address" positionX="-652.3203125" positionY="-1105.24609375" width="128" height="118"/>
         <element name="AppLocationInfo" positionX="-495.3125" positionY="-846.609375" width="128" height="88"/>
         <element name="Card" positionX="-871.23828125" positionY="-1182.16796875" width="128" height="191"/>
+        <element name="CardAddress" positionX="-652.44140625" positionY="-1179.01171875" width="128" height="58"/>
+        <element name="CardEmail" positionX="-864.3984375" positionY="-1363.515625" width="128" height="58"/>
+        <element name="CardPhoneNumber" positionX="-649.734375" positionY="-1359.53125" width="128" height="58"/>
         <element name="CityState" positionX="-493.51171875" positionY="-739.9609375" width="128" height="73"/>
         <element name="Community" positionX="-494.88671875" positionY="-653.93359375" width="128" height="73"/>
         <element name="Email" positionX="-865.03125" positionY="-1282.3515625" width="128" height="88"/>
         <element name="Event" positionX="-979.62890625" positionY="-528.1171875" width="128" height="58"/>
-        <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="161"/>
+        <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="146"/>
         <element name="HaveItem" positionX="-1144.36328125" positionY="-302.9140625" width="128" height="58"/>
         <element name="ImageInfo" positionX="-1271.828125" positionY="-1082.19921875" width="128" height="118"/>
         <element name="Item" positionX="-1302.953125" positionY="-266.1953125" width="128" height="163"/>
-        <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="176"/>
+        <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="146"/>
         <element name="NeedItem" positionX="-1452.00390625" positionY="-283.90234375" width="128" height="58"/>
         <element name="PhoneNumber" positionX="-651.63671875" positionY="-1283.03515625" width="128" height="88"/>
         <element name="Purpose" positionX="-1325.11328125" positionY="-753.93359375" width="128" height="133"/>
         <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="88"/>
         <element name="SocialMedia" positionX="-1107.11328125" positionY="-1144.203125" width="128" height="118"/>
         <element name="User" positionX="-914.83203125" positionY="-956.6640625" width="128" height="221"/>
-        <element name="CardAddress" positionX="-652.44140625" positionY="-1179.01171875" width="128" height="58"/>
-        <element name="CardPhoneNumber" positionX="-649.734375" positionY="-1359.53125" width="128" height="58"/>
-        <element name="CardEmail" positionX="-864.3984375" positionY="-1363.515625" width="128" height="58"/>
     </elements>
 </model>

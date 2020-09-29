@@ -15,25 +15,24 @@ import Foundation
 /// Used specifically for `RawRepresentables` with `rawValue == String`.  Default implementation returns a `String.capitalized` if applicable, and an empty `String` if `rawValue` fails to translate.
    /// - Returns: The `String` value of the `RawRepresentable`, formatted according to backend developer preferences.
 protocol DatabaseReady: RawRepresentable, CaseIterable {
-    func databaseValue() -> String
-    func getRawValue() -> String?
+    func firebaseValue() -> String
+    func coreDataValue() -> String?
 }
 
 extension DatabaseReady {
-    func databaseValue() -> String {
+    func firebaseValue() -> String {
         if let v = self.rawValue as? String {
             return v.taloneDatabaseValue()
         }
         return ""
     }
     
-    func getRawValue() -> String? {
+    func coreDataValue() -> String? {
         if let v = self.rawValue as? String {
             return v
         }
         return nil
     }
-    
 }
 
 enum DefaultsKeys: String, CaseIterable {

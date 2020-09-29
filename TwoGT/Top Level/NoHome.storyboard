@@ -21,31 +21,94 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BAk-5s-Joo">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Noob Train" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OYx-3f-6NY">
-                                        <rect key="frame" x="130" y="24" width="154.5" height="29"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="skyline" translatesAutoresizingMaskIntoConstraints="NO" id="vsf-Z5-s9a">
+                                        <rect key="frame" x="14" y="0.0" width="352" height="77"/>
+                                        <color key="tintColor" red="0.46209963292131973" green="0.13071150374469745" blue="0.14827882332262965" alpha="0.43905179794520549" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="vsf-Z5-s9a" secondAttribute="height" multiplier="32:7" id="gVd-BC-5Ic"/>
+                                        </constraints>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPl-zu-zn7" userLabel="Line View">
+                                        <rect key="frame" x="0.0" y="37.5" width="414" height="2"/>
+                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="2" id="TQI-UP-mMj"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" systemColor="darkTextColor"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="the noob train" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OYx-3f-6NY" customClass="DesignableLabel" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="123.5" y="23.5" width="167" height="30"/>
+                                        <color key="backgroundColor" red="0.4587782621" green="0.35597807170000001" blue="0.76079887150000003" alpha="0.76533069349315064" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="167" id="EvR-Eu-Sti"/>
+                                            <constraint firstAttribute="height" constant="30" id="NB9-cl-4Wc"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <size key="shadowOffset" width="-1" height="-1"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TeC-yn-cKN">
-                                        <rect key="frame" x="12" y="16.5" width="73" height="44"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TeC-yn-cKN" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="12" y="26.5" width="58" height="24"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="Vi6-t5-83t"/>
+                                            <constraint firstAttribute="height" constant="24" id="Vi6-t5-83t"/>
+                                            <constraint firstAttribute="width" constant="58" id="vwu-BS-rFW"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Forget It"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="forget It"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="forgetIt:" destination="zaG-xE-H7K" eventType="touchUpInside" id="oCk-Ni-c6c"/>
                                         </connections>
                                     </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="train" translatesAutoresizingMaskIntoConstraints="NO" id="Slq-ds-FOp">
+                                        <rect key="frame" x="300" y="37" width="100" height="40"/>
+                                        <color key="tintColor" red="0.0" green="0.013433284035007919" blue="0.76079887150000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Slq-ds-FOp" secondAttribute="height" multiplier="5:2" id="7h2-r2-PmD"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.33997378460771444" green="0.072104196871027787" blue="0.72019749365482233" alpha="0.76549122431506844" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.91259517766497456" green="0.28321687828649411" blue="0.70509162436680173" alpha="0.43822238869863012" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="RPl-zu-zn7" firstAttribute="trailing" secondItem="vsf-Z5-s9a" secondAttribute="leading" constant="400" id="GXc-At-JUb"/>
+                                    <constraint firstItem="RPl-zu-zn7" firstAttribute="centerY" secondItem="BAk-5s-Joo" secondAttribute="centerY" id="IjV-jD-hLV"/>
+                                    <constraint firstItem="RPl-zu-zn7" firstAttribute="leading" secondItem="BAk-5s-Joo" secondAttribute="leading" id="Jjl-3j-Oug"/>
                                     <constraint firstItem="OYx-3f-6NY" firstAttribute="centerX" secondItem="BAk-5s-Joo" secondAttribute="centerX" id="Jv3-UM-Wqr"/>
+                                    <constraint firstItem="Slq-ds-FOp" firstAttribute="top" secondItem="RPl-zu-zn7" secondAttribute="bottom" constant="-2.5" id="X31-NQ-skJ"/>
                                     <constraint firstItem="OYx-3f-6NY" firstAttribute="centerY" secondItem="BAk-5s-Joo" secondAttribute="centerY" id="Xiz-73-Yt0"/>
+                                    <constraint firstItem="vsf-Z5-s9a" firstAttribute="top" secondItem="RPl-zu-zn7" secondAttribute="bottom" constant="-39.5" id="aOo-0K-h8Y"/>
                                     <constraint firstItem="TeC-yn-cKN" firstAttribute="leading" secondItem="BAk-5s-Joo" secondAttribute="leading" constant="12" id="aRx-SM-29B"/>
+                                    <constraint firstAttribute="bottom" secondItem="Slq-ds-FOp" secondAttribute="bottom" id="fta-63-xlA"/>
                                     <constraint firstAttribute="height" constant="77" id="sBC-y4-On0"/>
+                                    <constraint firstItem="Slq-ds-FOp" firstAttribute="leading" secondItem="RPl-zu-zn7" secondAttribute="leading" constant="300" id="u2K-KR-Wge"/>
                                     <constraint firstItem="TeC-yn-cKN" firstAttribute="centerY" secondItem="BAk-5s-Joo" secondAttribute="centerY" id="w5J-FA-Nsz"/>
+                                    <constraint firstAttribute="bottom" secondItem="vsf-Z5-s9a" secondAttribute="bottom" id="xrL-fb-Hnc"/>
+                                    <constraint firstAttribute="trailing" secondItem="RPl-zu-zn7" secondAttribute="trailing" id="zG9-fT-dKs"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lxt-9v-KNN" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
@@ -426,7 +489,7 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
                                         <rect key="frame" x="0.0" y="112" width="390" height="81.5"/>
-                                        <string key="text">At this point, we will generate a secret password, known to no human soul, and enable face/touch ID or lock code. We will use this password to securely encrypt all your information.</string>
+                                        <string key="text">At this point, we will generate magic, and enable face/touch ID or lock code. We will use this magic to lock your information behind your own security precautions.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -3511,7 +3574,7 @@
             <objects>
                 <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">
@@ -4077,6 +4140,9 @@
         <designable name="OQE-Pl-MyA">
             <size key="intrinsicContentSize" width="137.5" height="34"/>
         </designable>
+        <designable name="OYx-3f-6NY">
+            <size key="intrinsicContentSize" width="140.5" height="30"/>
+        </designable>
         <designable name="PUK-AI-8vq">
             <size key="intrinsicContentSize" width="181" height="41"/>
         </designable>
@@ -4085,6 +4151,9 @@
         </designable>
         <designable name="TKH-AD-Wdu">
             <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
+        <designable name="TeC-yn-cKN">
+            <size key="intrinsicContentSize" width="46" height="27"/>
         </designable>
         <designable name="Wkq-eT-O9X">
             <size key="intrinsicContentSize" width="180" height="180"/>
@@ -4140,9 +4209,14 @@
         <image name="marketplaceForTab" width="25" height="25"/>
         <image name="needForTab" width="29" height="25"/>
         <image name="roof" width="600" height="317"/>
+        <image name="skyline" width="383" height="100"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
         <image name="tempLogoKarl1" width="200" height="200"/>
+        <image name="train" width="200" height="72"/>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

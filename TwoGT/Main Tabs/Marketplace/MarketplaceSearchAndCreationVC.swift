@@ -98,7 +98,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
-    /// Saved locations for selection are saved in the keychain, using the Saves.shared object
+    
     private func setInitialValues() {
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
@@ -207,6 +207,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
+    /// Unwind segue here is responsible for dealing with creating and saving the search location
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
 
         if let s = segue.source as? CityStateSearchVC {
@@ -263,7 +264,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func fetchMatchingHaves() {
         showSpinner()
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
-        guard let v = creationManager.getCategory()?.databaseValue() else { fatalError() }
+        guard let v = creationManager.getCategory()?.firebaseValue() else { fatalError() }
         HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
             if array.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in

@@ -104,7 +104,7 @@ class MarketplaceModel: NSObject {
     // MARK: Private Creation Functions
     private func createNeedItem() -> NeedsBase.NeedItem {
         /// create new needs
-        guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.databaseValue() else { fatalError() }
+        guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.firebaseValue() else { fatalError() }
         let locData = NeedsDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
@@ -116,7 +116,7 @@ class MarketplaceModel: NSObject {
     
     private func createHaveItem() -> HavesBase.HaveItem {
         /// create new needs
-        guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.databaseValue() else { fatalError() }
+        guard let loc = creationManager?.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country, let cat = creationManager?.getCategory()?.firebaseValue() else { fatalError() }
         let locData = HavesDbWriter.LocationInfo(city: city, state: state, country: country, address: nil, geoLocation: nil)
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
