@@ -2,7 +2,7 @@
 //  Address+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/27/20.
+//  Created by Arthur Mayes on 9/28/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -19,8 +19,8 @@ extension Address {
 
     @NSManaged public var street1: String?
     @NSManaged public var street2: String?
-    @NSManaged public var type: String?
-    @NSManaged public var zip: String?
+    @NSManaged public var title: String?
     @NSManaged public var uid: String?
+    @NSManaged public var zip: String?
 
 }

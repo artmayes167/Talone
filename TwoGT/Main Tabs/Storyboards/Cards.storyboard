@@ -28,7 +28,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell0" id="Nz2-Ge-BcM">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell0" id="Nz2-Ge-BcM" customClass="TemplatesCollectionViewCell" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="2Gi-Pt-rBj" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -72,8 +72,11 @@
                                             </userDefinedRuntimeAttributes>
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="DCP-6C-i1B" id="bKA-Ck-xKg"/>
+                                        </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell1" id="09s-cd-Vt2">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell1" id="09s-cd-Vt2" customClass="TemplatesCollectionViewCell" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="143" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SrN-gN-uEx" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -125,8 +128,15 @@
                                                 <real key="value" value="0.0"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="8Pb-MG-izO" id="8tu-be-Ecj"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="VIX-QH-xk1" id="wJ9-6A-SC9"/>
+                                    <outlet property="delegate" destination="VIX-QH-xk1" id="tTN-Gg-2p9"/>
+                                </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TEV-t5-Qg7" customClass="CardPrimaryHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="77"/>
@@ -193,6 +203,7 @@
                     <tabBarItem key="tabBarItem" title="Templates" image="doc.text" catalog="system" id="kmI-hA-kbK"/>
                     <connections>
                         <outlet property="cardHeaderView" destination="TEV-t5-Qg7" id="PJg-yQ-qRn"/>
+                        <outlet property="collectionView" destination="viT-cW-2yn" id="jsg-yy-3wX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5LC-75-xZU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1972,9 +1983,12 @@
                                                 <real key="value" value="2"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="save:" destination="Woj-Xj-ZK2" eventType="touchUpInside" id="Q9T-Cl-Zo8"/>
+                                        </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" systemColor="systemGray2Color"/>
                                 <constraints>
                                     <constraint firstItem="F2r-CJ-d9g" firstAttribute="leading" secondItem="64g-EW-7pv" secondAttribute="leading" constant="24" id="1kp-e6-Ofw"/>
                                     <constraint firstAttribute="bottom" secondItem="F2r-CJ-d9g" secondAttribute="bottom" constant="6" id="9ag-jZ-ztZ"/>
@@ -2024,6 +2038,9 @@
                                                 <real key="value" value="2"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="Woj-Xj-ZK2" id="eW2-zW-GaB"/>
+                                        </connections>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
@@ -2151,12 +2168,16 @@
                     <tabBarItem key="tabBarItem" title="Me" image="person.fill" catalog="system" id="dxo-MI-sIE"/>
                     <navigationItem key="navigationItem" id="LIh-yp-0f6"/>
                     <connections>
+                        <outlet property="addImageButton" destination="biz-xt-HgE" id="bRx-AS-rsA"/>
                         <outlet property="availableTableView" destination="f3Y-21-IAC" id="EbH-S3-JRw"/>
                         <outlet property="handleLabel" destination="ClI-pp-rYZ" id="xfT-Dj-McX"/>
                         <outlet property="imageButton" destination="EaC-DB-MmZ" id="cfu-Cs-6Qg"/>
+                        <outlet property="titleTextField" destination="Jxj-eb-nxJ" id="mSe-jw-zNr"/>
+                        <segue destination="IiA-gb-9aP" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="4U0-Bf-3MC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gep-5y-bnn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="IiA-gb-9aP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3024.6376811594205" y="2612.9464285714284"/>
         </scene>

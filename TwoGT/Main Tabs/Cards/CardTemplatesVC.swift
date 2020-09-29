@@ -10,9 +10,11 @@ import UIKit
 
 class CardTemplatesVC: UIViewController {
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     private var cardTemplates: [Card] {
         get {
-            let cards =  AppDelegate.user.cardTemplates
+            let cards = AppDelegate.user.cardTemplates
             return cards.sorted { return $0.title! < $1.title! }
         }
     }
@@ -23,7 +25,6 @@ class CardTemplatesVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cardHeaderView.setTitleText("templates")
-        // Do any additional setup after loading the view.
     }
     
 
@@ -37,6 +38,9 @@ class CardTemplatesVC: UIViewController {
     }
     */
 
+    @IBAction func unwindToCardTemplates( _ segue: UIStoryboardSegue) {
+        collectionView.reloadData()
+    }
 }
 
 extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -47,14 +51,13 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let reuseIdentifier = String(format: "cell%i", indexPath.item%2)
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TemplatesCollectionViewCell
         
-        
-        return UICollectionViewCell()
+        cell.nameLabel.text = cardTemplates[indexPath.item].title
+        return cell
     }
-    
-    
-    
-    
-    
+}
+
+class TemplatesCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var nameLabel: UILabel!
 }

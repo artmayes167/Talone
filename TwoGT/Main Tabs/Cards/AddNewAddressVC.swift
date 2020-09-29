@@ -37,7 +37,7 @@ class AddNewAddressVC: UIViewController {
     private var addresses: [Address] {
         get {
             let adds =  AppDelegate.user.addresses
-            return adds.sorted { return $0.type! < $1.type! }
+            return adds.sorted { return $0.title! < $1.title! }
         }
     }
 
@@ -58,7 +58,7 @@ class AddNewAddressVC: UIViewController {
     func addAddress() {
         let newAddress = Address(context: adder.managedObjectContext)
 
-        newAddress.type = labelTextField.text?.lowercased().pure()
+        newAddress.title = labelTextField.text?.lowercased().pure()
         newAddress.street1 = street1TextField.text?.pure()
         newAddress.street2 = street2TextField.text?.pure()
         newAddress.city = city
@@ -123,7 +123,7 @@ extension AddNewAddressVC {
     
     private func checkValidity() -> Bool {
         for a in addresses {
-            if a.type == labelTextField.text?.lowercased().pure() {
+            if a.title == labelTextField.text?.lowercased().pure() {
                 showReplaceAlert()
                 return false
             }

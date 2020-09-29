@@ -128,7 +128,7 @@ class MarketplaceModel: NSObject {
    
    private func getPrimaryEmail() -> String {
        var emailString = "artmayes167@icloud.com"
-       if let primaryEmail: Email = AppDelegate.user.emails.first(where: { $0.name == DefaultsKeys.taloneEmail.rawValue})  {
+       if let primaryEmail: Email = AppDelegate.user.emails.first(where: { $0.title == DefaultsKeys.taloneEmail.rawValue})  {
                if let pEmail = primaryEmail.emailString {
                emailString = pEmail
            } else {

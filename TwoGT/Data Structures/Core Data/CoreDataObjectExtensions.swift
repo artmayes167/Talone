@@ -81,6 +81,36 @@ extension CityState {
     }
 }
 
+extension Card {
+    class func create(image: Data?, title: String, uid: String, handle: String, comments: String?, notes: String?) -> Card {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "Card",
+                                     in: managedContext)!
+
+       guard let card = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Card else {
+                                                fatalError()
+        }
+        card.image = image
+        card.title = title
+        card.uid = uid
+        card.userHandle = handle
+        card.comments = comments
+        card.personalNotes = notes
+
+        do {
+          try managedContext.save()
+            return card
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
 extension Community {
     class func create(communityName: String) -> Community {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
@@ -123,6 +153,33 @@ extension User {
     }
 }
 
+extension CardEmail {
+    class func create(title: String, email: Email) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "CardEmail",
+                                     in: managedContext)!
+
+       guard let cardEmail = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? CardEmail else {
+                                                fatalError()
+        }
+        cardEmail.title = email.title
+        cardEmail.emailString = email.emailString
+        cardEmail.templateTitle = title
+        cardEmail.uid = email.uid
+
+        do {
+          try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
 extension Email {
     class func create(name: String, emailAddress: String) -> Email {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
@@ -136,7 +193,7 @@ extension Email {
                                               insertInto: managedContext) as? Email else {
                                                 fatalError()
         }
-        email.name = name
+        email.title = name
         email.emailString = emailAddress
         email.uid = UserDefaults.standard.string(forKey: "uid")
 
@@ -193,6 +250,39 @@ extension SearchLocation {
     }
 }
 
+extension CardAddress {
+    class func create(title: String, address: Address) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "CardAddress",
+                                     in: managedContext)!
+
+       guard let cardAddress = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? CardAddress else {
+                                                fatalError()
+        }
+        cardAddress.title = address.title
+        cardAddress.templateTitle = title
+        
+        cardAddress.street1 = address.street1
+        cardAddress.street2 = address.street2
+        cardAddress.city = address.city
+        cardAddress.state = address.state
+        cardAddress.country = address.country
+        cardAddress.uid = address.uid
+        cardAddress.zip = address.zip
+
+        do {
+          try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
 extension Address {
     func displayName() -> String {
         return String(format: "\(street1!) \n\(city!), \(state!)")
@@ -224,6 +314,33 @@ extension Address {
             return self
         }
         return nil
+    }
+}
+
+extension CardPhoneNumber {
+    class func create(title: String, phoneNumber: PhoneNumber) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "CardPhoneNumber",
+                                     in: managedContext)!
+
+       guard let cardNum = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? CardPhoneNumber else {
+                                                fatalError()
+        }
+        cardNum.title = phoneNumber.title
+        cardNum.number = phoneNumber.number
+        cardNum.templateTitle = title
+        cardNum.uid = phoneNumber.uid
+
+        do {
+          try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
     }
 }
 

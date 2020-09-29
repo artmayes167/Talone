@@ -56,10 +56,10 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
         if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
             print("Email verified!!! User not anonymous!")
             authenticationWithTouchID() { (success, error) in
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if success {
-                    // May move to AppDelegate
-                    DispatchQueue.main.async() {
+                DispatchQueue.main.async {
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                    if success {
+                        // May move to AppDelegate
                         appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
                         let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
                         let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
@@ -69,17 +69,13 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                         UIView.animate(withDuration: 0.5) {
                             mainVC.view.alpha = 1
                         }
-                    }
-                } else if let e = error {
-                    DispatchQueue.main.async() {
+                    } else if let e = error {
                         self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
                             fatalError("\(e.localizedDescription)")
                         })
-                    }
-                } else {
-                    DispatchQueue.main.async() {
+                    } else {
                         self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in

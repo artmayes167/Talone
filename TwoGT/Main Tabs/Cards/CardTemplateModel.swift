@@ -15,7 +15,7 @@ struct CardTemplateModel {
     private var addresses: [Address] {
         get {
             let adds =  AppDelegate.user.addresses
-            return adds.sorted { return $0.type! < $1.type! }
+            return adds.sorted { return $0.title! < $1.title! }
         }
     }
     
@@ -29,7 +29,7 @@ struct CardTemplateModel {
     private var emails: [Email] {
         get {
             let ems =  AppDelegate.user.emails
-            return ems.sorted { return $0.name! < $1.name! }
+            return ems.sorted { return $0.title! < $1.title! }
         }
     }
     

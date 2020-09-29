@@ -17,6 +17,8 @@ class CardTemplateCreatorVC: UIViewController {
     @IBOutlet weak var availableTableView: UITableView!
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
+    @IBOutlet weak var addImageButton: UIButton!
+    @IBOutlet weak var titleTextField: UITextField!
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -67,17 +69,40 @@ class CardTemplateCreatorVC: UIViewController {
         sender.isSelected = !sender.isSelected
     }
     
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func save(_ sender: UIButton) {
+        
+        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded?.isEmpty ?? true) {
+            showOkayAlert(title: "Nope", message: "Add a title and some contact information", handler: nil)
+            return
+        }
+        
+        var imageData: Data?
+        if addImageButton.isSelected {
+            let image = CoreDataImageHelper.shareInstance.fetchImage()
+            if let i = image?.image {
+                imageData = i
+            } else {
+                fatalError()
+            }
+        }
+        
+        let c = Card.create(image: imageData, title: titleTextField.text!.pure(), uid: AppDelegate.user.uid!, handle: AppDelegate.user.handle!, comments: nil, notes: nil)
+        
+        for x in model.allAdded! {
+            switch x.entity.name {
+            case Address().entity.name:
+                CardAddress.create(title: c.title!, address: x as! Address)
+            case PhoneNumber().entity.name:
+                CardPhoneNumber.create(title: c.title!, phoneNumber: x as! PhoneNumber)
+            case Email().entity.name:
+                CardEmail.create(title: c.title!, email: x as! Email)
+            default:
+                fatalError()
+            }
+        }
+        view.makeToast("Card created!")
+        performSegue(withIdentifier: "unwindToTemplates", sender: nil)
     }
-    */
-
 }
 
 extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
@@ -104,7 +129,7 @@ extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
             guard let a = object as? Address else { fatalError() }
-            cell.detailsLabel.text = a.type
+            cell.detailsLabel.text = a.title
             return cell
         case .phoneNumber:
             let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
@@ -114,19 +139,8 @@ extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
         case .email:
             let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
             guard let e = object as? Email else { fatalError() }
-            cell.detailsLabel.text = e.name
+            cell.detailsLabel.text = e.title
             return cell
-        }
-    }
-    
-    func keyForDefiningAttribute(object: NSManagedObject) -> String {
-        switch typeForClass(object.entity.name) {
-        case .address:
-            return "type"
-        case .phoneNumber:
-            return "title"
-        case .email:
-            return "name"
         }
     }
     
@@ -204,17 +218,5 @@ extension CardTemplateCreatorVC: UITableViewDragDelegate, UITableViewDropDelegat
             tableView.reloadData()
         }
     }
-}
-
-class TemplateAddressCell: ParentAddressTableViewCell {
-    @IBOutlet weak var detailsLabel: UILabel!
-}
-
-class TemplatePhoneCell: ParentPhoneTableViewCell {
-    @IBOutlet weak var detailsLabel: UILabel!
-}
-
-class TemplateEmailCell: ParentEmailTableViewCell {
-    @IBOutlet weak var detailsLabel: UILabel!
 }
 

@@ -23,7 +23,7 @@ enum AddressSections: Int, CaseIterable {
     private var addresses: [Address] {
         get {
             let adds =  AppDelegate.user.addresses
-            return adds.sorted { return $0.type! < $1.type! }
+            return adds.sorted { return $0.title! < $1.title! }
         }
     }
     
@@ -37,7 +37,7 @@ enum AddressSections: Int, CaseIterable {
     private var emails: [Email] {
         get {
             let ems =  AppDelegate.user.emails
-            return ems.sorted { return $0.name! < $1.name! }
+            return ems.sorted { return $0.title! < $1.title! }
         }
     }
 
@@ -121,7 +121,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
             let address = addresses[indexPath.row]
-            cell.configure(name: address.type, details: address.displayName())
+            cell.configure(name: address.title, details: address.displayName())
             return cell
         case .phoneNumber:
             let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
@@ -131,7 +131,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         case .email:
             let cell = tableView.dequeueReusableCell(withIdentifier: AddressCell.identifier(indexPath)) as! AddressCell
             let email = emails[indexPath.row]
-            cell.configure(name: email.name, details: email.emailString)
+            cell.configure(name: email.title, details: email.emailString)
             return cell
         default:
             fatalError()
@@ -192,7 +192,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
                 managedObjectContext.delete(p)
             case .email:
                 let e = emails[indexPath.row]
-                if e.name != DefaultsKeys.taloneEmail.rawValue {
+                if e.title != DefaultsKeys.taloneEmail.rawValue {
                     managedObjectContext.delete(e)
                 } else {
                     showOkayAlert(title: "Sorry", message: "Can't touch this email.  It's special.", handler: nil)

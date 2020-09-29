@@ -144,10 +144,10 @@ extension Customizer {
         if let v = tableCell as? ParentAddressTableViewCell {
             v.contentView.backgroundColor = UIColor.hex("CEDCCF")
         }
-        else if let v = tableCell as? ParentAddressTableViewCell {
+        else if let v = tableCell as? ParentEmailTableViewCell {
             v.contentView.backgroundColor = UIColor.hex("BECBE3")
         }
-        else if let v = tableCell as? ParentAddressTableViewCell {
+        else if let v = tableCell as? ParentPhoneTableViewCell {
             v.contentView.backgroundColor = UIColor.hex("DBD9DE")
         }
     }
