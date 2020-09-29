@@ -149,6 +149,7 @@ class MyHaveCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var createdAtLabel: UILabel!
+    @IBOutlet weak var joinedLabel: UILabel?
 
     func configure(_ have: HaveItem) {
 
@@ -159,5 +160,13 @@ class MyHaveCell: UICollectionViewCell {
         locationLabel.text = have.have?.purpose?.cityState?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: have.createdAt ?? Date())
+        
+        // This works and returns [Need] type
+        
+        if let cn = have.have?.childNeeds, !cn.isEmpty {
+            joinedLabel?.text = "\(cn.count)"
+        } else {
+            joinedLabel?.text = ""
+        }
     }
 }

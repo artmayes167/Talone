@@ -2792,7 +2792,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaY-We-fMf">
                                                     <rect key="frame" x="57.5" y="49.5" width="13.5" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -2919,6 +2919,12 @@
                                                         <constraint firstAttribute="width" secondItem="MHY-gL-K12" secondAttribute="height" multiplier="1:1" id="kqB-H1-Unp"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdy-87-HVj">
+                                                    <rect key="frame" x="57.5" y="49.5" width="13.5" height="29"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Headline" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yie-yp-WA3">
                                                     <rect key="frame" x="12" y="8" width="390" height="48"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -2949,7 +2955,9 @@
                                                 <constraint firstAttribute="bottom" secondItem="neF-xh-Jww" secondAttribute="bottom" constant="8" id="9TG-1T-PIB"/>
                                                 <constraint firstItem="MHY-gL-K12" firstAttribute="leading" secondItem="tRs-0z-8M2" secondAttribute="leading" id="AU4-R1-y2g"/>
                                                 <constraint firstItem="neF-xh-Jww" firstAttribute="top" secondItem="zW9-7O-IWS" secondAttribute="bottom" constant="8" id="GfM-2z-6cp"/>
+                                                <constraint firstItem="zdy-87-HVj" firstAttribute="centerX" secondItem="MHY-gL-K12" secondAttribute="centerX" id="S86-kX-gt5"/>
                                                 <constraint firstItem="MHY-gL-K12" firstAttribute="top" secondItem="tRs-0z-8M2" secondAttribute="top" id="SF1-gZ-wKL"/>
+                                                <constraint firstItem="zdy-87-HVj" firstAttribute="centerY" secondItem="MHY-gL-K12" secondAttribute="centerY" id="aah-kC-77H"/>
                                                 <constraint firstAttribute="trailing" secondItem="zW9-7O-IWS" secondAttribute="trailing" constant="8" id="dbt-e0-3gJ"/>
                                                 <constraint firstItem="Yie-yp-WA3" firstAttribute="top" secondItem="tRs-0z-8M2" secondAttribute="top" constant="8" id="ddu-QY-VW7"/>
                                                 <constraint firstItem="neF-xh-Jww" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tRs-0z-8M2" secondAttribute="leading" constant="12" id="fPY-MW-6ta"/>
@@ -2966,6 +2974,7 @@
                                         <connections>
                                             <outlet property="categoryImage" destination="MHY-gL-K12" id="D2t-jn-OTy"/>
                                             <outlet property="createdAtLabel" destination="neF-xh-Jww" id="jgB-A8-xie"/>
+                                            <outlet property="joinedLabel" destination="zdy-87-HVj" id="9uc-Ow-dgV"/>
                                             <outlet property="locationLabel" destination="zW9-7O-IWS" id="lbd-U7-RFJ"/>
                                             <outlet property="titleLabel" destination="Yie-yp-WA3" id="NqB-s5-OWA"/>
                                         </connections>
@@ -3574,7 +3583,7 @@
             <objects>
                 <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">
