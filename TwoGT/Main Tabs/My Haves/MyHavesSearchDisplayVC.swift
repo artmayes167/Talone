@@ -28,34 +28,9 @@ class MyHavesSearchDisplayVC: UIViewController {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
+        getHaves()                  // load from CoreData
+        startObservingHaveChanges() // sync with Firebase
 
-        getHaves()
-        // Temporary
-        HavesDbFetcher().observeMyHaves { fibHaveItems in
-            for have in self.haves {
-                for fibHave in fibHaveItems where fibHave.id == have.haveItem?.id {
-                    if let needStubs = fibHave.needs {
-
-                        let cdNeeds = have.childNeeds
-
-                        for needStub in needStubs {
-                            for cdNeed in cdNeeds {
-                                if cdNeed.needItem?.id == needStub.id {
-
-                                }
-                            }
-                            print(needStub.createdBy)
-                            print(needStub.id)
-                            print(needStub.owner)
-                            //cdNeeds.append(createNeed) <== Need that has only three values, see above
-                        }
-                        have.childNeeds = cdNeeds
-
-                    }
-                }
-            }
-
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -105,6 +80,82 @@ class MyHavesSearchDisplayVC: UIViewController {
         getHaves()
     }
 
+    private func startObservingHaveChanges() {
+        // Temporary location - TODO: Refactor. When should Have owner be notified of new links/people in need?
+        HavesDbFetcher().observeMyHaves { [self] fibHaveItems in
+
+            var addedNeedOwners = [String]()
+            var changedHaves = [HaveItem]()
+            var isRedrawRequired = false
+
+            // Cross-reference needs
+            for have in self.haves {
+                for fibHave in fibHaveItems where fibHave.id == have.haveItem?.id {
+                    if let needStubs = fibHave.needs, let haveItem = have.haveItem {
+                        var isChanged = false
+                        changedHaves.append(haveItem)   // for showing on UI
+
+                        let cdNeeds = have.childNeeds
+
+                        // First determine if there are any new needStubs that are missing from CD
+                        // These are the people that have linked with this have.
+                        for needStub in needStubs {
+                            var found = false
+                            for cdNeed in cdNeeds where cdNeed.needItem?.id == needStub.id {
+                                found = true
+                                break
+                            }
+                            if found == false {
+                                // create a new need (gets appended to childItems implicitly)
+                                var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
+                                fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
+                                let n = Need.createNeed(item: NeedItem.createNeedItem(item: fibNeed))
+                                n.parentHaveItemId = fibHave.id
+                                addedNeedOwners.append(fibNeed.owner)
+                                isChanged = true
+                            }
+                        }
+
+                        // Then determine if there are needStubs being deleted requiring cleanup from CD.
+                        // These are the people that have removed the link with this have.
+                        for cdNeed in cdNeeds {
+                            var found = false
+                            for needStub in needStubs where needStub.id == cdNeed.needItem?.id {
+                                found = true
+                                break
+                            }
+                            if found == false {
+                                cdNeed.deleteNeed()
+                                isChanged = true
+                            }
+                        }
+                        if isChanged { haveItem.update(); isRedrawRequired = true } // store changes to CD
+                    }
+                }
+            }
+            if isRedrawRequired { collectionView.reloadData() }
+            notifyUserOfNewLinks(addedNeedOwners, changedHaves)
+        }
+    }
+
+    func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [HaveItem]) {
+        if owners.count > 0 {
+            var str = ""
+            let haveDesc = haveItems.count == 1 ? (haveItems[0].headline ?? haveItems[0].desc ?? "") : "haves."
+            switch owners.count {
+            case 1:
+                str = "\(owners[0]) is interested in your \(haveDesc)"
+            case 2:
+                str = "\(owners[0]) and \(owners[1]) have linked to your \(haveDesc)"
+            default:
+                str = "\(owners[0]), \(owners[1]) and \(owners.count-2) others have linked to your \(haveDesc)"
+            }
+            // Show Toast
+            self.view.makeToast(str, duration: 2.0, position: .top) {_ in
+            }
+
+        }
+    }
 }
 
 extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -160,9 +211,9 @@ class MyHaveCell: UICollectionViewCell {
         locationLabel.text = have.have?.purpose?.cityState?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: have.createdAt ?? Date())
-        
+
         // This works and returns [Need] type
-        
+
         if let cn = have.have?.childNeeds, !cn.isEmpty {
             joinedLabel?.text = "\(cn.count)"
         } else {

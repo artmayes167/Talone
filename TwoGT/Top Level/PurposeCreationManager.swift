@@ -14,7 +14,7 @@ enum CurrentCreationType: Int {
 }
 
 class PurposeCreationManager: NSObject {
-    
+
     private var purpose: Purpose = Purpose()
     private var need: Need?
     private var have: Have?
@@ -23,7 +23,7 @@ class PurposeCreationManager: NSObject {
     private var cityState: CityState?
     private var headline: String?
     private var desc: String?
-    
+
     // TODO: - Rethink these inits to require city and state
     private func createPurpose(type: NeedType, cityState: CityState) -> Bool {
         let pred = NSPredicate(format: "category == %@", type.rawValue)
@@ -58,11 +58,11 @@ class PurposeCreationManager: NSObject {
         print("---------Successfully created Purpose with PurposeCreationManager")
         return true
     }
-    
+
     ///This function calls createPurpose()
     /// - Returns: `true` if `cityState` and  `category` have been previously set,` false` otherwise
     func checkPrimaryNavigationParameters(save: Bool) -> Bool {
-        guard let c = cityState, let t = category, creationType != .unknown else  {
+        guard let c = cityState, let t = category, creationType != .unknown else {
             print("---------Missing values in PurposeCreationManager -> checkPrimaryNavigationParameters.  cityState = \(String(describing: cityState)), category = \(String(describing: category)), creationType = \(creationType.rawValue)")
             return false
         }
@@ -87,7 +87,7 @@ class PurposeCreationManager: NSObject {
     func setCreationType(_ type: CurrentCreationType) {
         creationType = type
     }
-    
+
     func currentCreationTypeString() -> String {
         switch creationType {
         case .have:
@@ -98,47 +98,47 @@ class PurposeCreationManager: NSObject {
             return "none"
         }
     }
-    
+
     func currentCreationType() -> CurrentCreationType {
         return creationType
     }
-    
+
     func setCategory(_ type: NeedType) {
         category = type
-        
+
     }
-    
+
     func getCategory() -> NeedType? {
         return category
     }
-    
+
     func setLocation(cityState: CityState) {
         let c: NSManagedObject = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!)
         self.cityState = c as? CityState
     }
-    
+
     func setLocation(location: AppLocationInfo, communityName: String) -> Bool {
         guard let city = location.city, let state = location.state, let country = location.country else { return false }
         let c: NSManagedObject = CityState.create(city: city, state: state, country: country, communityName: communityName)
         cityState = c as? CityState
         return true
     }
-    
+
     func setLocation(city: String, state: String, country: String, community: String) {
         let c: NSManagedObject = CityState.create(city: city, state: state, country: country, communityName: community)
         cityState = c as? CityState
     }
-    
+
     func setCommunity(_ community: String) {
         guard let c = purpose.cityState else { return }
         let comm = Community.create(communityName: community)
         c.addToCommunities(comm)
     }
-    
+
     func getLocationOrNil() -> CityState? {
         return cityState
     }
-    
+
     /// - Returns: `true` if able to set both headline and description,` false` otherwise
     func setHeadline(_ headline: String?, description: String?) -> Bool {
         self.headline = headline
@@ -149,15 +149,15 @@ class PurposeCreationManager: NSObject {
             return false
         }
     }
-    
+
     func getHeadline() -> String? {
         return headline
     }
-    
+
     func getDescription() -> String? {
         return desc
     }
-    
+
     func setNeed(_ need: Need) {
         self.need = need
     }
@@ -173,7 +173,7 @@ class PurposeCreationManager: NSObject {
     func setHave(_ have: Have) {
         self.have = have
     }
-    
+
     func setHaveItem(item: HaveItem) {
         guard let h = have else {
             have = Have.createHave(item: item)
@@ -181,7 +181,7 @@ class PurposeCreationManager: NSObject {
         }
         h.haveItem = item
     }
-    
+
     /// - Returns: `true` if the item contains all required information,` false` otherwise
     func areAllRequiredFieldsFilled(light: Bool) -> Bool {
         let success = prepareForSave()
@@ -197,7 +197,7 @@ class PurposeCreationManager: NSObject {
         }
         return false
     }
-    
+
     /// - Returns: `true` if the relevant `Have` or `Need` has been created properly,` false` otherwise
     func prepareForSave() -> Bool {
         switch creationType {
@@ -207,7 +207,7 @@ class PurposeCreationManager: NSObject {
             item.desc = desc
             item.headline = headline
             purpose.addToNeeds(n)
-            
+
             print("---------Preparing purpose for save, successfully: \(purpose.needs!.contains(n))")
             return true
         case .have:
@@ -216,7 +216,7 @@ class PurposeCreationManager: NSObject {
             item.desc = desc
             item.headline = headline
             purpose.addToHaves(h)
-            
+
             print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
             return true
         default:
@@ -224,11 +224,11 @@ class PurposeCreationManager: NSObject {
             return false
         }
     }
-    
+
     /// - Returns: `Purpose` object , if corresponding item has been properly created,` nil` otherwise
     func getSavedPurpose() -> Purpose? {
         if !prepareForSave() { return nil }
         return purpose
     }
-    
+
 }
