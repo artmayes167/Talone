@@ -1064,7 +1064,7 @@
                                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3YB-Ye-nOR" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="22" y="0.0" width="346" height="128"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <color key="textColor" systemColor="labelColor"/>
+                                                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                                         <userDefinedRuntimeAttributes>
@@ -1110,6 +1110,9 @@
                                                 <rect key="frame" x="0.0" y="599.5" width="390" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <state key="normal" title="Send Invitation Request"/>
+                                                <connections>
+                                                    <action selector="sendToArt:" destination="rns-V5-s8B" eventType="touchUpInside" id="4KA-hM-fKG"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -1169,6 +1172,9 @@
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="c6N-Di-t7b"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="3Gb-k1-6jM"/>
+                                <connections>
+                                    <outlet property="delegate" destination="rns-V5-s8B" id="2uy-KY-GhE"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LNO-kf-X1L"/>
@@ -1185,10 +1191,19 @@
                     </view>
                     <navigationItem key="navigationItem" id="ewa-Bt-T3D"/>
                     <connections>
+                        <outlet property="emailTextField" destination="ZIM-tj-soc" id="FMT-7n-Waw"/>
                         <outlet property="pageHeaderView" destination="J9t-hI-Q35" id="rNl-01-9rn"/>
+                        <outlet property="personalNotesTextView" destination="3YB-Ye-nOR" id="JZS-Qx-mLy"/>
+                        <outlet property="realNameTextField" destination="0ia-tF-3Ve" id="Ql3-NS-jFW"/>
+                        <outlet property="scrollView" destination="ci8-QJ-Pe4" id="7KN-KU-ACK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IW3-yv-5IJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="u7e-hH-Wn3">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="rns-V5-s8B" id="TCe-If-IAF"/>
+                    </connections>
+                </tapGestureRecognizer>
                 <exit id="d1a-TD-8lF" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="232" y="2354"/>
@@ -2674,9 +2689,6 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">

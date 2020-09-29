@@ -73,27 +73,6 @@ class PurposeCreationManager: NSObject {
         return true
     }
     
-    /*
-     let name = "John Appleseed"
-
-     let newContact = addRecord(Contact.self)
-     newContact.contactNo = 1
-     newContact.contactName = name
-
-     let contacts = query(Contact.self, search: NSPredicate(format: "contactName == %@", name))
-     for contact in contacts
-     {
-         print ("Contact name = \(contact.contactName), no = \(contact.contactNo)")
-     }
-
-     deleteRecords(Contact.self, search: NSPredicate(format: "contactName == %@", name))
-
-     recs = recordsInTable(Contact.self)
-     print ("Contacts table has \(recs) records")
-
-     saveDatabase()
-     */
-    
     // Attempt at generic creation
     class func query<T: NSManagedObject>(table: String, searchPredicate: NSPredicate) -> [T] {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
@@ -104,27 +83,6 @@ class PurposeCreationManager: NSObject {
         print("---------Results from query = \(results)")
         return results
     }
-    
-//    class func createPurpose(inContext managedContext: NSManagedObjectContext, cityState: CityState, type: NeedType) -> Purpose {
-//
-//        let entity =
-//          NSEntityDescription.entity(forEntityName: "Purpose",
-//                                     in: managedContext)!
-//
-//       guard let purpose = NSManagedObject(entity: entity,
-//                                              insertInto: managedContext) as? Purpose else {
-//                                                fatalError()
-//        }
-//        purpose.category = type.rawValue
-//        purpose
-//        do {
-//          try managedContext.save()
-//            return purpose
-//        } catch let error as NSError {
-//          print("Could not save. \(error), \(error.userInfo)")
-//            fatalError()
-//        }
-//    }
     
     func setCreationType(_ type: CurrentCreationType) {
         creationType = type
@@ -212,18 +170,6 @@ class PurposeCreationManager: NSObject {
         n.needItem = item
     }
     
-//    func setParentNeed(_ need: Need) {
-//        self.need?.addToParentNeed(need)
-//    }
-//    
-//    func setNeedParentHave(_ have: Have) {
-//        self.need?.parentHave = have
-//    }
-//    
-//    func setHaveParentHave(_ have: Have) {
-//        self.have?.parentHave = have
-//    }
-    
     func setHave(_ have: Have) {
         self.have = have
     }
@@ -286,100 +232,3 @@ class PurposeCreationManager: NSObject {
     }
     
 }
-
-//extension PurposeCreationManager {
-//
-//    func addRecord<T: NSManagedObject>(_ type : T.Type) -> T
-//    {
-//        let entityName = T.description()
-//        let context = app.managedObjectContext
-//        let entity = NSEntityDescription.entity(forEntityName: entityName, in: context)
-//        let record = T(entity: entity!, insertInto: context)
-//        return record
-//    }
-//
-//    func recordsInTable<T: NSManagedObject>(_ type : T.Type) -> Int
-//    {
-//        let recs = allRecords(T.self)
-//        return recs.count
-//    }
-//
-//
-//    func allRecords<T: NSManagedObject>(_ type : T.Type, sort: NSSortDescriptor? = nil) -> [T]
-//    {
-//        let context = app.managedObjectContext
-//        let request = T.fetchRequest()
-//        do
-//        {
-//            let results = try context.fetch(request)
-//            return results as! [T]
-//        }
-//        catch
-//        {
-//            print("Error with request: \(error)")
-//            return []
-//        }
-//    }
-//
-//    func query<T: NSManagedObject>(_ type : T.Type, search: NSPredicate?, sort: NSSortDescriptor? = nil, multiSort: [NSSortDescriptor]? = nil) -> [T]
-//    {
-//        let context = app.managedObjectContext
-//        let request = T.fetchRequest()
-//        if let predicate = search
-//        {
-//            request.predicate = predicate
-//        }
-//        if let sortDescriptors = multiSort
-//        {
-//            request.sortDescriptors = sortDescriptors
-//        }
-//        else if let sortDescriptor = sort
-//        {
-//            request.sortDescriptors = [sortDescriptor]
-//        }
-//
-//        do
-//        {
-//            let results = try context.fetch(request)
-//            return results as! [T]
-//        }
-//        catch
-//        {
-//            print("Error with request: \(error)")
-//            return []
-//        }
-//
-//    }
-//
-//
-//    func deleteRecord(_ object: NSManagedObject)
-//    {
-//        let context = app.managedObjectContext
-//        context.delete(object)
-//    }
-//
-//    func deleteRecords<T: NSManagedObject>(_ type : T.Type, search: NSPredicate? = nil)
-//    {
-//        let context = app.managedObjectContext
-//
-//        let results = query(T.self, search: search)
-//        for record in results
-//        {
-//            context.delete(record)
-//        }
-//    }
-//
-//    func saveDatabase()
-//    {
-//        let context = app.managedObjectContext
-//
-//        do
-//        {
-//            try context.save()
-//        }
-//        catch
-//        {
-//            print("Error saving database: \(error)")
-//        }
-//    }
-//}

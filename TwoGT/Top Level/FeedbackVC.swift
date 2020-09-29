@@ -112,7 +112,7 @@ class FeedbackVC: UIViewController {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {
-                    self.showOkayAlert(title: "Can't Call", message: "You're probably running this in the Simulator.  Trying to crash the app?  This is not your moment.", handler: nil)
+                    self.showOkayAlert(title: "Can't Call", message: "You're probably running this on an ipod.  Trying to crash the app?  This is not your moment.", handler: nil)
                 }
             } else {
                 self.showOkayAlert(title: "", message: "Bad url", handler: nil)
