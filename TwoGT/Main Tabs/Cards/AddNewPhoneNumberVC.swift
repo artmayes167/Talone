@@ -18,7 +18,8 @@ class AddNewPhoneNumberVC: UIViewController {
     private var phoneNumbers: [PhoneNumber] {
         get {
             let phones =  AppDelegate.user.phoneNumbers
-            return phones.sorted { return $0.title! < $1.title! }
+            let p = phones.sorted { return $0.title! < $1.title! }
+            return p.filter { $0.entity.name != CardPhoneNumber().entity.name }
         }
     }
     

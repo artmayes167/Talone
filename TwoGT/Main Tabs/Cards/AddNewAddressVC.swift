@@ -37,7 +37,8 @@ class AddNewAddressVC: UIViewController {
     private var addresses: [Address] {
         get {
             let adds =  AppDelegate.user.addresses
-            return adds.sorted { return $0.title! < $1.title! }
+            let a = adds.sorted { return $0.title! < $1.title! }
+            return a.filter { $0.entity.name != CardAddress().entity.name }
         }
     }
 
