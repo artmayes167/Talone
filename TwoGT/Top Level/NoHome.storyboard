@@ -223,14 +223,14 @@
                                     <segue destination="g9E-Tv-tdm" kind="embed" identifier="toBaseTabBar" id="zaX-an-COn"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AW1-xa-PLh">
-                                <rect key="frame" x="364" y="58" width="50" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AW1-xa-PLh" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="364" y="58" width="50" height="25"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="lX5-WG-Of1">
-                                        <rect key="frame" x="10" y="14" width="40" height="22"/>
+                                        <rect key="frame" x="6" y="0.0" width="38" height="25"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="D" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9OC-t0-9vo">
-                                                <rect key="frame" x="0.0" y="0.0" width="10" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="9.5" height="25"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -239,7 +239,7 @@
                                                 <size key="shadowOffset" width="1" height="0.0"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L5M-j2-STt">
-                                                <rect key="frame" x="10" y="0.0" width="10" height="22"/>
+                                                <rect key="frame" x="9.5" y="0.0" width="9.5" height="25"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -248,7 +248,7 @@
                                                 <size key="shadowOffset" width="1" height="0.0"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="S" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z42-yw-zj0">
-                                                <rect key="frame" x="20" y="0.0" width="10" height="22"/>
+                                                <rect key="frame" x="19" y="0.0" width="9.5" height="25"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -257,7 +257,7 @@
                                                 <size key="shadowOffset" width="1" height="0.0"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="H" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CY0-uk-pAh">
-                                                <rect key="frame" x="30" y="0.0" width="10" height="22"/>
+                                                <rect key="frame" x="28.5" y="0.0" width="9.5" height="25"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -275,23 +275,31 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="2E7-Bc-SNy"/>
-                                    <constraint firstAttribute="trailing" secondItem="lX5-WG-Of1" secondAttribute="trailing" id="5A7-vS-z7e"/>
-                                    <constraint firstAttribute="bottom" secondItem="lX5-WG-Of1" secondAttribute="bottom" constant="14" id="FHG-3m-G2b"/>
-                                    <constraint firstItem="lX5-WG-Of1" firstAttribute="top" secondItem="AW1-xa-PLh" secondAttribute="top" constant="14" id="Zio-ty-GCy"/>
+                                    <constraint firstAttribute="height" constant="25" id="2E7-Bc-SNy"/>
+                                    <constraint firstAttribute="trailing" secondItem="lX5-WG-Of1" secondAttribute="trailing" constant="6" id="5A7-vS-z7e"/>
+                                    <constraint firstAttribute="bottom" secondItem="lX5-WG-Of1" secondAttribute="bottom" id="FHG-3m-G2b"/>
+                                    <constraint firstItem="lX5-WG-Of1" firstAttribute="top" secondItem="AW1-xa-PLh" secondAttribute="top" id="Zio-ty-GCy"/>
                                     <constraint firstItem="lX5-WG-Of1" firstAttribute="centerY" secondItem="AW1-xa-PLh" secondAttribute="centerY" id="kTt-9P-wKl"/>
-                                    <constraint firstItem="lX5-WG-Of1" firstAttribute="leading" secondItem="AW1-xa-PLh" secondAttribute="leading" constant="10" id="mf9-uJ-n6o"/>
+                                    <constraint firstItem="lX5-WG-Of1" firstAttribute="leading" secondItem="AW1-xa-PLh" secondAttribute="leading" constant="6" id="mf9-uJ-n6o"/>
                                     <constraint firstAttribute="width" constant="50" id="qfu-CH-gle"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1lz-Jf-c9h" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="364" y="58" width="50" height="50"/>
+                                <rect key="frame" x="364" y="58" width="50" height="25"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="12" maxX="-2" maxY="12"/>
-                                <state key="normal" image="tab">
+                                <state key="normal">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="68" scale="large" weight="light"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -364,10 +372,20 @@
                 <tabBarController interfaceStyle="light" id="g9E-Tv-tdm" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="O1f-c7-cSq"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="leV-Gd-why">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" backgroundImage="dragonClose" id="leV-Gd-why">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.27622483738740589" green="0.25793047787389056" blue="0.56269828680203049" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="8hf-gU-7T7" kind="relationship" relationship="viewControllers" id="hxw-Dl-sd7"/>
@@ -3493,7 +3511,7 @@
             <objects>
                 <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">
@@ -4027,7 +4045,7 @@
     </scenes>
     <designables>
         <designable name="1lz-Jf-c9h">
-            <size key="intrinsicContentSize" width="549" height="250"/>
+            <size key="intrinsicContentSize" width="30" height="34"/>
         </designable>
         <designable name="1pz-ae-jMm">
             <size key="intrinsicContentSize" width="592" height="592"/>
@@ -4114,6 +4132,7 @@
     <resources>
         <image name="appIcon" width="180" height="180"/>
         <image name="chevronRight" width="592" height="592"/>
+        <image name="dragonClose" width="4032" height="3024"/>
         <image name="eventForTab" width="25" height="28"/>
         <image name="food" width="329" height="304.5"/>
         <image name="haveForTab" width="28" height="28"/>
@@ -4123,7 +4142,6 @@
         <image name="roof" width="600" height="317"/>
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
-        <image name="tab" width="549" height="250"/>
         <image name="tempLogoKarl1" width="200" height="200"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

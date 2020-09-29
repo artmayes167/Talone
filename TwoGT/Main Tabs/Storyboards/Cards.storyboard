@@ -21,7 +21,10 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="viT-cW-2yn">
                                 <rect key="frame" x="0.0" y="166" width="414" height="647"/>
                                 <color key="backgroundColor" red="0.44947196809072831" green="0.47339272894754902" blue="0.77466687817258884" alpha="0.43664383561643838" colorSpace="custom" customColorSpace="sRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HDg-l5-rGs">
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="viT-cW-2yn" secondAttribute="height" multiplier="414:647" id="5pX-gM-Ufq"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="HDg-l5-rGs">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -413,7 +416,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n9J-Pv-8nE" userLabel="Background View">
                                 <rect key="frame" x="0.0" y="144" width="414" height="669"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8l4-W1-Wrf" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="107" y="44" width="200" height="200"/>
@@ -469,6 +472,7 @@
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="42" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="d33-gh-85q">
                                 <rect key="frame" x="20" y="252" width="374" height="561"/>
+                                <color key="backgroundColor" red="0.65670483732876717" green="0.74328558575617121" blue="0.99775256849315064" alpha="0.76728381849315064" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="header" id="fU5-mt-kcP" customClass="YouHeaderCell" customModule="Talone" customModuleProvider="target">
@@ -485,12 +489,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="I8n-fM-xbB" firstAttribute="leading" secondItem="m4z-T9-8vC" secondAttribute="leading" constant="12" id="D1O-ZZ-nGL"/>
                                                 <constraint firstItem="I8n-fM-xbB" firstAttribute="centerY" secondItem="m4z-T9-8vC" secondAttribute="centerY" id="YNr-H2-EaR"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="titleLabel" destination="I8n-fM-xbB" id="Eo0-0g-dd8"/>
                                         </connections>
@@ -597,22 +602,22 @@
                                             <outlet property="nameLabel" destination="MMU-kZ-jpY" id="LmZ-5X-biD"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="footer" rowHeight="62" id="3Rr-9x-pd6" customClass="YouFooterCell" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="156.5" width="374" height="62"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="footer" rowHeight="50" id="3Rr-9x-pd6" customClass="YouFooterCell" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="156.5" width="374" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3Rr-9x-pd6" id="Iaa-pK-xsc">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="62"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jK2-Vf-gak">
-                                                    <rect key="frame" x="0.0" y="46" width="374" height="16"/>
+                                                    <rect key="frame" x="0.0" y="42" width="374" height="8"/>
                                                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="16" id="bZw-pK-wVe"/>
+                                                        <constraint firstAttribute="height" constant="8" id="bZw-pK-wVe"/>
                                                     </constraints>
                                                 </view>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y0j-rL-ZDb" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                    <rect key="frame" x="250" y="9" width="104" height="45"/>
+                                                    <rect key="frame" x="250" y="2" width="104" height="45"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="45" id="Ljc-Ol-XBe"/>
@@ -635,14 +640,16 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
                                             </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="Y0j-rL-ZDb" secondAttribute="trailing" constant="20" symbolic="YES" id="3hT-lf-lv3"/>
                                                 <constraint firstAttribute="bottom" secondItem="jK2-Vf-gak" secondAttribute="bottom" id="8lq-mL-sf1"/>
                                                 <constraint firstItem="jK2-Vf-gak" firstAttribute="leading" secondItem="Iaa-pK-xsc" secondAttribute="leading" id="CCa-MV-Ixq"/>
-                                                <constraint firstAttribute="bottom" secondItem="Y0j-rL-ZDb" secondAttribute="bottom" constant="8" id="iBH-gQ-v13"/>
+                                                <constraint firstAttribute="bottom" secondItem="Y0j-rL-ZDb" secondAttribute="bottom" constant="3" id="iBH-gQ-v13"/>
                                                 <constraint firstAttribute="trailing" secondItem="jK2-Vf-gak" secondAttribute="trailing" id="obj-Bt-qsu"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="addNewButton" destination="Y0j-rL-ZDb" id="atT-HV-FBX"/>
                                         </connections>

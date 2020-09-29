@@ -21,6 +21,9 @@ class CardTemplatesVC: UIViewController {
     
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     
+    let spacer = CGFloat(0)
+    let numberOfItemsInRow = CGFloat(3)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +58,14 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
         
         cell.nameLabel.text = cardTemplates[indexPath.item].title
         return cell
+    }
+}
+
+extension CardTemplatesVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var width = UIScreen.main.bounds.width
+        width = (width - spacer)/numberOfItemsInRow
+        return CGSize(width: width, height: width)
     }
 }
 

@@ -61,3 +61,9 @@
 // Email by Rahmat Hidayat from the Noun Project
 
 // Chicago Skyline by Blaise Sewell from the Noun Project
+
+// scream by WARPAINT Media Inc. from the Noun Project
+
+// Justice by Edwin PM from the Noun Project
+
+// Happy by AomAm from the Noun Project
