@@ -102,8 +102,8 @@ class AddNewAddressVC: UIViewController {
         if !(type == .none) {
             let user = AppDelegate.user
             // Use core data
-            guard let city = loc[.city], let state = loc[.state], let country = loc[.country] else { fatalError() }
-            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country)
+            guard let city = loc[.city], let state = loc[.state] else { fatalError() }
+            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state)
             s.type = ["home", "alternate"][type.rawValue]
             user.addToSearchLocations(s)
         }
