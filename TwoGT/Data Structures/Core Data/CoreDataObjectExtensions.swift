@@ -148,6 +148,9 @@ extension CardTemplateInstance {
     }
 }
 
+/// Additional required items for payload indicators
+/// createdAt, modifiedAt, createdBy (uid), createdFor (uid), senderHandle
+/// Exists solely to Encode for payload
 struct CodableCardTemplateInstance: Codable {
     
     let receiverUserHandle: String

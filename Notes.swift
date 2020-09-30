@@ -6,6 +6,13 @@
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 
+// uid will be unique to user, and is shared as an identifier with FiB objects
+// owner will be the user's handle-- primarily used for display, and in-app unique identification for non-FiB objects
+// taloneEmail unique, and used for account logIn
+
+
+
+
 //Notes for Creative Commons usage
 
 // light food image by Augusto from the Noun Project
