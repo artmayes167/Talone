@@ -36,7 +36,7 @@ extension DatabaseReady {
 }
 
 enum DefaultsKeys: String, CaseIterable {
-    case lastUsedLocation, taloneEmail, userHandle, uuid
+    case lastUsedLocation, taloneEmail, userHandle, uid
 }
 
 enum ProfileButtonType {

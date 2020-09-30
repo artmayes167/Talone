@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)
-        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),  let uid = UserDefaults.standard.string(forKey: "uid")  {
+        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),  let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue)  {
             user.uid = uid
             _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
             return user
@@ -74,11 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    application,
                    didFinishLaunchingWithOptions: launchOptions
                )
-
-        if UserDefaults.standard.string(forKey: DefaultsKeys.uuid.rawValue) == nil {
-            let uuid = UUID().uuidString
-            UserDefaults.standard.setValue(uuid, forKeyPath: DefaultsKeys.uuid.rawValue)
-        }
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()

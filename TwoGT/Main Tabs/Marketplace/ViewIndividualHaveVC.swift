@@ -91,15 +91,12 @@ class ViewIndividualHaveVC: UIViewController {
 
         performSegue(withIdentifier: "toAddHeadline", sender: nil)
     }
-    
-    
 
     @IBAction func sendCard(_ sender: Any) {
     }
 
     @IBAction func seeCard(_ sender: Any) {
     }
-
     
     // MARK: - Navigation
 
@@ -110,7 +107,6 @@ class ViewIndividualHaveVC: UIViewController {
             vc.haveItem = haveItem
         }
     }
-    
     
     @IBAction func unwindToViewIndividualHaveVC( _ segue: UIStoryboardSegue) {}
 
