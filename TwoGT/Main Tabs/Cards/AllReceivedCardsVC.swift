@@ -11,10 +11,49 @@ import UIKit
 class AllReceivedCardsVC: UIViewController {
 
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
+    @IBOutlet weak var tableView: UITableView!
+    
+    var interactions: [Interaction] = [] {
+        didSet {
+            var dict: [String: [String]] = [:]
+            for i in interactions {
+                if let s = i.referenceUserHandle, let firstChar = s.first {
+                    if var array = dict[String(firstChar)] {
+                        array.append(s)
+                        print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
+                    } else {
+                        dict[String(firstChar)] = [s]
+                    }
+                } else { fatalError() }
+            }
+            contactList = dict
+        }
+    }
+    
+    var contactList: [String: [String]] = [:] {
+        didSet {
+            
+            if isViewLoaded {
+                tableView.reloadData()
+            }
+        }
+    }
+    
+    var contactListKeys: [String] {
+        get {
+            return contactList.keys.sorted()
+        }
+    }
+    
+    func getInteractions() {
+        let i = AppDelegate.user.interactions
+        if i.isEmpty { return }
+        interactions = i
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardHeaderView.setTitleText("all cards")
-        // Do any additional setup after loading the view.
+        cardHeaderView.setTitleText("all contacts")
     }
     
 
@@ -28,4 +67,55 @@ class AllReceivedCardsVC: UIViewController {
     }
     */
 
+}
+
+
+extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return contactListKeys.count
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return contactListKeys
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return contactList[contactListKeys[section]]!.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let handle = contactList[contactListKeys[indexPath.section]]![indexPath.row]
+        let reuseIdentifier = String(format: "cell%i", abs(indexPath.row%2))
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
+        let u = interactions.filter { $0.referenceUserHandle == handle }
+        cell.configure(handle: handle, image: u.first?.receivedCard.image)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell
+        cell.configure(contactListKeys[section])
+        return cell.contentView
+    }
+}
+
+class ContactListCell: UITableViewCell {
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var userImageView: UIImageView!
+    
+    func configure(handle: String, image: Data?) {
+        nameLabel.text = handle
+        if let i = image, let d = UIImage(data: i) {
+            userImageView.image = d
+        } else {
+            userImageView.image = #imageLiteral(resourceName: "avatar.png")
+        }
+    }
 }

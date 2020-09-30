@@ -164,17 +164,17 @@
         <fetchedProperty name="emails" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Email" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
+        <fetchedProperty name="interactions" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Interaction"/>
+        </fetchedProperty>
         <fetchedProperty name="phoneNumbers" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="PhoneNumber" predicateString="uid  == $FETCH_SOURCE.uid"/>
-        </fetchedProperty>
-        <fetchedProperty name="receivedCards" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Card" predicateString="uid  != $FETCH_SOURCE.uid"/>
         </fetchedProperty>
     </entity>
     <elements>
         <element name="Address" positionX="-652.3203125" positionY="-1105.24609375" width="128" height="118"/>
         <element name="AppLocationInfo" positionX="-495.3125" positionY="-846.609375" width="128" height="88"/>
-        <element name="Card" positionX="-870.71875" positionY="-1173.23828125" width="128" height="191"/>
+        <element name="Card" positionX="-833.1484375" positionY="-1176.0703125" width="128" height="191"/>
         <element name="CardAddress" positionX="-652.44140625" positionY="-1179.01171875" width="128" height="58"/>
         <element name="CardEmail" positionX="-865.49609375" positionY="-1384.07421875" width="128" height="58"/>
         <element name="CardPhoneNumber" positionX="-649.734375" positionY="-1359.53125" width="128" height="58"/>
@@ -191,10 +191,10 @@
         <element name="PhoneNumber" positionX="-651.63671875" positionY="-1283.03515625" width="128" height="88"/>
         <element name="Purpose" positionX="-1325.11328125" positionY="-753.93359375" width="128" height="133"/>
         <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="88"/>
-        <element name="SocialMedia" positionX="-1107.11328125" positionY="-1124.47265625" width="128" height="118"/>
+        <element name="SocialMedia" positionX="-1261.48046875" positionY="-1214.06640625" width="128" height="118"/>
         <element name="User" positionX="-914.83203125" positionY="-956.6640625" width="128" height="221"/>
-        <element name="Interaction" positionX="-1068.75" positionY="-1497.70703125" width="128" height="131"/>
-        <element name="CardTemplateInstance" positionX="-1074.40625" positionY="-1344.796875" width="128" height="73"/>
+        <element name="Interaction" positionX="-1007.66796875" positionY="-1176.921875" width="128" height="131"/>
+        <element name="CardTemplateInstance" positionX="-1008.234375" positionY="-1267.5234375" width="128" height="73"/>
         <element name="InteractionRating" positionX="-1218.8046875" positionY="-1494.87890625" width="128" height="103"/>
     </elements>
 </model>

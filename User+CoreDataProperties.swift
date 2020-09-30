@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/27/20.
+//  Created by Arthur Mayes on 9/30/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -19,16 +19,34 @@ extension User {
 
     @NSManaged public var handle: String?
     @NSManaged public var uid: String?
+    @NSManaged public var images: NSSet?
     @NSManaged public var purposes: NSSet?
     @NSManaged public var searchLocations: NSSet?
     @NSManaged public var socialMediaInfo: NSSet?
-    @NSManaged public var images: NSSet?
-
+    
     @NSManaged var addresses: [Address]
     @NSManaged var emails: [Email]
     @NSManaged var phoneNumbers: [PhoneNumber]
-    @NSManaged var receivedCards: [Card]
+    @NSManaged var interactions: [Interaction]
     @NSManaged var cardTemplates: [Card]
+
+}
+
+// MARK: Generated accessors for images
+extension User {
+
+    @objc(addImagesObject:)
+    @NSManaged public func addToImages(_ value: ImageInfo)
+
+    @objc(removeImagesObject:)
+    @NSManaged public func removeFromImages(_ value: ImageInfo)
+
+    @objc(addImages:)
+    @NSManaged public func addToImages(_ values: NSSet)
+
+    @objc(removeImages:)
+    @NSManaged public func removeFromImages(_ values: NSSet)
+
 }
 
 // MARK: Generated accessors for purposes
@@ -79,23 +97,6 @@ extension User {
 
     @objc(removeSocialMediaInfo:)
     @NSManaged public func removeFromSocialMediaInfo(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for images
-extension User {
-
-    @objc(addImagesObject:)
-    @NSManaged public func addToImages(_ value: ImageInfo)
-
-    @objc(removeImagesObject:)
-    @NSManaged public func removeFromImages(_ value: ImageInfo)
-
-    @objc(addImages:)
-    @NSManaged public func addToImages(_ values: NSSet)
-
-    @objc(removeImages:)
-    @NSManaged public func removeFromImages(_ values: NSSet)
 
 }
 

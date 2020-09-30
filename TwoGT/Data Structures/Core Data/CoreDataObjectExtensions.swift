@@ -43,7 +43,12 @@ extension Purpose {
 }
 
 extension CityState {
-    class func create(city: String, state: String, country: String, communityName: String) -> CityState {
+    
+    /**
+     - Parameter country: USA by default, as this app is only currently intended for distribution in the US
+     - Parameter communityName: Intended for future development
+     */
+    class func create(city: String, state: String, country: String = "USA", communityName: String = "") -> CityState {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -55,10 +60,9 @@ extension CityState {
 
         let community = Community.create(communityName: communityName)
 
-        cityState.setValue(country, forKeyPath: "country")
-        cityState.setValue(city, forKeyPath: "city")
-        cityState.setValue(state, forKeyPath: "state")
-        cityState.setValue(country, forKeyPath: "country")
+        cityState.country = country
+        cityState.city = city
+        cityState.state = state
         cityState.addToCommunities(community)
         do {
           try managedContext.save()
@@ -81,8 +85,21 @@ extension CityState {
     }
 }
 
+/**
+ `Card` is a template with the data that will be shared, identified by `title`
+ 
+ Discussion of variables:
+ `uid`: The uid created by FiB (FireBase) for User on account creation.  Any reference to `uid` must refer only to the thisUser.
+ `handle`: The unique identifier used by CoreData to differentiate between thisUser and otherUser
+ `comments`: On a Card template, the comments field will be nil.  Comments are messages sent to other users, customized when Card is subclassed in a `CardTemplateInstance`.
+ */
 extension Card {
-    class func create(image: Data?, title: String, uid: String, handle: String, comments: String?, notes: String?) -> Card {
+    /**
+     - Parameter image: perfectly fine for this to be nil
+     - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
+     - Parameter notes: personal notes on a card that will only be stored on the template, never shared.
+     */
+    class func create(cardCategory title: String, notes: String?, image: Data?) -> Card {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -91,14 +108,14 @@ extension Card {
                                      in: managedContext)!
 
        guard let card = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Card else {
-                                                fatalError()
-        }
-        card.image = image
+                                              insertInto: managedContext) as? Card else { fatalError() }
+        
+        card.uid = AppDelegate.user.uid
+        card.userHandle = AppDelegate.user.handle
+        
         card.title = title
-        card.uid = uid
-        card.userHandle = handle
-        card.comments = comments
+        card.image = image
+        card.comments = nil
         card.personalNotes = notes
 
         do {
@@ -111,9 +128,14 @@ extension Card {
     }
 }
 
+/**
+        An instance of a `Card` that contains the data defined in *one of the templates*, personalized with comments.
+ 
+            This object is associated with an `Interaction` object, and will not be otherwise accessible after creation. `CardTemplateInstance` should never set personal notes on creation, but should set comments.  Comments are a message to or from the other user, depending on the context
+ */
 extension CardTemplateInstance {
     /// - Parameter received: if `true` personal notes and template will not be stored from back end
-    class func create(received: Bool, card: Card, senderHandle: String, receiverHandle: String) -> CardTemplateInstance {
+    class func create(received: Bool, card: Card, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -126,16 +148,18 @@ extension CardTemplateInstance {
                                                 fatalError()
         }
         
-        instance.receiverUserHandle = receiverHandle
-        instance.senderUserHandle = senderHandle
+        instance.receiverUserHandle = receiver
+        instance.senderUserHandle = sender
         
         instance.image = card.image
         instance.uid = card.uid  // may not be necessary
         instance.userHandle = card.userHandle
-        instance.comments = card.comments
+        instance.comments = message
         if !received {
+            /// title: This is a unique identifier for the card, set by the thisUser.  It is primarily used as an indicator *to thisUser* of which `Card` template was used, and thus which information was presented to otherUser.
+            /// It is also an indicator that allows CoreData to change which data the otherUser has access to, and send updates.
+            // TODO: - Add a default template called "BLOCK", which sends a comment and empty data.  Setting to the "BLOCK" template on an Instance should update FiB accordingly, after a pop-up.
             instance.title = card.title
-            instance.personalNotes = card.personalNotes
         }
         
         do {

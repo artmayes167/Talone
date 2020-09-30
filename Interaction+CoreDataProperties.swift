@@ -21,8 +21,8 @@ extension Interaction {
     @NSManaged public var referenceUserHandle: String?
 
     @NSManaged var rating: InteractionRating
-    @NSManaged var receivedCards: [CardTemplateInstance]
-    @NSManaged var cardTemplates: [CardTemplateInstance]
+    @NSManaged var receivedCard: CardTemplateInstance
+    @NSManaged var cardTemplate: CardTemplateInstance
 }
 
 extension Interaction : Identifiable {

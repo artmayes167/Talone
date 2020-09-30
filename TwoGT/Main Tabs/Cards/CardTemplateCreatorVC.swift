@@ -77,12 +77,10 @@ class CardTemplateCreatorVC: UIViewController {
             let image = CoreDataImageHelper.shareInstance.fetchImage()
             if let i = image?.image {
                 imageData = i
-            } else {
-                fatalError()
             }
         }
         
-        let c = Card.create(image: imageData, title: titleTextField.text!.pure(), uid: AppDelegate.user.uid!, handle: AppDelegate.user.handle!, comments: nil, notes: nil)
+        let c = Card.create(cardCategory: titleTextField.text!.pure(), notes: nil, image: imageData)
         
         for x in model.allAdded! {
             switch x.entity.name {
