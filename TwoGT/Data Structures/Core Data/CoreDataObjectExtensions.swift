@@ -111,6 +111,92 @@ extension Card {
     }
 }
 
+extension CardTemplateInstance {
+    /// - Parameter received: if `true` personal notes and template will not be stored from back end
+    class func create(received: Bool, card: Card, senderHandle: String, receiverHandle: String) -> CardTemplateInstance {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "CardTemplateInstance",
+                                     in: managedContext)!
+
+       guard let instance = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? CardTemplateInstance else {
+                                                fatalError()
+        }
+        
+        instance.receiverUserHandle = receiverHandle
+        instance.senderUserHandle = senderHandle
+        
+        instance.image = card.image
+        instance.uid = card.uid  // may not be necessary
+        instance.userHandle = card.userHandle
+        instance.comments = card.comments
+        if !received {
+            instance.title = card.title
+            instance.personalNotes = card.personalNotes
+        }
+        
+        do {
+          try managedContext.save()
+            return instance
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
+struct CodableCardTemplateInstance: Codable {
+    
+    let receiverUserHandle: String
+    let senderUserHandle: String
+    
+    let uid: String  // may not be necessary
+    let image: Data?
+    let userHandle: String
+    let comments: String?
+    
+    let addresses: [[String: String]]
+    let emails: [[String: String]]
+    let phoneNumbers: [[String: String]]
+    
+    enum CodingKeys: String, CodingKey {
+        case receiverUserHandle, senderUserHandle
+        case uid, image, userHandle, comments
+        case addresses, emails, phoneNumbers
+    }
+    
+    init(instance: CardTemplateInstance) {
+        receiverUserHandle = instance.receiverUserHandle!
+        senderUserHandle = instance.senderUserHandle!
+        
+        image = instance.image
+        uid = instance.uid!  // may not be necessary
+        userHandle = instance.userHandle!
+        comments = instance.comments
+        
+        var addressBook: [[String: String]] = []
+        for a in instance.addresses {
+            addressBook.append(a.dictionaryValue())
+        }
+        addresses = addressBook
+        
+        var phoneBook: [[String: String]] = []
+        for p in instance.phoneNumbers {
+            phoneBook.append(p.dictionaryValue())
+        }
+        phoneNumbers = phoneBook
+        
+        var emailBook: [[String: String]] = [] 
+        for e in instance.emails {
+            emailBook.append(e.dictionaryValue())
+        }
+        emails = emailBook
+    }
+}
+
 extension Community {
     class func create(communityName: String) -> Community {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
@@ -177,6 +263,14 @@ extension CardEmail {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+    /// Template title not included
+    func dictionaryValue() -> [String: String] {
+        var dict: [String: String] = [:]
+        dict["title"] = title
+        dict["emailString"] = emailString
+        dict["uid"] = uid // from owner
+        return dict
     }
 }
 
@@ -263,15 +357,15 @@ extension CardAddress {
                                               insertInto: managedContext) as? CardAddress else {
                                                 fatalError()
         }
-        cardAddress.title = address.title
-        cardAddress.templateTitle = title
+        cardAddress.title = address.title  // unique
+        cardAddress.templateTitle = title  // unique
 
         cardAddress.street1 = address.street1
         cardAddress.street2 = address.street2
         cardAddress.city = address.city
         cardAddress.state = address.state
         cardAddress.country = address.country
-        cardAddress.uid = address.uid
+        cardAddress.uid = address.uid // from owner
         cardAddress.zip = address.zip
 
         do {
@@ -280,6 +374,19 @@ extension CardAddress {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+    
+    func dictionaryValue() -> [String: String] {
+        var dict: [String: String] = [:]
+        dict["title"] = title
+        dict["street1"] = street1
+        dict["street2"] = street2
+        dict["city"] = city
+        dict["state"] = state
+        dict["country"] = country
+        dict["uid"] = uid // from owner
+        dict["zip"] = zip
+        return dict
     }
 }
 
@@ -341,6 +448,15 @@ extension CardPhoneNumber {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+    
+    /// Template title not included
+    func dictionaryValue() -> [String: String] {
+        var dict: [String: String] = [:]
+        dict["title"] = title
+        dict["number"] = number
+        dict["uid"] = uid // from owner
+        return dict
     }
 }
 
@@ -498,6 +614,31 @@ extension AppLocationInfo {
         do {
           try managedContext.save()
             return locationInfo
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            fatalError()
+        }
+    }
+}
+
+extension Interaction {
+    /// Setting the `newPersonHandle` enables CoreData to find this `Interaction`, and `templateName` is a marker to allow the user to change which template is associated with which other userHandle
+    class func create(newPersonHandle handle: String, templateName template: String?) -> Interaction {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+
+        let managedContext = appDelegate.persistentContainer.viewContext
+
+        let entity = NSEntityDescription.entity(forEntityName: "Interaction",
+                                     in: managedContext)!
+
+        let interaction = Interaction(entity: entity, insertInto: managedContext)
+
+        interaction.referenceUserHandle = handle
+        interaction.templateName = template
+
+        do {
+          try managedContext.save()
+            return interaction
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()

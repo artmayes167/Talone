@@ -46,10 +46,6 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.dropDelegate = self
         availableTableView.dragInteractionEnabled = true
     }
-
-    enum CardElementTypes: String, RawRepresentable {
-        case address, phoneNumber, email
-    }
     
     func typeForClass(_ c: String?) -> CardElementTypes {
         guard let name = c else { fatalError() }

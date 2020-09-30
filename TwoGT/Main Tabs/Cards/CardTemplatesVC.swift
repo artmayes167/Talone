@@ -14,7 +14,7 @@ class CardTemplatesVC: UIViewController {
     
     private var cardTemplates: [Card] {
         get {
-            let cards = AppDelegate.user.cardTemplates
+            let cards = AppDelegate.user.cardTemplates // [Card]
             return cards.sorted { return $0.title! < $1.title! }
         }
     }
@@ -31,15 +31,17 @@ class CardTemplatesVC: UIViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "toTemplateDisplay" {
+            guard let vc = segue.destination as? ViewMyTemplateVC, let index = sender as? IndexPath else { fatalError() }
+            let template = cardTemplates[index.row]
+            vc.card = template
+        }
     }
-    */
+    
 
     @IBAction func unwindToCardTemplates( _ segue: UIStoryboardSegue) {
         collectionView.reloadData()
@@ -58,6 +60,10 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
         
         cell.nameLabel.text = cardTemplates[indexPath.item].title
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "toTemplateDisplay", sender: indexPath)
     }
 }
 

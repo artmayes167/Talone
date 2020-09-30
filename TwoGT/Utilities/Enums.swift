@@ -47,6 +47,6 @@ enum NeedType: String, CaseIterable, DatabaseReady {
     case none, food, clothes, shelter, furniture, service, miscellany
 }
 
-enum AddressType: String, CaseIterable, DatabaseReady {
-    case home, retail, office, other, custom  // custom for a temporary address
+enum CardElementTypes: String, RawRepresentable {
+    case address, phoneNumber, email
 }
