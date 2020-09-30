@@ -421,14 +421,14 @@ extension HaveItem {
                                               insertInto: managedContext) as? HaveItem else {
                                                 fatalError()
         }
-        haveItem.setValue(item.category, forKeyPath: "category")
-        haveItem.setValue(item.description, forKeyPath: "desc")
-        haveItem.setValue(item.validUntil?.dateValue(), forKeyPath: "validUntil")
-        haveItem.setValue(item.owner, forKeyPath: "owner")
-        haveItem.setValue(item.createdBy, forKeyPath: "createdBy")
-        haveItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
-        haveItem.setValue(item.modifiedAt?.dateValue(), forKeyPath: "modifiedAt")
-        haveItem.setValue(item.id, forKeyPath: "id")
+        haveItem.category = item.category
+        haveItem.desc = item.description
+        haveItem.validUntil = item.validUntil?.dateValue()
+        haveItem.owner = item.owner
+        haveItem.createdBy = item.createdBy
+        haveItem.createdAt = item.createdAt?.dateValue()
+        haveItem.modifiedAt = item.modifiedAt?.dateValue()
+        haveItem.id = item.id
         do {
           try managedContext.save()
             return haveItem
@@ -453,7 +453,8 @@ extension Have {
                                               insertInto: managedContext) as? Have else {
                                                 fatalError()
         }
-        have.setValue(item, forKeyPath: "haveItem")
+        // This should set the haveItem's `have` value
+        have.haveItem = item
         do {
           try managedContext.save()
             return have
@@ -484,9 +485,9 @@ extension AppLocationInfo {
 
         let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
 
-        locationInfo.setValue(country, forKeyPath: "country")
-        locationInfo.setValue(city, forKeyPath: "city")
-        locationInfo.setValue(state, forKeyPath: "state")
+        locationInfo.country = country
+        locationInfo.city = city
+        locationInfo.state = state
 
         do {
           try managedContext.save()
