@@ -41,16 +41,19 @@ extension UIView {
   }
 }
 
+/// Parent classes for display in Storyboard
 @IBDesignable class DesignableImage: UIImageView {}
 @IBDesignable class DesignableView: UIView {}
 
- // MARK: - DesignableButton and associated classes
+ // MARK: - DesignableButton
+///  Associated classes in ClassesForCustomizer
 @IBDesignable class DesignableButton: UIButton {}
 
 @IBDesignable class DesignableTextField: UITextField {}
 @IBDesignable class DesignableSegmentedControl: UISegmentedControl {}
 
- // MARK: - DesignableTextView and associated classes
+ // MARK: - DesignableTextView
+///  Associated classes in ClassesForCustomizer
 @IBDesignable public class DesignableTextView: UITextView {}
 
 @IBDesignable class DesignableLabel: UILabel {}

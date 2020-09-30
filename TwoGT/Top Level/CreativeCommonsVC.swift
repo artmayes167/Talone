@@ -61,7 +61,6 @@ extension CreativeCommonsVC: UICollectionViewDelegate, UICollectionViewDataSourc
         return 1
     }
 
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return contributors.count
     }
@@ -104,7 +103,6 @@ class CreativeCommonsCell: UICollectionViewCell {
     @IBOutlet weak var symbolImageView: DesignableImage!
     
     func configure(_ contributor: Contributor) {
-        
         if let image = UIImage(named: contributor.symbolName) {
             symbolImageView.image = image
         }

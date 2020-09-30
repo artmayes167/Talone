@@ -71,16 +71,6 @@ class ContributorsVC: UIViewController {
         return c
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
@@ -136,7 +126,6 @@ class ContributorCell: UICollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!
     @IBOutlet weak var symbolImageView: DesignableImage!
-    
     
     func configure(_ contributor: Contributor) {
         

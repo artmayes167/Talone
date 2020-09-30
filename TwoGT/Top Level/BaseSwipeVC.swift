@@ -12,17 +12,6 @@ class BaseSwipeVC: UIViewController {
 
     var baseTabBar: UITabBarController?
     
-//    @IBAction func showFeedbackPage(_ sender: Any) {
-//        guard let vc = baseTabBar?.selectedViewController else { fatalError() }
-//        let identifier = vc.restorationIdentifier ?? "No identifier available"
-//        let keyElements = vc.getKeyElements()
-//        let elements = ViewControllerElements()
-//        elements.identifier = identifier
-//        elements.elements = keyElements
-//        performSegue(withIdentifier: "toFeedback", sender: elements)
-//    }
-    
-    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toBaseTabBar" {
@@ -48,8 +37,6 @@ class CardsBaseSwipeVC: BaseSwipeVC {
     
     @IBAction func exitCardsFlow(_ sender: Any) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        
         appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
     }
-    
 }
