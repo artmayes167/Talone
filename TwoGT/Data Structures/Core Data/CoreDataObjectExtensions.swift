@@ -22,9 +22,9 @@ extension Purpose {
 
        let purpose = Purpose(entity: entity, insertInto: managedContext)
         purpose.setValue(type, forKeyPath: "category")
-        
+
         let cs: NSManagedObject = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!, communityName: "")
-        
+
         purpose.setValue(cs as? CityState, forKeyPath: "cityState")
         print("---------This is what the purpose looks like after adding values in Purpose extension------- \(purpose)")
         do {
@@ -265,7 +265,7 @@ extension CardAddress {
         }
         cardAddress.title = address.title
         cardAddress.templateTitle = title
-        
+
         cardAddress.street1 = address.street1
         cardAddress.street2 = address.street2
         cardAddress.city = address.city
@@ -436,6 +436,12 @@ extension HaveItem {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+
+    func update() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        try? managedContext.save()
     }
 
 }
