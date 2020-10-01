@@ -18,7 +18,9 @@ class ViewMyTemplateVC: UIViewController {
     
     var card: Card? {
         didSet {
-            setCardData()
+            if isViewLoaded {
+                setCardData()
+            }
         }
     }
     
@@ -38,7 +40,7 @@ class ViewMyTemplateVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if let _ = card { tableView.reloadData() }
         // Do any additional setup after loading the view.
     }
     
