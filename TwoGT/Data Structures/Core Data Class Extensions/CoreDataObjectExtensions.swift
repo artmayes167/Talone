@@ -134,7 +134,9 @@ extension Card {
             This object is associated with an `Interaction` object, and will not be otherwise accessible after creation. `CardTemplateInstance` should never set personal notes on creation, but should set comments.  Comments are a message to or from the other user, depending on the context
  */
 extension CardTemplateInstance {
-    /// - Parameter received: if `true` personal notes and template will not be stored from back end
+    /** - Parameter card: if set, will attempt to create from card.  Else, codableCard must be set
+        - Parameter codableCard:  if set, will attempt to create from codableCard.  Else, card must be set
+     */
     class func create(card: Card?, codableCard: CodableCardTemplateInstance?, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
