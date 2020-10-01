@@ -18,6 +18,7 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var notesView: ActiveTextView!
     @IBOutlet weak var saveNotesButton: DesignableButton!
     @IBOutlet weak var sendCardButton: DesignableButton!
+    @IBOutlet weak var imageButton: UIButton!
     
     var dataSource: InteractionDataSource? {
         didSet {
@@ -56,10 +57,19 @@ class ViewContactVC: UIViewController {
         // Strings are formatted in dataSource `ContactTabBarController`
         handleLabel.text = dataSource?.getHandle()
         notesView.text = dataSource?.getNotes()
-        messageTextView.text = dataSource?.getMessage(sender: true)
+        messageTextView.text = dataSource?.getMessage(sender: false)
         card = dataSource?.allContactInfo()
         let hasOld = dataSource?.previouslySentCard() ?? false
         sendCardButton.isEnabled = !hasOld
+        
+        let image = card?.image
+        var newImage: UIImage?
+        if let i = image {
+            newImage = UIImage(data: i)
+        } else {
+            newImage = UIImage(named: "avatar")
+        }
+        imageButton.setImage(newImage!, for: .normal)
     }
     
     func typeForClass(_ c: String?) -> CardElementTypes {

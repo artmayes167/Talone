@@ -192,23 +192,28 @@ extension CardTemplateInstance {
         // First check for existing instances
         let interactions: [Interaction] = AppDelegate.user.interactions
         let filteredInteractions = interactions.filter { $0.referenceUserHandle == codableInstance.senderUserHandle }
-        
+        print(codableInstance.senderUserHandle)
         if !filteredInteractions.isEmpty {
             if let f = filteredInteractions.first {
-                if let nonCodableInstance = f.receivedCard {
-                    DispatchQueue.main.async {
+                print(f)
+                
+                DispatchQueue.main.async {
+                    if let nonCodableInstance = f.receivedCard {
                         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                         let managedContext = appDelegate.persistentContainer.viewContext
-//                        for address in nonCodableInstance.addresses {
-//                            managedContext.delete(address)
-//                        }
-//                        for phone in nonCodableInstance.phoneNumbers {
-//                            managedContext.delete(phone)
-//                        }
-//                        for email in nonCodableInstance.emails {
-//                            managedContext.delete(email)
-//                        }
-                        managedContext.delete(nonCodableInstance)
+                        //                        for address in nonCodableInstance.addresses {
+                        //                            managedContext.delete(address)
+                        //                        }
+                        //                        for phone in nonCodableInstance.phoneNumbers {
+                        //                            managedContext.delete(phone)
+                        //                        }
+                        //                        for email in nonCodableInstance.emails {
+                        //                            managedContext.delete(email)
+                        //                        }
+                        for instance in nonCodableInstance {
+                            managedContext.delete(instance)
+                        }
+                        
                         do {
                             try managedContext.save()
                         } catch {

@@ -87,10 +87,10 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="InteractionRating" predicateString="referenceUserHandle == $FETCH_SOURCE. senderUserHandle"/>
         </fetchedProperty>
         <fetchedProperty name="receivedCard" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="referenceUserHandle == $FETCH_SOURCE. senderUserHandle"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="senderUserHandle == $FETCH_SOURCE. referenceUserHandle"/>
         </fetchedProperty>
         <fetchedProperty name="sentCard" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="referenceUserHandle == $FETCH_SOURCE. receiverUserHandle"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="receiverUserHandle == $FETCH_SOURCE. referenceUserHandle"/>
         </fetchedProperty>
     </entity>
     <entity name="InteractionRating" representedClassName="InteractionRating" syncable="YES">

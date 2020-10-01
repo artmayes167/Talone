@@ -47,20 +47,21 @@ class ContactTabBarController: UITabBarController, InteractionDataSource {
         return interaction!.referenceUserHandle! // should crash only if we fucked up
     }
     func getNotes() -> String {
-        return interaction?.receivedCard?.personalNotes ?? ""
+        return interaction?.receivedCard?.first?.personalNotes ?? ""
     }
     func allContactInfo() -> CardTemplateInstance? {
-        return interaction?.receivedCard
+        return interaction?.receivedCard?.first
     }
     func previouslySentCard() -> Bool {
-        if let _ = interaction?.cardTemplate { return true }
+        // TODO: - Clear all data, and fix this
+       //guard let _ = interaction?.cardTemplate else  { return false }  // why does this crash?
         return false
     }
     func getMessage(sender: Bool) -> String {
-        return sender == true ? (interaction?.receivedCard?.comments ?? "") : (interaction?.cardTemplate?.comments ?? "")
+        return sender ? (interaction?.cardTemplate?.first?.comments ?? "") : (interaction?.receivedCard?.first?.comments ?? "")
     }
     func saveNotes(_ notes: String) {
-        interaction?.receivedCard?.personalNotes = notes
+        interaction?.receivedCard?.first?.personalNotes = notes
         DispatchQueue.main.async {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
             _ = appDelegate.save()

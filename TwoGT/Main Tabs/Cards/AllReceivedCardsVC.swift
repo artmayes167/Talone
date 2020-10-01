@@ -93,7 +93,7 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
         let u = interactions.filter { $0.referenceUserHandle == handle }
-        cell.configure(handle: handle, image: u.first?.receivedCard?.image)
+        cell.configure(handle: handle, image: u.first?.receivedCard?.first?.image)
         return cell
     }
     
@@ -108,9 +108,10 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let handle = contactList[contactListKeys[indexPath.section]]![indexPath.row]
-        let u = interactions.filter { $0.referenceUserHandle == handle }
-        performSegue(withIdentifier: "toInteraction", sender: u.first)
+        let handle: String = contactList[contactListKeys[indexPath.section]]![indexPath.row]
+        let u: [Interaction] = interactions.filter { $0.referenceUserHandle == handle }
+        guard let i = u.first else { print(u); fatalError() }
+        performSegue(withIdentifier: "toInteraction", sender: i)
     }
 }
 
