@@ -17,10 +17,10 @@ extension InteractionRating {
         return NSFetchRequest<InteractionRating>(entityName: "InteractionRating")
     }
 
-    @NSManaged public var referenceUserHandle: String?
+    @NSManaged public var bad: Int64
     @NSManaged public var good: Int64
     @NSManaged public var justSo: Int64
-    @NSManaged public var bad: Int64
+    @NSManaged public var referenceUserHandle: String?
 
 }
 

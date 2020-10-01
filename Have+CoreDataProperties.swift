@@ -2,7 +2,7 @@
 //  Have+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/29/20.
+//  Created by Arthur Mayes on 9/30/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -22,8 +22,8 @@ extension Have {
     @NSManaged public var haveItem: HaveItem?
     @NSManaged public var purpose: Purpose?
 
-    @NSManaged var childNeeds: [Need]
-    @NSManaged var childHaves: [Have]
+    @NSManaged public var childHaves: [Have]
+    @NSManaged public var childNeeds: [Need]
 }
 
 extension Have : Identifiable {

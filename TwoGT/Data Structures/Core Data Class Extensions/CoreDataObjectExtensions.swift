@@ -135,7 +135,7 @@ extension Card {
  */
 extension CardTemplateInstance {
     /// - Parameter received: if `true` personal notes and template will not be stored from back end
-    class func create(received: Bool, card: Card, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
+    class func create(card: Card?, codableCard: CodableCardTemplateInstance?, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -150,17 +150,27 @@ extension CardTemplateInstance {
         
         instance.receiverUserHandle = receiver
         instance.senderUserHandle = sender
-        
-        instance.image = card.image
-        instance.uid = card.uid  // may not be necessary
-        instance.userHandle = card.userHandle
-        instance.comments = message
-        if !received {
-            /// title: This is a unique identifier for the card, set by the thisUser.  It is primarily used as an indicator *to thisUser* of which `Card` template was used, and thus which information was presented to otherUser.
-            /// It is also an indicator that allows CoreData to change which data the otherUser has access to, and send updates.
-            // TODO: - Add a default template called "BLOCK", which sends a comment and empty data.  Setting to the "BLOCK" template on an Instance should update FiB accordingly, after a pop-up.
-            instance.title = card.title
+        if let c = card {
+            instance.image = c.image
+            instance.uid = c.uid
+            instance.userHandle = c.userHandle // used for display
+            instance.title = c.title
+            
+            
+            
+        } else if let c = codableCard {
+            instance.image = c.image
+            instance.uid = c.uid
+            instance.userHandle = c.userHandle // used for display
+            
+            CardAddress.arrayFrom(dictionary: c.addresses)
+            CardEmail.arrayFrom(dictionary: c.emails)
+            CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
+        } else {
+            fatalError()
         }
+        
+        instance.comments = message
         
         do {
           try managedContext.save()
@@ -169,6 +179,31 @@ extension CardTemplateInstance {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+    
+    /**
+     This finds the existing interaction, or creates a new one, and creates/replaces the old `CardTemplateInstance`.  Since the instance is automatically pulled from CD according to uid, there is no further work to do.
+ 
+     */
+    class func createOrFindAndReturn(codableInstance: CodableCardTemplateInstance) -> CardTemplateInstance {
+        // First check for existing instances
+        let interactions: [Interaction] = AppDelegate.user.interactions
+        let filteredInteractions = interactions.filter { $0.referenceUserHandle == codableInstance.senderUserHandle }
+        
+        if !filteredInteractions.isEmpty {
+            if let f = filteredInteractions.first {
+                if let nonCodableInstance = f.receivedCard {
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                    let managedContext = appDelegate.persistentContainer.viewContext
+                    managedContext.delete(nonCodableInstance)
+                }
+            }
+        } else {
+            _ = Interaction.create(newPersonHandle: codableInstance.senderUserHandle, templateName: nil)
+        }
+        
+        let card = CardTemplateInstance.create(card: nil, codableCard: codableInstance, fromHandle: codableInstance.senderUserHandle, toHandle: codableInstance.receiverUserHandle, message: codableInstance.comments)
+        return card
     }
 }
 
@@ -180,7 +215,7 @@ struct CodableCardTemplateInstance: Codable {
     let receiverUserHandle: String
     let senderUserHandle: String
     
-    let uid: String  // may not be necessary
+    let uid: String
     let image: Data?
     let userHandle: String
     let comments: String?
@@ -221,6 +256,33 @@ struct CodableCardTemplateInstance: Codable {
             emailBook.append(e.dictionaryValue())
         }
         emails = emailBook
+    }
+}
+
+typealias GateKeeper = CodableCardTemplateInstanceManager
+
+class CodableCardTemplateInstanceManager {
+    func buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data {
+        let codableInstance = CodableCardTemplateInstance(instance: instance)
+        let encoder = newJSONEncoder()
+        
+        do {
+            let data = try encoder.encode(codableInstance)
+            return data
+        } catch {
+            fatalError()
+        }
+    }
+    
+    /// This is the only method FiB should need to call for the card data
+    func decodeCodableInstance(data: Data) -> CardTemplateInstance {
+        let decoder = newJSONDecoder()
+        do {
+            let codableInstance = try decoder.decode(CodableCardTemplateInstance.self, from: data)
+            return CardTemplateInstance.createOrFindAndReturn(codableInstance: codableInstance)
+        } catch {
+            fatalError()
+        }
     }
 }
 
@@ -267,9 +329,8 @@ extension User {
 }
 
 extension CardEmail {
-    class func create(title: String, email: Email) {
+    class func create(title: String?, email: Email?, dictionary: [String: String] = [:]) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
         let managedContext = appDelegate.persistentContainer.viewContext
 
         let entity = NSEntityDescription.entity(forEntityName: "CardEmail",
@@ -279,10 +340,21 @@ extension CardEmail {
                                               insertInto: managedContext) as? CardEmail else {
                                                 fatalError()
         }
-        cardEmail.title = email.title
-        cardEmail.emailString = email.emailString
+        
+        if let e = email {
+            cardEmail.title = e.title
+            cardEmail.emailString = e.emailString
+            cardEmail.uid = e.uid
+        } else if !dictionary.isEmpty {
+            let e = dictionary
+            cardEmail.title = e["title"]
+            cardEmail.emailString = e["emailString"]
+            cardEmail.uid = e["uid"]
+        } else {
+            fatalError()
+        }
+        
         cardEmail.templateTitle = title
-        cardEmail.uid = email.uid
 
         do {
           try managedContext.save()
@@ -298,6 +370,13 @@ extension CardEmail {
         dict["emailString"] = emailString
         dict["uid"] = uid // from owner
         return dict
+    }
+    
+    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
+    class func arrayFrom(dictionary: [[String: String]]) {
+        for e in dictionary {
+            CardEmail.create(title: nil, email: nil, dictionary: e)
+        }
     }
 }
 
@@ -372,7 +451,7 @@ extension SearchLocation {
 }
 
 extension CardAddress {
-    class func create(title: String, address: Address) {
+    class func create(title: String?, address: Address?, dictionary: [String: String] = [:] ) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -384,16 +463,29 @@ extension CardAddress {
                                               insertInto: managedContext) as? CardAddress else {
                                                 fatalError()
         }
-        cardAddress.title = address.title  // unique
+         // unique
         cardAddress.templateTitle = title  // unique
-
-        cardAddress.street1 = address.street1
-        cardAddress.street2 = address.street2
-        cardAddress.city = address.city
-        cardAddress.state = address.state
-        cardAddress.country = address.country
-        cardAddress.uid = address.uid // from owner
-        cardAddress.zip = address.zip
+        if let a = address {
+            cardAddress.title = a.title
+            cardAddress.street1 = a.street1
+            cardAddress.street2 = a.street2
+            cardAddress.city = a.city
+            cardAddress.state = a.state
+            cardAddress.country = a.country
+            cardAddress.uid = a.uid // from owner
+            cardAddress.zip = a.zip
+        } else if !dictionary.isEmpty {
+            let dict = dictionary
+            cardAddress.title = dict["title"]
+            cardAddress.street1 =  dict["street1"]
+            cardAddress.street2 = dict["street2"]
+            cardAddress.city =  dict["city"]
+            cardAddress.state =  dict["state"]
+            cardAddress.country =  dict["country"]
+            cardAddress.uid =  dict["uid"] // from owner
+            cardAddress.zip =  dict["zip"]
+        }
+        
 
         do {
           try managedContext.save()
@@ -414,6 +506,13 @@ extension CardAddress {
         dict["uid"] = uid // from owner
         dict["zip"] = zip
         return dict
+    }
+    
+    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
+    class func arrayFrom(dictionary: [[String: String]]) {
+        for a in dictionary {
+            CardAddress.create(title: nil, address: nil, dictionary: a)
+        }
     }
 }
 
@@ -452,7 +551,7 @@ extension Address {
 }
 
 extension CardPhoneNumber {
-    class func create(title: String, phoneNumber: PhoneNumber) {
+    class func create(title: String?, phoneNumber: PhoneNumber?, dictionary: [String: String] = [:]) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -464,10 +563,20 @@ extension CardPhoneNumber {
                                               insertInto: managedContext) as? CardPhoneNumber else {
                                                 fatalError()
         }
-        cardNum.title = phoneNumber.title
-        cardNum.number = phoneNumber.number
+        
         cardNum.templateTitle = title
-        cardNum.uid = phoneNumber.uid
+        
+        if let p = phoneNumber {
+            cardNum.title = p.title
+            cardNum.number = p.number
+            cardNum.uid = p.uid
+        } else if !dictionary.isEmpty {
+            let p = dictionary
+            cardNum.title = p["title"]
+            cardNum.number = p["number"]
+            cardNum.uid = p["uid"]
+        }
+        
 
         do {
           try managedContext.save()
@@ -484,6 +593,13 @@ extension CardPhoneNumber {
         dict["number"] = number
         dict["uid"] = uid // from owner
         return dict
+    }
+    
+    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
+    class func arrayFrom(dictionary: [[String: String]]) {
+        for p in dictionary {
+            CardEmail.create(title: nil, email: nil, dictionary: p)
+        }
     }
 }
 

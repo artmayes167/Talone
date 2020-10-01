@@ -13,7 +13,7 @@ class AllReceivedCardsVC: UIViewController {
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     @IBOutlet weak var tableView: UITableView!
     
-    var interactions: [Interaction] = [] {
+    private var interactions: [Interaction] = [] {
         didSet {
             var dict: [String: [String]] = [:]
             for i in interactions {
@@ -30,22 +30,21 @@ class AllReceivedCardsVC: UIViewController {
         }
     }
     
-    var contactList: [String: [String]] = [:] {
+    private var contactList: [String: [String]] = [:] {
         didSet {
-            
             if isViewLoaded {
                 tableView.reloadData()
             }
         }
     }
     
-    var contactListKeys: [String] {
+    private var contactListKeys: [String] {
         get {
             return contactList.keys.sorted()
         }
     }
     
-    func getInteractions() {
+    private func getInteractions() {
         let i = AppDelegate.user.interactions
         if i.isEmpty { return }
         interactions = i
@@ -54,6 +53,7 @@ class AllReceivedCardsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cardHeaderView.setTitleText("all contacts")
+        getInteractions()
     }
     
 

@@ -17,12 +17,12 @@ extension Interaction {
         return NSFetchRequest<Interaction>(entityName: "Interaction")
     }
 
-    @NSManaged public var templateName: String?
     @NSManaged public var referenceUserHandle: String?
+    @NSManaged public var templateName: String?
 
-    @NSManaged var rating: InteractionRating?
-    @NSManaged var receivedCard: CardTemplateInstance?
-    @NSManaged var cardTemplate: CardTemplateInstance?
+    @NSManaged public var rating: InteractionRating?
+    @NSManaged public var receivedCard: CardTemplateInstance?
+    @NSManaged public var cardTemplate: CardTemplateInstance?
 }
 
 extension Interaction : Identifiable {

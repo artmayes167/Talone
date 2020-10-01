@@ -16,8 +16,11 @@ class CardReceiverObserver {
     func startObserving() {
         observeCardReceptions()
     }
+    
+    // TODO: - Jyrki will look at GateKeeper().decodeCodableInstance(data: Data) -> CardTemplateInstance and GateKeeper().buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data
 
     func observeCardReceptions() {
+        
 //        CardsFetcher().observeCardsSentToMe { [self] fibCardItems in
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
             print("cards received! \(fibCardItems)")

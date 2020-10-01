@@ -20,22 +20,22 @@
         <attribute name="uid" optional="YES" attributeType="String"/>
         <attribute name="userHandle" optional="YES" attributeType="String"/>
         <fetchedProperty name="addresses" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardAddress" predicateString="templateTitle == $FETCH_SOURCE.title"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardAddress" predicateString="templateTitle == $FETCH_SOURCE.title OR  (templateTitle == nil AND uid == $FETCH_SOURCE.uid)"/>
         </fetchedProperty>
         <fetchedProperty name="emails" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardEmail" predicateString="templateTitle == $FETCH_SOURCE.title"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardEmail" predicateString="templateTitle == $FETCH_SOURCE.title OR  (templateTitle == nil AND uid == $FETCH_SOURCE.uid)"/>
         </fetchedProperty>
         <fetchedProperty name="phoneNumbers" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardPhoneNumber" predicateString="templateTitle == $FETCH_SOURCE.title"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardPhoneNumber" predicateString="templateTitle == $FETCH_SOURCE.title OR  (templateTitle == nil AND uid == $FETCH_SOURCE.uid)"/>
         </fetchedProperty>
     </entity>
-    <entity name="CardAddress" representedClassName="CardAddress" parentEntity="Address" syncable="YES" codeGenerationType="class">
+    <entity name="CardAddress" representedClassName="CardAddress" parentEntity="Address" syncable="YES">
         <attribute name="templateTitle" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CardEmail" representedClassName="CardEmail" parentEntity="Email" syncable="YES" codeGenerationType="class">
+    <entity name="CardEmail" representedClassName="CardEmail" parentEntity="Email" syncable="YES">
         <attribute name="templateTitle" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="CardPhoneNumber" representedClassName="CardPhoneNumber" parentEntity="PhoneNumber" syncable="YES" codeGenerationType="class">
+    <entity name="CardPhoneNumber" representedClassName="CardPhoneNumber" parentEntity="PhoneNumber" syncable="YES">
         <attribute name="templateTitle" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CardTemplateInstance" representedClassName="CardTemplateInstance" parentEntity="Card" syncable="YES">
@@ -178,6 +178,7 @@
         <element name="CardAddress" positionX="-652.44140625" positionY="-1179.01171875" width="128" height="58"/>
         <element name="CardEmail" positionX="-865.49609375" positionY="-1384.07421875" width="128" height="58"/>
         <element name="CardPhoneNumber" positionX="-649.734375" positionY="-1359.53125" width="128" height="58"/>
+        <element name="CardTemplateInstance" positionX="-1008.234375" positionY="-1267.5234375" width="128" height="73"/>
         <element name="CityState" positionX="-493.51171875" positionY="-739.9609375" width="128" height="73"/>
         <element name="Community" positionX="-494.88671875" positionY="-653.93359375" width="128" height="73"/>
         <element name="Email" positionX="-867.60546875" positionY="-1299.609375" width="128" height="88"/>
@@ -185,6 +186,8 @@
         <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="146"/>
         <element name="HaveItem" positionX="-1144.36328125" positionY="-302.9140625" width="128" height="58"/>
         <element name="ImageInfo" positionX="-1271.828125" positionY="-1082.19921875" width="128" height="118"/>
+        <element name="Interaction" positionX="-1007.66796875" positionY="-1176.921875" width="128" height="131"/>
+        <element name="InteractionRating" positionX="-1218.8046875" positionY="-1494.87890625" width="128" height="103"/>
         <element name="Item" positionX="-1302.953125" positionY="-266.1953125" width="128" height="163"/>
         <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="146"/>
         <element name="NeedItem" positionX="-1452.00390625" positionY="-283.90234375" width="128" height="58"/>
@@ -193,8 +196,5 @@
         <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="88"/>
         <element name="SocialMedia" positionX="-1261.48046875" positionY="-1214.06640625" width="128" height="118"/>
         <element name="User" positionX="-914.83203125" positionY="-956.6640625" width="128" height="221"/>
-        <element name="Interaction" positionX="-1007.66796875" positionY="-1176.921875" width="128" height="131"/>
-        <element name="CardTemplateInstance" positionX="-1008.234375" positionY="-1267.5234375" width="128" height="73"/>
-        <element name="InteractionRating" positionX="-1218.8046875" positionY="-1494.87890625" width="128" height="103"/>
     </elements>
 </model>

@@ -9,7 +9,20 @@
 import UIKit
 
 class ViewContactVC: UIViewController {
-
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var handleLabel: UILabel!
+    @IBOutlet weak var messageTextView: InactiveTextView!
+    
+    @IBOutlet weak var notesView: ActiveTextView!
+    
+    @IBOutlet weak var saveNotesButton: DesignableButton!
+    
+    @IBOutlet weak var sendCardButton: DesignableButton!
+    @IBOutlet weak var doneEditingButton: UIButton!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,6 +30,19 @@ class ViewContactVC: UIViewController {
     }
     
 
+    @IBAction func saveNotes(_ sender: UIButton) {
+    }
+    
+    
+    @IBAction func sendCard(_ sender: UIButton) {
+    }
+    
+    @IBAction func endEditing(_ sender: UIButton) {
+        view.endEditing(true)
+    }
+    
+    
+    
     /*
     // MARK: - Navigation
 
@@ -28,3 +54,5 @@ class ViewContactVC: UIViewController {
     */
 
 }
+
+
