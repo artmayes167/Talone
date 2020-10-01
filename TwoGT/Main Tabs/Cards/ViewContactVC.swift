@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewContactVC: UIViewController {
     
@@ -26,6 +27,26 @@ class ViewContactVC: UIViewController {
         }
     }
     
+    var card: CardTemplateInstance? {
+        didSet {
+            setCardData()
+        }
+    }
+    
+    var cardAddresses: [NSManagedObject] = []
+    
+    func setCardData() {
+        var arr: [NSManagedObject] = []
+        if let c = card {
+            let a: [CardAddress] = c.addresses
+            let p: [CardPhoneNumber] = c.phoneNumbers
+            let e: [CardEmail] = c.emails
+            arr.append(contentsOf: a + p + e)
+        }
+        cardAddresses = arr
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
@@ -36,7 +57,24 @@ class ViewContactVC: UIViewController {
         handleLabel.text = dataSource?.getHandle()
         notesView.text = dataSource?.getNotes()
         messageTextView.text = dataSource?.getMessage(sender: true)
+        card = dataSource?.allContactInfo()
     }
+    
+    func typeForClass(_ c: String?) -> CardElementTypes {
+        guard let name = c else { fatalError() }
+        switch name {
+        case CardAddress().entity.name:
+            return .address
+        case CardPhoneNumber().entity.name:
+            return .phoneNumber
+        case CardEmail().entity.name:
+            return .email
+        default:
+            fatalError()
+        }
+    }
+    
+    
     
      // MARK: - IBActions
     @IBAction func saveNotes(_ sender: UIButton) {
@@ -64,15 +102,47 @@ class ViewContactVC: UIViewController {
 }
 
 extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return cardAddresses.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        
+        let object = cardAddresses[indexPath.row]
+        
+        // Included switch statement, because other cells may be used if the format changes
+        switch typeForClass(object.entity.name) {
+        case .address:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
+            guard let a = object as? CardAddress else { fatalError() }
+            cell.detailsLabel.text = a.title
+            return cell
+        case .phoneNumber:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
+            guard let p = object as? CardPhoneNumber else { fatalError() }
+            cell.detailsLabel.text = p.title
+            return cell
+        case .email:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
+            guard let e = object as? CardEmail else { fatalError() }
+            cell.detailsLabel.text = e.title
+            return cell
+        }
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell
+        cell.configure("included contact info")
+        return cell.contentView
+    }
 }
 
 extension ViewContactVC: UITextViewDelegate {

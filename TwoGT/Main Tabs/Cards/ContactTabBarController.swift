@@ -13,6 +13,7 @@ protocol InteractionDataSource {
     func getHandle() -> String
     /// Only for received card
     func getNotes() -> String // TODO: - work on formatting
+    func allContactInfo() -> CardTemplateInstance?
     func getMessage(sender: Bool) -> String
     func saveNotes(_ notes: String)
 }
@@ -40,11 +41,15 @@ class ContactTabBarController: UITabBarController, InteractionDataSource {
         }
     }
 
+     // MARK: - InteractionDataSource
     func getHandle() -> String {
         return interaction!.referenceUserHandle! // should crash only if we fucked up
     }
     func getNotes() -> String {
         return interaction?.receivedCard?.personalNotes ?? ""
+    }
+    func allContactInfo() -> CardTemplateInstance? {
+        return interaction?.receivedCard
     }
     func getMessage(sender: Bool) -> String {
         return sender == true ? (interaction?.receivedCard?.comments ?? "") : (interaction?.cardTemplate?.comments ?? "")
