@@ -20,9 +20,9 @@ extension Interaction {
     @NSManaged public var templateName: String?
     @NSManaged public var referenceUserHandle: String?
 
-    @NSManaged var rating: InteractionRating
-    @NSManaged var receivedCard: CardTemplateInstance
-    @NSManaged var cardTemplate: CardTemplateInstance
+    @NSManaged var rating: InteractionRating?
+    @NSManaged var receivedCard: CardTemplateInstance?
+    @NSManaged var cardTemplate: CardTemplateInstance?
 }
 
 extension Interaction : Identifiable {

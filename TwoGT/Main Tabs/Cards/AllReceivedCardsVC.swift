@@ -91,7 +91,7 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
         let u = interactions.filter { $0.referenceUserHandle == handle }
-        cell.configure(handle: handle, image: u.first?.receivedCard.image)
+        cell.configure(handle: handle, image: u.first?.receivedCard?.image)
         return cell
     }
     
