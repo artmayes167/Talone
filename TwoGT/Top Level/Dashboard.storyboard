@@ -1858,6 +1858,7 @@
                                                         <constraints>
                                                             <constraint firstItem="0zl-FV-1LM" firstAttribute="top" secondItem="1I0-az-yo7" secondAttribute="top" id="1lB-e1-hur"/>
                                                             <constraint firstAttribute="trailing" secondItem="0zl-FV-1LM" secondAttribute="trailing" constant="24" id="6sC-8W-zXy"/>
+                                                            <constraint firstAttribute="height" constant="120" id="CKa-bb-J68"/>
                                                             <constraint firstAttribute="bottom" secondItem="plD-78-NCe" secondAttribute="bottom" constant="24" id="Oar-Yd-CZf"/>
                                                             <constraint firstItem="0zl-FV-1LM" firstAttribute="leading" secondItem="1I0-az-yo7" secondAttribute="leading" constant="24" id="ScQ-pA-vJ0"/>
                                                             <constraint firstItem="plD-78-NCe" firstAttribute="leading" secondItem="1I0-az-yo7" secondAttribute="leading" constant="36" id="U6h-eF-uzl"/>
@@ -2092,33 +2093,6 @@
                                     <outlet property="delegate" destination="Guh-10-Rru" id="m9d-55-fDZ"/>
                                 </connections>
                             </scrollView>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wdt-M4-H16" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="290" y="0.0" width="100" height="45"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="BeL-MA-QYe"/>
-                                    <constraint firstAttribute="height" constant="45" id="LH5-ba-MMA"/>
-                                </constraints>
-                                <size key="titleShadowOffset" width="1" height="1"/>
-                                <state key="normal" title="DONE">
-                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" systemColor="systemBlueColor"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="8"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="doneEditingText:" destination="Guh-10-Rru" eventType="touchUpInside" id="21v-B6-VuA"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5fi-88-dqP" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="20" y="0.0" width="374" height="77"/>
                                 <subviews>
@@ -2163,10 +2137,8 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="KmM-bp-uMX" secondAttribute="trailing" id="5Og-Ht-TBz"/>
-                            <constraint firstItem="wdt-M4-H16" firstAttribute="top" secondItem="ms2-rE-7E1" secondAttribute="top" id="6lg-yT-Noa"/>
                             <constraint firstItem="KmM-bp-uMX" firstAttribute="leading" secondItem="Zxz-Mi-fa2" secondAttribute="leading" id="MMQ-dS-jE8"/>
                             <constraint firstItem="5fi-88-dqP" firstAttribute="leading" secondItem="ms2-rE-7E1" secondAttribute="leading" constant="20" id="QVf-KO-gsE"/>
-                            <constraint firstItem="ms2-rE-7E1" firstAttribute="trailing" secondItem="wdt-M4-H16" secondAttribute="trailing" constant="24" id="cDh-Vo-k5A"/>
                             <constraint firstItem="Ob8-Hc-aq1" firstAttribute="top" secondItem="5fi-88-dqP" secondAttribute="bottom" constant="-2" id="dfd-go-eSS"/>
                             <constraint firstItem="KmM-bp-uMX" firstAttribute="top" secondItem="5fi-88-dqP" secondAttribute="bottom" id="ovO-6C-09M"/>
                             <constraint firstItem="5fi-88-dqP" firstAttribute="top" secondItem="ms2-rE-7E1" secondAttribute="top" id="pHZ-sk-O1Y"/>
@@ -2180,8 +2152,6 @@
                     <navigationItem key="navigationItem" id="2ec-HZ-mBP"/>
                     <size key="freeformSize" width="414" height="1200"/>
                     <connections>
-                        <outlet property="doneButton" destination="wdt-M4-H16" id="SvO-8H-dgE"/>
-                        <outlet property="doneButtonTop" destination="6lg-yT-Noa" id="TQi-ye-6ku"/>
                         <outlet property="feedbackTextView" destination="R6B-mF-zoL" id="s0d-WU-qnP"/>
                         <outlet property="scrollView" destination="KmM-bp-uMX" id="vPZ-0Y-8JJ"/>
                         <outlet property="viewControllerNameLabel" destination="N3M-WG-3tp" id="6by-24-woh"/>
@@ -2195,7 +2165,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-643" y="3401"/>
+            <point key="canvasLocation" x="-670" y="3516"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="x9X-r5-ugq">
@@ -2603,9 +2573,6 @@
         </designable>
         <designable name="sqE-tY-yOp">
             <size key="intrinsicContentSize" width="538" height="538"/>
-        </designable>
-        <designable name="wdt-M4-H16">
-            <size key="intrinsicContentSize" width="50" height="34"/>
         </designable>
         <designable name="xxM-8L-pxG">
             <size key="intrinsicContentSize" width="130" height="41"/>

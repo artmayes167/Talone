@@ -57,15 +57,17 @@ class AllReceivedCardsVC: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "toInteraction" {
+            let tabBar = segue.destination as! ContactTabBarController
+            guard let i = sender as? Interaction else { fatalError() }
+            tabBar.interaction = i
+        }
     }
-    */
 
 }
 
@@ -103,6 +105,12 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell
         cell.configure(contactListKeys[section])
         return cell.contentView
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let handle = contactList[contactListKeys[indexPath.section]]![indexPath.row]
+        let u = interactions.filter { $0.referenceUserHandle == handle }
+        performSegue(withIdentifier: "toInteraction", sender: u.first)
     }
 }
 

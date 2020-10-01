@@ -11,34 +11,42 @@ import UIKit
 class ViewContactVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var messageTextView: InactiveTextView!
-    
     @IBOutlet weak var notesView: ActiveTextView!
-    
     @IBOutlet weak var saveNotesButton: DesignableButton!
-    
     @IBOutlet weak var sendCardButton: DesignableButton!
-    @IBOutlet weak var doneEditingButton: UIButton!
     
-    
+    var dataSource: InteractionDataSource? {
+        didSet {
+            if isViewLoaded {
+                updateUI()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        updateUI()
     }
     
-
+    func updateUI() {
+        // Strings are formatted in dataSource `ContactTabBarController`
+        handleLabel.text = dataSource?.getHandle()
+        notesView.text = dataSource?.getNotes()
+        messageTextView.text = dataSource?.getMessage(sender: true)
+    }
+    
+     // MARK: - IBActions
     @IBAction func saveNotes(_ sender: UIButton) {
+        if let t = notesView.text?.pure() {
+            dataSource?.saveNotes(t)
+        }
     }
-    
     
     @IBAction func sendCard(_ sender: UIButton) {
-    }
-    
-    @IBAction func endEditing(_ sender: UIButton) {
-        view.endEditing(true)
+        // TODO: - Show card creation view, with template selector and message textView
     }
     
     
@@ -53,6 +61,37 @@ class ViewContactVC: UIViewController {
     }
     */
 
+}
+
+extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+    
+    
+}
+
+extension ViewContactVC: UITextViewDelegate {
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            textView.resignFirstResponder()
+            
+            let s = UIStoryboard.init(name: "Helper", bundle: nil)
+            guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
+            vc.configure(textView: textView, displayName: "personal notes", initialText: notesView.text)
+            present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
+    }
+    
 }
 
 

@@ -9,20 +9,54 @@
 import UIKit
 
 protocol InteractionDataSource {
-    
+    /// Universal, at Interaction level
+    func getHandle() -> String
+    /// Only for received card
+    func getNotes() -> String // TODO: - work on formatting
+    func getMessage(sender: Bool) -> String
+    func saveNotes(_ notes: String)
 }
 
 class ContactTabBarController: UITabBarController, InteractionDataSource {
     
-    var interaction: Interaction?
+    var interaction: Interaction? {
+        didSet {
+            if isViewLoaded {
+                setDataConsumers()
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setDataConsumers()
     }
     
+    func setDataConsumers() {
+        for vc in viewControllers! {
+            if let v = vc as? ViewContactVC {
+                v.dataSource = self
+            }
+        }
+    }
 
+    func getHandle() -> String {
+        return interaction!.referenceUserHandle! // should crash only if we fucked up
+    }
+    func getNotes() -> String {
+        return interaction?.receivedCard?.personalNotes ?? ""
+    }
+    func getMessage(sender: Bool) -> String {
+        return sender == true ? (interaction?.receivedCard?.comments ?? "") : (interaction?.cardTemplate?.comments ?? "")
+    }
+    func saveNotes(_ notes: String) {
+        interaction?.receivedCard?.personalNotes = notes
+        DispatchQueue.main.async {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+            _ = appDelegate.save()
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
