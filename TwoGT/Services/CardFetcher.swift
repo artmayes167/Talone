@@ -11,6 +11,10 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+protocol CardsObserver {
+    func observeCardsSentToMe(completion: @escaping ([CardsBase.FiBCardItem]) -> Void)
+}
+
 class CardsBase: FirebaseGeneric {
 
     struct FiBCardItem: Codable {
@@ -26,9 +30,10 @@ class CardsBase: FirebaseGeneric {
     }
 }
 
-class CardsFetcher: CardsBase {
+class CardsFetcher: CardsBase, CardsObserver {
 
-    class func observeCardsSentToMe(completion: @escaping ([FiBCardItem]) -> Void) {
+    func observeCardsSentToMe(completion: @escaping ([FiBCardItem]) -> Void) {
+
         // Listen to metadata updates to receive a server snapshot even if
         // the data is the same as the cached data.
         guard let uid = Auth.auth().currentUser?.uid else { return }

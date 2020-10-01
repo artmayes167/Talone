@@ -14,8 +14,8 @@ import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    class func getUser() -> User  {
+
+    class func getUser() -> User {
         guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         let managedContext = d.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
@@ -32,21 +32,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           return AppDelegate.createUser()
         }
     }
-    
+
     class func createUser() -> User {
         guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         let managedContext = d.persistentContainer.viewContext
         let entity =
           NSEntityDescription.entity(forEntityName: "User",
                                      in: managedContext)!
-        
+
        guard let user = NSManagedObject(entity: entity,
                                               insertInto: managedContext) as? User else {
                                                 fatalError()
         }
-        
+
         user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)
-        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),  let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue)  {
+        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid
             _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
             return user
@@ -54,11 +54,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             fatalError()
         }
     }
-    
+
     static let user = AppDelegate.getUser()
 
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
+    static var cardObserver = CardReceiverObserver()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let def = UserDefaults.standard
@@ -68,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if def.string(forKey: "admin") == nil {
             def.set("xxxx", forKey: "admin")
         }
-        
+
         // Notify FB application delegate
         ApplicationDelegate.shared.application(
                    application,
@@ -77,11 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-        
-        //try? Auth.auth().signOut() // Needed to test login-process
-        
-        
-        // Otherwise, go to sign-in view
 
 // Fetch latest news for this city.
 //        newsFetcher.fetchNews { newsItems in
@@ -104,10 +100,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
     }
-    
+
     private func handlePasswordlessSignIn(withURL url: URL) -> Bool {
         let link = url.absoluteString
-        
+
         if Auth.auth().isSignIn(withEmailLink: link) {  // Checks if the link is a sign-in link; can be used one-time only.
             UserDefaults.standard.set(link, forKey: "Link")
             // Post a notification to the PasswordlessViewController to resume authentication
@@ -117,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return false
     }
-    
+
     func applicationWillResignActive(_ application: UIApplication) {
         do {
             BackgroundTask.run(application: application) { backgroundTask in
@@ -126,23 +122,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
     func save() -> Bool {
         if persistentContainer.viewContext.hasChanges {
             persistentContainer.viewContext.insert(AppDelegate.user)
             do {
                 try persistentContainer.viewContext.save()
                 return true
-            }
-            catch {
+            } catch {
                 return false
             }
         }
         return true
     }
-    
+
     func setToFlow(storyboardName: String, identifier viewControllerIdentifier: String) {
-        DispatchQueue.main.async() {
+        DispatchQueue.main.async {
             self.window = UIWindow(frame: UIScreen.main.bounds)
             let mainStoryboard = UIStoryboard(name: storyboardName, bundle: nil)
             let mainVC = mainStoryboard.instantiateViewController(withIdentifier: viewControllerIdentifier) as! BaseSwipeVC
@@ -154,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
     // MARK: UISceneSession Lifecycle
 
 //    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -194,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //         error conditions that could cause the creation of the store to fail.
 //        */
         let container = NSPersistentCloudKitContainer(name: "TwoGT")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
 //                // Replace this implementation with code to handle the error appropriately.
 //                // fatalError() causes the application to generate a crash log and terminate.
@@ -242,7 +237,7 @@ class BackgroundTask {
         self.application = application
     }
 
-    class func run(application: UIApplication, handler: (BackgroundTask) -> ()) {
+    class func run(application: UIApplication, handler: (BackgroundTask) -> Void) {
         // NOTE: The handler must call end() when it is done
 
         let backgroundTask = BackgroundTask(application: application)
@@ -257,7 +252,7 @@ class BackgroundTask {
     }
 
     func end() {
-        if (identifier != UIBackgroundTaskIdentifier.invalid) {
+        if identifier != UIBackgroundTaskIdentifier.invalid {
             application.endBackgroundTask(identifier)
         }
 
