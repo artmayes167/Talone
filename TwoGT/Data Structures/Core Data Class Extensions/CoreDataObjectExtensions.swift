@@ -134,8 +134,8 @@ extension Card {
             This object is associated with an `Interaction` object, and will not be otherwise accessible after creation. `CardTemplateInstance` should never set personal notes on creation, but should set comments.  Comments are a message to or from the other user, depending on the context
  */
 extension CardTemplateInstance {
-    /** - Parameter card: if set, will attempt to create from card.  Else, codableCard must be set
-        - Parameter codableCard:  if set, will attempt to create from codableCard.  Else, card must be set
+    /** - Parameter card: if set, will attempt to create from `card`.  Else, `codableCard` must be set. `card` takes precedence.
+        - Parameter codableCard:  if set, in the absence of `card`, will attempt to create from `codableCard`.  Else, `card` must be set
      */
     class func create(card: Card?, codableCard: CodableCardTemplateInstance?, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
@@ -273,6 +273,10 @@ struct CodableCardTemplateInstance: Codable {
 typealias GateKeeper = CodableCardTemplateInstanceManager
 
 class CodableCardTemplateInstanceManager {
+    /**
+    This is the only method FiB should need to call to encode card data.
+     - Returns: JSON-formatted string
+     */
     func buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data {
         let codableInstance = CodableCardTemplateInstance(instance: instance)
         let encoder = newJSONEncoder()
@@ -285,7 +289,10 @@ class CodableCardTemplateInstanceManager {
         }
     }
     
-    /// This is the only method FiB should need to call for the card data
+    /**
+        This is the only method FiB should need to call to decode card data.
+        - Parameter data: JSON-formatted string
+     */
     func decodeCodableInstance(data: Data) -> CardTemplateInstance {
         let decoder = newJSONDecoder()
         do {
