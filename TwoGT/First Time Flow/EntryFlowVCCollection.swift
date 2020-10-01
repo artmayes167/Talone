@@ -62,6 +62,7 @@ class EnterVerificationVC: UIViewController {
 
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var warningLabel: UILabel!
 
     @IBAction func submitVerification(_ sender: Any) {
         // Sign-in code here
@@ -82,6 +83,10 @@ class EnterVerificationVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setSignInButtonState()
+    }
+    
+    private func setLabelsState() {
+        
     }
 
     private func setSignInButtonState() {
@@ -121,6 +126,7 @@ class EnterVerificationVC: UIViewController {
     }
 
     @objc private func passwordlessSignInSuccessful() {
+        setLabelsState()
         setSignInButtonState()
     }
 }

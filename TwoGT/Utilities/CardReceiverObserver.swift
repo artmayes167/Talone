@@ -23,34 +23,47 @@ class CardReceiverObserver {
         
 //        CardsFetcher().observeCardsSentToMe { [self] fibCardItems in
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
-            print("cards received! \(fibCardItems)")
-            let interactions: [Interaction] = AppDelegate.user.interactions
-            var newCards = [CardsBase.FiBCardItem]()
-            var modifiedCards = newCards
-
-            // cross-reference Cards
-
-            checkNew: for fibCard in fibCardItems {
-                for interaction in interactions where fibCard.id == interaction.receivedCard?.uid {
-                    // card modified?
-                    modifiedCards.append(fibCard)
-                    continue checkNew
-                }
-                newCards.append(fibCard)
-                // Create card in CD
+//            print("cards received! \(fibCardItems)")
+//            let interactions: [Interaction] = AppDelegate.user.interactions
+//            var newCards = [CardsBase.FiBCardItem]()
+//            var modifiedCards = newCards
+//
+//            // cross-reference Cards
+//
+//            checkNew: for fibCard in fibCardItems {
+//                for interaction in interactions where fibCard.id == interaction.receivedCard?.uid {
+//                    // card modified?
+//                    modifiedCards.append(fibCard)
+//                    continue checkNew
+//                }
+//                newCards.append(fibCard)
+//                // Create card in CD
+//            }
+//
+//            // Search for any card that has been deleted.
+//            checkDeleted: for interaction in interactions {
+//                for fibCard in fibCardItems where fibCard.id == interaction.receivedCard?.uid {
+//                    continue checkDeleted
+//                }
+//                //interaction.receivedCard.deleteCard()
+//            }
+//            self.notifyUserOfNewAndModifiedCards(newCards, modifiedCards)
+            
+            // New stuff
+            for fibCard in fibCardItems {
+                let decodedData = Data(base64Encoded: fibCard.payload)!
+                _ = GateKeeper().decodeCodableInstance(data:decodedData)
             }
-
-            // Search for any card that has been deleted.
-            checkDeleted: for interaction in interactions {
-                for fibCard in fibCardItems where fibCard.id == interaction.receivedCard?.uid {
-                    continue checkDeleted
-                }
-                //interaction.receivedCard.deleteCard()
+            DispatchQueue.main.async {
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                let vc = appDelegate.window!.rootViewController
+                vc?.view.makeToast("new contact information received from \(fibCardItems.count) contacts")
             }
-            self.notifyUserOfNewAndModifiedCards(newCards, modifiedCards)
+            
         }
     }
 
+    // I think this is overkill, but will keep in case that changes
     private func notifyUserOfNewAndModifiedCards(_ newCards: [CardsBase.FiBCardItem], _ modifiedCards: [CardsBase.FiBCardItem]) {
         guard newCards.count > 0 || modifiedCards.count > 0 else { return }
 

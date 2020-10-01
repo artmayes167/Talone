@@ -93,6 +93,7 @@ class ViewIndividualHaveVC: UIViewController {
     }
 
     @IBAction func sendCard(_ sender: Any) {
+        performSegue(withIdentifier: "toCompleteAndSendCardVC", sender: nil)
     }
 
     @IBAction func seeCard(_ sender: Any) {
@@ -104,6 +105,9 @@ class ViewIndividualHaveVC: UIViewController {
         if segue.identifier == "toAddHeadline" {
             guard let vc = segue.destination as? AddHaveToWatchVC else { fatalError() }
             vc.creationManager = creationManager
+            vc.haveItem = haveItem
+        } else if segue.identifier == "toCompleteAndSendCardVC" {
+            guard let vc = segue.destination as? CompleteAndSendCardVC else { fatalError() }
             vc.haveItem = haveItem
         }
     }

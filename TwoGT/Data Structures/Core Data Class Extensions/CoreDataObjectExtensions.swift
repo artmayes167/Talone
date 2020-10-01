@@ -169,7 +169,8 @@ extension CardTemplateInstance {
             CardEmail.arrayFrom(dictionary: c.emails)
             CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
         } else {
-            fatalError()
+            instance.uid = AppDelegate.user.uid
+            instance.userHandle = AppDelegate.user.handle
         }
         
         instance.comments = message
