@@ -16,12 +16,11 @@ class CardReceiverObserver {
     func startObserving() {
         observeCardReceptions()
     }
-    
+
     // TODO: - Jyrki will look at GateKeeper().decodeCodableInstance(data: Data) -> CardTemplateInstance and GateKeeper().buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data
 
     func observeCardReceptions() {
-        
-//        CardsFetcher().observeCardsSentToMe { [self] fibCardItems in
+
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
             print("cards received! \(fibCardItems)")
             let interactions: [Interaction] = AppDelegate.user.interactions
@@ -29,18 +28,23 @@ class CardReceiverObserver {
             var modifiedCards = newCards
 
             // cross-reference Cards
-
             checkNew: for fibCard in fibCardItems {
+                // ART: SO WE CAN'T DO THE BELOW?
+                // Check if we have an existing interaction and this is a card update.
                 for interaction in interactions where fibCard.id == interaction.receivedCard?.uid {
-                    // card modified?
+                    // card modified? has modifiedAt changed? if so, modify, otherwise ignore
                     modifiedCards.append(fibCard)
                     continue checkNew
                 }
                 newCards.append(fibCard)
+                let decodedData = Data(base64Encoded: fibCard.payload)!
+                // Create Interaction in CD
+                _ = Interaction.create(newPersonHandle: fibCard.owner, templateName: nil)
                 // Create card in CD
+                _ = GateKeeper().decodeCodableInstance(data: decodedData)
             }
 
-            // Search for any card that has been deleted.
+            // Search for any card that has been deleted by the remove owner of that card.
             checkDeleted: for interaction in interactions {
                 for fibCard in fibCardItems where fibCard.id == interaction.receivedCard?.uid {
                     continue checkDeleted

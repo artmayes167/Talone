@@ -93,11 +93,12 @@ class ViewIndividualHaveVC: UIViewController {
     }
 
     @IBAction func sendCard(_ sender: Any) {
+        sendArbitraryCardToHaveOwner()
     }
 
     @IBAction func seeCard(_ sender: Any) {
     }
-    
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -107,7 +108,7 @@ class ViewIndividualHaveVC: UIViewController {
             vc.haveItem = haveItem
         }
     }
-    
+
     @IBAction func unwindToViewIndividualHaveVC( _ segue: UIStoryboardSegue) {}
 
 //    private func joinTheHave() {
@@ -126,6 +127,29 @@ class ViewIndividualHaveVC: UIViewController {
 //        }
 //
 //    }
+
+    private func sendArbitraryCardToHaveOwner() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let haveItemCreatorUid = haveItem?.createdBy else { return }
+
+        let cards = AppDelegate.user.cardTemplates // [Card]
+        if cards.count == 0 { return }
+        let card = cards[0] // TODO: temporary solution
+
+        let handle = AppDelegate.user.handle ?? "Anonymous"
+        let recipientHandle = haveItem?.owner ?? "Anonymous"
+        let cardInstance = CardTemplateInstance.create(card: card, codableCard: nil, fromHandle: handle, toHandle: recipientHandle, message: "This is placeholder message that user should probably define themselves.")
+        let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance)
+        // TODO: Move this logic to another utility class.
+        var fibCard = CardsBase.FiBCardItem(createdBy: userId, createdFor: haveItemCreatorUid, payload: data.base64EncodedString(), owner: handle)
+
+        CardsDbWriter().addCard(fibCard) { error in
+            if error != nil {
+                print(error)
+            }
+        }
+    }
+
 }
 
 extension ViewIndividualHaveVC: UITextViewDelegate {
