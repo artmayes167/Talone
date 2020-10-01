@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class AddressAdder: NSObject {
-    let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var managedObjectContext: NSManagedObjectContext {
+        get {
+            return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        }
+    }
     
     func saveContext() -> Bool {
       do {

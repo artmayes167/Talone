@@ -196,18 +196,25 @@ extension CardTemplateInstance {
         if !filteredInteractions.isEmpty {
             if let f = filteredInteractions.first {
                 if let nonCodableInstance = f.receivedCard {
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                    let managedContext = appDelegate.persistentContainer.viewContext
-                    for address in nonCodableInstance.addresses {
-                        managedContext.delete(address)
+                    DispatchQueue.main.async {
+                        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+                        let managedContext = appDelegate.persistentContainer.viewContext
+//                        for address in nonCodableInstance.addresses {
+//                            managedContext.delete(address)
+//                        }
+//                        for phone in nonCodableInstance.phoneNumbers {
+//                            managedContext.delete(phone)
+//                        }
+//                        for email in nonCodableInstance.emails {
+//                            managedContext.delete(email)
+//                        }
+                        managedContext.delete(nonCodableInstance)
+                        do {
+                            try managedContext.save()
+                        } catch {
+                            fatalError()
+                        }
                     }
-                    for phone in nonCodableInstance.phoneNumbers {
-                        managedContext.delete(phone)
-                    }
-                    for email in nonCodableInstance.emails {
-                        managedContext.delete(email)
-                    }
-                    managedContext.delete(nonCodableInstance)
                 }
             }
         } else {
