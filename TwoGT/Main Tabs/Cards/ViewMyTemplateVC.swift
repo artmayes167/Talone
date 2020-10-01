@@ -59,11 +59,11 @@ class ViewMyTemplateVC: UIViewController {
     }
     
     @IBAction func edit(_ sender: UIButton) {
-        
+        // Nope
     }
 
     @IBAction func showUsersWithTemplate(_ sender: UIButton) {  // Interactions
-        
+        // Nope
     }
     
     /*

@@ -14,6 +14,7 @@ protocol InteractionDataSource {
     /// Only for received card
     func getNotes() -> String // TODO: - work on formatting
     func allContactInfo() -> CardTemplateInstance?
+    func previouslySentCard() -> Bool
     func getMessage(sender: Bool) -> String
     func saveNotes(_ notes: String)
 }
@@ -50,6 +51,10 @@ class ContactTabBarController: UITabBarController, InteractionDataSource {
     }
     func allContactInfo() -> CardTemplateInstance? {
         return interaction?.receivedCard
+    }
+    func previouslySentCard() -> Bool {
+        if let _ = interaction?.cardTemplate { return true }
+        return false
     }
     func getMessage(sender: Bool) -> String {
         return sender == true ? (interaction?.receivedCard?.comments ?? "") : (interaction?.cardTemplate?.comments ?? "")

@@ -58,6 +58,8 @@ class ViewContactVC: UIViewController {
         notesView.text = dataSource?.getNotes()
         messageTextView.text = dataSource?.getMessage(sender: true)
         card = dataSource?.allContactInfo()
+        let hasOld = dataSource?.previouslySentCard() ?? false
+        sendCardButton.isEnabled = !hasOld
     }
     
     func typeForClass(_ c: String?) -> CardElementTypes {
@@ -148,14 +150,12 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
 extension ViewContactVC: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        func textViewDidBeginEditing(_ textView: UITextView) {
-            textView.resignFirstResponder()
-            
-            let s = UIStoryboard.init(name: "Helper", bundle: nil)
-            guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
-            vc.configure(textView: textView, displayName: "personal notes", initialText: notesView.text)
-            present(vc, animated: true, completion: nil)
-        }
+        textView.resignFirstResponder()
+        
+        let s = UIStoryboard.init(name: "Helper", bundle: nil)
+        guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
+        vc.configure(textView: textView, displayName: "personal notes", initialText: notesView.text)
+        present(vc, animated: true, completion: nil)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

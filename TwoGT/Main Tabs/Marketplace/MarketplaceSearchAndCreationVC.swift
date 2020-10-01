@@ -29,7 +29,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBOutlet weak var seeMatchingNeedsButton: DesignableButton!
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: DesignableTextView!
-    @IBOutlet var dismissTapGesture: UITapGestureRecognizer!
     @IBOutlet weak var createNewNeedHaveButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
 
@@ -57,10 +56,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         //dismissTapGesture.isEnabled = false
         setInitialValues()
 
-        // Notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
         if Auth.auth().currentUser?.isAnonymous ?? true {
             // SignIn Anonymously
             Auth.auth().signInAnonymously { (authResult, _) in
@@ -83,22 +78,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
            view.endEditing(true)
             setUIForCurrents()
        }
-
-     // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-
-        var contentInset: UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets()
-        scrollView.contentInset = contentInset
-    }
 
      // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
@@ -123,13 +102,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
      // MARK: - IBActions
-    @IBAction func dismissOnTap(_ sender: Any) {
-        if categoriesPopOver.isHidden == false {
-            categoriesPopOver.isHidden = true
-            //dismissTapGesture.isEnabled = false
-        }
-        view.endEditing(true)
-    }
 
     @IBAction func selectedNeedOrHave(_ sender: UISegmentedControl) {
         // UI and CoreData elements are handled in didSet()
@@ -183,7 +155,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         creationManager.setCategory(need)
         setSearchButtons()
-        dismissTapGesture.isEnabled = false
         view.layoutIfNeeded()
     }
 
@@ -303,7 +274,6 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         if textField == categoryTextField {
             categoriesPopOver.isHidden = false
             textField.resignFirstResponder()
-            dismissTapGesture.isEnabled = true
             view.layoutIfNeeded()
         }
     }
@@ -323,10 +293,12 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        dismissTapGesture.isEnabled = true
-        let rect = scrollView.convert(textView.frame, from: buttonsAndDescriptionView)
-        let newRect = rect //.offsetBy(dx: 0, dy: (textView.superview?.frame.origin.y)!)
-        self.scrollView.scrollRectToVisible(newRect, animated: false)
+        textView.resignFirstResponder()
+        
+        let s = UIStoryboard.init(name: "Helper", bundle: nil)
+        guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
+        vc.configure(textView: textView, displayName: "description", initialText: descriptionTextView.text)
+        present(vc, animated: true, completion: nil)
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
