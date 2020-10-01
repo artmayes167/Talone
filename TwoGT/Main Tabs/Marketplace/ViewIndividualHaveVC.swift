@@ -34,8 +34,9 @@ class ViewIndividualHaveVC: UIViewController {
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
     @IBOutlet weak var joinThisHaveButton: DesignableButton!
+    @IBOutlet weak var sendCardButton: DesignableButton!
 
-     // MARK: - View Life Cycle
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -61,6 +62,7 @@ class ViewIndividualHaveVC: UIViewController {
         doYouLabel.text = str
         locationLabel.text = String(format: "%@ in %@", n, cityState.displayName())
         needDescriptionTextView.text = haveItem?.description
+        // sendCardButton.isEnabled = AppDelegate.user.cardTemplates.count > 0
         view.layoutIfNeeded()
     }
 
@@ -133,7 +135,10 @@ class ViewIndividualHaveVC: UIViewController {
         guard let haveItemCreatorUid = haveItem?.createdBy else { return }
 
         let cards = AppDelegate.user.cardTemplates // [Card]
-        if cards.count == 0 { return }
+        if cards.count == 0 {
+            showOkayAlert(title: "", message: "You don't have any Cards created. Go to Cards and create one first.") { _ in }
+            return
+        }
         let card = cards[0] // TODO: temporary solution
 
         let handle = AppDelegate.user.handle ?? "Anonymous"
@@ -144,6 +149,9 @@ class ViewIndividualHaveVC: UIViewController {
         var fibCard = CardsBase.FiBCardItem(createdBy: userId, createdFor: haveItemCreatorUid, payload: data.base64EncodedString(), owner: handle)
 
         CardsDbWriter().addCard(fibCard) { error in
+            // Show success - note: FiB supports offline, so all items are created immediately, and synced automatically in the background.
+            self.view.makeToast("Sent a card to \(recipientHandle)", duration: 2.0, position: .center)
+
             if error != nil {
                 print(error)
             }

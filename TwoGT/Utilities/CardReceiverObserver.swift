@@ -17,8 +17,6 @@ class CardReceiverObserver {
         observeCardReceptions()
     }
 
-    // TODO: - Jyrki will look at GateKeeper().decodeCodableInstance(data: Data) -> CardTemplateInstance and GateKeeper().buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data
-
     func observeCardReceptions() {
 
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
@@ -29,24 +27,24 @@ class CardReceiverObserver {
 
             // cross-reference Cards
             checkNew: for fibCard in fibCardItems {
-                // ART: SO WE CAN'T DO THE BELOW?
                 // Check if we have an existing interaction and this is a card update.
-                for interaction in interactions where fibCard.id == interaction.receivedCard?.uid {
+                for interaction in interactions where fibCard.owner == interaction.referenceUserHandle {
                     // card modified? has modifiedAt changed? if so, modify, otherwise ignore
                     modifiedCards.append(fibCard)
                     continue checkNew
                 }
                 newCards.append(fibCard)
-                let decodedData = Data(base64Encoded: fibCard.payload)!
-                // Create Interaction in CD
-                _ = Interaction.create(newPersonHandle: fibCard.owner, templateName: nil)
-                // Create card in CD
-                _ = GateKeeper().decodeCodableInstance(data: decodedData)
+                if let decodedData = Data(base64Encoded: fibCard.payload) {
+                    // Create card in CD
+                    _ = GateKeeper().decodeCodableInstance(data: decodedData)
+                } else {
+                    print("WARNING: \(#function): Payload data can't be decoded!!")
+                }
             }
 
             // Search for any card that has been deleted by the remove owner of that card.
             checkDeleted: for interaction in interactions {
-                for fibCard in fibCardItems where fibCard.id == interaction.receivedCard?.uid {
+                for fibCard in fibCardItems where fibCard.owner == interaction.referenceUserHandle {
                     continue checkDeleted
                 }
                 //interaction.receivedCard.deleteCard()
@@ -116,62 +114,3 @@ class CardReceiverObserver {
         }
     }
 }
-
-/*
- HavesDbFetcher().observeMyHaves { [self] fibHaveItems in
-
-     var addedNeedOwners = [String]()
-     var changedHaves = [HaveItem]()
-     var isRedrawRequired = false
-
-     // Cross-reference needs
-     for have in self.haves {
-         for fibHave in fibHaveItems where fibHave.id == have.haveItem?.id {
-             if let needStubs = fibHave.needs, let haveItem = have.haveItem {
-                 var isChanged = false
-                 changedHaves.append(haveItem)   // for showing on UI
-
-                 let cdNeeds = have.childNeeds
-
-                 // First determine if there are any new needStubs that are missing from CD
-                 // These are the people that have linked with this have.
-                 for needStub in needStubs {
-                     var found = false
-                     for cdNeed in cdNeeds where cdNeed.needItem?.id == needStub.id {
-                         found = true
-                         break
-                     }
-                     if found == false {
-                         // create a new need (gets appended to childItems implicitly)
-                         var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
-                         fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
-                         let n = Need.createNeed(item: NeedItem.createNeedItem(item: fibNeed))
-                         n.parentHaveItemId = fibHave.id
-                         addedNeedOwners.append(fibNeed.owner)
-                         isChanged = true
-                     }
-                 }
-
-                 // Then determine if there are needStubs being deleted requiring cleanup from CD.
-                 // These are the people that have removed the link with this have.
-                 for cdNeed in cdNeeds {
-                     var found = false
-                     for needStub in needStubs where needStub.id == cdNeed.needItem?.id {
-                         found = true
-                         break
-                     }
-                     if found == false {
-                         cdNeed.deleteNeed()
-                         isChanged = true
-                     }
-                 }
-                 if isChanged { haveItem.update(); isRedrawRequired = true } // store changes to CD
-             }
-         }
-     }
-     if isRedrawRequired { collectionView.reloadData() }
-     notifyUserOfNewLinks(addedNeedOwners, changedHaves)
- }
-}
-
- */
