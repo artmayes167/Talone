@@ -224,12 +224,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
             guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
             let newArray = array.filter { $0.category.lowercased() ==  cat}
-            if newArray.isEmpty {
+            let finalArray = newArray.filter { $0.owner != AppDelegate.user.handle }
+            if finalArray.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
                     self.hideSpinner()
                 }
             } else {
-                self.performSegue(withIdentifier: "toNeedsCollection", sender: newArray)
+                self.performSegue(withIdentifier: "toNeedsCollection", sender: finalArray)
                 self.hideSpinner()
             }
         }
@@ -240,12 +241,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
         guard let v = creationManager.getCategory()?.firebaseValue() else { fatalError() }
         HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
-            if array.isEmpty {
+            let finalArray = array.filter { $0.owner != AppDelegate.user.handle }
+            if finalArray.isEmpty {
                 self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
                     self.hideSpinner()
                 }
             } else {
-                self.performSegue(withIdentifier: "toHavesCollection", sender: array)
+                self.performSegue(withIdentifier: "toHavesCollection", sender: finalArray)
                 self.hideSpinner()
             }
         }
