@@ -36,7 +36,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Variables
     var creationManager: PurposeCreationManager = PurposeCreationManager()
     var model: MarketplaceModel?
-    
+
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
             creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
@@ -70,7 +70,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
             }
         }
-        
+
+        // Start observing any Card receptions or card updates.
+        // We do this late in the flow to ensure user has signed in.
+        AppDelegate.cardObserver.startObserving()
+
         model = MarketplaceModel(creationManager: creationManager)
     }
 
@@ -98,18 +102,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
-    
+
     private func setInitialValues() {
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
             creationManager.setLocation(city: city, state: state, country: loc[DefaultsSavedLocationKeys.country.rawValue] ?? "USA", community: loc[DefaultsSavedLocationKeys.community.rawValue] ?? "")
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
             }
         }
         creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
     }
-    
+
     private func setUIForCurrents() {
         if let loc = creationManager.getLocationOrNil() {
             whereTextField.text = loc.displayName()
@@ -131,7 +135,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // UI and CoreData elements are handled in didSet()
         currentNeedHaveSelectedSegmentIndex = sender.selectedSegmentIndex
     }
-    
+
      // MARK: - IBActions
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
@@ -148,12 +152,12 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                     print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
                 }
             }
-        
+
         } else {
             view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
         }
     }
-    
+
     @IBAction func seeMatchingNeeds(_ sender: Any) {
         let success = creationManager.checkPrimaryNavigationParameters(save: true)
         if success {
@@ -172,7 +176,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         }
     }
 
-     
     // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
         categoryTextField.text = need.rawValue.capitalized
@@ -276,7 +279,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
     }
-    
+
     private func checkSaveButton() {
         // Check cityState and category, but don't save
         var success = creationManager.checkPrimaryNavigationParameters(save: false)
@@ -286,7 +289,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             createNewNeedHaveButton.isEnabled = success
         }
     }
-    
+
     private func setSearchButtons() {
         let success = creationManager.checkPrimaryNavigationParameters(save: false)
         seeMatchingHavesButton.isEnabled = success
@@ -310,7 +313,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
             checkSaveButton()
         }
     }
-    
+
      // MARK: TextView
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView == descriptionTextView {
@@ -318,10 +321,10 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         }
         return false
     }
-    
+
     func textViewDidBeginEditing(_ textView: UITextView) {
         dismissTapGesture.isEnabled = true
-        let rect = scrollView.convert(textView.frame, from:buttonsAndDescriptionView)
+        let rect = scrollView.convert(textView.frame, from: buttonsAndDescriptionView)
         let newRect = rect //.offsetBy(dx: 0, dy: (textView.superview?.frame.origin.y)!)
         self.scrollView.scrollRectToVisible(newRect, animated: false)
     }
@@ -368,4 +371,3 @@ class SimpleSearchCell: UITableViewCell {
     @IBOutlet weak var basicLabel: UILabel!
     @IBOutlet weak var colorBar: UIView!
 }
-
