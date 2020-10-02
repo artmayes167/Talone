@@ -23,4 +23,13 @@ class CardsDbWriter: CardsBase {
         }
         completion(nil)
     }
+
+    class func deleteCard(id: String, completion: ((Error?) -> Void)? = nil) {
+        let db = Firestore.firestore()
+        db.collection("cards").document(id).delete { err in
+            // Error about deleting the card. Note Deletion can be postponed until Firebase can sync again.
+            completion?(err)
+        }
+    }
+
 }
