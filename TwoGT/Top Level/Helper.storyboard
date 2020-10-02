@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KSc-Pu-d9n">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -69,6 +69,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pYW-R3-HyN"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="5jM-HJ-SJA" firstAttribute="top" secondItem="l6f-lE-zzK" secondAttribute="bottom" constant="8" symbolic="YES" id="2G1-11-9Df"/>
                             <constraint firstItem="pYW-R3-HyN" firstAttribute="trailing" secondItem="5jM-HJ-SJA" secondAttribute="trailing" constant="24" id="4wA-fm-h6P"/>
@@ -84,13 +85,21 @@
                             <constraint firstItem="fuv-XE-LJG" firstAttribute="top" secondItem="5jM-HJ-SJA" secondAttribute="bottom" constant="8" symbolic="YES" id="t0y-za-viB"/>
                             <constraint firstItem="l6f-lE-zzK" firstAttribute="trailing" secondItem="5jM-HJ-SJA" secondAttribute="trailing" id="twc-hI-rJT"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="lns-WL-Kos" appends="YES" id="adF-mJ-nuW"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="textView" destination="5jM-HJ-SJA" id="3kF-hh-93Z"/>
-                        <outlet property="textViewIdentifierLabel" destination="l6f-lE-zzK" id="zTE-sn-ZeH"/>
+                        <outlet property="textViewIdentifierLabel" destination="l6f-lE-zzK" id="wQg-ct-3kq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEE-qg-LaV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="lns-WL-Kos">
+                    <connections>
+                        <action selector="endEditing:" destination="KSc-Pu-d9n" id="B02-eu-HXd"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="428.98550724637687" y="1654.6875"/>
         </scene>

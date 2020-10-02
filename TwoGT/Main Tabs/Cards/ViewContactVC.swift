@@ -99,17 +99,15 @@ class ViewContactVC: UIViewController {
         // TODO: - Show card creation view, with template selector and message textView
     }
     
-    
-    
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "toTextViewHelper" {
+            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
+            vc.configure(textView: notesView, displayName: "personal notes", initialText: notesView.text)
+        }
     }
-    */
 
 }
 
@@ -126,7 +124,6 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
         
         let object = cardAddresses[indexPath.row]
         
-        // Included switch statement, because other cells may be used if the format changes
         switch typeForClass(object.entity.name) {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
@@ -159,13 +156,9 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
 
 extension ViewContactVC: UITextViewDelegate {
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        textView.resignFirstResponder()
-        
-        let s = UIStoryboard.init(name: "Helper", bundle: nil)
-        guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
-        vc.configure(textView: textView, displayName: "personal notes", initialText: notesView.text)
-        present(vc, animated: true, completion: nil)
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        performSegue(withIdentifier: "toTextViewHelper", sender: nil)
+        return false
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

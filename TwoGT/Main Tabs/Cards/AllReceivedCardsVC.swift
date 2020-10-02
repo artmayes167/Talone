@@ -79,7 +79,7 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return contactListKeys
+        return contactListKeys.count > 5 ? contactListKeys : nil
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
