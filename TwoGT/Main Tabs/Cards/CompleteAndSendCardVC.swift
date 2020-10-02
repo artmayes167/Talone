@@ -131,7 +131,8 @@ extension CompleteAndSendCardVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
+        let reuseIdentifier = String(format: "cell%i", indexPath.row%2)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! SavedLocationCell
         cell.titleLabel.text = templates[indexPath.row]
         return cell
     }
