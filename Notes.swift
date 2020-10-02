@@ -76,3 +76,5 @@
 // Happy by AomAm from the Noun Project
 
 // Train by isaac claramunt from the Noun Project
+
+// USA by Paul Aimé from the Noun Project
