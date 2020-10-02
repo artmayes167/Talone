@@ -22,24 +22,24 @@ enum AddressSections: Int, CaseIterable {
     
     private var addresses: [Address] {
         get {
-            let adds =  AppDelegate.user.addresses
-            let a = adds.sorted { return $0.title! < $1.title! }
+            let adds =  AppDelegate.user.addresses ?? []
+            let a = adds.isEmpty ? [] : adds.sorted { return $0.title! < $1.title! }
             return a.filter { $0.entity.name != CardAddress().entity.name }
         }
     }
     
     private var phoneNumbers: [PhoneNumber] {
         get {
-            let phones =  AppDelegate.user.phoneNumbers
-            let p = phones.sorted { return $0.title! < $1.title! }
+            let phones = AppDelegate.user.phoneNumbers ?? []
+            let p = phones.isEmpty ? [] : phones.sorted { return $0.title! < $1.title! }
             return p.filter { $0.entity.name != CardPhoneNumber().entity.name }
         }
     }
     
     private var emails: [Email] {
         get {
-            let ems =  AppDelegate.user.emails
-            let e = ems.sorted { return $0.title! < $1.title! }
+            let ems = AppDelegate.user.emails ?? []
+            let e = ems.isEmpty ? [] : ems.sorted { return $0.title! < $1.title! }
             return e.filter { $0.entity.name != CardEmail().entity.name }
         }
     }

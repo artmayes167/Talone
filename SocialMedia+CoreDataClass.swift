@@ -2,7 +2,7 @@
 //  SocialMedia+CoreDataClass.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/17/20.
+//  Created by Arthur Mayes on 10/2/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //

@@ -85,11 +85,11 @@ class CardTemplateCreatorVC: UIViewController {
         for x in model.allAdded! {
             switch x.entity.name {
             case Address().entity.name:
-                CardAddress.create(title: c.title!, address: x as! Address)
+                CardAddress.create(title: c.title!, address: x as? Address)
             case PhoneNumber().entity.name:
-                CardPhoneNumber.create(title: c.title!, phoneNumber: x as! PhoneNumber)
+                CardPhoneNumber.create(title: c.title!, phoneNumber: x as? PhoneNumber)
             case Email().entity.name:
-                CardEmail.create(title: c.title!, email: x as! Email)
+                CardEmail.create(title: c.title!, email: x as? Email)
             default:
                 fatalError()
             }

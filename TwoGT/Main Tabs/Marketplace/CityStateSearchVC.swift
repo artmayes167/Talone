@@ -166,7 +166,6 @@ class CityStateSearchVC: UIViewController {
             dismiss(animated: true, completion: nil)
         }
     }
-    
 }
 
  // MARK: - Saved Locations TableView DataSource/Delegate
@@ -184,30 +183,26 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
         return sections.keys.count
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "header") as! SavedLocationCell
-        let array = ["home", "alternate"]
-        cell.titleLabel.text = array[section]
-        return cell.contentView
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return ["home", "alternate"][section]
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let array = ["home", "alternate"]
-        return sections[array[section]]?.count ?? 0
+        let key = ["home", "alternate"][section]
+        return sections[key]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let array = ["home", "alternate"]
+        let key = ["home", "alternate"][indexPath.section]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SavedLocationCell
-        guard let s = sections[array[indexPath.section]] else { return cell }
+        guard let s = sections[key] else { return cell }
         cell.titleLabel.text = s[indexPath.row].displayName()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let array = ["home", "alternate"]
-        let type = array[indexPath.section]
-        guard let s = sections[type] else { fatalError() }
+        let key = ["home", "alternate"][indexPath.section]
+        guard let s = sections[key] else { fatalError() }
         let loc = s[indexPath.row]
         selectedLocation = [.city: loc.city!, .state: loc.state!]
         searchButton.isEnabled = true
@@ -256,28 +251,68 @@ enum ItemType {
 }
 
 class LocationPickerTVC: UITableViewController {
-    var list: [String] = []
+    var list: [String: [String]]  = [:]
+    var keys: [String] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     var type: ItemType = .undetermined
     var delegate: LocationPickerDelegate?
     
     func configure(list: [String], itemType: ItemType) {
-        self.list = list
+        var dict: [String: [String]] = [:]
+        var firstLettersArray: [String] = []
+        for string in list {
+            if let firstChar = string.first {
+                if var array = dict[String(firstChar)] {
+                    array.append(string)
+                    dict[String(firstChar)] = array
+                    print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
+                } else { // first time
+                    firstLettersArray.append(String(firstChar))
+                    dict[String(firstChar)] = [string]
+                }
+            } else { fatalError() }
+            
+        }
+        self.list = dict
+        self.keys = firstLettersArray.sorted()
+        
         type = itemType
         tableView.reloadData()
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return keys.count
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return keys
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return keys[section]
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
+        let key = keys[section]
+        guard let array = list[key] else { return 0 }
+        return array.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SimpleSearchCell
-        cell.basicLabel.text = list[indexPath.row]
+        let key = keys[indexPath.section]
+        guard let v = list[key] else { fatalError() }
+        cell.basicLabel.text = v[indexPath.row]
         // cell.colorBar
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.selected(item: list[indexPath.row], type: type)
+        let key = keys[indexPath.section]
+        guard let array = list[key] else { fatalError() }
+        delegate?.selected(item: array[indexPath.row], type: type)
     }
 }

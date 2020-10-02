@@ -190,8 +190,8 @@ extension CardTemplateInstance {
      */
     class func createOrFindAndReturn(codableInstance: CodableCardTemplateInstance) -> CardTemplateInstance {
         // First check for existing instances
-        let interactions: [Interaction] = AppDelegate.user.interactions
-        let filteredInteractions = interactions.filter { $0.referenceUserHandle == codableInstance.senderUserHandle }
+        let interactions: [Interaction] = AppDelegate.user.interactions ?? []
+        let filteredInteractions = interactions.isEmpty ? [] : interactions.filter { $0.referenceUserHandle == codableInstance.senderUserHandle }
         print(codableInstance.senderUserHandle)
         if !filteredInteractions.isEmpty {
             if let f = filteredInteractions.first {
@@ -350,7 +350,7 @@ extension User {
             var home: [SearchLocation] = []
             var alternate: [SearchLocation] = []
             for s in locs {
-                if (s as? SearchLocation)?.type == "home" { home.append(s as! SearchLocation) } else if (s as? SearchLocation)?.type == "alternate" { alternate.append(s as! SearchLocation) }
+                if s.type == "home" { home.append(s) } else if s.type == "alternate" { alternate.append(s) }
             }
             if !home.isEmpty { dict["home"] = home }
             if !alternate.isEmpty { dict["alternate"] = alternate }

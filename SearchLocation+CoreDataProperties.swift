@@ -2,7 +2,7 @@
 //  SearchLocation+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/17/20.
+//  Created by Arthur Mayes on 10/2/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -19,6 +19,5 @@ extension SearchLocation {
 
     @NSManaged public var community: String?
     @NSManaged public var type: String?
-    @NSManaged public var user: User?
 
 }

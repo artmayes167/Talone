@@ -390,13 +390,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2l-Tq-hNp" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="20" y="44" width="374" height="77"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxc-3f-KMy">
-                                        <rect key="frame" x="105.5" y="24" width="163.5" height="29"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="select location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxc-3f-KMy">
+                                        <rect key="frame" x="114.5" y="24" width="145.5" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rym-UV-Vj0">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rym-UV-Vj0" customClass="ModalBackButton" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="12" y="16.5" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="87f-gZ-pcR"/>
@@ -432,7 +432,7 @@
                                 <rect key="frame" x="0.0" y="121" width="414" height="741"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="s6d-pY-T35">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="537"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="637"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="trK-jH-Qzp" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="157" y="-2" width="100" height="16"/>
@@ -485,17 +485,14 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tY2-8f-nJp" userLabel="NewSaved Stack View">
-                                                <rect key="frame" x="0.0" y="91" width="414" height="446"/>
+                                                <rect key="frame" x="0.0" y="91" width="414" height="546"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHy-Hf-4zc">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                                         <subviews>
-                                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="50" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="whQ-CP-Mph">
-                                                                <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="30" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="whQ-CP-Mph">
+                                                                <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.44038955479452052" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="200" id="xdA-YT-L6o"/>
-                                                                </constraints>
                                                                 <prototypes>
                                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="header" rowHeight="50" id="NKP-z3-QzS" customClass="SavedLocationCell" customModule="Talone" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="28" width="414" height="50"/>
@@ -631,14 +628,14 @@
                                                             <constraint firstAttribute="trailing" secondItem="whQ-CP-Mph" secondAttribute="trailing" id="ARW-mn-yXX"/>
                                                             <constraint firstItem="whQ-CP-Mph" firstAttribute="top" secondItem="oHy-Hf-4zc" secondAttribute="top" id="DwX-i4-Wk5"/>
                                                             <constraint firstItem="whQ-CP-Mph" firstAttribute="leading" secondItem="oHy-Hf-4zc" secondAttribute="leading" id="LfX-Pb-S55"/>
-                                                            <constraint firstAttribute="height" constant="200" id="SFl-Sn-jxG"/>
+                                                            <constraint firstAttribute="height" constant="300" id="SFl-Sn-jxG"/>
                                                             <constraint firstAttribute="bottom" secondItem="whQ-CP-Mph" secondAttribute="bottom" id="VB7-hT-0jn"/>
                                                             <constraint firstAttribute="trailing" secondItem="whQ-CP-Mph" secondAttribute="trailing" id="qE2-kv-wwC"/>
                                                             <constraint firstItem="whQ-CP-Mph" firstAttribute="leading" secondItem="oHy-Hf-4zc" secondAttribute="leading" id="vCd-xo-qSI"/>
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="11T-BJ-5cV">
-                                                        <rect key="frame" x="0.0" y="200" width="414" height="184"/>
+                                                        <rect key="frame" x="0.0" y="300" width="414" height="184"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xrk-hH-BpK">
                                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="16"/>
@@ -848,9 +845,9 @@
                                                                             <constraint firstAttribute="height" constant="44" id="UBA-PR-QaQ"/>
                                                                         </constraints>
                                                                         <segments>
-                                                                            <segment title="Save As Home"/>
-                                                                            <segment title="Save As Alt"/>
-                                                                            <segment title="Don't Save"/>
+                                                                            <segment title="save as home"/>
+                                                                            <segment title="save as alt"/>
+                                                                            <segment title="don't save"/>
                                                                         </segments>
                                                                         <connections>
                                                                             <action selector="selectedTypeOfSave:" destination="MmC-33-bzH" eventType="valueChanged" id="jeK-Vj-eFC"/>
@@ -890,7 +887,7 @@
                                                         </constraints>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2r6-Ki-LOk">
-                                                        <rect key="frame" x="0.0" y="384" width="414" height="62"/>
+                                                        <rect key="frame" x="0.0" y="484" width="414" height="62"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vZ-tK-zdu" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="12" width="366" height="50"/>
@@ -898,7 +895,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="50" id="p5k-Ud-nW5"/>
                                                                 </constraints>
-                                                                <state key="normal" title="SEARCH WITH THIS LOCATION"/>
+                                                                <state key="normal" title="use this location"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                                         <color key="value" systemColor="systemBlueColor"/>
@@ -2769,7 +2766,7 @@
             <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="5vZ-tK-zdu">
-            <size key="intrinsicContentSize" width="216" height="30"/>
+            <size key="intrinsicContentSize" width="112" height="30"/>
         </designable>
         <designable name="AKH-s3-s76">
             <size key="intrinsicContentSize" width="32" height="34"/>
@@ -2784,6 +2781,9 @@
             <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="QHG-XL-Yvf">
+            <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
+        <designable name="Rym-UV-Vj0">
             <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="UM5-c8-aMl">

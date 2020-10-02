@@ -13,7 +13,8 @@ class CompleteAndSendCardVC: UIViewController {
     private var templates: [String] {
         get {
             var possibles = ["none"]
-            let mappedTemplates = AppDelegate.user.cardTemplates.map { $0.title! }
+            let temps = AppDelegate.user.cardTemplates ?? []
+            let mappedTemplates = temps.isEmpty ? [] : temps.map { $0.title! }
             possibles.append(contentsOf: mappedTemplates.sorted())
             return possibles
         }
@@ -77,8 +78,8 @@ class CompleteAndSendCardVC: UIViewController {
         guard let haveItemCreatorUid = getItemCreator() else { return }
         var card: Card? = nil
         if !(templateTextField.text == "none") {
-            let cards = AppDelegate.user.cardTemplates // [Card]
-            let filteredCards = cards.filter { $0.title == templateTextField.text }
+            let cards = AppDelegate.user.cardTemplates ?? [] // [Card]
+            let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text }
             if !filteredCards.isEmpty {
                 card = filteredCards.first
             }

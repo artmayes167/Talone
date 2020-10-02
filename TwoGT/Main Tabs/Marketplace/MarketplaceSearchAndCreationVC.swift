@@ -212,12 +212,19 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func saveFor(_ type: SaveType) {
         guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         if !(type == .none) {
-            let user = AppDelegate.user
-            // Use core data
             guard let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
-            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country)
-            s.type = ["home", "alternate"][type.rawValue]
-            user.addToSearchLocations(s)
+            let user = AppDelegate.user
+            let locType: String = ["home", "alternate"][type.rawValue]
+            if let locations = user.searchLocations {
+                for s in (locations as [SearchLocation]) {
+                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType {
+                        return
+                    }
+                }
+            }
+            // Use core data
+            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country, community: "")
+            s.type = locType
         }
     }
 

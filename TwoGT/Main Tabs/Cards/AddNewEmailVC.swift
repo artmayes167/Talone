@@ -16,8 +16,8 @@ class AddNewEmailVC: UIViewController {
     
     private var emails: [Email] {
         get {
-            let ems =  AppDelegate.user.emails
-            let e = ems.sorted { return $0.title! < $1.title! }
+            let ems =  AppDelegate.user.emails ?? []
+            let e = ems.isEmpty ? [] : ems.sorted { return $0.title! < $1.title! }
             return e.filter { $0.entity.name != CardEmail().entity.name }
         }
     }

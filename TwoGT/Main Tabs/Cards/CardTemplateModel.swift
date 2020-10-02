@@ -14,25 +14,28 @@ struct CardTemplateModel {
      // MARK: - PRIVATE PARTS (look away)
     private var addresses: [Address] {
         get {
-            let adds =  AppDelegate.user.addresses
-            let a = adds.sorted { return $0.title! < $1.title! }
-            return a.filter { $0.entity.name != CardAddress().entity.name }
+            let adds = AppDelegate.user.addresses
+            guard let a = adds, !(a.isEmpty) else { return [] }
+            let sortedAdds = a.sorted { return $0.title! < $1.title! }
+            return sortedAdds.filter { $0.entity.name != CardAddress().entity.name }
         }
     }
     
     private var phoneNumbers: [PhoneNumber] {
         get {
             let phones =  AppDelegate.user.phoneNumbers
-            let p = phones.sorted { return $0.title! < $1.title! }
-            return p.filter { $0.entity.name != CardPhoneNumber().entity.name }
+            guard let p = phones, !(p.isEmpty) else { return [] }
+            let sortedPhones = p.sorted { return $0.title! < $1.title! }
+            return sortedPhones.filter { $0.entity.name != CardPhoneNumber().entity.name }
         }
     }
     
     private var emails: [Email] {
         get {
             let ems =  AppDelegate.user.emails
-            let e = ems.sorted { return $0.title! < $1.title! }
-            return e.filter { $0.entity.name != CardEmail().entity.name }
+            guard let e = ems, !(e.isEmpty) else { return [] }
+            let sortedEmails = e.sorted { return $0.title! < $1.title! }
+            return sortedEmails.filter { $0.entity.name != CardEmail().entity.name }
         }
     }
     

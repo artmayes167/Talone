@@ -45,8 +45,7 @@ class AllReceivedCardsVC: UIViewController {
     }
     
     private func getInteractions() {
-        let i = AppDelegate.user.interactions
-        if i.isEmpty { return }
+        let i = AppDelegate.user.interactions ?? []
         interactions = i
     }
     

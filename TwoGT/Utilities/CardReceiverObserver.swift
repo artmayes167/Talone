@@ -20,7 +20,7 @@ class CardReceiverObserver {
     func observeCardReceptions() {
 
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
-            let interactions: [Interaction] = AppDelegate.user.interactions
+            let interactions: [Interaction]? = AppDelegate.user.interactions
             var newCards = [CardsBase.FiBCardItem]()
             var modifiedCards = newCards
 
@@ -39,11 +39,17 @@ class CardReceiverObserver {
                 }
 
                 var isExisting = false
-                for interaction in interactions where fibCard.owner == interaction.referenceUserHandle {
-                    modifiedCards.append(fibCard)
-                    isExisting = true
+                if interactions == nil || (interactions?.isEmpty ?? true) {
+                    newCards.append(fibCard)
+                    
+                } else {
+                    for interaction in interactions! where fibCard.owner == interaction.referenceUserHandle {
+                        modifiedCards.append(fibCard)
+                        isExisting = true
+                    }
+                    if !isExisting { newCards.append(fibCard) }
                 }
-                if !isExisting { newCards.append(fibCard) }
+                
             }
 
             // NOTE: Deleted cards will not be noted; Sender needs to send "an empty" card to

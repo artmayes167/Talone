@@ -127,17 +127,17 @@ class MarketplaceModel: NSObject {
     }
    
    private func getPrimaryEmail() -> String {
-       var emailString = "artmayes167@icloud.com"
-       if let primaryEmail: Email = AppDelegate.user.emails.first(where: { $0.title == DefaultsKeys.taloneEmail.rawValue})  {
-               if let pEmail = primaryEmail.emailString {
-               emailString = pEmail
-           } else {
-               print("Talone email not saved to User")
-               emailString = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? emailString
-           }
-       } else {
-           emailString = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? emailString
-       }
-       return emailString
-   }
+        var emailString: String = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue)!
+        let e = AppDelegate.user.emails ?? []
+        if !e.isEmpty {
+            if let primaryEmail: Email = e.first(where: { $0.title == DefaultsKeys.taloneEmail.rawValue} )  {
+                if let pEmail = primaryEmail.emailString {
+                    emailString = pEmail
+                } else {
+                    print("Talone email not linked to User")
+                }
+            }
+        }
+        return emailString
+    }
 }

@@ -41,8 +41,8 @@ class AddNewAddressVC: UIViewController {
     
     private var addresses: [Address] {
         get {
-            let adds =  AppDelegate.user.addresses
-            let a = adds.sorted { return $0.title! < $1.title! }
+            let adds =  AppDelegate.user.addresses ?? []
+            let a = adds.isEmpty ? [] : adds.sorted { return $0.title! < $1.title! }
             return a.filter { $0.entity.name != CardAddress().entity.name }
         }
     }
@@ -105,12 +105,20 @@ class AddNewAddressVC: UIViewController {
     /// Used by unwind segue from state/city selector
     private func save(location loc: [DefaultsSavedLocationKeys: String], _ type: SaveType) {
         if !(type == .none) {
-            let user = AppDelegate.user
             // Use core data
-            guard let city = loc[.city], let state = loc[.state] else { fatalError() }
-            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state)
-            s.type = ["home", "alternate"][type.rawValue]
-            user.addToSearchLocations(s)
+            guard let city = loc[.city], let state = loc[.state], let country = loc[.country] else { fatalError() }
+            let user = AppDelegate.user
+            let locType: String = ["home", "alternate"][type.rawValue]
+            if let locations = user.searchLocations {
+                for s in (locations as [SearchLocation]) {
+                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType {
+                        return
+                    }
+                }
+            }
+            // Use core data
+            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country, community: "")
+            s.type = locType
         }
     }
     

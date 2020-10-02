@@ -139,22 +139,18 @@
     <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="community" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="searchLocations" inverseEntity="User"/>
     </entity>
     <entity name="SocialMedia" representedClassName="SocialMedia" syncable="YES">
         <attribute name="personalURLString" optional="YES" attributeType="String"/>
         <attribute name="siteName" optional="YES" attributeType="String"/>
         <attribute name="siteURLString" optional="YES" attributeType="String"/>
         <attribute name="userName" optional="YES" attributeType="String"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="socialMediaInfo" inverseEntity="User"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="handle" optional="YES" attributeType="String"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ImageInfo" inverseName="user" inverseEntity="ImageInfo"/>
         <relationship name="purposes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Purpose" inverseName="user" inverseEntity="Purpose"/>
-        <relationship name="searchLocations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SearchLocation" inverseName="user" inverseEntity="SearchLocation"/>
-        <relationship name="socialMediaInfo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SocialMedia" inverseName="user" inverseEntity="SocialMedia"/>
         <fetchedProperty name="addresses" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Address" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
@@ -169,6 +165,12 @@
         </fetchedProperty>
         <fetchedProperty name="phoneNumbers" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="PhoneNumber" predicateString="uid  == $FETCH_SOURCE.uid"/>
+        </fetchedProperty>
+        <fetchedProperty name="searchLocations" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="SearchLocation"/>
+        </fetchedProperty>
+        <fetchedProperty name="socialMedia" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="SocialMedia"/>
         </fetchedProperty>
     </entity>
     <elements>
@@ -193,8 +195,8 @@
         <element name="NeedItem" positionX="-1452.00390625" positionY="-283.90234375" width="128" height="58"/>
         <element name="PhoneNumber" positionX="-651.63671875" positionY="-1283.03515625" width="128" height="88"/>
         <element name="Purpose" positionX="-1325.11328125" positionY="-753.93359375" width="128" height="133"/>
-        <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="88"/>
-        <element name="SocialMedia" positionX="-1261.48046875" positionY="-1214.06640625" width="128" height="118"/>
+        <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="73"/>
+        <element name="SocialMedia" positionX="-1261.48046875" positionY="-1214.06640625" width="128" height="103"/>
         <element name="User" positionX="-914.83203125" positionY="-956.6640625" width="128" height="221"/>
     </elements>
 </model>

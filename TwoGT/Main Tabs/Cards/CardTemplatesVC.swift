@@ -14,8 +14,8 @@ class CardTemplatesVC: UIViewController {
     
     private var cardTemplates: [Card] {
         get {
-            let cards = AppDelegate.user.cardTemplates // [Card]
-            return cards.sorted { return $0.title! < $1.title! }
+            let cards = AppDelegate.user.cardTemplates ?? [] // [Card]
+            return cards.isEmpty ? [] : cards.sorted { return $0.title! < $1.title! }
         }
     }
     
