@@ -9,6 +9,16 @@
 import UIKit
 import CoreData
 
+protocol InteractionDataSource {
+    /// Universal, at Interaction level
+    func getHandle() -> String
+    /// Only for received card
+    func getNotes() -> String // TODO: - work on formatting
+    func allContactInfo() -> CardTemplateInstance?
+    func getMessage(sender: Bool) -> String
+    func saveNotes(_ notes: String)
+}
+
 class ViewContactVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -20,13 +30,7 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
-    var dataSource: InteractionDataSource? {
-        didSet {
-            if isViewLoaded {
-                updateUI()
-            }
-        }
-    }
+    var interaction: Interaction?
     
     var card: CardTemplateInstance? {
         didSet {
@@ -55,12 +59,10 @@ class ViewContactVC: UIViewController {
     
     func updateUI() {
         // Strings are formatted in dataSource `ContactTabBarController`
-        handleLabel.text = dataSource?.getHandle()
-        notesView.text = dataSource?.getNotes()
-        messageTextView.text = dataSource?.getMessage(sender: false)
-        card = dataSource?.allContactInfo()
-        let hasOld = dataSource?.previouslySentCard() ?? false
-        sendCardButton.isEnabled = !hasOld
+        handleLabel.text = getHandle()
+        notesView.text = getNotes()
+        messageTextView.text = getMessage(sender: false)
+        card = allContactInfo()
         
         let image = card?.image
         var newImage: UIImage?
@@ -86,17 +88,16 @@ class ViewContactVC: UIViewController {
         }
     }
     
-    
-    
      // MARK: - IBActions
     @IBAction func saveNotes(_ sender: UIButton) {
         if let t = notesView.text?.pure() {
-            dataSource?.saveNotes(t)
+            saveNotes(t)
         }
     }
     
-    @IBAction func sendCard(_ sender: UIButton) {
+    @IBAction func manageDataShare(_ sender: UIButton) {
         // TODO: - Show card creation view, with template selector and message textView
+        showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
     }
     
     // MARK: - Navigation
@@ -108,7 +109,30 @@ class ViewContactVC: UIViewController {
             vc.configure(textView: notesView, displayName: "personal notes", initialText: notesView.text)
         }
     }
+}
 
+extension ViewContactVC: InteractionDataSource {
+    func getHandle() -> String {
+        return interaction!.referenceUserHandle! // should crash only if we fucked up
+    }
+    func getNotes() -> String {
+        return interaction?.receivedCard?.first?.personalNotes ?? ""
+    }
+    func allContactInfo() -> CardTemplateInstance? {
+        return interaction?.receivedCard?.first
+    }
+    
+    func getMessage(sender: Bool) -> String {
+        return sender ? (interaction?.cardTemplate?.first?.comments ?? "") : (interaction?.receivedCard?.first?.comments ?? "")
+    }
+    func saveNotes(_ notes: String) {
+        interaction?.receivedCard?.first?.personalNotes = notes
+        DispatchQueue.main.async {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+            let context = appDelegate.persistentContainer.viewContext
+            _ = try? context.save()
+        }
+    }
 }
 
 extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {

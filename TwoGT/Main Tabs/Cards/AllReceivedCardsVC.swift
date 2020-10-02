@@ -63,9 +63,9 @@ class AllReceivedCardsVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toInteraction" {
-            let tabBar = segue.destination as! ContactTabBarController
+            let vc = segue.destination as! ViewContactVC
             guard let i = sender as? Interaction else { fatalError() }
-            tabBar.interaction = i
+            vc.interaction = i
         }
     }
 

@@ -106,6 +106,13 @@ extension UIViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let t = textField.text {
+            if (t.count > 50) && string != "" { return false }
+        }
+        return true
+    }
 }
 
 /// Add VCs to enable Toast

@@ -10,7 +10,7 @@ import UIKit
 
 class CompleteAndSendCardVC: UIViewController {
     
-    var templates: [String] {
+    private var templates: [String] {
         get {
             var possibles = ["none"]
             let mappedTemplates = AppDelegate.user.cardTemplates.map { $0.title! }
@@ -42,10 +42,10 @@ class CompleteAndSendCardVC: UIViewController {
         }
     }
     
-    func getItemCreator() -> String? {
+    private func getItemCreator() -> String? {
         return haveItem?.createdBy ?? needItem?.createdBy ?? nil
     }
-    func getItemOwner() -> String? {
+    private func getItemOwner() -> String? {
         return haveItem?.owner ?? needItem?.owner ?? nil
     }
 
@@ -54,7 +54,7 @@ class CompleteAndSendCardVC: UIViewController {
         configure()
     }
     
-    func configure() {
+    private func configure() {
         guard let handle = getItemOwner() else { return }
         headerTitleLabel.text = "new card to \(handle)"
         templateTextField.text = "none"
