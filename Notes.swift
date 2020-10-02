@@ -9,7 +9,7 @@
 // uid will be unique to user, and is shared as an identifier with FiB objects
 // owner will be the user's handle-- primarily used for display, and in-app unique identification for non-FiB objects
 // taloneEmail unique, and used for account logIn
-
+// createdBy is the uid
 
 
 

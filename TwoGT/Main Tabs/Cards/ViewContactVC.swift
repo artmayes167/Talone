@@ -96,8 +96,22 @@ class ViewContactVC: UIViewController {
     }
     
     @IBAction func manageDataShare(_ sender: UIButton) {
-        // TODO: - Show card creation view, with template selector and message textView
-        showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
+        
+        guard let temps = AppDelegate.user.cardTemplates else {
+            showOkayAlert(title: "", message: "Please add a template") { _ in
+                self.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
+            }
+            return
+        }
+        
+        if temps.isEmpty {
+            showOkayAlert(title: "", message: "Please add a template") { _ in
+                self.performSegue(withIdentifier: "unwindToTemplates", sender: nil)}
+            return
+        }
+        
+        showCompleteAndSendCardHelper(interaction: interaction)
+        
     }
     
     // MARK: - Navigation

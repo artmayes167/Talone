@@ -55,7 +55,10 @@ class AllReceivedCardsVC: UIViewController {
         getInteractions()
     }
     
-
+    @IBAction func goToSearch(_ sender: UIButton) {
+        showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
+    }
+    
     
     // MARK: - Navigation
 

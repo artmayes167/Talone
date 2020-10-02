@@ -1177,7 +1177,7 @@
                                 </connections>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Nk6-aD-gTn">
-                                <rect key="frame" x="0.0" y="94" width="414" height="719"/>
+                                <rect key="frame" x="0.0" y="127" width="414" height="686"/>
                                 <color key="backgroundColor" red="0.4766612053" green="0.55218684669999996" blue="0.78463703389999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="header" rowHeight="30" id="5fh-2I-Fnk" customClass="YouHeaderCell" customModule="Talone" customModuleProvider="target">
@@ -1336,17 +1336,45 @@
                                     <outlet property="delegate" destination="LyV-05-5i3" id="Nl8-93-R40"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JO9-ho-TnP">
+                                <rect key="frame" x="0.0" y="94" width="414" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ky-F3-56P">
+                                        <rect key="frame" x="318" y="0.0" width="84" height="33"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="5Ny-Aa-1wb"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="create new">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="goToSearch:" destination="LyV-05-5i3" eventType="touchUpInside" id="vuo-01-uY1"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.77236729449999997" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="9ky-F3-56P" secondAttribute="trailing" constant="12" id="9mg-4n-NpG"/>
+                                    <constraint firstAttribute="bottom" secondItem="9ky-F3-56P" secondAttribute="bottom" id="RMu-vO-HJz"/>
+                                    <constraint firstItem="9ky-F3-56P" firstAttribute="centerY" secondItem="JO9-ho-TnP" secondAttribute="centerY" id="lZy-tN-dtM"/>
+                                    <constraint firstItem="9ky-F3-56P" firstAttribute="top" secondItem="JO9-ho-TnP" secondAttribute="top" id="oab-l1-LoG"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3IH-tJ-WgA"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="3IH-tJ-WgA" firstAttribute="bottom" secondItem="Nk6-aD-gTn" secondAttribute="bottom" id="1Xe-NJ-Whn"/>
+                            <constraint firstItem="JO9-ho-TnP" firstAttribute="top" secondItem="1Nc-Eu-aCr" secondAttribute="bottom" id="377-T6-OL3"/>
+                            <constraint firstItem="JO9-ho-TnP" firstAttribute="trailing" secondItem="3IH-tJ-WgA" secondAttribute="trailing" id="9cp-rz-9hI"/>
                             <constraint firstItem="Nk6-aD-gTn" firstAttribute="leading" secondItem="3IH-tJ-WgA" secondAttribute="leading" id="CrI-gV-BAj"/>
                             <constraint firstItem="1Nc-Eu-aCr" firstAttribute="leading" secondItem="3IH-tJ-WgA" secondAttribute="leading" id="GAP-L0-cLK"/>
                             <constraint firstItem="1Nc-Eu-aCr" firstAttribute="top" secondItem="3IH-tJ-WgA" secondAttribute="top" id="Zcv-ej-7FF"/>
                             <constraint firstItem="1Nc-Eu-aCr" firstAttribute="trailing" secondItem="3IH-tJ-WgA" secondAttribute="trailing" id="cBE-qQ-8wZ"/>
                             <constraint firstItem="3IH-tJ-WgA" firstAttribute="trailing" secondItem="Nk6-aD-gTn" secondAttribute="trailing" id="grc-as-0B1"/>
-                            <constraint firstItem="Nk6-aD-gTn" firstAttribute="top" secondItem="1Nc-Eu-aCr" secondAttribute="bottom" id="ovy-z6-J8X"/>
+                            <constraint firstItem="JO9-ho-TnP" firstAttribute="leading" secondItem="3IH-tJ-WgA" secondAttribute="leading" id="hRz-AG-3EX"/>
+                            <constraint firstItem="Nk6-aD-gTn" firstAttribute="top" secondItem="JO9-ho-TnP" secondAttribute="bottom" id="zpu-Rh-aeP"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="all contacts" image="stackForTab" id="rxc-1t-Jqp"/>
@@ -3255,6 +3283,7 @@
                         <outlet property="tableView" destination="BeB-1a-rcu" id="vBq-ap-GOe"/>
                         <segue destination="tO4-mY-r5C" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="Ttj-Wk-nrJ"/>
                         <segue destination="aR8-HS-sM1" kind="show" identifier="toTextViewHelper" id="IKy-U1-iNm"/>
+                        <segue destination="tO4-mY-r5C" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="joE-Bu-p9a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pQX-oT-hhU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

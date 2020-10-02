@@ -28,9 +28,10 @@ class CompleteAndSendCardVC: UIViewController {
     
     private var haveItem: HavesBase.HaveItem?
     private var needItem: NeedsBase.NeedItem?
+    private var interaction: Interaction?
     
-    func configure(haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
-        if haveItem == nil && needItem == nil { fatalError() }
+    func configure(interaction: Interaction?, haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
+        self.interaction = interaction
         self.haveItem = haveItem
         self.needItem = needItem
         if isViewLoaded {
@@ -39,10 +40,10 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     private func getItemCreator() -> String? {
-        return haveItem?.createdBy ?? needItem?.createdBy ?? nil
+        return haveItem?.createdBy ?? needItem?.createdBy ?? interaction?.receivedCard?.first?.uid
     }
     private func getItemOwner() -> String? {
-        return haveItem?.owner ?? needItem?.owner ?? nil
+        return haveItem?.owner ?? needItem?.owner ?? AppDelegate.user.uid
     }
 
     override func viewDidLoad() {
@@ -51,7 +52,7 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     private func configure() {
-        guard let handle = getItemOwner() else { return }
+        guard let handle = getItemOwner() else { fatalError() }
         headerTitleLabel.text = "new card to \(handle)"
         templateTextField.text = "none"
     }
@@ -75,10 +76,10 @@ class CompleteAndSendCardVC: UIViewController {
     */
 
     private func sendCard() {
-        guard let haveItemCreatorUid = getItemCreator() else { return }
+        guard let haveItemCreatorUid = getItemCreator() else { return } // Potentially configure this further?
         var card: Card? = nil
         if !(templateTextField.text == "none") {
-            let cards = AppDelegate.user.cardTemplates ?? [] // [Card]
+            let cards: [Card] = AppDelegate.user.cardTemplates ?? []
             let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text }
             if !filteredCards.isEmpty {
                 card = filteredCards.first
