@@ -80,9 +80,10 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+     // MARK: - Spinner Controls
     func showSpinner() {
-        let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
-        let spinner = mainStoryboard.instantiateViewController(withIdentifier: "Spinner") as! SpinnerVC
+        let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
+        let spinner = helperBoard.instantiateViewController(withIdentifier: "Spinner") as! SpinnerVC
         spinner.willMove(toParent: self)
         spinner.view.frame = UIScreen.main.bounds
         view.addSubview(spinner.view)
@@ -98,6 +99,21 @@ extension UIViewController {
                 s.view.removeFromSuperview()
             }
         }
+    }
+    
+    func showTextViewHelper(textView: UITextView, displayName: String, initialText: String) {
+        let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
+        let helper = helperBoard.instantiateViewController(withIdentifier: "TextView Helper") as! TextViewHelperVC
+        helper.configure(textView: textView, displayName: displayName, initialText: initialText)
+        present(helper, animated: true, completion: nil)
+    }
+    
+    func showCompleteAndSendCardHelper(haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+        let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
+        let helper = helperBoard.instantiateViewController(withIdentifier: "New Card Helper") as! CompleteAndSendCardVC
+        helper.configure(haveItem: haveItem, needItem: needItem)
+        present(helper, animated: true, completion: nil)
+        
     }
 }
 

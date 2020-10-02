@@ -35,10 +35,6 @@ class ViewMyHaveVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
         if let owner = have?.haveItem?.owner ?? AppDelegate.user.handle {
             headerTitleLabel.text = String(format: "%@'s Have", owner)
         }
@@ -57,22 +53,6 @@ class ViewMyHaveVC: UIViewController {
         view.layoutIfNeeded()
     }
 
-    // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-
-        var contentInset: UIEdgeInsets = scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets()
-        scrollView.contentInset = contentInset
-    }
-
     private func deleteCurrentHave() {
         guard let haveItem = have?.haveItem else { return }
 
@@ -88,5 +68,25 @@ class ViewMyHaveVC: UIViewController {
             }
 
         }
+    }
+    
+    // MARK: - Navigation
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "toTextViewHelper" {
+//            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
+//            vc.configure(textView: personalNotesTextView, displayName: "personal notes", initialText: personalNotesTextView.text)
+//        }
+//    }
+}
+
+extension ViewMyHaveVC: UITextViewDelegate {
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: personalNotesTextView, displayName: "personal notes", initialText: personalNotesTextView.text)
+        return false
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
     }
 }

@@ -25,20 +25,15 @@ class CompleteAndSendCardVC: UIViewController {
     @IBOutlet weak var templateSelectionTableViewContainer: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-    /// Set either `haveItem` or `needItem`.  `haveItem` takes precedence, and if both are nil, we crash.
-    var haveItem: HavesBase.HaveItem? {
-        didSet {
-            if isViewLoaded {
-                configure()
-            }
-        }
-    }
-    /// Set either `haveItem` or `needItem`.  `haveItem` takes precedence, and if both are nil, we crash.
-    var needItem: NeedsBase.NeedItem? {
-        didSet {
-            if isViewLoaded {
-                configure()
-            }
+    private var haveItem: HavesBase.HaveItem?
+    private var needItem: NeedsBase.NeedItem?
+    
+    func configure(haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
+        if haveItem == nil && needItem == nil { fatalError() }
+        self.haveItem = haveItem
+        self.needItem = needItem
+        if isViewLoaded {
+            configure()
         }
     }
     

@@ -101,14 +101,12 @@ class ViewContactVC: UIViewController {
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toTextViewHelper" {
-            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
-            vc.configure(textView: notesView, displayName: "personal notes", initialText: notesView.text)
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "toTextViewHelper" {
+//            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
+//            vc.configure(textView: notesView, displayName: "personal notes", initialText: notesView.text)
+//        }
+//    }
 }
 
 extension ViewContactVC: InteractionDataSource {
@@ -181,7 +179,7 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
 extension ViewContactVC: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        performSegue(withIdentifier: "toTextViewHelper", sender: nil)
+        showTextViewHelper(textView: notesView, displayName: "personal notes", initialText: notesView.text)
         return false
     }
     

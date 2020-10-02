@@ -32,8 +32,6 @@ class FeedbackVC: UIViewController {
     @IBOutlet weak var feedbackTextView: DesignableTextView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var doneButtonTop: NSLayoutConstraint!
-    
     var elements: ViewControllerElements?
     
     private var keyElements: [String] = [] {
@@ -96,31 +94,24 @@ class FeedbackVC: UIViewController {
             }
         }
     }
-    /*
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "toTextViewHelper" {
+//            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
+//            vc.configure(textView: feedbackTextView, displayName: "general feedback", initialText: feedbackTextView.text)
+//        }
+//    }
 }
 
- // MARK: -
 extension FeedbackVC: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        textView.resignFirstResponder()
-        
-        let s = UIStoryboard.init(name: "Helper", bundle: nil)
-        guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
-        vc.configure(textView: textView, displayName: "Feedback", initialText: "")
-        present(vc, animated: true, completion: nil)
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: feedbackTextView, displayName: "general feedback", initialText: feedbackTextView.text)
+        return false
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-
+        
     }
 }
 

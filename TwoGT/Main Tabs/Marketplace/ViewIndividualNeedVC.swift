@@ -82,7 +82,7 @@ class ViewIndividualNeedVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: Any) {
-        performSegue(withIdentifier: "toCompleteAndSendCardVC", sender: nil)
+        showCompleteAndSendCardHelper(needItem: needItem)
     }
     
     @IBAction func saveNotes(_ sender: Any) {
@@ -93,9 +93,6 @@ class ViewIndividualNeedVC: UIViewController {
         if segue.identifier == "toAddHeadline" {
             guard let vc = segue.destination as? AddNeedToWatchVC else { fatalError() }
             vc.creationManager = creationManager
-            vc.needItem = needItem
-        } else if segue.identifier == "toCompleteAndSendCardVC" {
-            guard let vc = segue.destination as? CompleteAndSendCardVC else { fatalError() }
             vc.needItem = needItem
         }
     }

@@ -40,7 +40,7 @@ class AddNeedToWatchModel: NSObject {
                     AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
+                            controller.view.makeToast("you have successfully created a `need`!", duration: 2.0, position: .center) {_ in
                                 // TODO: - Create unwind segue to my needs
                                 controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                             }
@@ -86,7 +86,7 @@ class AddNeedToWatchModel: NSObject {
                     AppDelegate.user.addToPurposes(p)
                     if appDelegate.save() {
                         DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
+                            controller.view.makeToast("you have successfully created a `have`!", duration: 2.0, position: .center) {_ in
                                 // TODO: - Create unwind segue to my needs
                                 controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
                             }
@@ -143,9 +143,9 @@ class AddNeedToWatchVC: UIViewController {
         guard let c = creationManager else { return }
         switch c.currentCreationType() {
         case .need:
-            infoLabel.text = "We will create a Need to track this Need.  You can find it in MyNeeds."
+            infoLabel.text = "we will create a `need` to track this.  You can find it in `my needs`."
         case .have:
-            infoLabel.text = "We will create a Have to track this Need.  You can find it in MyHaves."
+            infoLabel.text = "we will create a `have` to track this.  You can find it in `my haves`."
         default:
             fatalError()
         }

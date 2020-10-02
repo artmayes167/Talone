@@ -72,12 +72,17 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         model = MarketplaceModel(creationManager: creationManager)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkSaveButton()
+    }
 
     override func viewDidAppear(_ animated: Bool) {
-           super.viewDidAppear(animated)
-           view.endEditing(true)
-            setUIForCurrents()
-       }
+        super.viewDidAppear(animated)
+        view.endEditing(true)
+        setUIForCurrents()
+    }
 
      // MARK: Utility Functions
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
@@ -288,25 +293,12 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
 
      // MARK: TextView
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if textView == descriptionTextView {
-            return true
-        }
+        showTextViewHelper(textView: descriptionTextView, displayName: "description", initialText: descriptionTextView.text)
         return false
     }
 
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        textView.resignFirstResponder()
-        
-        let s = UIStoryboard.init(name: "Helper", bundle: nil)
-        guard let vc = s.instantiateViewController(identifier: "TextView Helper") as? TextViewHelperVC else { fatalError() }
-        vc.configure(textView: textView, displayName: "description", initialText: descriptionTextView.text)
-        present(vc, animated: true, completion: nil)
-    }
-
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView == descriptionTextView {
-            checkSaveButton()
-        }
+        
     }
 }
 
