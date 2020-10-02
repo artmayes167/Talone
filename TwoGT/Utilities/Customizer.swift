@@ -123,7 +123,7 @@ extension Customizer {
             v.titleLabel?.font = UIFont.systemFont(ofSize: 24.0, weight: .thin)
             v.titleLabel?.textColor = .black
             v.titleLabel?.backgroundColor = .clear
-            view.backgroundColor = .systemBlue
+            view.backgroundColor = UIColor.hex("5165BE")
             view.borderColor = .black
             view.borderWidth = 0
         }

@@ -111,7 +111,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="Sg5-4O-MU7">
-                                <rect key="frame" x="12" y="133" width="390" height="383.5"/>
+                                <rect key="frame" x="12" y="133" width="390" height="324"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="enter your email" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAA-Bs-dFR">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
@@ -147,21 +147,21 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We will send a verification email, containing a link. Please open that email in your email client and click on the link." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-5G-msG">
-                                        <rect key="frame" x="0.0" y="132" width="390" height="61"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="0.0" y="132" width="390" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We're going to save this email, because it is how we will privately identify you." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9KQ-gu-WhQ">
-                                        <rect key="frame" x="0.0" y="217" width="390" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="0.0" y="192" width="390" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBG-e1-9fd">
-                                        <rect key="frame" x="0.0" y="282" width="390" height="101.5"/>
+                                        <rect key="frame" x="0.0" y="252" width="390" height="72"/>
                                         <string key="text">If, for some reason, you feel the need to use multiple email accounts, maybe game the system a bit for whatever stupid reason you've concocted...  Go for it.  You'll need a new phone for each account, though.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -462,38 +462,70 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="EcC-5M-KC7">
-                                <rect key="frame" x="12" y="133" width="390" height="319"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ARm-7f-MNU">
+                                <rect key="frame" x="12" y="133" width="390" height="325"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="confirm your sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-q5-Q19">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="EcC-5M-KC7">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="325"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="confirm your sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-q5-Q19">
+                                                <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="r2b-5L-Lqw"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="check your email on this iphone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-WL-oud">
+                                                <rect key="frame" x="0.0" y="64" width="390" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="T1H-pa-D3Y"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <color key="textColor" systemColor="systemRedColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
+                                                <rect key="frame" x="0.0" y="118" width="390" height="81.5"/>
+                                                <string key="text">at this point, we will generate magic, and enable face/touch ID or lock code. we will use this magic to lock your information behind your own security precautions.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
+                                                <rect key="frame" x="0.0" y="223.5" width="390" height="101.5"/>
+                                                <string key="text">we are still waiting for you to click on the link on the email we sent you. you need to navigate to your email application (or browser) on this device. after clicking that link, you will be redirected back here and you can continue this sign-in process.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="r2b-5L-Lqw"/>
+                                            <constraint firstAttribute="trailing" secondItem="ds6-WL-oud" secondAttribute="trailing" id="1Pd-G3-ZpZ"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="check your email on this iphone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ds6-WL-oud">
-                                        <rect key="frame" x="0.0" y="64" width="390" height="24"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <color key="textColor" systemColor="systemRedColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
-                                        <rect key="frame" x="0.0" y="112" width="390" height="81.5"/>
-                                        <string key="text">At this point, we will generate magic, and enable face/touch ID or lock code. We will use this magic to lock your information behind your own security precautions.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
-                                        <rect key="frame" x="0.0" y="217.5" width="390" height="101.5"/>
-                                        <string key="text">We are still waiting for you to click on the link on the email we sent you. You need to navigate to your email application (or browser) on this device. After clicking that link, you will be redirected back here and you can continue this sign-in process.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    </stackView>
+                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="g1L-AO-C1i">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="52"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sign in confirmed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dk2-qv-Sbz">
+                                                <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="hqe-Ma-WYP"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gj8-Y3-RNu">
+                                                <rect key="frame" x="0.0" y="52" width="390" height="0.0"/>
+                                                <string key="text">continue to the next page to create a unique handle.  this is how you will be known to friends and strangers in the app, so choose whimsically.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRn-fJ-pwG" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
@@ -540,37 +572,26 @@
                                     <constraint firstItem="uzi-vJ-F7w" firstAttribute="centerY" secondItem="Ils-kh-oXS" secondAttribute="centerY" id="t7s-GR-7ZL"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="confirm your sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dk2-qv-Sbz">
-                                <rect key="frame" x="24" y="452" width="366" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="hqe-Ma-WYP"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6hj-Sd-DjT"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Dk2-qv-Sbz" firstAttribute="leading" secondItem="6hj-Sd-DjT" secondAttribute="leading" constant="24" id="2JY-uX-YPv"/>
                             <constraint firstItem="6hj-Sd-DjT" firstAttribute="bottom" secondItem="bRn-fJ-pwG" secondAttribute="bottom" constant="12" id="3om-GD-7v2"/>
-                            <constraint firstItem="EcC-5M-KC7" firstAttribute="leading" secondItem="6hj-Sd-DjT" secondAttribute="leading" constant="12" id="98u-CV-goz"/>
-                            <constraint firstItem="6hj-Sd-DjT" firstAttribute="trailing" secondItem="Dk2-qv-Sbz" secondAttribute="trailing" constant="24" id="9zh-mc-ROg"/>
-                            <constraint firstItem="bRn-fJ-pwG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="EcC-5M-KC7" secondAttribute="bottom" constant="12" id="Gr5-po-iWB"/>
-                            <constraint firstAttribute="trailing" secondItem="EcC-5M-KC7" secondAttribute="trailing" constant="12" id="I7n-DY-fYs"/>
                             <constraint firstItem="6hj-Sd-DjT" firstAttribute="trailing" secondItem="bRn-fJ-pwG" secondAttribute="trailing" constant="24" id="PkY-ul-VrE"/>
-                            <constraint firstItem="Dk2-qv-Sbz" firstAttribute="top" secondItem="EcC-5M-KC7" secondAttribute="bottom" id="Yvx-LF-0mo"/>
+                            <constraint firstItem="ARm-7f-MNU" firstAttribute="leading" secondItem="6hj-Sd-DjT" secondAttribute="leading" constant="12" id="Pux-rZ-Jy5"/>
+                            <constraint firstAttribute="trailing" secondItem="ARm-7f-MNU" secondAttribute="trailing" constant="12" id="WTI-Xb-rOT"/>
                             <constraint firstItem="Ils-kh-oXS" firstAttribute="leading" secondItem="6hj-Sd-DjT" secondAttribute="leading" id="d9b-91-VhY"/>
                             <constraint firstItem="Ils-kh-oXS" firstAttribute="top" secondItem="6hj-Sd-DjT" secondAttribute="top" id="doC-ge-Znw"/>
-                            <constraint firstItem="EcC-5M-KC7" firstAttribute="top" secondItem="Ils-kh-oXS" secondAttribute="bottom" constant="12" id="ehm-do-5Nr"/>
+                            <constraint firstItem="ARm-7f-MNU" firstAttribute="top" secondItem="Ils-kh-oXS" secondAttribute="bottom" constant="12" id="idQ-cG-2ib"/>
                             <constraint firstItem="bRn-fJ-pwG" firstAttribute="leading" secondItem="6hj-Sd-DjT" secondAttribute="leading" constant="24" id="mjm-Gn-Av6"/>
-                            <constraint firstItem="Dk2-qv-Sbz" firstAttribute="centerX" secondItem="LbY-cC-0FF" secondAttribute="centerX" id="oy9-Gy-Q32"/>
+                            <constraint firstItem="bRn-fJ-pwG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ARm-7f-MNU" secondAttribute="bottom" constant="12" id="sou-5O-n2A"/>
                             <constraint firstItem="Ils-kh-oXS" firstAttribute="trailing" secondItem="6hj-Sd-DjT" secondAttribute="trailing" id="xpU-Of-Y0i"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="5ox-49-euG"/>
                     <connections>
+                        <outlet property="confirmStack" destination="EcC-5M-KC7" id="1oM-Ia-C6B"/>
+                        <outlet property="doneStack" destination="g1L-AO-C1i" id="Y67-n9-0AG"/>
                         <outlet property="signInButton" destination="bRn-fJ-pwG" id="QWJ-Ld-3DQ"/>
                         <outlet property="signInInfo" destination="52g-Xp-4C1" id="E4O-9a-yv1"/>
                         <segue destination="43P-eo-xwU" kind="show" identifier="toHandle" id="EB5-Ls-A7D"/>
@@ -3528,7 +3549,7 @@
             <objects>
                 <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">

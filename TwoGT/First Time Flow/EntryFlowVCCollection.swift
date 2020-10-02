@@ -62,8 +62,10 @@ class EnterVerificationVC: UIViewController {
 
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
-    @IBOutlet weak var warningLabel: UILabel!
-
+    
+    @IBOutlet weak var confirmStack: UIStackView!
+    @IBOutlet weak var doneStack: UIStackView!
+    
     @IBAction func submitVerification(_ sender: Any) {
         // Sign-in code here
         trySignInWithEmailLink()
@@ -85,8 +87,10 @@ class EnterVerificationVC: UIViewController {
         setSignInButtonState()
     }
     
-    private func setLabelsState() {
-        
+    private func setStackState() {
+        confirmStack.isHidden = true
+        doneStack.isHidden = false
+        view.layoutIfNeeded()
     }
 
     private func setSignInButtonState() {
@@ -126,7 +130,7 @@ class EnterVerificationVC: UIViewController {
     }
 
     @objc private func passwordlessSignInSuccessful() {
-        setLabelsState()
+        setStackState()
         setSignInButtonState()
     }
 }
