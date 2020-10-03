@@ -56,8 +56,10 @@ class ViewContactVC: UIViewController {
         handleLabel.text = getHandle()
         notesView.text = getNotes()
         templateTitleLabel.text = interaction == nil ? card?.title : ""
-        messageTextView.text = getMessage(sender: false)
         card = allContactInfo()
+        print("-------------Card = \(card)")
+        messageTextView.text = card?.comments
+        notesView.text = card?.personalNotes
         
         let image = card?.image
         var newImage: UIImage?
@@ -130,9 +132,6 @@ extension ViewContactVC {
         return interaction?.receivedCard?.first ?? card
     }
     
-    func getMessage(sender: Bool) -> String {
-        return sender ? (interaction?.cardTemplate?.first?.comments ?? "") : (interaction?.receivedCard?.first?.comments ?? "")
-    }
     func saveNotes(_ notes: String) {
         interaction?.receivedCard?.first?.personalNotes = notes
         DispatchQueue.main.async {

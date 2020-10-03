@@ -105,6 +105,7 @@ extension UIViewController {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "TextView Helper") as! TextViewHelperVC
         helper.configure(textView: textView, displayName: displayName, initialText: initialText)
+        view.endEditing(true)
         present(helper, animated: true, completion: nil)
     }
     

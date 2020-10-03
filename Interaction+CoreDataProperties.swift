@@ -22,7 +22,7 @@ extension Interaction {
 
     @NSManaged public var rating: [InteractionRating]?
     @NSManaged public var receivedCard: [CardTemplateInstance]?
-    @NSManaged public var cardTemplate: [CardTemplateInstance]?
+    @NSManaged public var sentCard: [CardTemplateInstance]?
 }
 
 extension Interaction : Identifiable {
