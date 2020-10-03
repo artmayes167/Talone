@@ -109,10 +109,10 @@ extension UIViewController {
         present(helper, animated: true, completion: nil)
     }
     
-    func showCompleteAndSendCardHelper(interaction: Interaction? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+    func showCompleteAndSendCardHelper(received: Bool? = nil, interaction: Interaction? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "New Card Helper") as! CompleteAndSendCardVC
-        helper.configure(interaction: interaction, haveItem: haveItem, needItem: needItem)
+        helper.configure(received: received, interaction: interaction, haveItem: haveItem, needItem: needItem)
         present(helper, animated: true, completion: nil)
         
     }

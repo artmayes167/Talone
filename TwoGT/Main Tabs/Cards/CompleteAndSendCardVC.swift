@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Will need to pass in uid when we do a send from search
 class CompleteAndSendCardVC: UIViewController {
     
     private var templates: [String] {
@@ -35,15 +36,20 @@ class CompleteAndSendCardVC: UIViewController {
     
     private var haveItem: HavesBase.HaveItem?
     private var needItem: NeedsBase.NeedItem?
-    private var interaction: Interaction?
-    
-    private var receivedCard: CardTemplateInstance? {
-        get {
-            return interaction?.receivedCard?.first
+    private var interaction: Interaction? {
+        didSet {
+            if interaction == nil { return }
+            guard let r = received else { fatalError() }
+            relevantCard = r ? interaction?.receivedCard?.first : interaction?.sentCard?.first
         }
     }
     
-    func configure(interaction: Interaction?, haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
+    private var received: Bool?
+    
+    private var relevantCard: CardTemplateInstance?
+    
+    func configure(received: Bool? = nil, interaction: Interaction? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+        self.received = received
         self.interaction = interaction
         self.haveItem = haveItem
         self.needItem = needItem
@@ -53,7 +59,7 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     private func getRecipientUid() -> String? {
-        return haveItem?.createdBy ?? needItem?.createdBy ?? receivedCard?.uid
+        return haveItem?.createdBy ?? needItem?.createdBy ?? relevantCard?.uid
     }
     private func getRecipientHandle() -> String? {
         return haveItem?.owner ?? needItem?.owner ?? interaction?.referenceUserHandle
@@ -71,7 +77,7 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
-        sendCard()
+        continueOrAlertWithRecipientUid()
     }
     
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {
@@ -87,9 +93,19 @@ class CompleteAndSendCardVC: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    private func continueOrAlertWithRecipientUid() {
+        guard let recipientUid = getRecipientUid() else {
+            showOkayOrCancelAlert(title: "careful", message: "this is an old card, so it will crash the app.  proceed anyway?", okayHandler: { _ in
+            self.sendCard(nil)
+            }, cancelHandler: nil)
+            return
+        }
+        sendCard(recipientUid)
+    }
 
-    private func sendCard() {
-        guard let recipientUid = getRecipientUid() else { fatalError() }
+    private func sendCard(_ uid: String?) {
+        guard let recipientUid = uid else { fatalError() }
         var card: Card? = nil
         if !(templateTextField.text == "none") {
             let cards: [Card] = AppDelegate.user.cardTemplates ?? []

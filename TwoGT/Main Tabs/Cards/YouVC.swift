@@ -281,6 +281,7 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
             if let im = CoreDataImageHelper.shareInstance.fetchImage() {
                 if let imageFromStorage = im.image {
                     let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                    imageButton.imageView?.contentMode = .scaleAspectFill
                     imageButton.setImage(i, for: .normal)
                 }
                 

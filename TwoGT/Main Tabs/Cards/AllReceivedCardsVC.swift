@@ -67,7 +67,7 @@ class AllReceivedCardsVC: UIViewController {
         if segue.identifier == "toInteraction" {
             let vc = segue.destination as! ViewContactVC
             guard let i = sender as? Interaction else { fatalError() }
-            vc.interaction = i
+            vc.configure(received: true, interaction: i, template: nil)
         }
     }
 

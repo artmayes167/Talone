@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+/// Callers:
 class ViewContactVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -21,9 +22,21 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
-    var interaction: Interaction?
+    private var received: Bool?
     
-    var card: Card? {
+    private var interaction: Interaction? {
+        didSet {
+            if let r = received {
+                if let i = r ? interaction!.receivedCard?.first : interaction!.sentCard?.first {
+                    /// crash if I fucked up
+                    cardInstance = i
+                }
+            }
+        }
+    }
+    
+    /// Only looking at the template
+    private var cardTemplate: Card? {
         didSet {
             if isViewLoaded {
                 setCardData()
@@ -31,11 +44,33 @@ class ViewContactVC: UIViewController {
         }
     }
     
-    var cardAddresses: [NSManagedObject] = []
+    /// Looking at sent card, or received card
+    private var cardInstance: CardTemplateInstance? {
+        didSet {
+            if isViewLoaded {
+                setCardData()
+            }
+        }
+    }
     
-    func setCardData() {
+    private var cardAddresses: [NSManagedObject] = []
+    
+    
+    /// If
+    func configure(received: Bool? = nil, interaction: Interaction? = nil, template: Card? = nil) {
+        if received == nil && interaction == nil && template == nil { fatalError() }
+        
+        if let r = received {
+            self.received = r
+            self.interaction = interaction
+        } else {
+            self.cardTemplate = template
+        }
+    }
+    
+    private func setCardData() {
         var arr: [NSManagedObject] = []
-        if let c = card {
+        if let c = cardInstance ?? cardTemplate {
             let a: [CardAddress] = c.addresses
             let p: [CardPhoneNumber] = c.phoneNumbers
             let e: [CardEmail] = c.emails
@@ -51,17 +86,15 @@ class ViewContactVC: UIViewController {
         updateUI()
     }
     
-    func updateUI() {
+    private func updateUI() {
         // Strings are formatted in dataSource `ContactTabBarController`
-        handleLabel.text = getHandle()
+        handleLabel.text = getRelevantHandle()
         notesView.text = getNotes()
-        templateTitleLabel.text = interaction == nil ? card?.title : ""
-        card = allContactInfo()
-        print("-------------Card = \(card)")
-        messageTextView.text = card?.comments
-        notesView.text = card?.personalNotes
+        templateTitleLabel.text = interaction == nil ? cardTemplate?.title : cardInstance?.title
+        messageTextView.text = interaction == nil ? cardTemplate?.comments : cardInstance?.comments
+        notesView.text = interaction == nil ? cardTemplate?.personalNotes : cardInstance?.personalNotes
         
-        let image = card?.image
+        let image = interaction == nil ? cardTemplate?.image : cardInstance?.image
         var newImage: UIImage?
         if let i = image {
             newImage = UIImage(data: i)
@@ -71,7 +104,7 @@ class ViewContactVC: UIViewController {
         imageButton.setImage(newImage!, for: .normal)
     }
     
-    func typeForClass(_ c: String?) -> CardElementTypes {
+    private func typeForClass(_ c: String?) -> CardElementTypes {
         guard let name = c else { fatalError() }
         switch name {
         case CardAddress().entity.name:
@@ -92,6 +125,7 @@ class ViewContactVC: UIViewController {
         }
     }
     
+    /// Go to the template selector, if we have templates
     @IBAction func manageDataShare(_ sender: UIButton) {
         
         guard let temps = AppDelegate.user.cardTemplates else {
@@ -107,7 +141,7 @@ class ViewContactVC: UIViewController {
             return
         }
         
-        showCompleteAndSendCardHelper(interaction: interaction)
+        showCompleteAndSendCardHelper(received: received, interaction: interaction)
         
     }
     
@@ -115,21 +149,19 @@ class ViewContactVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toEditTemplate" {
             guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
-            vc.card = card
+            vc.card = cardTemplate
         }
     }
 }
 
 extension ViewContactVC {
-    func getHandle() -> String {
-        let i = interaction == nil ?  card?.userHandle! : interaction?.referenceUserHandle!
+    func getRelevantHandle() -> String {
+        // If an interaction has not been created yet, it is because we are viewing a template
+        let i = interaction == nil ?  cardTemplate?.userHandle! : interaction?.referenceUserHandle!
         return i! // should crash only if we fucked up
     }
     func getNotes() -> String {
-        return interaction?.receivedCard?.first?.personalNotes ?? ""
-    }
-    func allContactInfo() -> Card? {
-        return interaction?.receivedCard?.first ?? card
+        return interaction == nil ? "" : cardInstance?.personalNotes ?? ""
     }
     
     func saveNotes(_ notes: String) {

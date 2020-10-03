@@ -43,8 +43,8 @@ class CardTemplatesVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyTemplate" {
             guard let vc = segue.destination as? ViewContactVC, let index = sender as? IndexPath else { fatalError() }
-            let template = cardTemplates[index.row]
-            vc.card = template
+            let template = cardTemplates[index.item]
+            vc.configure(template: template)
         }
     }
     
