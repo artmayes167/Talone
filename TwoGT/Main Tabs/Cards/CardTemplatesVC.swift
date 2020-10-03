@@ -17,6 +17,7 @@ class CardTemplatesVC: UIViewController {
             var cards: [Card] = []
             let c = AppDelegate.user.cardTemplates ?? [] // [Card]
             
+            /// Onlt templates, not instances
             if !c.isEmpty {
                 cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
             }

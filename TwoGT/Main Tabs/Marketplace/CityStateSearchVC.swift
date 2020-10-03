@@ -268,7 +268,7 @@ class LocationPickerTVC: UITableViewController {
                 if var array = dict[String(firstChar)] {
                     array.append(string)
                     dict[String(firstChar)] = array
-                    print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
+                    //print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
                 } else { // first time
                     firstLettersArray.append(String(firstChar))
                     dict[String(firstChar)] = [string]

@@ -20,7 +20,7 @@ class AllReceivedCardsVC: UIViewController {
                 if let s = i.referenceUserHandle, let firstChar = s.first {
                     if var array = dict[String(firstChar)] {
                         array.append(s)
-                        print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
+                        //print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
                     } else {
                         dict[String(firstChar)] = [s]
                     }

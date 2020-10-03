@@ -69,14 +69,13 @@ class ViewContactVC: UIViewController {
     }
     
     private func setCardData() {
-        var arr: [NSManagedObject] = []
         if let c = cardInstance ?? cardTemplate {
             let a: [CardAddress] = c.addresses
             let p: [CardPhoneNumber] = c.phoneNumbers
             let e: [CardEmail] = c.emails
-            arr.append(contentsOf: a + p + e)
+            cardAddresses = a + p + e
         }
-        cardAddresses = arr
+        
         tableView.reloadData()
     }
     
@@ -149,7 +148,7 @@ class ViewContactVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toEditTemplate" {
             guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
-            vc.card = cardTemplate
+            vc.configure(card: cardTemplate)
         }
     }
 }

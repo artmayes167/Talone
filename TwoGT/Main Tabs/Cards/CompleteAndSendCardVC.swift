@@ -13,7 +13,7 @@ class CompleteAndSendCardVC: UIViewController {
     
     private var templates: [String] {
         get {
-            var possibles = ["none"]
+            var possibles: [String] = ["none"]
             var cards: [Card] = []
             
             let c = AppDelegate.user.cardTemplates ?? [] // [Card]
@@ -23,8 +23,11 @@ class CompleteAndSendCardVC: UIViewController {
             }
         
             let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.title! }
-            possibles.append(contentsOf: mappedTemplates.sorted())
-            return possibles
+            for t in mappedTemplates {
+                if !(t == "") && !(t == "none") { possibles.append(t) }
+            }
+            
+            return possibles.sorted()
         }
     }
     
@@ -128,7 +131,7 @@ class CompleteAndSendCardVC: UIViewController {
         guard let recipientUid = receiverUid else { fatalError() }
         
         // Already checked for existing category
-        let card = c == nil ? CardTemplateInstance.create(cardCategory: "", notes: "Nope", image: nil) : c
+        let card = c == nil ? CardTemplateInstance.create(cardCategory: "none", notes: "Nope", image: nil) : c
         // Now we have a card template, or nothing
         
         let handle = AppDelegate.user.handle!

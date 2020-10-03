@@ -11,9 +11,23 @@ import CoreData
 /// The data model used to populate the table view on appearance
 struct CardTemplateModel {
     
-    var card: Card?
+    private var card: Card? {
+        didSet {
+            configure()
+        }
+    }
+    private var editing: Bool {
+        get {
+            return card != nil
+        }
+    }
+    
+    mutating func set(card: Card?) {
+        self.card = card
+    }
     
      // MARK: - PRIVATE PARTS (look away)
+    // Only use these for new creation
     private var addresses: [Address] {
         get {
             let adds = AppDelegate.user.addresses
@@ -80,40 +94,39 @@ struct CardTemplateModel {
     /// set by `moveStarted`
     var sourceIndexPath: IndexPath?
     
-    /// Call to set the initial values we will be accessing, ideally in `viewDidLoad`
-    mutating func configure() {
-        
+    
+    private mutating func configure() {
+        /// If we are editing
         if let c = card {
             /// Filtering for allPossibles
-            /// get each stored` Address`, `CardAddress`, `PhoneNumber`, `CardPhoneNumber`, `Email`, and `CardEmail`
-            /// get rid of Card versions
-            var a = addresses.filter { $0.entity.name != CardAddress().entity.name }
-            var p = phoneNumbers.filter { $0.entity.name != CardPhoneNumber().entity.name }
-            var e = emails.filter { $0.entity.name != CardEmail().entity.name }
+            /// Card Items from card
+            let a = c.addresses
+            let p = c.phoneNumbers
+            let e = c.emails
+            allAdded = a + p + e
             
+            var adds = addresses
+            var phones = phoneNumbers
+            var ems = emails
             /// filter out any non-Card-unique items that are already included
-            for add in c.addresses {
-                a = a.filter { $0.title != add.title }
+            for add in a {
+                adds = adds.filter { $0.title != add.title }
             }
-            for phone in c.phoneNumbers {
-                p = p.filter { $0.title != phone.title }
+            for phone in p {
+                phones = phones.filter { $0.title != phone.title }
             }
-            for email in c.emails {
-                e = e.filter { $0.title != email.title }
+            for email in e {
+                ems = ems.filter { $0.title != email.title }
             }
             
-            allPossibles = a + p + e
+            allPossibles = adds + phones + ems
             
-            allAdded = c.addresses + c.phoneNumbers + c.emails
         } else {
             var arr: [NSManagedObject] = []
-            let allArrays: [[NSManagedObject]] = [addresses, phoneNumbers, emails]
-            for array in allArrays {
-                for x in array {
-                    arr.append(x)
-                }
-            }
-            allPossibles = arr
+            let a = addresses
+            let p = phoneNumbers
+            let e = emails
+            allPossibles = a + p + e
             allAdded = []
         }
     }

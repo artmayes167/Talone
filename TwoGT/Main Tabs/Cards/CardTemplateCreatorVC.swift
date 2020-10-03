@@ -13,16 +13,26 @@ import AlamofireImage
 
 class CardTemplateCreatorVC: UIViewController {
     
+    /// handles filtering and sorting as datasource
     var model = CardTemplateModel()
     
+     // MARK: - UI
     @IBOutlet weak var availableTableView: UITableView!
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var plusImage: UIImageView!
     
-    var card: Card?
-    var canEditTitle = true
+    
+     // MARK: - Data
+    private var card: Card?
+    private var canEditTitle: Bool {
+        return card == nil
+    }
+    
+    func configure(card: Card?) {
+        self.card = card
+    }
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -41,18 +51,23 @@ class CardTemplateCreatorVC: UIViewController {
         }
         
         handleLabel.text = AppDelegate.user.handle
+        
+        
         if let c = card {
-            model.card = c
+            model.set(card: c)
+            
+            
             if let image = c.image {
                 if let i = UIImage(data: image) {
                     imageButton.setImage(i, for: .normal)
                     imageButton.isSelected = true
+                    imageButton.isEnabled = true
                 }
             }
-            titleTextField.text = card?.title ?? ""
-            canEditTitle = false
+            titleTextField.text = c.title ?? ""
+        } else {
+            model.set(card: nil)
         }
-        model.configure()
         availableTableView.reloadData()
         setDragAndDropDelegates()
     }
@@ -109,43 +124,72 @@ class CardTemplateCreatorVC: UIViewController {
                 fatalError()
             }
             let aspectScaledToFitImage = i.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
-            imageData = aspectScaledToFitImage.jpegData(compressionQuality: 0.0)
+            imageData = aspectScaledToFitImage.jpegData(compressionQuality: 0.3)
         }
         
-        /// Here, we are checking for a card.  if one exists, we are replacing its non-fetched properties
-        let c = Card.create(cardCategory: titleTextField.text!.pure(), notes: nil, image: imageData)
-        
-        /// Now, we need to set the new all added
-        for x in model.allAdded! {
-            switch x.entity.name {
-            case Address().entity.name:
-                CardAddress.create(title: c.title!, address: x as? Address)
-            case PhoneNumber().entity.name:
-                CardPhoneNumber.create(title: c.title!, phoneNumber: x as? PhoneNumber)
-            case Email().entity.name:
-                CardEmail.create(title: c.title!, email: x as? Email)
-            default:
-                print("------------ Old entity in All Added:" + x.entity.name!)
+        /// Editing
+        if let c = card {
+            
+            c.title = titleTextField.text!
+            c.image = imageData
+            
+            if let all = model.allAdded {
+                for x in all {
+                    switch x.entity.name {
+                    case Address().entity.name:
+                        CardAddress.create(title: c.title!, address: x as? Address)
+                    case PhoneNumber().entity.name:
+                        CardPhoneNumber.create(title: c.title!, phoneNumber: x as? PhoneNumber)
+                    case Email().entity.name:
+                        CardEmail.create(title: c.title!, email: x as? Email)
+                    default:
+                        print("------------ Old entity in All Added:" + x.entity.name!)
+                    }
+                }
+            }
+            
+            /// and remove the old added if they were removed
+            for x in model.allPossibles! {
+                switch x.entity.name {
+                case CardAddress().entity.name:
+                    let z =  x as! CardAddress
+                    z.title = nil
+                    z.uid = nil
+                case CardPhoneNumber().entity.name:
+                    let z =  x as! CardPhoneNumber
+                    z.title = nil
+                    z.uid = nil
+                case CardEmail().entity.name:
+                    let z =  x as! CardEmail
+                    z.title = nil
+                    z.uid = nil
+                default:
+                    print("------------ Same old entity in All Added:" + x.entity.name!)
+                }
+            }
+            
+        } else { /// Not editing
+            card = Card.create(cardCategory: titleTextField.text!.pure(), notes: nil, image: imageData)
+            
+            if let all = model.allAdded {
+                for x in all {
+                    switch x.entity.name {
+                    case Address().entity.name:
+                        CardAddress.create(title: card!.title!, address: x as? Address)
+                    case PhoneNumber().entity.name:
+                        CardPhoneNumber.create(title: card!.title!, phoneNumber: x as? PhoneNumber)
+                    case Email().entity.name:
+                        CardEmail.create(title: card!.title!, email: x as? Email)
+                    default:
+                        print("------------ Old entity in All Added:" + x.entity.name!)
+                    }
+                }
             }
         }
-        
-        /// and remove the old added if they were removed
-        for x in model.allPossibles! {
-            switch x.entity.name {
-            case CardAddress().entity.name:
-                (x as! CardAddress).title = nil
-            case CardPhoneNumber().entity.name:
-                (x as! CardPhoneNumber).title = nil
-            case CardEmail().entity.name:
-                (x as! CardEmail).title = nil
-            default:
-                print("------------ Same old entity in All Added:" + x.entity.name!)
-            }
-        }
-        
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         do {
+            appDelegate.persistentContainer.viewContext.processPendingChanges()
             try appDelegate.persistentContainer.viewContext.save()
             view.makeToast("Card created!")
             performSegue(withIdentifier: "unwindToTemplates", sender: nil)

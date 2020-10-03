@@ -100,30 +100,14 @@ extension Card {
      - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
      - Parameter notes: personal notes on a card that will only be stored on the template, never shared.
      */
+    
     class func create(cardCategory title: String, notes: String?, image: Data?) -> Card {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
 
         let managedContext = appDelegate.persistentContainer.viewContext
 
-        let request: NSFetchRequest<Card> = Card.fetchRequest()
+        let card = newCard(managedContext: managedContext, title: title)
         
-        var cardInTransit: Card?
-        
-        do {
-            let cards = try managedContext.fetch(request)
-            let notInstances: [Card] = cards.filter { $0.entity.name != CardTemplateInstance().entity.name }
-            let c: [Card] = notInstances.filter { $0.title == title }
-            if !c.isEmpty {
-                cardInTransit = c.first! as Card
-            } else {
-                cardInTransit = newCard(managedContext: managedContext, title: title)
-            }
-        } catch {
-            cardInTransit = newCard(managedContext: managedContext, title: title)
-        }
-        
-        
-        guard let card = cardInTransit else { fatalError() }
         card.image = image
         card.comments = nil
         card.personalNotes = notes
@@ -151,7 +135,7 @@ extension Card {
 }
 
 /**
-        An instance of a `Card` that contains the data defined in *one of the templates*, personalized with comments.
+        An instance of a `Card` that contains the data defined in *one of the templates*, personalized with comments.  Only call to create new
  
             This object is associated with an `Interaction` object, and will not be otherwise accessible after creation. `CardTemplateInstance` should never set personal notes on creation, but should set comments.  Comments are a message to or from the other user, depending on the context
  */
@@ -183,17 +167,7 @@ extension CardTemplateInstance {
             instance.title = c.title
             instance.personalNotes = c.personalNotes
             
-            for add in instance.addresses {
-                CardAddress.create(title: instance.title, address: add)
-            }
-            
-            for phone in instance.phoneNumbers {
-                CardPhoneNumber.create(title: instance.title, phoneNumber: phone)
-            }
-            
-            for email in instance.emails {
-                CardEmail.create(title: instance.title, email: email)
-            }
+            // addresses, phones, and emails are fetched by title
             
         } else if let c = codableCard {
             instance.image = c.image
@@ -201,6 +175,7 @@ extension CardTemplateInstance {
             instance.userHandle = c.userHandle
             instance.receiverUserHandle = sender // used for display
             instance.senderUserHandle = receiver
+            instance.title = c.title
             CardAddress.arrayFrom(dictionary: c.addresses)
             CardEmail.arrayFrom(dictionary: c.emails)
             CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
@@ -281,6 +256,7 @@ struct CodableCardTemplateInstance: Codable {
     let image: Data?
     let userHandle: String
     let comments: String?
+    let title: String?
     
     let addresses: [[String: String]]
     let emails: [[String: String]]
@@ -288,7 +264,7 @@ struct CodableCardTemplateInstance: Codable {
     
     enum CodingKeys: String, CodingKey {
         case receiverUserHandle, senderUserHandle
-        case uid, image, userHandle, comments
+        case uid, image, userHandle, comments, title
         case addresses, emails, phoneNumbers
     }
     
@@ -300,6 +276,7 @@ struct CodableCardTemplateInstance: Codable {
         uid = instance.uid!  // may not be necessary
         userHandle = instance.userHandle!
         comments = instance.comments
+        title = instance.title
         
         var addressBook: [[String: String]] = []
         for a in instance.addresses {
@@ -534,6 +511,7 @@ extension CardAddress {
         }
          // unique
         cardAddress.templateTitle = title  // unique
+        /// from thisUser
         if let a = address {
             cardAddress.title = a.title
             cardAddress.street1 = a.street1
@@ -543,6 +521,7 @@ extension CardAddress {
             cardAddress.country = a.country
             cardAddress.uid = a.uid // from owner
             cardAddress.zip = a.zip
+            /// from otherUser
         } else if !dictionary.isEmpty {
             let dict = dictionary
             cardAddress.title = dict["title"]
