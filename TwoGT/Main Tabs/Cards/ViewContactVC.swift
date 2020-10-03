@@ -32,9 +32,11 @@ class ViewContactVC: UIViewController {
     
     var interaction: Interaction?
     
-    var card: CardTemplateInstance? {
+    var card: Card? {
         didSet {
-            setCardData()
+            if isViewLoaded {
+                setCardData()
+            }
         }
     }
     
@@ -54,6 +56,7 @@ class ViewContactVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setCardData()
         updateUI()
     }
     
@@ -125,7 +128,8 @@ class ViewContactVC: UIViewController {
 
 extension ViewContactVC: InteractionDataSource {
     func getHandle() -> String {
-        return interaction!.referenceUserHandle! // should crash only if we fucked up
+        let i = interaction == nil ?  card?.userHandle! : interaction?.referenceUserHandle!
+        return i! // should crash only if we fucked up
     }
     func getNotes() -> String {
         return interaction?.receivedCard?.first?.personalNotes ?? ""

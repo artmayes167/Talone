@@ -94,8 +94,14 @@ class CardTemplateCreatorVC: UIViewController {
                 fatalError()
             }
         }
-        view.makeToast("Card created!")
-        performSegue(withIdentifier: "unwindToTemplates", sender: nil)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        do {
+            try appDelegate.persistentContainer.viewContext.save()
+            view.makeToast("Card created!")
+            performSegue(withIdentifier: "unwindToTemplates", sender: nil)
+        } catch {
+            fatalError()
+        }
     }
 }
 

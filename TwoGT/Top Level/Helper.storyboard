@@ -135,7 +135,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="OCp-Mx-KhU">
-                                <rect key="frame" x="24" y="133" width="366" height="381"/>
+                                <rect key="frame" x="24" y="133" width="366" height="589"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="which information would you like to send?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vev-kj-RY7">
                                         <rect key="frame" x="0.0" y="0.0" width="366" height="24"/>
@@ -170,8 +170,8 @@
                                             <outlet property="delegate" destination="dov-BO-gKy" id="b9Y-i8-jLj"/>
                                         </connections>
                                     </textField>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUp-ln-Yr9">
-                                        <rect key="frame" x="0.0" y="81" width="366" height="200"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUp-ln-Yr9">
+                                        <rect key="frame" x="0.0" y="85" width="366" height="200"/>
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ubw-Me-iOz">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="200"/>
@@ -180,7 +180,7 @@
                                                     <constraint firstAttribute="height" constant="200" id="p5l-5n-S4U"/>
                                                 </constraints>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell0" id="xwX-Uf-l1Q" customClass="SavedLocationCell" customModule="Talone" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell0" id="xwX-Uf-l1Q" customClass="SavedLocationCell" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="28" width="366" height="46.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xwX-Uf-l1Q" id="mPV-yV-ngD">
@@ -210,7 +210,7 @@
                                                             <outlet property="titleLabel" destination="gAn-D2-bpR" id="Pqq-Pi-1Ib"/>
                                                         </connections>
                                                     </tableViewCell>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell1" id="pQP-js-Qs1" customClass="SavedLocationCell" customModule="Talone" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell1" id="pQP-js-Qs1" customClass="SavedLocationCell" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="74.5" width="366" height="46.5"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pQP-js-Qs1" id="UTS-US-dMk">
@@ -241,6 +241,10 @@
                                                         </connections>
                                                     </tableViewCell>
                                                 </prototypes>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="dov-BO-gKy" id="JRn-j6-esl"/>
+                                                    <outlet property="delegate" destination="dov-BO-gKy" id="7u7-HO-Dhw"/>
+                                                </connections>
                                             </tableView>
                                         </subviews>
                                         <color key="backgroundColor" red="0.57471478040000001" green="0.77944437470000005" blue="0.52689128669999996" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
@@ -260,7 +264,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DUJ-LM-l5Z">
-                                        <rect key="frame" x="0.0" y="85" width="366" height="30"/>
+                                        <rect key="frame" x="0.0" y="293" width="366" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add a message to this card?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uPO-4F-tLx">
                                                 <rect key="frame" x="0.0" y="6" width="366" height="24"/>
@@ -281,7 +285,7 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ytl-zf-mt2" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="123" width="366" height="200"/>
+                                        <rect key="frame" x="0.0" y="331" width="366" height="200"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="mLT-Zt-BKR"/>
@@ -302,7 +306,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R0x-wm-IX6" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="331" width="366" height="50"/>
+                                        <rect key="frame" x="0.0" y="539" width="366" height="50"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="9rD-0u-CKo"/>
@@ -355,7 +359,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1zY-pn-2t1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="ZpL-Ip-yiU">
+                <tapGestureRecognizer cancelsTouchesInView="NO" id="ZpL-Ip-yiU">
                     <connections>
                         <action selector="endEditing:" destination="dov-BO-gKy" id="dsm-F8-0VD"/>
                     </connections>

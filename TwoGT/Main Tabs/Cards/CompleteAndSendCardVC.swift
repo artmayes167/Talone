@@ -13,8 +13,15 @@ class CompleteAndSendCardVC: UIViewController {
     private var templates: [String] {
         get {
             var possibles = ["none"]
-            let temps = AppDelegate.user.cardTemplates ?? []
-            let mappedTemplates = temps.isEmpty ? [] : temps.map { $0.title! }
+            var cards: [Card] = []
+            
+            let c = AppDelegate.user.cardTemplates ?? [] // [Card]
+                
+            if !c.isEmpty {
+                cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
+            }
+        
+            let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.title! }
             possibles.append(contentsOf: mappedTemplates.sorted())
             return possibles
         }
@@ -114,6 +121,7 @@ extension CompleteAndSendCardVC: UITextViewDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == templateTextField {
             templateSelectionTableViewContainer.isHidden = false
+            tableView.reloadData()
             view.layoutIfNeeded()
             return false
         }

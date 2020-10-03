@@ -14,7 +14,13 @@ class CardTemplatesVC: UIViewController {
     
     private var cardTemplates: [Card] {
         get {
-            let cards = AppDelegate.user.cardTemplates ?? [] // [Card]
+            var cards: [Card] = []
+            let c = AppDelegate.user.cardTemplates ?? [] // [Card]
+            
+            if !c.isEmpty {
+                cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
+            }
+            
             return cards.isEmpty ? [] : cards.sorted { return $0.title! < $1.title! }
         }
     }
@@ -35,8 +41,8 @@ class CardTemplatesVC: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toTemplateDisplay" {
-            guard let vc = segue.destination as? ViewMyTemplateVC, let index = sender as? IndexPath else { fatalError() }
+        if segue.identifier == "toMyTemplate" {
+            guard let vc = segue.destination as? ViewContactVC, let index = sender as? IndexPath else { fatalError() }
             let template = cardTemplates[index.row]
             vc.card = template
         }
@@ -63,7 +69,7 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "toTemplateDisplay", sender: indexPath)
+        performSegue(withIdentifier: "toMyTemplate", sender: indexPath)
     }
 }
 

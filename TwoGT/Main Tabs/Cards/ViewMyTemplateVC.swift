@@ -33,6 +33,14 @@ class ViewMyTemplateVC: UIViewController {
             let p: [CardPhoneNumber] = c.phoneNumbers
             let e: [CardEmail] = c.emails
             arr.append(contentsOf: a + p + e)
+            templateTitleLabel.text = c.title
+            handleLabel.text = c.userHandle
+            
+            if let i = c.image, let d = UIImage(data: i) {
+                imageButton.setImage(d, for: .normal)
+            } else {
+                imageButton.setImage( #imageLiteral(resourceName: "avatar.png"), for: .normal)
+            }
         }
         cardAddresses = arr
         tableView.reloadData()
@@ -40,8 +48,7 @@ class ViewMyTemplateVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let _ = card { tableView.reloadData() }
-        // Do any additional setup after loading the view.
+        setCardData()
     }
     
     func typeForClass(_ c: String?) -> CardElementTypes {
