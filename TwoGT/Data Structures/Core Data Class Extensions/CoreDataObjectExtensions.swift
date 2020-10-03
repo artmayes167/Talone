@@ -95,6 +95,7 @@ extension CityState {
  */
 extension Card {
     /**
+        Only thisUser created cards
      - Parameter image: perfectly fine for this to be nil
      - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
      - Parameter notes: personal notes on a card that will only be stored on the template, never shared.
@@ -111,21 +112,14 @@ extension Card {
         do {
             let cards = try managedContext.fetch(request)
             let notInstances: [Card] = cards.filter { $0.entity.name != CardTemplateInstance().entity.name }
-            let card: [Card] = notInstances.filter { $0.title == title }
-            if !card.isEmpty {
-                cardInTransit = card.first! as Card
+            let c: [Card] = notInstances.filter { $0.title == title }
+            if !c.isEmpty {
+                cardInTransit = c.first! as Card
+            } else {
+                cardInTransit = newCard(managedContext: managedContext, title: title)
             }
         } catch {
-            print("-------------managedContext failed request: Card.create()")
-            let entity = NSEntityDescription.entity(forEntityName: "Card",
-                                         in: managedContext)!
-
-           guard let c = NSManagedObject(entity: entity,
-                                                  insertInto: managedContext) as? Card else { fatalError() }
-            c.uid = AppDelegate.user.uid
-            c.userHandle = AppDelegate.user.handle
-            c.title = title
-            cardInTransit = c
+            cardInTransit = newCard(managedContext: managedContext, title: title)
         }
         
         
@@ -141,6 +135,18 @@ extension Card {
             print("Could not save. \(error), \(error.userInfo)")
             fatalError()
         }
+    }
+    
+    class func newCard(managedContext: NSManagedObjectContext, title: String) -> Card {
+        let entity = NSEntityDescription.entity(forEntityName: "Card",
+                                     in: managedContext)!
+
+       guard let c = NSManagedObject(entity: entity,
+                                              insertInto: managedContext) as? Card else { fatalError() }
+        c.uid = AppDelegate.user.uid
+        c.userHandle = AppDelegate.user.handle
+        c.title = title
+        return c
     }
 }
 

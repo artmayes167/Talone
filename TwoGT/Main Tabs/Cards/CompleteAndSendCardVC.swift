@@ -95,33 +95,49 @@ class CompleteAndSendCardVC: UIViewController {
     */
     
     private func continueOrAlertWithRecipientUid() {
+        /// check id
         guard let recipientUid = getRecipientUid() else {
+            /// No id
             showOkayOrCancelAlert(title: "careful", message: "this is an old card, so it will crash the app.  proceed anyway?", okayHandler: { _ in
-            self.sendCard(nil)
+                self.sendCard(card: nil, nil)
             }, cancelHandler: nil)
             return
         }
-        sendCard(recipientUid)
+        if let c = checkTemplate(id: recipientUid) {
+            sendCard(card: c, recipientUid)
+        }
     }
-
-    private func sendCard(_ uid: String?) {
-        guard let recipientUid = uid else { fatalError() }
-        var card: Card? = nil
+    
+    private func checkTemplate(id: String) -> Card? {
+        // If no template has been selected
         if !(templateTextField.text == "none") {
-            let cards: [Card] = AppDelegate.user.cardTemplates ?? []
+            let cards: [Card] = AppDelegate.user.cardTemplates!
             let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text }
             if !filteredCards.isEmpty {
-                card = filteredCards.first
+                return filteredCards.first
             }
+        } else {
+            showOkayOrCancelAlert(title: "notice", message: "You have chosen 'none', which will functionally erase all the contact details the other person has.  if this is what you want, hit okay.", okayHandler: { (_) in
+                self.sendCard(card: nil, id)
+            }, cancelHandler: nil)
         }
+        return nil
+    }
+
+    private func sendCard(card c: Card?, _ receiverUid: String?) {
+        guard let recipientUid = receiverUid else { fatalError() }
+        
+        // Already checked for existing category
+        let card = c == nil ? CardTemplateInstance.create(cardCategory: "", notes: "Nope", image: nil) : c
+        // Now we have a card template, or nothing
         
         let handle = AppDelegate.user.handle!
-        let uid = card?.uid ?? AppDelegate.user.uid!
+        let myUid = AppDelegate.user.uid!
         guard let recipientHandle = getRecipientHandle() else { fatalError() }
         let cardInstance = CardTemplateInstance.create(card: card, codableCard: nil, fromHandle: handle, toHandle: recipientHandle, message: messageTextView.text.pure())
         let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance)
         // TODO: Move this logic to another utility class.
-        let fibCard = CardsBase.FiBCardItem(createdBy: uid, createdFor: recipientUid, payload: data.base64EncodedString(), owner: handle)
+        let fibCard = CardsBase.FiBCardItem(createdBy: myUid, createdFor: recipientUid, payload: data.base64EncodedString(), owner: handle)
         
         CardsDbWriter().addCard(fibCard) { error in
             if let e = error {
