@@ -37,6 +37,12 @@ class CompleteAndSendCardVC: UIViewController {
     private var needItem: NeedsBase.NeedItem?
     private var interaction: Interaction?
     
+    private var receivedCard: CardTemplateInstance? {
+        get {
+            return interaction?.receivedCard?.first
+        }
+    }
+    
     func configure(interaction: Interaction?, haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
         self.interaction = interaction
         self.haveItem = haveItem
@@ -46,11 +52,11 @@ class CompleteAndSendCardVC: UIViewController {
         }
     }
     
-    private func getItemCreator() -> String? {
-        return haveItem?.createdBy ?? needItem?.createdBy ?? interaction?.receivedCard?.first?.uid
+    private func getRecipientUid() -> String? {
+        return haveItem?.createdBy ?? needItem?.createdBy ?? receivedCard?.uid
     }
-    private func getItemOwner() -> String? {
-        return haveItem?.owner ?? needItem?.owner ?? AppDelegate.user.uid
+    private func getRecipientHandle() -> String? {
+        return haveItem?.owner ?? needItem?.owner ?? interaction?.referenceUserHandle
     }
 
     override func viewDidLoad() {
@@ -59,7 +65,7 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     private func configure() {
-        guard let handle = getItemOwner() else { fatalError() }
+        guard let handle = getRecipientHandle() else { fatalError() }
         headerTitleLabel.text = "new card to \(handle)"
         templateTextField.text = "none"
     }
@@ -83,7 +89,7 @@ class CompleteAndSendCardVC: UIViewController {
     */
 
     private func sendCard() {
-        guard let haveItemCreatorUid = getItemCreator() else { return } // Potentially configure this further?
+        guard let recipientUid = getRecipientUid() else { return } // Potentially configure this further?
         var card: Card? = nil
         if !(templateTextField.text == "none") {
             let cards: [Card] = AppDelegate.user.cardTemplates ?? []
@@ -95,11 +101,11 @@ class CompleteAndSendCardVC: UIViewController {
         
         let handle = AppDelegate.user.handle!
         let uid = card?.uid ?? AppDelegate.user.uid!
-        guard let recipientHandle = getItemOwner() else { fatalError() }
+        guard let recipientHandle = getRecipientHandle() else { fatalError() }
         let cardInstance = CardTemplateInstance.create(card: card, codableCard: nil, fromHandle: handle, toHandle: recipientHandle, message: messageTextView.text.pure())
         let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance)
         // TODO: Move this logic to another utility class.
-        let fibCard = CardsBase.FiBCardItem(createdBy: uid, createdFor: haveItemCreatorUid, payload: data.base64EncodedString(), owner: handle)
+        let fibCard = CardsBase.FiBCardItem(createdBy: uid, createdFor: recipientUid, payload: data.base64EncodedString(), owner: handle)
         
         CardsDbWriter().addCard(fibCard) { error in
             if let e = error {

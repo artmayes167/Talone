@@ -173,8 +173,19 @@ extension CardTemplateInstance {
             instance.uid = c.uid
             instance.userHandle = c.userHandle // used for display
             instance.title = c.title
+            instance.personalNotes = c.personalNotes
             
+            for add in instance.addresses {
+                CardAddress.create(title: instance.title, address: add)
+            }
             
+            for phone in instance.phoneNumbers {
+                CardPhoneNumber.create(title: instance.title, phoneNumber: phone)
+            }
+            
+            for email in instance.emails {
+                CardEmail.create(title: instance.title, email: email)
+            }
             
         } else if let c = codableCard {
             instance.image = c.image
