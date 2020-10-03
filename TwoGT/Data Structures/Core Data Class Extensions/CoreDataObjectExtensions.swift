@@ -172,6 +172,8 @@ extension CardTemplateInstance {
             instance.image = c.image
             instance.uid = c.uid
             instance.userHandle = c.userHandle // used for display
+            instance.senderUserHandle = sender
+            instance.receiverUserHandle = receiver
             instance.title = c.title
             instance.personalNotes = c.personalNotes
             
@@ -190,8 +192,9 @@ extension CardTemplateInstance {
         } else if let c = codableCard {
             instance.image = c.image
             instance.uid = c.uid
-            instance.userHandle = c.userHandle // used for display
-            
+            instance.userHandle = c.userHandle
+            instance.receiverUserHandle = sender // used for display
+            instance.senderUserHandle = receiver
             CardAddress.arrayFrom(dictionary: c.addresses)
             CardEmail.arrayFrom(dictionary: c.emails)
             CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
@@ -225,6 +228,7 @@ extension CardTemplateInstance {
                 print(f)
                 
                 DispatchQueue.main.async {
+                    /// make sure we have the received card
                     if let nonCodableInstance = f.receivedCard {
                         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                         let managedContext = appDelegate.persistentContainer.viewContext
@@ -237,6 +241,7 @@ extension CardTemplateInstance {
                         //                        for email in nonCodableInstance.emails {
                         //                            managedContext.delete(email)
                         //                        }
+                        /// delete those cards
                         for instance in nonCodableInstance {
                             managedContext.delete(instance)
                         }
