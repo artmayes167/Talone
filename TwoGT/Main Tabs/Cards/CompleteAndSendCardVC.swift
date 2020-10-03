@@ -105,14 +105,14 @@ class CompleteAndSendCardVC: UIViewController {
             if let e = error {
                 print(e.localizedDescription)
             } else {
-                self.view.makeToast("Successfully sent a card to \(recipientHandle)")
+                self.view.makeToast("Successfully sent a card to \(recipientHandle)") { [weak self] _ in
+                    if let nav = self?.navigationController {
+                        nav.popViewController(animated: true)
+                    } else {
+                        self?.dismiss(animated: true, completion: nil)
+                    }
+                }
             }
-        }
-        
-        if let nav = navigationController {
-            nav.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
         }
     }
 }
