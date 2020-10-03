@@ -89,7 +89,7 @@ class CompleteAndSendCardVC: UIViewController {
     */
 
     private func sendCard() {
-        guard let recipientUid = getRecipientUid() else { return } // Potentially configure this further?
+        guard let recipientUid = getRecipientUid() else { fatalError() }
         var card: Card? = nil
         if !(templateTextField.text == "none") {
             let cards: [Card] = AppDelegate.user.cardTemplates ?? []
