@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AlamofireImage
 
 enum AddressSections: Int, CaseIterable {
     case address, phoneNumber, email
@@ -271,11 +272,21 @@ class TelephoneNumberCell: UITableViewCell {
 extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }
-        imageButton.setImage(userPickedImage, for: .normal)
         
-        if let imageData = userPickedImage.pngData() {
+        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
+        if let imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.2) {
             CoreDataImageHelper.shareInstance.saveImage(data: imageData)
-           }
+            showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
+            
+            if let im = CoreDataImageHelper.shareInstance.fetchImage() {
+                if let imageFromStorage = im.image {
+                    let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                    imageButton.setImage(i, for: .normal)
+                }
+                
+            }
+            imageButton.setImage(userPickedImage, for: .normal)
+        }
         picker.dismiss(animated: true)
     }
 }

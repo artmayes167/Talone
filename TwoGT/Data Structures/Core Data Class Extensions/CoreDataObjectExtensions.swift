@@ -104,16 +104,32 @@ extension Card {
 
         let managedContext = appDelegate.persistentContainer.viewContext
 
-        let entity = NSEntityDescription.entity(forEntityName: "Card",
-                                     in: managedContext)!
+        let request: NSFetchRequest<Card> = Card.fetchRequest()
+        
+        var cardInTransit: Card?
+        
+        do {
+            let cards = try managedContext.fetch(request)
+            let notInstances: [Card] = cards.filter { $0.entity.name != CardTemplateInstance().entity.name }
+            let card: [Card] = notInstances.filter { $0.title == title }
+            if !card.isEmpty {
+                cardInTransit = card.first! as Card
+            }
+        } catch {
+            print("-------------managedContext failed request: Card.create()")
+            let entity = NSEntityDescription.entity(forEntityName: "Card",
+                                         in: managedContext)!
 
-       guard let card = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Card else { fatalError() }
+           guard let c = NSManagedObject(entity: entity,
+                                                  insertInto: managedContext) as? Card else { fatalError() }
+            c.uid = AppDelegate.user.uid
+            c.userHandle = AppDelegate.user.handle
+            c.title = title
+            cardInTransit = c
+        }
         
-        card.uid = AppDelegate.user.uid
-        card.userHandle = AppDelegate.user.handle
         
-        card.title = title
+        guard let card = cardInTransit else { fatalError() }
         card.image = image
         card.comments = nil
         card.personalNotes = notes

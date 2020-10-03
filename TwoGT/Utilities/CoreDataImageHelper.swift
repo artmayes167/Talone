@@ -14,6 +14,14 @@ class CoreDataImageHelper: NSObject {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     func saveImage(data: Data) {
+        /// remove old image, if it exists
+        if let i = fetchAllImages() {
+            for x in i {
+                AppDelegate.user.removeFromImages(x)
+                context.delete(x)
+            }
+        }
+        
         let imageInfo = ImageInfo(context: context)
         imageInfo.image = data
         imageInfo.type = "userImage"
@@ -27,13 +35,21 @@ class CoreDataImageHelper: NSObject {
     }
     
     func fetchImage() -> ImageInfo? {
+        if let fetchingImage = fetchAllImages() {
+            return fetchingImage.first
+        }
+        return nil
+    }
+    
+    func fetchAllImages() -> [ImageInfo]? {
         var fetchingImage = [ImageInfo]()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ImageInfo")
         do {
             fetchingImage = try context.fetch(fetchRequest) as! [ImageInfo]
+            return fetchingImage.filter { $0.type == "userImage" }
         } catch {
             print("Error while fetching the image")
         }
-        return fetchingImage.first(where: { $0.type == "userImage" })
+        return nil
     }
 }

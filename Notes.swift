@@ -80,3 +80,5 @@
 // USA by Paul Aimé from the Noun Project
 
 // template by IYIKON from the Noun Project
+
+// Plus by scott desmond from the Noun Project

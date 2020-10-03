@@ -9,22 +9,13 @@
 import UIKit
 import CoreData
 
-protocol InteractionDataSource {
-    /// Universal, at Interaction level
-    func getHandle() -> String
-    /// Only for received card
-    func getNotes() -> String // TODO: - work on formatting
-    func allContactInfo() -> CardTemplateInstance?
-    func getMessage(sender: Bool) -> String
-    func saveNotes(_ notes: String)
-}
-
 class ViewContactVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var messageTextView: InactiveTextView!
+    @IBOutlet weak var templateTitleLabel: UILabel!
     @IBOutlet weak var notesView: ActiveTextView!
     @IBOutlet weak var saveNotesButton: DesignableButton!
     @IBOutlet weak var sendCardButton: DesignableButton!
@@ -64,6 +55,7 @@ class ViewContactVC: UIViewController {
         // Strings are formatted in dataSource `ContactTabBarController`
         handleLabel.text = getHandle()
         notesView.text = getNotes()
+        templateTitleLabel.text = interaction == nil ? card?.title : ""
         messageTextView.text = getMessage(sender: false)
         card = allContactInfo()
         
@@ -117,16 +109,16 @@ class ViewContactVC: UIViewController {
         
     }
     
-    // MARK: - Navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "toTextViewHelper" {
-//            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
-//            vc.configure(textView: notesView, displayName: "personal notes", initialText: notesView.text)
-//        }
-//    }
+     // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toEditTemplate" {
+            guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
+            vc.card = card
+        }
+    }
 }
 
-extension ViewContactVC: InteractionDataSource {
+extension ViewContactVC {
     func getHandle() -> String {
         let i = interaction == nil ?  card?.userHandle! : interaction?.referenceUserHandle!
         return i! // should crash only if we fucked up
@@ -134,8 +126,8 @@ extension ViewContactVC: InteractionDataSource {
     func getNotes() -> String {
         return interaction?.receivedCard?.first?.personalNotes ?? ""
     }
-    func allContactInfo() -> CardTemplateInstance? {
-        return interaction?.receivedCard?.first
+    func allContactInfo() -> Card? {
+        return interaction?.receivedCard?.first ?? card
     }
     
     func getMessage(sender: Bool) -> String {

@@ -9,6 +9,7 @@
 import UIKit
 import MobileCoreServices
 import CoreData
+import AlamofireImage
 
 class CardTemplateCreatorVC: UIViewController {
     
@@ -17,8 +18,11 @@ class CardTemplateCreatorVC: UIViewController {
     @IBOutlet weak var availableTableView: UITableView!
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
-    @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var plusImage: UIImageView!
+    
+    var card: Card?
+    var canEditTitle = true
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -28,14 +32,26 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.estimatedRowHeight = 62
         
         let image = CoreDataImageHelper.shareInstance.fetchImage()
-        var newImage: UIImage?
-        if let i = image?.image {
-            newImage = UIImage(data: i)
+        if let _ = image?.image {
+            imageButton.isEnabled = true
+            plusImage.isHidden = false
         } else {
-            newImage = UIImage(named: "avatar")
+            imageButton.isEnabled = false
+            plusImage.isHidden = true
         }
-        imageButton.setImage(newImage!, for: .normal)
+        
         handleLabel.text = AppDelegate.user.handle
+        if let c = card {
+            model.card = c
+            if let image = c.image {
+                if let i = UIImage(data: image) {
+                    imageButton.setImage(i, for: .normal)
+                    imageButton.isSelected = true
+                }
+            }
+            titleTextField.text = card?.title ?? ""
+            canEditTitle = false
+        }
         model.configure()
         availableTableView.reloadData()
         setDragAndDropDelegates()
@@ -50,19 +66,33 @@ class CardTemplateCreatorVC: UIViewController {
     func typeForClass(_ c: String?) -> CardElementTypes {
         guard let name = c else { fatalError() }
         switch name {
-        case Address().entity.name:
+        case Address().entity.name, CardAddress().entity.name:
             return .address
-        case PhoneNumber().entity.name:
+        case PhoneNumber().entity.name, CardPhoneNumber().entity.name:
             return .phoneNumber
-        case Email().entity.name:
+        case Email().entity.name, CardEmail().entity.name:
             return .email
         default:
             fatalError()
         }
     }
     
+    /// If there wasn't an image shown and included before, there is now-- and vice-versa
     @IBAction func touchedAddRemoveImage(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            let image = CoreDataImageHelper.shareInstance.fetchImage()
+            if let i = image?.image {
+                if let z = UIImage(data: i) {
+                    let resized = z.af.imageAspectScaled(toFill: imageButton.bounds.size)
+                    imageButton.setImage(resized, for: .normal)
+                }
+                
+            }
+        } else {
+            imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
+        }
+        
     }
     
     @IBAction func save(_ sender: UIButton) {
@@ -72,16 +102,20 @@ class CardTemplateCreatorVC: UIViewController {
             return
         }
         
+        /// get the image if user has chosen to use it
         var imageData: Data?
-        if addImageButton.isSelected {
-            let image = CoreDataImageHelper.shareInstance.fetchImage()
-            if let i = image?.image {
-                imageData = i
+        if imageButton.isSelected {
+            guard let i = imageButton.image(for: .normal) else {
+                fatalError()
             }
+            let aspectScaledToFitImage = i.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
+            imageData = aspectScaledToFitImage.jpegData(compressionQuality: 0.0)
         }
         
+        /// Here, we are checking for a card.  if one exists, we are replacing its non-fetched properties
         let c = Card.create(cardCategory: titleTextField.text!.pure(), notes: nil, image: imageData)
         
+        /// Now, we need to set the new all added
         for x in model.allAdded! {
             switch x.entity.name {
             case Address().entity.name:
@@ -91,9 +125,25 @@ class CardTemplateCreatorVC: UIViewController {
             case Email().entity.name:
                 CardEmail.create(title: c.title!, email: x as? Email)
             default:
-                fatalError()
+                print("------------ Old entity in All Added:" + x.entity.name!)
             }
         }
+        
+        /// and remove the old added if they were removed
+        for x in model.allPossibles! {
+            switch x.entity.name {
+            case CardAddress().entity.name:
+                (x as! CardAddress).title = nil
+            case CardPhoneNumber().entity.name:
+                (x as! CardPhoneNumber).title = nil
+            case CardEmail().entity.name:
+                (x as! CardEmail).title = nil
+            default:
+                print("------------ Same old entity in All Added:" + x.entity.name!)
+            }
+        }
+        
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         do {
             try appDelegate.persistentContainer.viewContext.save()
@@ -102,6 +152,16 @@ class CardTemplateCreatorVC: UIViewController {
         } catch {
             fatalError()
         }
+    }
+}
+
+extension CardTemplateCreatorVC {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if !canEditTitle {
+            showOkayAlert(title: "Nope", message: "you're stuck with this title, until I make it changeable. who's got the power, now, chump?", handler: nil)
+            return false
+        }
+        return true
     }
 }
 

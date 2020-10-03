@@ -11,6 +11,8 @@ import CoreData
 /// The data model used to populate the table view on appearance
 struct CardTemplateModel {
     
+    var card: Card?
+    
      // MARK: - PRIVATE PARTS (look away)
     private var addresses: [Address] {
         get {
@@ -79,17 +81,42 @@ struct CardTemplateModel {
     var sourceIndexPath: IndexPath?
     
     /// Call to set the initial values we will be accessing, ideally in `viewDidLoad`
-   mutating func configure() {
-       var arr: [NSManagedObject] = []
-       let allArrays: [[NSManagedObject]] = [addresses, phoneNumbers, emails]
-       for array in allArrays {
-           for x in array {
-               arr.append(x)
-           }
-       }
-       allPossibles = arr
-       allAdded = []
-   }
+    mutating func configure() {
+        
+        if let c = card {
+            /// Filtering for allPossibles
+            /// get each stored` Address`, `CardAddress`, `PhoneNumber`, `CardPhoneNumber`, `Email`, and `CardEmail`
+            /// get rid of Card versions
+            var a = addresses.filter { $0.entity.name != CardAddress().entity.name }
+            var p = phoneNumbers.filter { $0.entity.name != CardPhoneNumber().entity.name }
+            var e = emails.filter { $0.entity.name != CardEmail().entity.name }
+            
+            /// filter out any non-Card-unique items that are already included
+            for add in c.addresses {
+                a = a.filter { $0.title != add.title }
+            }
+            for phone in c.phoneNumbers {
+                p = p.filter { $0.title != phone.title }
+            }
+            for email in c.emails {
+                e = e.filter { $0.title != email.title }
+            }
+            
+            allPossibles = a + p + e
+            
+            allAdded = c.addresses + c.phoneNumbers + c.emails
+        } else {
+            var arr: [NSManagedObject] = []
+            let allArrays: [[NSManagedObject]] = [addresses, phoneNumbers, emails]
+            for array in allArrays {
+                for x in array {
+                    arr.append(x)
+                }
+            }
+            allPossibles = arr
+            allAdded = []
+        }
+    }
     
     /// Call before updating `tableView` in `performDropWith`
     mutating func addItem(at indexPath: IndexPath) {
