@@ -72,7 +72,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         model = MarketplaceModel(creationManager: creationManager)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkSaveButton()
@@ -233,7 +233,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func fetchMatchingNeeds() {
         guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
         showSpinner()
-        NeedsDbFetcher().fetchNeeds(city: city, state: state, loc.country) { array in
+        NeedsDbFetcher().fetchAllNeeds(city: city, state: state, country: loc.country, maxCount: 20) { array in
             guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
             let newArray = array.filter { $0.category.lowercased() ==  cat}
             let finalArray = newArray.filter { $0.owner != AppDelegate.user.handle }
@@ -305,7 +305,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        
+
     }
 }
 
