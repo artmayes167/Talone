@@ -11,7 +11,53 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class HavesDbFetcher: HavesBase {
+protocol HavesObserver {
+    func observeMyHaves(completion: @escaping ([HavesBase.HaveItem]) -> Void)
+    func stopObserving()
+}
+
+class HavesDbFetcher: HavesBase, HavesObserver {
+    var listener: ListenerRegistration?
+
+    func observeMyHaves(completion: @escaping ([HavesBase.HaveItem]) -> Void) {
+        // Listen to metadata updates to receive a server snapshot even if
+        // the data is the same as the cached data.
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+
+        listener = db.collection("haves").whereField("createdBy", isEqualTo: uid)
+            .addSnapshotListener(includeMetadataChanges: true) { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error retreiving snapshot: \(error!)")
+                    return
+                }
+
+                for diff in snapshot.documentChanges {
+                    if diff.type == .modified {
+                        print("modified have: \(diff.document.data())")
+                    }
+                }
+
+                let source = snapshot.metadata.isFromCache ? "local cache" : "server"
+                print("Metadata: Data fetched from \(source)")
+                let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
+                    print(document)
+                    var item: HaveItem?
+                    do {
+                        item = try document.data(as: HaveItem.self)
+                    } catch {
+                        print(error)
+                    }
+                    return item
+                }
+                completion(haves)
+            }
+    }
+
+    func stopObserving() {
+        listener?.remove()
+    }
+
     func fetchHaves(matching needs: [String], _ city: String, _ state: String, _ country: String, completion: @escaping ([HaveItem]) -> Void) {
         let db = Firestore.firestore()
 
@@ -19,6 +65,7 @@ class HavesDbFetcher: HavesBase {
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country)
             .whereField("category", in: needs)
+            //.whereField("createdBy", isLessThan: "")
             .getDocuments { (snapshot, error) in
             if let error = error {
                 print(error)
@@ -88,39 +135,4 @@ class HavesDbFetcher: HavesBase {
             }
         }
     }
-
-    func observeMyHaves(completion: @escaping ([HaveItem]) -> Void) {
-        // Listen to metadata updates to receive a server snapshot even if
-        // the data is the same as the cached data.
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
-
-        db.collection("haves").whereField("createdBy", isEqualTo: uid)
-            .addSnapshotListener(includeMetadataChanges: true) { querySnapshot, error in
-                guard let snapshot = querySnapshot else {
-                    print("Error retreiving snapshot: \(error!)")
-                    return
-                }
-
-                for diff in snapshot.documentChanges {
-                    if diff.type == .modified {
-                        print("modified have: \(diff.document.data())")
-                    }
-                }
-
-                let source = snapshot.metadata.isFromCache ? "local cache" : "server"
-                print("Metadata: Data fetched from \(source)")
-                let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
-                    print(document)
-                    var item: HaveItem?
-                    do {
-                        item = try document.data(as: HaveItem.self)
-                    } catch {
-                        print(error)
-                    }
-                    return item
-                }
-                completion(haves)
-            }
-        }
 }

@@ -13,6 +13,7 @@ import FirebaseFirestoreSwift
 
 protocol CardsObserver {
     func observeCardsSentToMe(completion: @escaping ([CardsBase.FiBCardItem]) -> Void)
+    func stopObserving()
 }
 
 class CardsBase: FirebaseGeneric {
@@ -31,6 +32,11 @@ class CardsBase: FirebaseGeneric {
 }
 
 class CardsFetcher: CardsBase, CardsObserver {
+    var listener: ListenerRegistration?
+    
+    func stopObserving() {
+        listener?.remove()
+    }
 
     func observeCardsSentToMe(completion: @escaping ([FiBCardItem]) -> Void) {
 
@@ -39,7 +45,7 @@ class CardsFetcher: CardsBase, CardsObserver {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
 
-        db.collection("cards").whereField("createdFor", isEqualTo: uid)
+        listener = db.collection("cards").whereField("createdFor", isEqualTo: uid)
             .addSnapshotListener(includeMetadataChanges: true) { querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     print("Error retreiving snapshot: \(error!)")

@@ -16,6 +16,10 @@ class CardReceiverObserver {
     func startObserving() {
         observeCardReceptions()
     }
+    
+    func stopObserving() {
+        fetcher.stopObserving()
+    }
 
     func observeCardReceptions() {
 
