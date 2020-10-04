@@ -94,13 +94,14 @@ class ViewContactVC: UIViewController {
         notesView.text = interaction == nil ? cardTemplate?.personalNotes : cardInstance?.personalNotes
         
         let image = interaction == nil ? cardTemplate?.image : cardInstance?.image
-        var newImage: UIImage?
-        if let i = image {
-            newImage = UIImage(data: i)
+        if let imageFromStorage = image {
+            let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+            imageButton.imageView?.contentMode = .scaleAspectFill
+            imageButton.setImage(i, for: .normal)
         } else {
-            newImage = UIImage(named: "avatar")
+            let newImage = UIImage(named: "avatar")
+            imageButton.setImage(newImage!, for: .normal)
         }
-        imageButton.setImage(newImage!, for: .normal)
     }
     
     private func typeForClass(_ c: String?) -> CardElementTypes {

@@ -58,11 +58,12 @@ class CardTemplateCreatorVC: UIViewController {
             
             
             if let image = c.image {
-                if let i = UIImage(data: image) {
-                    imageButton.setImage(i, for: .normal)
-                    imageButton.isSelected = true
-                    imageButton.isEnabled = true
-                }
+                /// image has been previously added to template
+                let i = UIImage(data: image)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(i, for: .normal)
+                imageButton.isSelected = true
+                imageButton.isEnabled = true
             }
             titleTextField.text = c.title ?? ""
         } else {
@@ -96,13 +97,12 @@ class CardTemplateCreatorVC: UIViewController {
     @IBAction func touchedAddRemoveImage(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
-            let image = CoreDataImageHelper.shareInstance.fetchImage()
-            if let i = image?.image {
-                if let z = UIImage(data: i) {
-                    let resized = z.af.imageAspectScaled(toFill: imageButton.bounds.size)
-                    imageButton.setImage(resized, for: .normal)
+            if let im = CoreDataImageHelper.shareInstance.fetchImage() {
+                if let imageFromStorage = im.image {
+                    let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                    imageButton.imageView?.contentMode = .scaleAspectFill
+                    imageButton.setImage(i, for: .normal)
                 }
-                
             }
         } else {
             imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)

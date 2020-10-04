@@ -36,8 +36,10 @@ class ViewMyTemplateVC: UIViewController {
             templateTitleLabel.text = c.title
             handleLabel.text = c.userHandle
             
-            if let i = c.image, let d = UIImage(data: i) {
-                imageButton.setImage(d, for: .normal)
+            if let imageFromStorage = c.image {
+                let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(i, for: .normal)
             } else {
                 imageButton.setImage( #imageLiteral(resourceName: "avatar.png"), for: .normal)
             }

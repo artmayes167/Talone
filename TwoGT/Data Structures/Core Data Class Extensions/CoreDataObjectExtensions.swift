@@ -825,7 +825,7 @@ extension Interaction {
         let interaction = Interaction(entity: entity, insertInto: managedContext)
 
         interaction.referenceUserHandle = handle
-        interaction.templateName = template
+        interaction.templateName = template ?? "none"
 
         do {
           try managedContext.save()

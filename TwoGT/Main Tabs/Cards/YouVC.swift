@@ -50,14 +50,13 @@ enum AddressSections: Int, CaseIterable {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 62
         
-        let image = CoreDataImageHelper.shareInstance.fetchImage()
-        var newImage: UIImage?
-        if let i = image?.image {
-            newImage = UIImage(data: i)
-        } else {
-            newImage = UIImage(named: "avatar")
+        if let im = CoreDataImageHelper.shareInstance.fetchImage() {
+            if let imageFromStorage = im.image {
+                let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(i, for: .normal)
+            }
         }
-        imageButton.setImage(newImage!, for: .normal)
         
         handleLabel.text = AppDelegate.user.handle
     }
@@ -274,7 +273,7 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }
         
         let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
-        if let imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.2) {
+        if let imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3) {
             CoreDataImageHelper.shareInstance.saveImage(data: imageData)
             showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
             
@@ -285,8 +284,10 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
                     imageButton.setImage(i, for: .normal)
                 }
                 
+            } else {
+                view.makeToast("Image saving and rerendering failed")
+                imageButton.setImage(userPickedImage, for: .normal)
             }
-            imageButton.setImage(userPickedImage, for: .normal)
         }
         picker.dismiss(animated: true)
     }
