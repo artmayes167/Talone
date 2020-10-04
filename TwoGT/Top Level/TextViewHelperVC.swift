@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TextViewHelperVC: UIViewController, UITextViewDelegate {
+final class TextViewHelperVC: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var textViewIdentifierLabel: UILabel!
     @IBOutlet weak var textView: ActiveTextView!
@@ -27,7 +27,6 @@ class TextViewHelperVC: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         textViewIdentifierLabel.text = displayName
         textView.text = initialText
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {
@@ -37,5 +36,4 @@ class TextViewHelperVC: UIViewController, UITextViewDelegate {
         modifyingTextView?.text = textView.text
         dismiss(animated: true, completion: nil)
     }
-
 }

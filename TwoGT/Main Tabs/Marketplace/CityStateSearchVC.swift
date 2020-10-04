@@ -40,11 +40,11 @@ class CityStateSearchVC: UIViewController {
     
     let user = AppDelegate.user
     
-    var statesTVC: LocationPickerTVC?
-    var citiesTVC: LocationPickerTVC?
-    var states: [USState] = []
-    var allStates: [String] = []
-    var sections: Dictionary<String, [SearchLocation]> = [:]
+    private var statesTVC: LocationPickerTVC?
+    private var citiesTVC: LocationPickerTVC?
+    private var states: [USState] = []
+    private var allStates: [String] = []
+    private var sections: Dictionary<String, [SearchLocation]> = [:]
     
     var saveType: SaveType = .none
     var selectedLocation: [DefaultsSavedLocationKeys: String] = [:]
@@ -52,7 +52,7 @@ class CityStateSearchVC: UIViewController {
     var citySelector: LocationPickerTVC?
 
     /// To be set by presenting controller, defaults to `unwindToMarketplaceSearch`
-    var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
+    public var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
     
      // MARK: - View Life Cycle
     @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
@@ -71,10 +71,7 @@ class CityStateSearchVC: UIViewController {
         do {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            
-            //print(jsonData)
             let container = try decoder.decode([String: [String]].self, from: jsonData) as [String: [String]]
-            //print(container)
             container.forEach { (key, value) in
                 let st = USState(name: key, cities: value)
                 states.append(st)
@@ -85,9 +82,7 @@ class CityStateSearchVC: UIViewController {
             stateContainer.isHidden = true
             statesCoverView?.isHidden = true
             
-        } catch {
-            print(error.localizedDescription)
-        }
+        } catch { print(error.localizedDescription) }
         savedLocationTableView.reloadData()
         savedLocationView.isHidden = true
     }
@@ -123,7 +118,6 @@ class CityStateSearchVC: UIViewController {
         performSegue(withIdentifier: unwindSegueIdentifier, sender: nil)
     }
     
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField {
         case stateTextField:
@@ -156,15 +150,11 @@ class CityStateSearchVC: UIViewController {
         default:
             print("Unknown segue in CityStateSearchVC")
         }
-        
     }
     
     @IBAction func back(_ sender: Any) {
-        if let n = self.navigationController {
-            n.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
-        }
+        if let n = self.navigationController { n.popViewController(animated: true) }
+        else { dismiss(animated: true, completion: nil) }
     }
 }
 
@@ -227,9 +217,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
                 cityTextField.text = ""
                 cityInputView.isHidden = false
                 citySelector?.configure(list: arr.sorted(), itemType: .city)
-            } else {
-                fatalError()
-            }
+            } else { fatalError() }
         case .city:
             cityTextField.text = item
             cityContainer.isHidden = true
@@ -251,13 +239,9 @@ enum ItemType {
 }
 
 class LocationPickerTVC: UITableViewController {
-    var list: [String: [String]]  = [:]
-    var keys: [String] = [] {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    var type: ItemType = .undetermined
+    private var list: [String: [String]]  = [:]
+    private var keys: [String] = [] { didSet { tableView.reloadData() } }
+    private var type: ItemType = .undetermined
     var delegate: LocationPickerDelegate?
     
     func configure(list: [String], itemType: ItemType) {
@@ -268,13 +252,11 @@ class LocationPickerTVC: UITableViewController {
                 if var array = dict[String(firstChar)] {
                     array.append(string)
                     dict[String(firstChar)] = array
-                    //print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
                 } else { // first time
                     firstLettersArray.append(String(firstChar))
                     dict[String(firstChar)] = [string]
                 }
             } else { fatalError() }
-            
         }
         self.list = dict
         self.keys = firstLettersArray.sorted()

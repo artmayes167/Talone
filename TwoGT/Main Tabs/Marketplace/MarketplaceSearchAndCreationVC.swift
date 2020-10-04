@@ -39,9 +39,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
             creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
-            let title = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need" : "Create a New Have"
-            createNewNeedHaveButton.setTitle(title, for: .normal)
-            whereTextLabel.text = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?" : "Where Do You Have It?"
+            let title = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need".taloneCased() : "Create a New Have".taloneCased()
+            createNewNeedHaveButton.setTitle(title.taloneCased(), for: .normal)
+            let whereText = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?".taloneCased() : "Where Do You Have It?".taloneCased()
+            whereTextLabel.text = whereText.taloneCased()
         }
     }
 
@@ -131,7 +132,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
 
         } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
         }
     }
 
@@ -140,7 +141,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         if success {
             fetchMatchingNeeds()
         } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
         }
     }
 
@@ -149,7 +150,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         if success {
             fetchMatchingHaves()
         } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched")
+            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
         }
     }
 
@@ -170,17 +171,15 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             let needsTVC = segue.destination as! NeedsTVC
             needsTVC.delegate = self
         case "toNeedsCollection":
-            guard let s = sender as? [NeedsBase.NeedItem] else { fatalError() }
+            guard let n = sender as? [NeedsBase.NeedItem] else { fatalError() }
             guard let _ = creationManager.getLocationOrNil() else { fatalError() }
             let vc = segue.destination as! NeedsSearchDisplayVC
-            vc.needs = s
-            vc.creationManager = creationManager
+            vc.configure(needItems: n, creationManager: creationManager)
         case "toHavesCollection":
             guard let h = sender as? [HavesBase.HaveItem] else { fatalError() }
             guard let _ = creationManager.getLocationOrNil() else { fatalError() }
             let vc = segue.destination as! HavesSearchDisplayVC
-            vc.haves = h
-            vc.creationManager = creationManager
+            vc.configure(haveItems: h, creationManager: creationManager)
         default:
             print("Different segue")
         }
@@ -188,7 +187,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     /// Unwind segue here is responsible for dealing with creating and saving the search location
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
-
         if let s = segue.source as? CityStateSearchVC {
 
             var loc = s.selectedLocation
@@ -217,9 +215,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             let locType: String = ["home", "alternate"][type.rawValue]
             if let locations = user.searchLocations {
                 for s in (locations as [SearchLocation]) {
-                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType {
-                        return
-                    }
+                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType { return }
                 }
             }
             // Use core data
@@ -238,7 +234,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             let newArray = array.filter { $0.category.lowercased() ==  cat}
             let finalArray = newArray.filter { $0.owner != AppDelegate.user.handle }
             if finalArray.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
+                self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
                     self.hideSpinner()
                 }
             } else {
@@ -255,7 +251,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
             let finalArray = array.filter { $0.owner != AppDelegate.user.handle }
             if finalArray.isEmpty {
-                self.showOkayAlert(title: "", message: "There are no results for this category, in this city.  Try creating one!") { (_) in
+                self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
                     self.hideSpinner()
                 }
             } else {

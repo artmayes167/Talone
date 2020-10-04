@@ -12,37 +12,26 @@ import Toast_Swift
 import CoreData
 
 class ViewIndividualHaveVC: UIViewController {
-    var haveItem: HavesBase.HaveItem? {
-        didSet {
-            if isViewLoaded {
-                populateUI()
-            }
-        }
+    private var haveItem: HavesBase.HaveItem?
+    private var creationManager: PurposeCreationManager?
+    
+    public func configure(haveItem item: HavesBase.HaveItem, creationManager manager: PurposeCreationManager) {
+        haveItem = item
+        creationManager = manager
     }
-
-    // Manages live activity in the app
-    var creationManager: PurposeCreationManager?
-
+    
+     // MARK: -
     @IBOutlet weak var headerTitleLabel: UILabel!
-
     @IBOutlet weak var scrollView: UIScrollView!
-
     @IBOutlet weak var locationLabel: UILabel!
-
     @IBOutlet weak var doYouLabel: UILabel!
-
     @IBOutlet weak var needDescriptionTextView: UITextView!
-    @IBOutlet weak var personalNotesTextView: UITextView!
+    @IBOutlet weak var personalNotesTextView: UITextView! // editable
     @IBOutlet weak var joinThisHaveButton: DesignableButton!
 
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
         if let owner = haveItem?.owner {
             headerTitleLabel.text = String(format: "%@'s Have", owner)
         }
@@ -51,44 +40,30 @@ class ViewIndividualHaveVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         populateUI()
-
     }
 
     func populateUI() {
-        guard let n = haveItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
+        guard let h = haveItem, let cityState = creationManager?.getLocationOrNil() else { return }
         guard let t = creationManager?.currentCreationTypeString() else { fatalError() }
         let str = "Do you " + t + "..."
         doYouLabel.text = str
-        locationLabel.text = String(format: "%@ in %@", n, cityState.displayName())
+        locationLabel.text = String(format: "%@ in %@", h.category, cityState.displayName())
         needDescriptionTextView.text = haveItem?.description
+        
+        if let owner = haveItem?.owner {
+            let text = h.headline ?? ""
+            headerTitleLabel.text = String(format: "%@: \(text)", owner)
+        }
+        
         view.layoutIfNeeded()
     }
 
-    // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-
-        var contentInset: UIEdgeInsets = scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets()
-        scrollView.contentInset = contentInset
-    }
-
      // MARK: - Actions
-
-    @IBAction func showLinkedHaves(_ sender: Any) {
-    }
+    @IBAction func showLinkedHaves(_ sender: Any) { }
 
     @IBAction func joinThisHave(_ sender: Any) {
         // show textView for Headline and description (Required?)
         // Create a Have in the database linked to the current Have
-
         performSegue(withIdentifier: "toAddHeadline", sender: nil)
     }
 
@@ -96,11 +71,9 @@ class ViewIndividualHaveVC: UIViewController {
         showCompleteAndSendCardHelper(haveItem: haveItem)
     }
 
-    @IBAction func seeCard(_ sender: Any) {
-    }
+    @IBAction func seeCard(_ sender: Any) { }
     
     // MARK: - Navigation
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toAddHeadline" {
             guard let vc = segue.destination as? AddHaveToWatchVC else { fatalError() }
@@ -110,25 +83,11 @@ class ViewIndividualHaveVC: UIViewController {
     }
     
     @IBAction func unwindToViewIndividualHaveVC( _ segue: UIStoryboardSegue) {}
-
-//    private func joinTheHave() {
-//
-//        guard let have = haveItem else { return }
-//
-//        NeedsDbWriter().createNeedAndJoinHave(have, usingHandle: AppDelegate.user.handle ?? "Anonymous") { (error, needItem) in
-//            if error == nil {
-//                // Show success
-//                self.view.makeToast("Created a need and linked it to this Have", duration: 2.0, position: .center) {_ in
-//                }
-//                // Since we do not navigate away from this view, prevent user from creating another need.
-//                self.joinThisHaveButton.isEnabled = false
-//
-//            }
-//        }
-//
-//    }
 }
 
 extension ViewIndividualHaveVC: UITextViewDelegate {
-
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: personalNotesTextView, displayName: "personal notes", initialText: personalNotesTextView.text)
+        return false
+    }
 }

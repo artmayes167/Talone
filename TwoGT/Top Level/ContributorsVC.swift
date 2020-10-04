@@ -23,12 +23,8 @@ class ContributorsVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var contributors: [Contributor] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
+    private var contributors: [Contributor] = [] {
+        didSet { if isViewLoaded { collectionView.reloadData() } }
     }
 
     override func viewDidLoad() {
@@ -36,7 +32,7 @@ class ContributorsVC: UIViewController {
         getContributors()
     }
     
-    func getContributors() {
+    private func getContributors() {
         let path = Bundle.main.path(forResource: "contributors", ofType: "json")
         let url = URL.init(fileURLWithPath: path!)
         do {
@@ -59,7 +55,7 @@ class ContributorsVC: UIViewController {
         }
     }
     
-    func makeContributor(name: String, data: NSDictionary) -> Contributor {
+    private func makeContributor(name: String, data: NSDictionary) -> Contributor {
         let c = Contributor()
         c.name = name
         let d = data[name] as! NSDictionary
@@ -74,15 +70,11 @@ class ContributorsVC: UIViewController {
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
 }
 
 extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return contributors.count
@@ -91,9 +83,7 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let reuseId = "cell\(indexPath.item%2)"
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! ContributorCell
-       
         cell.configure(contributors[indexPath.row])
-       
         return cell
     }
     
@@ -104,10 +94,10 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {
-                    self.showOkayAlert(title: "Oops", message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309"), handler: nil)
+                    self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309").taloneCased(), handler: nil)
                 }
             } else {
-                self.showOkayAlert(title: "Oops", message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real..."), handler: nil)
+                self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real...").taloneCased(), handler: nil)
             }
         }
     }
@@ -120,7 +110,7 @@ extension ContributorsVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-class ContributorCell: UICollectionViewCell {
+final class ContributorCell: UICollectionViewCell {
     
     @IBOutlet weak var contributorImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -128,7 +118,6 @@ class ContributorCell: UICollectionViewCell {
     @IBOutlet weak var symbolImageView: DesignableImage!
     
     func configure(_ contributor: Contributor) {
-        
         if let url = contributor.imageUrl {
             if let imageURL = URL(string: url), let placeholder = UIImage(named: contributor.imageName) {
                 contributorImage.af.setImage(withURL: imageURL, placeholderImage: placeholder)
@@ -139,7 +128,6 @@ class ContributorCell: UICollectionViewCell {
                 contributorImage.image = image //aspectScaledToFitImage
             }
         }
-        
         nameLabel.text = contributor.name
         roleLabel.text = contributor.role
         symbolImageView.image = UIImage(named: contributor.symbolName)

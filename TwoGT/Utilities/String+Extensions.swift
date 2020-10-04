@@ -21,4 +21,8 @@ extension String {
     func pure() -> String {
         return self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+    // TODO: - set for customization
+    func taloneCased() -> String {
+        return self.lowercased()
+    }
 }

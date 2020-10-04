@@ -12,67 +12,38 @@ import Toast_Swift
 import CoreData
 
 class ViewIndividualNeedVC: UIViewController {
-    var needItem: NeedsBase.NeedItem? {
-        didSet {
-            if isViewLoaded {
-                populateUI()
-            }
-        }
-    }
+     // MARK: - Accessors
+    public var needItem: NeedsBase.NeedItem? { didSet { if isViewLoaded { populateUI() } } }
+    public var creationManager: PurposeCreationManager?
 
-    // Manages live activity in the app
-    var creationManager: PurposeCreationManager?
-
+     // MARK: - Outlets
     @IBOutlet weak var headerTitleLabel: UILabel!
-
     @IBOutlet weak var scrollView: UIScrollView!
-
     @IBOutlet weak var needTypeLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
-
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView!
 
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
-        if let owner = needItem?.owner {
-            headerTitleLabel.text = String(format: "%@'s Need", owner)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         populateUI()
-
     }
 
-    func populateUI() {
-        guard let n = needItem?.category, let cityState = creationManager?.getLocationOrNil() else { return }
-        needTypeLabel.text = n
+     // MARK: - private configuration
+    private func populateUI() {
+        guard let n = needItem, let cityState = creationManager?.getLocationOrNil() else { return }
+        needTypeLabel.text = n.category
         locationLabel.text = cityState.displayName()
-        needDescriptionTextView.text = needItem?.description
-    }
-
-    // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-
-        var contentInset: UIEdgeInsets = scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets()
-        scrollView.contentInset = contentInset
+        needDescriptionTextView.text = n.description
+        if let owner = needItem?.owner {
+            let text = n.headline ?? ""
+            headerTitleLabel.text = String(format: "%@: \(text)", owner)
+        }
     }
 
      // MARK: - Actions
@@ -82,11 +53,15 @@ class ViewIndividualNeedVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: Any) {
-        showCompleteAndSendCardHelper(needItem: needItem)
+        if let n = needItem {
+            showCompleteAndSendCardHelper(needItem: n)
+        } else {
+            print("-----------NO NEED ITEM!")
+            fatalError()
+        }
     }
     
-    @IBAction func saveNotes(_ sender: Any) {
-    }
+    @IBAction func saveNotes(_ sender: Any) {} // TODO: 
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -100,6 +75,10 @@ class ViewIndividualNeedVC: UIViewController {
     @IBAction func unwindToViewIndividualNeedVC( _ segue: UIStoryboardSegue) {}
 }
 
+ // MARK: - UITextViewDelegate
 extension ViewIndividualNeedVC: UITextViewDelegate {
-
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: personalNotesTextView, displayName: "personal notes".taloneCased(), initialText: personalNotesTextView.text)
+        return false
+    }
 }

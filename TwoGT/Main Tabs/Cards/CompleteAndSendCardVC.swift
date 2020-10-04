@@ -115,7 +115,7 @@ class CompleteAndSendCardVC: UIViewController {
         // If no template has been selected
         if !(templateTextField.text == "none") {
             let cards: [Card] = AppDelegate.user.cardTemplates!
-            let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text }
+            let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text?.lowercased() }
             if !filteredCards.isEmpty {
                 return filteredCards.first
             }

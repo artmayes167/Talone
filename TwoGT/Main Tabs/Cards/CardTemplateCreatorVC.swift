@@ -124,13 +124,13 @@ class CardTemplateCreatorVC: UIViewController {
                 fatalError()
             }
             let aspectScaledToFitImage = i.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
-            imageData = aspectScaledToFitImage.jpegData(compressionQuality: 0.3)
+            imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3)
         }
         
         /// Editing
         if let c = card {
             
-            c.title = titleTextField.text!
+            c.title = titleTextField.text?.lowercased()
             c.image = imageData
             
             if let all = model.allAdded {

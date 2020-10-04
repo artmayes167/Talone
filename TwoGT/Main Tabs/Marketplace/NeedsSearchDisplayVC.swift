@@ -10,21 +10,22 @@ import UIKit
 import AlamofireImage
 
 class NeedsSearchDisplayVC: UIViewController {
+    
+    private var creationManager: PurposeCreationManager?
+    private var needs: [NeedsBase.NeedItem] = []
+    public func configure(needItems: [NeedsBase.NeedItem], creationManager manager: PurposeCreationManager) {
+        self.needs = needItems
+        self.creationManager = manager
+        if isViewLoaded { collectionView.reloadData() }
+    }
+    
+     // MARK: -
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
-    @IBOutlet weak var collectionView: UICollectionView!
     
-    var creationManager: PurposeCreationManager?
-    var needs: [NeedsBase.NeedItem] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
-    }
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var cityStateLabel: UILabel!
-    
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -39,7 +40,7 @@ class NeedsSearchDisplayVC: UIViewController {
         populateUI()
     }
     
-    func populateUI() {
+    private func populateUI() {
         guard let c = creationManager else { fatalError() }
         categoryLabel.text = c.getCategory()?.rawValue.capitalized
         if c.getLocationOrNil() != nil {
@@ -48,8 +49,6 @@ class NeedsSearchDisplayVC: UIViewController {
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewNeed" {
             guard let vc = segue.destination as? ViewIndividualNeedVC, let n = sender as? NeedsBase.NeedItem else { fatalError() }
@@ -62,11 +61,7 @@ class NeedsSearchDisplayVC: UIViewController {
 }
 
 extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return needs.count
@@ -74,9 +69,7 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PurposeCell
-       
         cell.configure(needs[indexPath.item])
-       
         return cell
     }
     
@@ -99,7 +92,6 @@ class PurposeCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     
     func configure(_ need: NeedsBase.NeedItem) {
-        
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: need.category.lowercased())!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage

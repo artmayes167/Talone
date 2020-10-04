@@ -10,8 +10,9 @@ import UIKit
 import Firebase
 import MessageUI
 
-class InviteATesterVC: UIViewController {
+final class InviteATesterVC: UIViewController {
 
+    /// custom view -- must call `.setTitleText()`
     @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -21,27 +22,7 @@ class InviteATesterVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        pageHeaderView.setTitleText("invite a tester")
-        
-        // Notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    // MARK: - Keyboard Notifications
-    @objc func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-
-        var contentInset: UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        scrollView.contentInset = contentInset
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset: UIEdgeInsets = UIEdgeInsets()
-        scrollView.contentInset = contentInset
+        pageHeaderView.setTitleText("invite a tester".taloneCased())
     }
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -49,42 +30,39 @@ class InviteATesterVC: UIViewController {
     }
     
     @IBAction func sendToArt(_ sender: UIButton) {
+        let nopeTitle = "nope".taloneCased()
+        let nopeMessage = "try again?".taloneCased()
         guard let e = emailTextField.text?.pure(), let n = realNameTextField.text?.pure() else {
-            showOkayAlert(title: "nope", message: "try again?", handler: nil)
+            showOkayAlert(title: nopeTitle, message: nopeMessage, handler: nil)
             return
         }
         
         if !e.contains("@") || !e.contains(".") {
-            showOkayAlert(title: "nope", message: "try again?", handler: nil)
+            showOkayAlert(title: nopeTitle, message: nopeMessage, handler: nil)
+            return
+        }
+        if !(n.endIndex > "aaa".endIndex) {
+            showOkayAlert(title: nopeTitle, message: nopeMessage, handler: nil)
             return
         }
         
-        if !(n.endIndex > "aaa".endIndex) {
-            showOkayAlert(title: "nope", message: "try again?", handler: nil)
-            return
-        }
         let comments = personalNotesTextView.text.pure()
         let str = String(format: "Invitee email: %@ \n Invitee name: %@ \n Comments: %@", e, n, comments)
         launchEmail(body: str)
-        
     }
-
 }
 
 // MARK: -
 extension InviteATesterVC: MFMailComposeViewControllerDelegate {
-
    func launchEmail(body: String) {
-
-    let emailTitle = "\(String(describing: AppDelegate.user.handle)) Inviting A Tester!"
-       let toRecipents = ["artmayes167@icloud.com"]
-       let mc: MFMailComposeViewController = MFMailComposeViewController()
-       mc.mailComposeDelegate = self
-       mc.setSubject(emailTitle)
-       mc.setMessageBody(body, isHTML: false)
-       mc.setToRecipients(toRecipents)
-
-       self.present(mc, animated: true, completion: nil)
+        let emailTitle = "\(String(describing: AppDelegate.user.handle)) Inviting A Tester!"
+        let toRecipents = ["artmayes167@icloud.com"]
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setSubject(emailTitle)
+        mc.setMessageBody(body, isHTML: false)
+        mc.setToRecipients(toRecipents)
+        self.present(mc, animated: true, completion: nil)
    }
 
    func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
@@ -103,7 +81,14 @@ extension InviteATesterVC: MFMailComposeViewControllerDelegate {
            break
        }
        self.dismiss(animated: true) {
-           self.showOkayAlert(title: "", message: message, handler: nil)
+        self.showOkayAlert(title: "", message: message.taloneCased(), handler: nil)
        }
    }
+}
+
+extension InviteATesterVC: UITextViewDelegate {
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: personalNotesTextView, displayName: "personal notes".taloneCased(), initialText: "")
+        return false
+    }
 }

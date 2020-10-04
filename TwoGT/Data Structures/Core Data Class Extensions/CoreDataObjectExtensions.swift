@@ -129,7 +129,7 @@ extension Card {
                                               insertInto: managedContext) as? Card else { fatalError() }
         c.uid = AppDelegate.user.uid
         c.userHandle = AppDelegate.user.handle
-        c.title = title
+        c.title = title.lowercased()
         return c
     }
 }
@@ -164,7 +164,7 @@ extension CardTemplateInstance {
             instance.userHandle = c.userHandle // used for display
             instance.senderUserHandle = sender
             instance.receiverUserHandle = receiver
-            instance.title = c.title
+            instance.title = c.title?.lowercased()
             instance.personalNotes = c.personalNotes
             
             // addresses, phones, and emails are fetched by title
@@ -175,7 +175,7 @@ extension CardTemplateInstance {
             instance.userHandle = c.userHandle
             instance.receiverUserHandle = sender // used for display
             instance.senderUserHandle = receiver
-            instance.title = c.title
+            instance.title = c.title?.lowercased()
             CardAddress.arrayFrom(dictionary: c.addresses)
             CardEmail.arrayFrom(dictionary: c.emails)
             CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
@@ -388,12 +388,12 @@ extension CardEmail {
         }
         
         if let e = email {
-            cardEmail.title = e.title
+            cardEmail.title = e.title?.lowercased()
             cardEmail.emailString = e.emailString
             cardEmail.uid = e.uid
         } else if !dictionary.isEmpty {
             let e = dictionary
-            cardEmail.title = e["title"]
+            cardEmail.title = e["title"]?.lowercased()
             cardEmail.emailString = e["emailString"]
             cardEmail.uid = e["uid"]
         } else {
@@ -439,7 +439,7 @@ extension Email {
                                               insertInto: managedContext) as? Email else {
                                                 fatalError()
         }
-        email.title = name
+        email.title = name.lowercased()
         email.emailString = emailAddress
         email.uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue)
 
@@ -513,7 +513,7 @@ extension CardAddress {
         cardAddress.templateTitle = title  // unique
         /// from thisUser
         if let a = address {
-            cardAddress.title = a.title
+            cardAddress.title = a.title?.lowercased()
             cardAddress.street1 = a.street1
             cardAddress.street2 = a.street2
             cardAddress.city = a.city
@@ -524,7 +524,7 @@ extension CardAddress {
             /// from otherUser
         } else if !dictionary.isEmpty {
             let dict = dictionary
-            cardAddress.title = dict["title"]
+            cardAddress.title = dict["title"]?.lowercased()
             cardAddress.street1 =  dict["street1"]
             cardAddress.street2 = dict["street2"]
             cardAddress.city =  dict["city"]
@@ -545,7 +545,7 @@ extension CardAddress {
     
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
-        dict["title"] = title
+        dict["title"] = title?.lowercased()
         dict["street1"] = street1
         dict["street2"] = street2
         dict["city"] = city
@@ -615,12 +615,12 @@ extension CardPhoneNumber {
         cardNum.templateTitle = title
         
         if let p = phoneNumber {
-            cardNum.title = p.title
+            cardNum.title = p.title?.lowercased()
             cardNum.number = p.number
             cardNum.uid = p.uid
         } else if !dictionary.isEmpty {
             let p = dictionary
-            cardNum.title = p["title"]
+            cardNum.title = p["title"]?.lowercased()
             cardNum.number = p["number"]
             cardNum.uid = p["uid"]
         }
@@ -637,7 +637,7 @@ extension CardPhoneNumber {
     /// Template title not included
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
-        dict["title"] = title
+        dict["title"] = title?.lowercased()
         dict["number"] = number
         dict["uid"] = uid // from owner
         return dict
@@ -664,14 +664,15 @@ extension NeedItem {
                                               insertInto: managedContext) as? NeedItem else {
                                                 fatalError()
         }
-        needItem.setValue(item.category, forKeyPath: "category")
-        needItem.setValue(item.description, forKeyPath: "desc")
-        needItem.setValue(item.validUntil.dateValue(), forKeyPath: "validUntil")
-        needItem.setValue(item.owner, forKeyPath: "owner")
-        needItem.setValue(item.createdBy, forKeyPath: "createdBy")
-        needItem.setValue(item.createdAt?.dateValue(), forKeyPath: "createdAt")
-        needItem.setValue(item.modifiedAt?.dateValue(), forKeyPath: "modifiedAt")
-        needItem.setValue(item.id, forKeyPath: "id")
+        needItem.headline = item.headline
+        needItem.category = item.category
+        needItem.desc = item.description
+        needItem.validUntil = item.validUntil.dateValue()
+        needItem.owner = item.owner
+        needItem.createdBy = item.createdBy
+        needItem.createdAt = item.createdAt?.dateValue()
+        needItem.modifiedAt = item.modifiedAt?.dateValue()
+        needItem.id = item.id
         do {
           try managedContext.save()
             return needItem
@@ -728,6 +729,7 @@ extension HaveItem {
                                               insertInto: managedContext) as? HaveItem else {
                                                 fatalError()
         }
+        haveItem.headline = item.headline
         haveItem.category = item.category
         haveItem.desc = item.description
         haveItem.validUntil = item.validUntil?.dateValue()
@@ -825,7 +827,7 @@ extension Interaction {
         let interaction = Interaction(entity: entity, insertInto: managedContext)
 
         interaction.referenceUserHandle = handle
-        interaction.templateName = template ?? "none"
+        interaction.templateName = template?.lowercased() ?? "none"
 
         do {
           try managedContext.save()

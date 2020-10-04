@@ -8,16 +8,12 @@
 
 import UIKit
 
-class CreativeCommonsVC: UIViewController {
+final class CreativeCommonsVC: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     var contributors: [Contributor] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
+        didSet { if isViewLoaded { collectionView.reloadData() } }
     }
 
     override func viewDidLoad() {
@@ -77,10 +73,10 @@ extension CreativeCommonsVC: UICollectionViewDelegate, UICollectionViewDataSourc
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {
-                    self.showOkayAlert(title: "Oops", message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309"), handler: nil)
+                    self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309").taloneCased(), handler: nil)
                 }
             } else {
-                self.showOkayAlert(title: "Oops", message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real..."), handler: nil)
+                self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real...").taloneCased(), handler: nil)
             }
         }
     }
@@ -102,6 +98,6 @@ class CreativeCommonsCell: UICollectionViewCell {
         if let image = UIImage(named: contributor.symbolName) {
             symbolImageView.image = image
         }
-        nameLabel.text = contributor.name
+        nameLabel.text = contributor.name.taloneCased()
     }
 }

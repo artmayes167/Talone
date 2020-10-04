@@ -10,6 +10,7 @@
 // owner will be the user's handle-- primarily used for display, and in-app unique identification for non-FiB objects
 // taloneEmail unique, and used for account logIn
 // createdBy is the uid
+// titles for addresses, emails, and phone numbers are all stored lowercased
 
 
 

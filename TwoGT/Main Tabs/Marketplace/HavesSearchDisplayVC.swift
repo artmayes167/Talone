@@ -14,24 +14,22 @@ class HavesSearchDisplayVC: UIViewController {
     let numberOfItemsInRow = CGFloat(1)
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var creationManager: PurposeCreationManager?
-    var haves: [HavesBase.HaveItem] = [] {
-        didSet {
-            if isViewLoaded {
-                collectionView.reloadData()
-            }
-        }
+    private var creationManager: PurposeCreationManager?
+    private var haves: [HavesBase.HaveItem] = []
+    public func configure(haveItems: [HavesBase.HaveItem], creationManager manager: PurposeCreationManager) {
+        self.haves = haveItems
+        self.creationManager = manager
+        if isViewLoaded { collectionView.reloadData() }
     }
+    
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var cityStateLabel: UILabel!
-    
     
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,13 +46,10 @@ class HavesSearchDisplayVC: UIViewController {
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "viewHave" {
-            guard let vc = segue.destination as? ViewIndividualHaveVC, let h = sender as? HavesBase.HaveItem else { fatalError() }
-            vc.haveItem = h
-            vc.creationManager = creationManager
+            guard let vc = segue.destination as? ViewIndividualHaveVC, let h = sender as? HavesBase.HaveItem, let c = creationManager else { fatalError() }
+            vc.configure(haveItem: h, creationManager: c)
         }
     }
     
@@ -62,21 +57,15 @@ class HavesSearchDisplayVC: UIViewController {
 }
 
 extension HavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return haves.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HaveCell
-       
         cell.configure(haves[indexPath.item])
-       
         return cell
     }
     
@@ -94,12 +83,10 @@ extension HavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
 }
 
 class HaveCell: UICollectionViewCell {
-    
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
     func configure(_ have: HavesBase.HaveItem) {
-        
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: have.category.lowercased())!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage

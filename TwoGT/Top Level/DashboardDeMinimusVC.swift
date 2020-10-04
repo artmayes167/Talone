@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DashboardDeMinimusVC: UIViewController {
+final class DashboardDeMinimusVC: UIViewController {
     
     var timer: Timer?
     var adminCounter = 0
@@ -19,7 +19,7 @@ class DashboardDeMinimusVC: UIViewController {
                 self.adminCounter = 0
                 self.timer?.invalidate()
                 
-                showAdminPasswordAlert(title: "Admin", message: "") { _ in
+                showAdminPasswordAlert(title: "Admin".taloneCased(), message: "") { _ in
                     self.performSegue(withIdentifier: "toAdmin", sender: nil)
                 }
             }
@@ -35,6 +35,5 @@ class DashboardDeMinimusVC: UIViewController {
         timer?.invalidate()
     }
     
-    @IBAction func unwindToDashboardDeMinimus( _ segue: UIStoryboardSegue) {
-    }
+    @IBAction func unwindToDashboardDeMinimus( _ segue: UIStoryboardSegue) { }
 }

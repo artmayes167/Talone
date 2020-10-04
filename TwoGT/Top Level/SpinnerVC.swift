@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SpinnerVC: UIViewController {
+final class SpinnerVC: UIViewController {
     
     @IBOutlet weak var spinner: DesignableImage!
     @IBOutlet weak var spinnerWidthConstraint: NSLayoutConstraint!
@@ -45,21 +45,15 @@ class SpinnerVC: UIViewController {
         
         lookLabel.alpha = 0.1
         swipeLabel.alpha = 0
-        UIView.animate(withDuration: 3) {
-            self.lookLabel.alpha = 1
-        } completion: { (_) in
-            UIView.animate(withDuration: 3) {
-                self.swipeLabel.alpha = 1
-            }
+        UIView.animate(withDuration: 3) { self.lookLabel.alpha = 1 }
+            completion: { (_) in
+                UIView.animate(withDuration: 3) { self.swipeLabel.alpha = 1 }
         }
     }
     
     override func didMove(toParent parent: UIViewController?) {
-        if parent == nil {
-            spinner.layer.removeAllAnimations()
-        } else {
-            animate()
-        }
+        if parent == nil { spinner.layer.removeAllAnimations() }
+        else { animate() }
     }
     
     @IBAction func dismiss(_ sender: UISwipeGestureRecognizer?) {
@@ -67,17 +61,4 @@ class SpinnerVC: UIViewController {
         self.view.removeFromSuperview()
         self.removeFromParent()
     }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

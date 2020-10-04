@@ -105,7 +105,6 @@ class PurposeCreationManager: NSObject {
 
     func setCategory(_ type: NeedType) {
         category = type
-
     }
 
     func getCategory() -> NeedType? {
@@ -145,9 +144,8 @@ class PurposeCreationManager: NSObject {
         self.desc = description
         if let h = headline, !h.isEmpty, let d = description, !d.isEmpty {
             return true
-        } else {
-            return false
         }
+        return false
     }
 
     func getHeadline() -> String? {
@@ -207,7 +205,6 @@ class PurposeCreationManager: NSObject {
             item.desc = desc
             item.headline = headline
             purpose.addToNeeds(n)
-
             print("---------Preparing purpose for save, successfully: \(purpose.needs!.contains(n))")
             return true
         case .have:
@@ -216,7 +213,6 @@ class PurposeCreationManager: NSObject {
             item.desc = desc
             item.headline = headline
             purpose.addToHaves(h)
-
             print("---------Preparing purpose for save, successfully: \(purpose.haves!.contains(h))")
             return true
         default:
@@ -230,5 +226,4 @@ class PurposeCreationManager: NSObject {
         if !prepareForSave() { return nil }
         return purpose
     }
-
 }
