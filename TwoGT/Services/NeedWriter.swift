@@ -14,12 +14,14 @@ import FirebaseFirestoreSwift
 class FirebaseGeneric {
 
     enum GenericFirebaseError: Error {
-        case noAuthUser, unauthorized, undefined
+        case noAuthUser, alreadyTaken, alreadyOwned, unauthorized, undefined
         var errorDescription: String? {
             switch self {
-                case .noAuthUser: return "No authenticated user"
-                case .unauthorized: return "User is not the creator of this document"
-                case .undefined: return "Unspecified error"
+            case .noAuthUser: return "No authenticated user"
+            case .alreadyTaken: return "Name is already reserved by someone else"
+            case .alreadyOwned: return "Name is already owned by the caller"
+            case .unauthorized: return "User is not the creator of this document"
+            case .undefined: return "Unspecified error"
             }
         }
     }
