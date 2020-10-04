@@ -38,12 +38,14 @@ class HavesDbFetcher: HavesBase {
         }
     }
 
-    func fetchAllHaves(in city: String, _ state: String, _ country: String, completion: @escaping ([HaveItem]) -> Void) {
+    func fetchAllHaves(city: String, _ state: String, _ country: String, maxCount: Int, completion: @escaping ([HaveItem]) -> Void) {
         let db = Firestore.firestore()
 
         db.collection("haves").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country)
+            .limit(to: maxCount)
+            .order(by: "modifiedAt", descending: true)
             .getDocuments { (snapshot, error) in
             if let error = error {
                 print(error)
