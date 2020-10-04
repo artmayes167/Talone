@@ -236,7 +236,7 @@ extension CardTemplateInstance {
                 }
             }
         } else {
-            _ = Interaction.create(newPersonHandle: codableInstance.senderUserHandle, templateName: nil)
+            _ = Interaction.create(newPersonHandle: codableInstance.senderUserHandle, templateName: codableInstance.title)
         }
         
         let card = CardTemplateInstance.create(card: nil, codableCard: codableInstance, fromHandle: codableInstance.senderUserHandle, toHandle: codableInstance.receiverUserHandle, message: codableInstance.comments)
