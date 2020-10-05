@@ -14,23 +14,17 @@ class MyHavesSearchDisplayVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageHeader: PageHeader!
 
-    var purposes: Set<Purpose>? = {
-        return AppDelegate.user.purposes as? Set<Purpose>
-    }()
-
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
 
-    var haves: [Have] = []
+    var haves: [Have] = CoreDataGod.user.haves ?? []
 
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
-        getHaves()                  // load from CoreData
         startObservingHaveChanges() // sync with Firebase
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -38,32 +32,9 @@ class MyHavesSearchDisplayVC: UIViewController {
         populateUI()
     }
 
-    func getHaves() {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<Have> = Have.fetchRequest()
-        do {
-            let u = try managedContext.fetch(fetchRequest)
-
-            haves = u.filter {
-                if let item = $0.haveItem {
-                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
-                } else {
-                    print("----------No haveItem found on have")
-                    return false
-                }
-            }
-        } catch _ as NSError {
-          fatalError()
-        }
-        if isViewLoaded {
-            collectionView.reloadData()
-            populateUI()
-        }
-    }
-
     func populateUI() {
         pageHeader.setTitleText("All \(haves.count) of My Haves")
+        collectionView.reloadData()
     }
 
     // MARK: - Navigation
@@ -77,7 +48,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
 
     @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-        getHaves()
+        
     }
 
     private func startObservingHaveChanges() {
@@ -85,23 +56,23 @@ class MyHavesSearchDisplayVC: UIViewController {
         HavesDbFetcher().observeMyHaves { [self] fibHaveItems in
 
             var addedNeedOwners = [String]()
-            var changedHaves = [HaveItem]()
+            var changedHaves = [Have]()
             var isRedrawRequired = false
 
             // Cross-reference needs
             for have in self.haves {
-                for fibHave in fibHaveItems where fibHave.id == have.haveItem?.id {
-                    if let needStubs = fibHave.needs, let haveItem = have.haveItem {
+                for fibHave in fibHaveItems where fibHave.id == have.id {
+                    if let needStubs = fibHave.needs {
                         var isChanged = false
-                        changedHaves.append(haveItem)   // for showing on UI
+                        changedHaves.append(have)   // for showing on UI
 
-                        let cdNeeds = have.childNeeds
+                        let cdNeeds = have.childNeeds ?? []
 
                         // First determine if there are any new needStubs that are missing from CD
                         // These are the people that have linked with this have.
                         for needStub in needStubs {
                             var found = false
-                            for cdNeed in cdNeeds where cdNeed.needItem?.id == needStub.id {
+                            for cdNeed in cdNeeds where cdNeed.id == needStub.id {
                                 found = true
                                 break
                             }
@@ -109,7 +80,7 @@ class MyHavesSearchDisplayVC: UIViewController {
                                 // create a new need (gets appended to childItems implicitly)
                                 var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
                                 fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
-                                let n = Need.createNeed(item: NeedItem.createNeedItem(item: fibNeed))
+                                let n = Need.createNeed(item: fibNeed)
                                 n.parentHaveItemId = fibHave.id
                                 addedNeedOwners.append(fibNeed.owner)
                                 isChanged = true
@@ -120,7 +91,7 @@ class MyHavesSearchDisplayVC: UIViewController {
                         // These are the people that have removed the link with this have.
                         for cdNeed in cdNeeds {
                             var found = false
-                            for needStub in needStubs where needStub.id == cdNeed.needItem?.id {
+                            for needStub in needStubs where needStub.id == cdNeed.id {
                                 found = true
                                 break
                             }

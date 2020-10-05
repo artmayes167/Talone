@@ -13,7 +13,7 @@ class CompleteAndSendCardVC: UIViewController {
     
     private var templates: [String] {
         get {
-            var possibles: [String] = ["none"]
+            var possibles: [String] = []
             var cards: [CardTemplate] = []
             
             let c = CoreDataGod.user.cardTemplates ?? [] // [Card]
@@ -24,7 +24,7 @@ class CompleteAndSendCardVC: UIViewController {
         
             let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.templateTitle }
             for t in mappedTemplates {
-                if !(t == "") && !(t == "none") { possibles.append(t) }
+                possibles.append(t)
             }
             
             return possibles.sorted()
@@ -65,16 +65,33 @@ class CompleteAndSendCardVC: UIViewController {
             }
         }
     }
+    private var cardInstance: CardTemplateInstance? {
+        didSet {
+            if let i = cardInstance {
+                // check if a received card, and get
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactUid == i.uid }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                    // check if a sent card, and get
+                } else if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == i.receiverUserHandle }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                } else {
+                    fatalError()
+                }
+            }
+        }
+    }
     
-    private var contact: Contact?
+    private var contact: Contact? // this should be set, no matter what
     
-    private var received: Bool?
-    
-    /// Four possible combinations: received=true&contact, received=false&contact, only haveItem, only needItem
-    func configure(received: Bool? = nil, contact: Contact? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
-        if received == nil && contact == nil && haveItem == nil && needItem == nil { fatalError() }
-        self.received = received
-        self.contact = contact
+    func configure(card: CardTemplateInstance? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+        if card == nil && haveItem == nil && needItem == nil { fatalError() }
+        self.cardInstance = card
         self.haveItem = haveItem
         self.needItem = needItem
         if isViewLoaded {

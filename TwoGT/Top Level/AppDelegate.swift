@@ -42,7 +42,7 @@ class AppDelegateHelper: NSObject {
         if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid
             _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str, uid: uid)
-            _ = CardTemplate.create(cardCategory: "none", image: nil)
+            _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
             return user
         } else {
             fatalError()

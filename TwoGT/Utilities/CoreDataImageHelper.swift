@@ -13,7 +13,6 @@ class CoreDataImageHelper: NSObject {
     static let shareInstance = CoreDataImageHelper()
     
     func saveImage(data: Data) {
-        
         let imageInfo = ImageInfo(context: CoreDataGod.managedContext)
         imageInfo.image = data
         imageInfo.handle = CoreDataGod.user.handle

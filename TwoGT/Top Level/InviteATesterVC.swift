@@ -55,7 +55,7 @@ final class InviteATesterVC: UIViewController {
 // MARK: -
 extension InviteATesterVC: MFMailComposeViewControllerDelegate {
    func launchEmail(body: String) {
-        let emailTitle = "\(String(describing: AppDelegate.user.handle)) Inviting A Tester!"
+        let emailTitle = "\(String(describing: AppDelegateHelper.user.handle)) Inviting A Tester!"
         let toRecipents = ["artmayes167@icloud.com"]
         let mc: MFMailComposeViewController = MFMailComposeViewController()
         mc.mailComposeDelegate = self

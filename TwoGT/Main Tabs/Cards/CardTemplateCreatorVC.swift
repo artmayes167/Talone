@@ -25,12 +25,13 @@ class CardTemplateCreatorVC: UIViewController {
     
     
      // MARK: - Data
-    private var card: Card?
+    private var card: CardTemplate?
     private var canEditTitle: Bool {
         return card == nil
     }
+    private var potentialImage: UIImage?
     
-    func configure(card: Card?) {
+    func configure(card: CardTemplate?) {
         self.card = card
     }
     
@@ -41,16 +42,17 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.rowHeight = UITableView.automaticDimension
         availableTableView.estimatedRowHeight = 62
         
-        let image = CoreDataImageHelper.shareInstance.fetchImage()
-        if let _ = image?.image {
+        let images = CoreDataImageHelper.shareInstance.fetchAllImages()
+        if let i = images?.first?.image {
             imageButton.isEnabled = true
             plusImage.isHidden = false
+            potentialImage = UIImage(data: i)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
         } else {
             imageButton.isEnabled = false
             plusImage.isHidden = true
         }
         
-        handleLabel.text = AppDelegate.user.handle
+        handleLabel.text = AppDelegateHelper.user.handle
         
         
         if let c = card {
@@ -59,13 +61,13 @@ class CardTemplateCreatorVC: UIViewController {
             
             if let image = c.image {
                 /// image has been previously added to template
-                let i = UIImage(data: image)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                potentialImage = UIImage(data: image)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
-                imageButton.setImage(i, for: .normal)
+                imageButton.setImage(potentialImage, for: .normal)
                 imageButton.isSelected = true
                 imageButton.isEnabled = true
             }
-            titleTextField.text = c.title ?? ""
+            titleTextField.text = c.templateTitle
         } else {
             model.set(card: nil)
         }
@@ -82,11 +84,11 @@ class CardTemplateCreatorVC: UIViewController {
     func typeForClass(_ c: String?) -> CardElementTypes {
         guard let name = c else { fatalError() }
         switch name {
-        case Address().entity.name, CardAddress().entity.name:
+        case Address().entity.name:
             return .address
-        case PhoneNumber().entity.name, CardPhoneNumber().entity.name:
+        case PhoneNumber().entity.name:
             return .phoneNumber
-        case Email().entity.name, CardEmail().entity.name:
+        case Email().entity.name:
             return .email
         default:
             fatalError()
@@ -97,104 +99,82 @@ class CardTemplateCreatorVC: UIViewController {
     @IBAction func touchedAddRemoveImage(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
-            if let im = CoreDataImageHelper.shareInstance.fetchImage() {
-                if let imageFromStorage = im.image {
-                    let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
-                    imageButton.imageView?.contentMode = .scaleAspectFill
-                    imageButton.setImage(i, for: .normal)
-                }
+            if potentialImage != nil {
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(potentialImage, for: .normal)
+            } else {
+                showOkayOrCancelAlert(title: "hmm".taloneCased(), message: "no images have been set. Would you like to add one?".taloneCased()) { (_) in
+                    self.performSegue(withIdentifier: "unwindToCreation", sender: nil)
+                } cancelHandler: { (_) in }
+                imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
             }
-        } else {
-            imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
         }
         
     }
     
     @IBAction func save(_ sender: UIButton) {
         
-        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded?.isEmpty ?? true) {
-            showOkayAlert(title: "Nope", message: "Add a title and some contact information", handler: nil)
+        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded.isEmpty) {
+            showOkayAlert(title: "Nope", message: "Add a title and some contact information. a default template with no information already exists for you, titled \(DefaultTitles.noDataTemplate.rawValue)", handler: nil)
             return
         }
-        
-        /// get the image if user has chosen to use it
         var imageData: Data?
+        /// get the image if user has chosen to use it
         if imageButton.isSelected {
-            guard let i = imageButton.image(for: .normal) else {
-                fatalError()
-            }
-            let aspectScaledToFitImage = i.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
+            let aspectScaledToFitImage = potentialImage!.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
             imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3)
         }
         
         /// Editing
         if let c = card {
             
-            c.title = titleTextField.text?.lowercased()
+            c.templateTitle = titleTextField.text!.lowercased()
             c.image = imageData
             
-            if let all = model.allAdded {
-                for x in all {
-                    switch x.entity.name {
-                    case Address().entity.name:
-                        CardAddress.create(title: c.title!, address: x as? Address)
-                    case PhoneNumber().entity.name:
-                        CardPhoneNumber.create(title: c.title!, phoneNumber: x as? PhoneNumber)
-                    case Email().entity.name:
-                        CardEmail.create(title: c.title!, email: x as? Email)
-                    default:
-                        print("------------ Old entity in All Added:" + x.entity.name!)
+            let all = model.allAdded
+            
+            // remove addresses from object that have been removed
+            for x in c.allAddresses() {
+                if !all.contains(x) {
+                    if let a = x as? Address {
+                        c.removeFromAddresses(a)
+                    } else if let p = x as? PhoneNumber {
+                        c.removeFromPhoneNumbers(p)
+                    } else if let e = x as? Email {
+                        c.removeFromEmails(e)
                     }
                 }
             }
             
-            /// and remove the old added if they were removed
-            for x in model.allPossibles! {
-                switch x.entity.name {
-                case CardAddress().entity.name:
-                    let z =  x as! CardAddress
-                    z.title = nil
-                    z.uid = nil
-                case CardPhoneNumber().entity.name:
-                    let z =  x as! CardPhoneNumber
-                    z.title = nil
-                    z.uid = nil
-                case CardEmail().entity.name:
-                    let z =  x as! CardEmail
-                    z.title = nil
-                    z.uid = nil
-                default:
-                    print("------------ Same old entity in All Added:" + x.entity.name!)
+            // add addresses to object that have been added
+            for x in all {
+                if !c.allAddresses().contains(x) {
+                    if let a = x as? Address {
+                        c.addToAddresses(a)
+                    } else if let p = x as? PhoneNumber {
+                        c.addToPhoneNumbers(p)
+                    } else if let e = x as? Email {
+                        c.addToEmails(e)
+                    }
                 }
             }
-            
-        } else { /// Not editing
-            card = Card.create(cardCategory: titleTextField.text!.pure(), notes: nil, image: imageData)
-            
-            if let all = model.allAdded {
-                for x in all {
-                    switch x.entity.name {
-                    case Address().entity.name:
-                        CardAddress.create(title: card!.title!, address: x as? Address)
-                    case PhoneNumber().entity.name:
-                        CardPhoneNumber.create(title: card!.title!, phoneNumber: x as? PhoneNumber)
-                    case Email().entity.name:
-                        CardEmail.create(title: card!.title!, email: x as? Email)
-                    default:
-                        print("------------ Old entity in All Added:" + x.entity.name!)
-                    }
+        } else { /// Creating
+            let c = CardTemplate.create(cardCategory: titleTextField.text!.pure(), image: imageData)
+            let all = model.allAdded
+            for x in all {
+                if let a = x as? Address {
+                    c.addToAddresses(a)
+                } else if let p = x as? PhoneNumber {
+                    c.addToPhoneNumbers(p)
+                } else if let e = x as? Email {
+                    c.addToEmails(e)
                 }
             }
         }
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        do {
-            appDelegate.persistentContainer.viewContext.processPendingChanges()
-            try appDelegate.persistentContainer.viewContext.save()
-            view.makeToast("Card created!")
-            performSegue(withIdentifier: "unwindToTemplates", sender: nil)
-        } catch {
-            fatalError()
+        _ = try? CoreDataGod.managedContext.save()
+        view.makeToast("Card created!".taloneCased()) { [weak self] _ in
+            self?.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
         }
     }
 }
@@ -202,7 +182,7 @@ class CardTemplateCreatorVC: UIViewController {
 extension CardTemplateCreatorVC {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if !canEditTitle {
-            showOkayAlert(title: "Nope", message: "you're stuck with this title, until I make it changeable. who's got the power, now, chump?", handler: nil)
+            showOkayAlert(title: "Nope".taloneCased(), message: "you're stuck with this title, until I make it changeable. who's got the power, now, chump?".taloneCased(), handler: nil)
             return false
         }
         return true
@@ -218,15 +198,15 @@ extension CardTemplateCreatorVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return model.allAdded!.count
+            return model.allAdded.count
         default:
-            return model.allPossibles!.count
+            return model.allPossibles.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let array = indexPath.section == 0 ? model.allAdded : model.allPossibles
-        let object = array![indexPath.row]
+        let object = array[indexPath.row]
         
         // Included switch statement, because other cells may be used if the format changes
         switch typeForClass(object.entity.name) {

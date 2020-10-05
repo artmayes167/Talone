@@ -43,6 +43,10 @@ enum ProfileButtonType {
     case me, card
 }
 
+enum DefaultTitles: String, CaseIterable {
+    case noDataTemplate = "no data"
+}
+
 enum CardElementTypes: String, RawRepresentable {
     case address, phoneNumber, email
 }

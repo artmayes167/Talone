@@ -18,12 +18,8 @@ class AllReceivedCardsVC: UIViewController {
             var dict: [String: [String]] = [:]
             for c in contacts {
                 if let firstChar = c.contactHandle.first {
-                    if var array = dict[String(firstChar)] {
-                        array.append(c.contactHandle)
-                        //print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
-                    } else {
-                        dict[String(firstChar)] = [c.contactHandle]
-                    }
+                    if var array = dict[String(firstChar)] { array.append(c.contactHandle) }
+                    else { dict[String(firstChar)] = [c.contactHandle] }
                 } else { fatalError() }
             }
             contactList = dict
@@ -31,22 +27,15 @@ class AllReceivedCardsVC: UIViewController {
     }
     
     private var contactList: [String: [String]] = [:] {
-        didSet {
-            if isViewLoaded {
-                tableView.reloadData()
-            }
-        }
+        didSet { if isViewLoaded { tableView.reloadData() } }
     }
     
     private var contactListKeys: [String] {
-        get {
-            return contactList.keys.sorted()
-        }
+        get { return contactList.keys.sorted() }
     }
     
     private func getContacts() {
-        let c = CoreDataGod.user.contacts ?? []
-        contacts = c
+        contacts = CoreDataGod.user.contacts ?? []
     }
     
     override func viewDidLoad() {
@@ -59,20 +48,15 @@ class AllReceivedCardsVC: UIViewController {
         showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
     }
     
-    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toInteraction" {
-            let vc = segue.destination as! ViewContactVC
+        if segue.identifier == "toCardIntro" {
+            let vc = segue.destination as! ContactIntroVC
             guard let c = sender as? Contact else { fatalError() }
-            vc.configure(received: true, contact: c, template: nil)
+            vc.contact = c
         }
     }
-
 }
-
 
 extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
     
@@ -89,13 +73,12 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let handle = contactList[contactListKeys[indexPath.section]]![indexPath.row]
         let reuseIdentifier = String(format: "cell%i", abs(indexPath.row%2))
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
-        let u = interactions.filter { $0.referenceUserHandle == handle }
-        cell.configure(handle: handle, image: u.first?.receivedCard?.first?.image)
+        let u = contacts.filter { $0.contactHandle == handle }
+        cell.configure(handle: handle, image: u.first?.receivedCards?.first?.image)
         return cell
     }
     
@@ -111,9 +94,9 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let handle: String = contactList[contactListKeys[indexPath.section]]![indexPath.row]
-        let u: [Interaction] = interactions.filter { $0.referenceUserHandle == handle }
+        let u: [Contact] = contacts.filter { $0.contactHandle == handle }
         guard let i = u.first else { print(u); fatalError() }
-        performSegue(withIdentifier: "toInteraction", sender: i)
+        performSegue(withIdentifier: "toCardIntro", sender: i)
     }
 }
 

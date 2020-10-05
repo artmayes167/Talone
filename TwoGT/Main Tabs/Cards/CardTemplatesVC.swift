@@ -39,13 +39,11 @@ class CardTemplatesVC: UIViewController {
     
 
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyTemplate" {
-            guard let vc = segue.destination as? ViewContactVC, let index = sender as? IndexPath else { fatalError() }
+            guard let vc = segue.destination as? MyTemplateVC, let index = sender as? IndexPath else { fatalError() }
             let template = cardTemplates[index.item]
-            vc.configure(template: template)
+            vc.template = template
         }
     }
     

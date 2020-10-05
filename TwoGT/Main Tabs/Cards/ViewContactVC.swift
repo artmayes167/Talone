@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import MessageUI
 
 /// Callers:
 class ViewContactVC: UIViewController {
@@ -15,69 +16,42 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var handleLabel: UILabel!
-    @IBOutlet weak var messageTextView: InactiveTextView!
+    @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var templateTitleLabel: UILabel!
-    @IBOutlet weak var notesView: ActiveTextView!
+    @IBOutlet weak var notesView: UITextView!
     @IBOutlet weak var saveNotesButton: DesignableButton!
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
-    private var received: Bool?
+    // MARK: - IBActions
+   @IBAction func saveNotes(_ sender: UIButton) {
+       if let t = notesView.text?.pure() {
+           saveNotes(t)
+       }
+   }
     
-    private var contact: Contact? {
+    @IBAction func manageDataShare(_ sender: UIButton) {
+        sendCard()
+    }
+    
+    var cardAddresses: [NSManagedObject] = [] {
         didSet {
-            if let r = received {
-                if let i = r ? contact!.receivedCards?.first : contact!.sentCards?.first {
-                    /// crash if I fucked up
-                    cardInstance = i
-                }
-            }
+            tableView.reloadData()
         }
     }
     
-    /// Looking at sent card, or received card
-    private var cardInstance: CardTemplateInstance? {
-        didSet {
-            if isViewLoaded {
-                setCardData()
-            }
+    private func typeForClass(_ c: String?) -> CardElementTypes {
+        guard let name = c else { fatalError() }
+        switch name {
+        case Address().entity.name:
+            return .address
+        case PhoneNumber().entity.name:
+            return .phoneNumber
+        case Email().entity.name:
+            return .email
+        default:
+            fatalError()
         }
-    }
-    
-    
-    /// Only looking at the template -- received = false
-    private var cardTemplate: CardTemplate? {
-        didSet {
-            if isViewLoaded {
-                setCardData()
-            }
-        }
-    }
-    
-    private var cardAddresses: [NSManagedObject] = []
-    
-    
-    /// If
-    func configure(received: Bool? = nil, contact: Contact? = nil, template: CardTemplate? = nil) {
-        if received == nil && contact == nil && template == nil { fatalError() }
-        
-        if let r = received {
-            self.received = r
-            self.interaction = interaction
-        } else {
-            self.cardTemplate = template
-        }
-    }
-    
-    private func setCardData() {
-        if let c = cardInstance ?? cardTemplate {
-            let a: [CardAddress] = c.addresses
-            let p: [CardPhoneNumber] = c.phoneNumbers
-            let e: [CardEmail] = c.emails
-            cardAddresses = a + p + e
-        }
-        
-        tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -86,15 +60,59 @@ class ViewContactVC: UIViewController {
         updateUI()
     }
     
-    private func updateUI() {
-        // Strings are formatted in dataSource `ContactTabBarController`
-        handleLabel.text = getRelevantHandle()
-        notesView.text = getNotes()
-        templateTitleLabel.text = interaction == nil ? cardTemplate?.title : cardInstance?.title
-        messageTextView.text = interaction == nil ? cardTemplate?.comments : cardInstance?.comments
-        notesView.text = interaction == nil ? cardTemplate?.personalNotes : cardInstance?.personalNotes
+    private func call(number: String) {
+        DispatchQueue.main.async {
+            if let url = URL(string: String(format: "tel:%@", number)) {
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    self.showOkayAlert(title: "Can't Call".taloneCased(), message: "You're probably running this on an ipod.  Or they sent you a bogus number. Either way, this is not your moment.".taloneCased(), handler: nil)
+                }
+            } else {
+                self.showOkayAlert(title: "", message: "Bad url".taloneCased(), handler: nil)
+            }
+        }
+    }
+    
+    fileprivate func setCardAddresses(card c: CardTemplateInstance) {
+        var allAdded: [NSManagedObject] = []
+        if let adds = c.addresses {
+            for a in adds {
+                if let add = a as? Address {
+                    allAdded.append(add)
+                }
+            }
+        }
+        if let phones = c.phoneNumbers {
+            for p in phones {
+                if let ph = p as? PhoneNumber {
+                    allAdded.append(ph)
+                }
+            }
+        }
+        if let emails = c.emails {
+            for e in emails {
+                if let email = e as? Email {
+                    allAdded.append(email)
+                }
+            }
+        }
+        cardAddresses = allAdded
+        updateUI()
+    }
+    
+    func setCardData() {}
+    func saveNotes(_ notes: String) {}
+    func updateUI() {}
+    func sendCard() {}
+    
+    func updateUIFor(card c: CardTemplateInstance) {
+        handleLabel.text = c.userHandle
+        templateTitleLabel.text = c.templateTitle
+        messageTextView.text = c.message
+        notesView.isHidden = true
         
-        let image = interaction == nil ? cardTemplate?.image : cardInstance?.image
+        let image = c.image
         if let imageFromStorage = image {
             let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
             imageButton.imageView?.contentMode = .scaleAspectFill
@@ -105,76 +123,109 @@ class ViewContactVC: UIViewController {
         }
     }
     
-    private func typeForClass(_ c: String?) -> CardElementTypes {
-        guard let name = c else { fatalError() }
-        switch name {
-        case CardAddress().entity.name:
-            return .address
-        case CardPhoneNumber().entity.name:
-            return .phoneNumber
-        case CardEmail().entity.name:
-            return .email
-        default:
-            fatalError()
+    func updateUIFor(template c: CardTemplate) {
+        handleLabel.text = c.userHandle
+        templateTitleLabel.text = c.templateTitle
+        
+        let image = c.image
+        if let imageFromStorage = image {
+            let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+            imageButton.imageView?.contentMode = .scaleAspectFill
+            imageButton.setImage(i, for: .normal)
+        } else {
+            let newImage = UIImage(named: "avatar")
+            imageButton.setImage(newImage!, for: .normal)
+        }
+    }
+}
+
+class TheirContactVC: ViewContactVC {
+    var theirCard: CardTemplateInstance? {
+        didSet { if isViewLoaded { setCardData() } }
+    }
+    
+    override func setCardData() {
+        if let c = theirCard {
+            setCardAddresses(card: c)
+        }
+    }
+        
+    override func updateUI() {
+        if let t = theirCard {
+            messageTextView.isEditable = false
+            notesView.isEditable = true
+            notesView.text = t.personalNotes
+            updateUIFor(card: t)
         }
     }
     
-     // MARK: - IBActions
-    @IBAction func saveNotes(_ sender: UIButton) {
-        if let t = notesView.text?.pure() {
-            saveNotes(t)
+    override func saveNotes(_ notes: String) {
+        theirCard!.personalNotes = notes
+        DispatchQueue.main.async {
+            _ = try? CoreDataGod.managedContext.save()
+            self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
         }
     }
     
-    /// Go to the template selector, if we have templates
-    @IBAction func manageDataShare(_ sender: UIButton) {
-        
-        guard let temps = AppDelegate.user.cardTemplates else {
-            showOkayAlert(title: "", message: "Please add a template") { _ in
-                self.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
-            }
-            return
-        }
-        
-        if temps.isEmpty {
-            showOkayAlert(title: "", message: "Please add a template") { _ in
-                self.performSegue(withIdentifier: "unwindToTemplates", sender: nil)}
-            return
-        }
-        
-        showCompleteAndSendCardHelper(received: received, interaction: interaction)
-        
+    override func sendCard() {
+        showCompleteAndSendCardHelper(card: theirCard)
+    }
+}
+
+class MyContactVC: ViewContactVC {
+    
+    var myCard: CardTemplateInstance? {
+        didSet { if isViewLoaded { setCardData() } }
     }
     
-     // MARK: - Navigation
+    override func updateUI() {
+        if let m = myCard {
+            messageTextView.isEditable = true
+            notesView.isEditable = false
+            updateUIFor(card: m)
+        }
+    }
+    
+    override func setCardData() {
+        if let c = myCard {
+            setCardAddresses(card: c)
+        }
+    }
+    
+    override func sendCard() {
+        showCompleteAndSendCardHelper(card: myCard)
+    }
+}
+
+class MyTemplateVC: ViewContactVC {
+    var template: CardTemplate? {
+        didSet { if isViewLoaded { setCardData() } }
+    }
+    
+    override func updateUI() {
+        if let m = template {
+            updateUIFor(template: m)
+        }
+    }
+    
+    override func setCardData() {
+        if let c = template {
+            cardAddresses = c.allAddresses()
+        }
+    }
+    
+    override func sendCard() {
+//        showCompleteAndSendCardHelper(card: myCard)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toEditTemplate" {
             guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
-            vc.configure(card: cardTemplate)
+            vc.configure(card: template)
         }
     }
 }
-
-extension ViewContactVC {
-    func getRelevantHandle() -> String {
-        // If an interaction has not been created yet, it is because we are viewing a template
-        let i = interaction == nil ?  cardTemplate?.userHandle! : interaction?.referenceUserHandle!
-        return i! // should crash only if we fucked up
-    }
-    func getNotes() -> String {
-        return interaction == nil ? "" : cardInstance?.personalNotes ?? ""
-    }
     
-    func saveNotes(_ notes: String) {
-        interaction?.receivedCard?.first?.personalNotes = notes
-        DispatchQueue.main.async {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-            let context = appDelegate.persistentContainer.viewContext
-            _ = try? context.save()
-        }
-    }
-}
-
 extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -191,17 +242,17 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
         switch typeForClass(object.entity.name) {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
-            guard let a = object as? CardAddress else { fatalError() }
+            guard let a = object as? Address else { fatalError() }
             cell.detailsLabel.text = a.title
             return cell
         case .phoneNumber:
             let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
-            guard let p = object as? CardPhoneNumber else { fatalError() }
+            guard let p = object as? PhoneNumber else { fatalError() }
             cell.detailsLabel.text = p.title
             return cell
         case .email:
             let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
-            guard let e = object as? CardEmail else { fatalError() }
+            guard let e = object as? Email else { fatalError() }
             cell.detailsLabel.text = e.title
             return cell
         }
@@ -216,19 +267,69 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
         cell.configure("included contact info")
         return cell.contentView
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let _ = self as? TheirContactVC {
+            let object = cardAddresses[indexPath.row]
+            
+            switch typeForClass(object.entity.name) {
+            case .email:
+                guard let e = object as? Email else { return }
+                launchEmail(to: e.emailString)
+            case .phoneNumber:
+                guard let p = object as? PhoneNumber else { return }
+                call(number: p.number)
+            default:
+                showOkayAlert(title: "sorry".taloneCased(), message: "teleportation is not available with this model.".taloneCased(), handler: nil)
+            }
+        }
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
 }
 
 extension ViewContactVC: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        showTextViewHelper(textView: notesView, displayName: "personal notes", initialText: notesView.text)
+        if textView == notesView {
+            showTextViewHelper(textView: notesView, displayName: "personal notes", initialText: notesView.text)
+            return false
+        }
+        if textView == messageTextView {
+            showTextViewHelper(textView: messageTextView, displayName: "message", initialText: messageTextView.text)
+            return false
+        }
         return false
     }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        
-    }
-    
 }
 
+// MARK: -
+extension ViewContactVC: MFMailComposeViewControllerDelegate {
+   func launchEmail(to recipient: String) {
+        let toRecipents = [recipient]
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setToRecipients(toRecipents)
+        self.present(mc, animated: true, completion: nil)
+   }
+
+   func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
+       var message = ""
+       switch result {
+       case .cancelled:
+           message = "Mail cancelled"
+       case .saved:
+           message = "Mail saved"
+       case .sent:
+           message = "Mail sent"
+       case .failed:
+           message = "Mail sent failure: \(String(describing: error?.localizedDescription))."
+       default:
+           message = "Something unanticipated has occurred"
+           break
+       }
+       self.dismiss(animated: true) {
+        self.showOkayAlert(title: "", message: message.taloneCased(), handler: nil)
+       }
+   }
+}
 

@@ -58,6 +58,14 @@ extension CardTemplate {
         try? CoreDataGod.managedContext.save()
         return card!
     }
+    
+    func allAddresses() -> [NSManagedObject] {
+        var a: [NSManagedObject] = []
+        a.append(contentsOf: addresses?.allObjects as! [Address])
+        a.append(contentsOf: phoneNumbers?.allObjects as! [PhoneNumber])
+        a.append(contentsOf: emails?.allObjects as! [Email])
+        return a
+    }
 }
 
 /**
@@ -130,7 +138,7 @@ struct CodableCardTemplateInstance: Codable {
     }
     
     init(instance: CardTemplateInstance) {
-        receiverUserHandle = instance.receiverUserHandle!
+        receiverUserHandle = instance.receiverUserHandle
         uid = instance.uid
         image = instance.image
         userHandle = instance.userHandle
@@ -399,7 +407,7 @@ extension Contact {
         let entity = NSEntityDescription.entity(forEntityName: "Contact", in: CoreDataGod.managedContext)!
         let contact = Contact(entity: entity, insertInto: CoreDataGod.managedContext)
 
-        contact.
+        contact.contactUid = uid
         contact.contactHandle = handle
 
         try? CoreDataGod.managedContext.save()

@@ -20,45 +20,24 @@ enum AddressSections: Int, CaseIterable {
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    private var addresses: [Address] {
-        get {
-            let adds =  AppDelegate.user.addresses ?? []
-            let a = adds.isEmpty ? [] : adds.sorted { return $0.title! < $1.title! }
-            return a.filter { $0.entity.name != CardAddress().entity.name }
-        }
-    }
-    
-    private var phoneNumbers: [PhoneNumber] {
-        get {
-            let phones = AppDelegate.user.phoneNumbers ?? []
-            let p = phones.isEmpty ? [] : phones.sorted { return $0.title! < $1.title! }
-            return p.filter { $0.entity.name != CardPhoneNumber().entity.name }
-        }
-    }
-    
-    private var emails: [Email] {
-        get {
-            let ems = AppDelegate.user.emails ?? []
-            let e = ems.isEmpty ? [] : ems.sorted { return $0.title! < $1.title! }
-            return e.filter { $0.entity.name != CardEmail().entity.name }
-        }
-    }
+    var addresses: [Address] = []
+    var phoneNumbers: [PhoneNumber] = []
+    var emails: [Email] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 62
         
-        if let im = CoreDataImageHelper.shareInstance.fetchImage() {
-            if let imageFromStorage = im.image {
+        if let im = CoreDataImageHelper.shareInstance.fetchAllImages() {
+            if let imageFromStorage = im.first?.image {
                 let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(i, for: .normal)
             }
         }
         
-        handleLabel.text = AppDelegate.user.handle
+        handleLabel.text = CoreDataGod.user.handle
     }
     
     @IBAction @objc func changeImage(_ sender: UIButton) {
@@ -78,24 +57,10 @@ enum AddressSections: Int, CaseIterable {
             performSegue(withIdentifier: "toAddEmail", sender: nil)
         }
     }
-
-//    @IBSegueAction func toProfileView(_ coder: NSCoder) -> UIViewController? {
-//        return UIHostingController(coder: coder, rootView: ContentView())
-//    }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @IBAction func unwindToYouVC( _ segue: UIStoryboardSegue) {
         tableView.reloadData()
     }
-
 }
 
 extension YouVC: UITableViewDelegate, UITableViewDataSource {
@@ -107,10 +72,19 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch AddressSections(rawValue: section) {
         case .address:
+            if let adds = CoreDataGod.user.addresses {
+                addresses = adds
+            }
             return addresses.count
         case .phoneNumber:
+            if let phones = CoreDataGod.user.phoneNumbers {
+                phoneNumbers = phones
+            }
             return phoneNumbers.count
         case .email:
+            if let ems = CoreDataGod.user.emails {
+                emails = ems
+            }
             return emails.count
         default:
             fatalError()
@@ -168,7 +142,6 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: YouFooterCell.identifier) as! YouFooterCell
-        
         switch AddressSections(rawValue: section) {
         case .address:
             cell.configure(controller: self, selector: #selector(addNewAddress))
@@ -277,8 +250,8 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
             CoreDataImageHelper.shareInstance.saveImage(data: imageData)
             showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
             
-            if let im = CoreDataImageHelper.shareInstance.fetchImage() {
-                if let imageFromStorage = im.image {
+            if let im = CoreDataImageHelper.shareInstance.fetchAllImages() {
+                if let imageFromStorage = im.first?.image {
                     let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                     imageButton.imageView?.contentMode = .scaleAspectFill
                     imageButton.setImage(i, for: .normal)
