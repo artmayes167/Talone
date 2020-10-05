@@ -72,6 +72,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         // Start observing any Card receptions or card updates.
         // We do this late in the flow to ensure user has signed in.
         AppDelegate.cardObserver.startObserving()
+        AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
 
         model = MarketplaceModel(creationManager: creationManager)
     }

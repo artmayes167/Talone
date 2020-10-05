@@ -57,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
     static var cardObserver = CardReceiverObserver()
+    static var linkedNeedsObserver = LinkedNeedsObserver()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let def = UserDefaults.standard
@@ -75,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-
+        
 // Fetch latest news for this city.
 //        newsFetcher.fetchNews { newsItems in
 //            print(newsItems)
@@ -96,6 +97,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        if Auth.auth().currentUser?.isAnonymous == false {
+            AppDelegate.cardObserver.startObserving()
+            AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
+        }
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        AppDelegate.cardObserver.stopObserving()
+        AppDelegate.linkedNeedsObserver.stopObservingHaveChanges()
     }
 
     private func handlePasswordlessSignIn(withURL url: URL) -> Bool {

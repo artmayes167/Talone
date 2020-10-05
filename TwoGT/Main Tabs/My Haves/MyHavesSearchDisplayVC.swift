@@ -24,7 +24,8 @@ class MyHavesSearchDisplayVC: UIViewController {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
-        startObservingHaveChanges() // sync with Firebase
+        getHaves()                  // load from CoreData
+        AppDelegate.linkedNeedsObserver.registerForUpdates(self)    // register to receive any updates in linked needs.
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -48,84 +49,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
 
     @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-        
-    }
-
-    private func startObservingHaveChanges() {
-        // Temporary location - TODO: Refactor. When should Have owner be notified of new links/people in need?
-        HavesDbFetcher().observeMyHaves { [self] fibHaveItems in
-
-            var addedNeedOwners = [String]()
-            var changedHaves = [Have]()
-            var isRedrawRequired = false
-
-            // Cross-reference needs
-            for have in self.haves {
-                for fibHave in fibHaveItems where fibHave.id == have.id {
-                    if let needStubs = fibHave.needs {
-                        var isChanged = false
-                        changedHaves.append(have)   // for showing on UI
-
-                        let cdNeeds = have.childNeeds ?? []
-
-                        // First determine if there are any new needStubs that are missing from CD
-                        // These are the people that have linked with this have.
-                        for needStub in needStubs {
-                            var found = false
-                            for cdNeed in cdNeeds where cdNeed.id == needStub.id {
-                                found = true
-                                break
-                            }
-                            if found == false {
-                                // create a new need (gets appended to childItems implicitly)
-                                var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
-                                fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
-                                let n = Need.createNeed(item: fibNeed)
-                                n.parentHaveItemId = fibHave.id
-                                addedNeedOwners.append(fibNeed.owner)
-                                isChanged = true
-                            }
-                        }
-
-                        // Then determine if there are needStubs being deleted requiring cleanup from CD.
-                        // These are the people that have removed the link with this have.
-                        for cdNeed in cdNeeds {
-                            var found = false
-                            for needStub in needStubs where needStub.id == cdNeed.id {
-                                found = true
-                                break
-                            }
-                            if found == false {
-                                cdNeed.deleteNeed()
-                                isChanged = true
-                            }
-                        }
-                        if isChanged { _ = try? CoreDataGod.managedContext.save(); isRedrawRequired = true } // store changes to CD
-                    }
-                }
-            }
-            if isRedrawRequired { collectionView.reloadData() }
-            notifyUserOfNewLinks(addedNeedOwners, changedHaves)
-        }
-    }
-
-    func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [Have]) {
-        if owners.count > 0 {
-            var str = ""
-            let haveDesc = haveItems.count == 1 ? (haveItems[0].headline ?? haveItems[0].desc ?? "") : "haves."
-            switch owners.count {
-            case 1:
-                str = "\(owners[0]) is interested in your \(haveDesc)"
-            case 2:
-                str = "\(owners[0]) and \(owners[1]) have linked to your \(haveDesc)"
-            default:
-                str = "\(owners[0]), \(owners[1]) and \(owners.count-2) others have linked to your \(haveDesc)"
-            }
-            // Show Toast
-            self.view.makeToast(str, duration: 2.0, position: .top) {_ in
-            }
-
-        }
+        getHaves()
     }
 }
 
@@ -162,6 +86,15 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
         return CGSize(width: width, height: 128.0)
+    }
+}
+
+/**
+ Observe if any linked needs are removed or added while user is on this ViewController. Not likely to happen, but useful during testing.
+ */
+extension MyHavesSearchDisplayVC: LinkedNeedsCountChangeDetectable {
+    func havesLinkedNeedsCountChanged() {
+        collectionView.reloadData()
     }
 }
 
