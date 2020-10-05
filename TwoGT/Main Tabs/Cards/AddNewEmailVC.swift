@@ -12,15 +12,7 @@ class AddNewEmailVC: UIViewController {
     @IBOutlet weak var labelTextField: DesignableTextField!
     @IBOutlet weak var emailTextField: DesignableTextField!
     
-    let adder = AddressAdder()
-    
-    private var emails: [Email] {
-        get {
-            let ems =  AppDelegate.user.emails ?? []
-            let e = ems.isEmpty ? [] : ems.sorted { return $0.title! < $1.title! }
-            return e.filter { $0.entity.name != CardEmail().entity.name }
-        }
-    }
+    private var emails: [Email] = CoreDataGod.user.emails ?? []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,15 +21,11 @@ class AddNewEmailVC: UIViewController {
     }
     
     func addEmail() {
-        let newEmail = Email(context: adder.managedObjectContext)
+        
+        let _ = Email.create(name: labelTextField.text!.lowercased().pure(), emailAddress: emailTextField.text!.pure(), uid: CoreDataGod.user.uid)
 
-        newEmail.title = labelTextField.text?.lowercased().pure()
-        newEmail.emailString = emailTextField.text?.pure()
-        newEmail.uid = AppDelegate.user.uid
-
-        if adder.saveContext() {
-            performSegue(withIdentifier: "unwindToYou", sender: nil)
-        }
+        try? CoreDataGod.managedContext.save()
+        performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     
     @IBAction func saveTouched(_ sender: Any) {
@@ -49,8 +37,6 @@ class AddNewEmailVC: UIViewController {
 
 extension AddNewEmailVC {
     private func showReplaceAlert() {
-        
-        
         showOkayOrCancelAlert(title: "Uh Oh", message: "An address with this label already exists. Replace??", okayHandler: { (_) in
             self.addEmail()
         }, cancelHandler: nil)

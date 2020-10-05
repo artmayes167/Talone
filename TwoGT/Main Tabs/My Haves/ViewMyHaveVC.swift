@@ -35,7 +35,7 @@ class ViewMyHaveVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let owner = have?.haveItem?.owner ?? AppDelegate.user.handle {
+        if let owner = have?.owner ?? CoreDataGod.user.handle {
             headerTitleLabel.text = String(format: "%@'s Have", owner)
         }
     }
@@ -46,19 +46,18 @@ class ViewMyHaveVC: UIViewController {
     }
 
     func populateUI() {
-        guard let c = have?.haveItem?.category, let cityState = have?.purpose?.cityState else { return }
+        guard let c = have?.category, let cityState = have?.location else { return }
         locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
-        pageHeaderView.setTitleText(have?.haveItem?.headline ?? "No Headline!")
-        haveDescriptionTextView.text = have?.haveItem?.desc ?? "No Description!"
+        pageHeaderView.setTitleText(have?.headline ?? "No Headline!")
+        haveDescriptionTextView.text = have?.desc ?? "No Description!"
         view.layoutIfNeeded()
     }
 
     private func deleteCurrentHave() {
-        guard let haveItem = have?.haveItem else { return }
+        guard let have = self.have else { return }
+        have.deleteHave()
 
-        have?.deleteHave()
-
-        HavesDbWriter().deleteHave(id: haveItem.id!, creator: haveItem.createdBy ?? "") { error in
+        HavesDbWriter().deleteHave(id: have.id!, creator: have.createdBy ?? "") { error in
             if error == nil {
                 self.view.makeToast("You have Deleted the Have", duration: 1.0, position: .center) {_ in
                     self.performSegue(withIdentifier: "dismissToMyHaves", sender: self)

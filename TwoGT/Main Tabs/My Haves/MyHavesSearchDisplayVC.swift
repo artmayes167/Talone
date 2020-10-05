@@ -100,7 +100,7 @@ class MyHavesSearchDisplayVC: UIViewController {
                                 isChanged = true
                             }
                         }
-                        if isChanged { haveItem.update(); isRedrawRequired = true } // store changes to CD
+                        if isChanged { _ = try? CoreDataGod.managedContext.save(); isRedrawRequired = true } // store changes to CD
                     }
                 }
             }
@@ -109,7 +109,7 @@ class MyHavesSearchDisplayVC: UIViewController {
         }
     }
 
-    func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [HaveItem]) {
+    func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [Have]) {
         if owners.count > 0 {
             var str = ""
             let haveDesc = haveItems.count == 1 ? (haveItems[0].headline ?? haveItems[0].desc ?? "") : "haves."
@@ -147,7 +147,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
         let have = haves[indexPath.item]
         managedObjectContext.refresh(have, mergeChanges: true)
 
-        cell.configure(have.haveItem!)
+        cell.configure(have)
 
         return cell
     }
@@ -173,19 +173,19 @@ class MyHaveCell: UICollectionViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var joinedLabel: UILabel?
 
-    func configure(_ have: HaveItem) {
+    func configure(_ have: Have) {
 
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: (have.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
         titleLabel.text = have.headline
-        locationLabel.text = have.have?.purpose?.cityState?.displayName()
+        locationLabel.text = have.location?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: have.createdAt ?? Date())
 
         // This works and returns [Need] type
 
-        if let cn = have.have?.childNeeds, !cn.isEmpty {
+        if let cn = have.childNeeds, !cn.isEmpty {
             joinedLabel?.text = "\(cn.count)"
         } else {
             joinedLabel?.text = ""

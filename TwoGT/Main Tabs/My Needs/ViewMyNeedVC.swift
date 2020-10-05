@@ -50,10 +50,10 @@ class ViewMyNeedVC: UIViewController {
     }
 
     func populateUI() {
-        guard let n = need?.needItem?.category, let cityState = need?.purpose?.cityState else { return }
-        locationLabel.text = n + " in " + cityState.displayName()
-        pageHeaderView.setTitleText(need?.needItem?.headline ?? "No Headline!")
-        needDescriptionTextView.text = need?.needItem?.desc ?? "No Description!"
+        guard let n = need?.category, let loc = need?.location else { return }
+        locationLabel.text = n + " in " + loc.displayName()
+        pageHeaderView.setTitleText(need?.headline ?? "No Headline!")
+        needDescriptionTextView.text = need?.desc ?? "No Description!"
     }
 
     // MARK: - Keyboard Notifications
@@ -73,21 +73,20 @@ class ViewMyNeedVC: UIViewController {
     }
 
     private func deleteCurrentNeed() {
-        guard let needItem = need?.needItem else { return }
-        let parentHave = need?.parentHaveItemId
-        let handle = AppDelegate.user.handle ?? "Anonymous"
+        guard let n = need else { return }
+        let parentHave = n.parentHaveItemId
+        let handle = CoreDataGod.user.handle
 
-        need?.deleteNeed()          // Remove from CoreData
+        n.deleteNeed()          // Remove from CoreData
         // Remove from Remote database
-        NeedsDbWriter().deleteNeed(id: needItem.id!, userHandle: handle, associatedHaveId: parentHave) { error in
+        NeedsDbWriter().deleteNeed(id: n.id!, userHandle: handle, associatedHaveId: parentHave) { error in
             if error == nil {
-                self.view.makeToast("You have Deleted the Need", duration: 1.0, position: .center) {_ in
+                self.view.makeToast("You have Deleted the Need".taloneCased(), duration: 1.0, position: .center) {_ in
                     self.performSegue(withIdentifier: "dismissToMyNeeds", sender: self)
                 }
             } else {
-                self.showOkayAlert(title: "Error", message: "Error while deleting need. Error: \(error!.localizedDescription)", handler: nil)
+                self.showOkayAlert(title: "Error".taloneCased(), message: "Error while deleting need. Error: \(error!.localizedDescription)".taloneCased(), handler: nil)
             }
-
         }
     }
 }

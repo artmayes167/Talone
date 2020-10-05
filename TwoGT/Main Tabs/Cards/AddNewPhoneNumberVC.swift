@@ -13,15 +13,7 @@ class AddNewPhoneNumberVC: UIViewController {
     @IBOutlet weak var labelTextField: DesignableTextField!
     @IBOutlet weak var numberTextField: DesignableTextField!
     
-    let adder = AddressAdder()
-    
-    private var phoneNumbers: [PhoneNumber] {
-        get {
-            let phones =  AppDelegate.user.phoneNumbers ?? []
-            let p = phones.isEmpty ? [] : phones.sorted { return $0.title! < $1.title! }
-            return p.filter { $0.entity.name != CardPhoneNumber().entity.name }
-        }
-    }
+    private var phoneNumbers: [PhoneNumber] = CoreDataGod.user.phoneNumbers ?? []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,15 +22,14 @@ class AddNewPhoneNumberVC: UIViewController {
     }
     
     func addPhoneNumber() {
-        let newPhone = PhoneNumber(context: adder.managedObjectContext)
-
-        newPhone.title = labelTextField.text?.lowercased().pure()
-        newPhone.number = numberTextField.text?.pure()
-        newPhone.uid = AppDelegate.user.uid
-
-        if adder.saveContext() {
-            performSegue(withIdentifier: "unwindToYou", sender: nil)
+        guard let t = labelTextField.text?.lowercased().pure(), let n = numberTextField.text?.pure() else {
+            showOkayAlert(title: "", message: "you're trying to save without completing all fields.  bad you.".taloneCased(), handler: nil)
+            return
         }
+        let uid = CoreDataGod.user.uid
+        let _ = PhoneNumber.create(title: t, number: n, uid: uid)
+        try? CoreDataGod.managedContext.save()
+        performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     
     @IBAction func saveTouched(_ sender: Any) {

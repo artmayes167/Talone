@@ -17,7 +17,7 @@ class AddNeedToWatchModel: NSObject {
     func storeWatchingNeedToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
         let needItem = item
-        guard let loc = c.getLocationOrNil()?.locationInfo() else { fatalError() }
+        guard let loc: SearchLocation = c.getLocationOrNil() else { fatalError() }
         // if neither need-type nor location is selected, display an error message
         guard let user = Auth.auth().currentUser else { fatalError() } //
 
@@ -32,28 +32,18 @@ class AddNeedToWatchModel: NSObject {
 
         needsWriter.addNeed(need, completion: { error in
             if error == nil {
-                let n = Need.createNeed(item: NeedItem.createNeedItem(item: need))
+                let n = Need.createNeed(item: need)
                 n.parentNeedItemId = needItem.id
-                c.setNeed(n)
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            controller.view.makeToast("you have successfully created a `need`!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                            }
-                        }
-                    } else {
-                        fatalError()
+                try? CoreDataGod.managedContext.save()
+                DispatchQueue.main.async {
+                    controller.view.makeToast("you have successfully created a `need`!".taloneCased(), duration: 2.0, position: .center) {_ in
+                        // TODO: - Create unwind segue to my needs
+                        controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
                     }
-                } else {
-                    fatalError()
                 }
                 
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Need in ViewIndividualNeed. Error: \(error!.localizedDescription)", handler: nil)
+                controller.showOkayAlert(title: "".taloneCased(), message: "Error while adding a Need in ViewIndividualNeed. Error: \(error!.localizedDescription)".taloneCased(), handler: nil)
             }
         })
     }
@@ -61,7 +51,7 @@ class AddNeedToWatchModel: NSObject {
     func storeWatchingHaveToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
         let needItem = item
-        guard let loc = c.getLocationOrNil()?.locationInfo() else { fatalError() }
+        guard let loc: SearchLocation = c.getLocationOrNil() else { fatalError() }
         // if neither need-type nor location is selected, display an error message
         guard let user = Auth.auth().currentUser else { fatalError() }
 
@@ -76,30 +66,18 @@ class AddNeedToWatchModel: NSObject {
 
         havesWriter.addHave(have, completion: { error in
             if error == nil {
-                let h = Have.createHave(item: HaveItem.createHaveItem(item: have))
-                
-                c.setHave(h)
-                let newCD = Need.createNeed(item: NeedItem.createNeedItem(item: needItem))
+                let _ = Have.createHave(item: have)
+                let newCD = Need.createNeed(item: needItem)
                 newCD.parentHaveItemId = have.id
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            controller.view.makeToast("you have successfully created a `have`!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
-                            }
-                        }
-                    } else {
-                        fatalError()
+                try? CoreDataGod.managedContext.save()
+                DispatchQueue.main.async {
+                    controller.view.makeToast("you have successfully created a `have`!".taloneCased(), duration: 2.0, position: .center) {_ in
+                        controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
                     }
-                } else {
-                    fatalError()
                 }
                 
             } else {
-                controller.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
+                controller.showOkayAlert(title: "".taloneCased(), message: "Error while adding a Have. Error: \(error!.localizedDescription)".taloneCased(), handler: nil)
             }
         })
     }
@@ -143,9 +121,9 @@ class AddNeedToWatchVC: UIViewController {
         guard let c = creationManager else { return }
         switch c.currentCreationType() {
         case .need:
-            infoLabel.text = "we will create a `need` to track this.  You can find it in `my needs`."
+            infoLabel.text = "we will create a `need` to track this.  You can find it in `my needs`.".taloneCased()
         case .have:
-            infoLabel.text = "we will create a `have` to track this.  You can find it in `my haves`."
+            infoLabel.text = "we will create a `have` to track this.  You can find it in `my haves`.".taloneCased()
         default:
             fatalError()
         }

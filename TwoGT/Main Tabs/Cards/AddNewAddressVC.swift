@@ -9,23 +9,6 @@
 import UIKit
 import CoreData
 
-class AddressAdder: NSObject {
-    var managedObjectContext: NSManagedObjectContext {
-        get {
-            return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        }
-    }
-    
-    func saveContext() -> Bool {
-      do {
-        try managedObjectContext.save()
-        return true
-      } catch {
-        fatalError()
-      }
-    }
-}
-
 class AddNewAddressVC: UIViewController {
     
      // MARK: - IBOutlets
@@ -37,15 +20,7 @@ class AddNewAddressVC: UIViewController {
     @IBOutlet weak var zipTextField: DesignableTextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    let adder = AddressAdder()
-    
-    private var addresses: [Address] {
-        get {
-            let adds =  AppDelegate.user.addresses ?? []
-            let a = adds.isEmpty ? [] : adds.sorted { return $0.title! < $1.title! }
-            return a.filter { $0.entity.name != CardAddress().entity.name }
-        }
-    }
+    private var addresses: [Address] = CoreDataGod.user.addresses ?? []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,25 +31,22 @@ class AddNewAddressVC: UIViewController {
     }
     
     @IBAction func saveTouched(_ sender: Any) {
-        if checkValidity() {
-            addAddress()
-        }
+        if checkValidity() { addAddress() }
     }
     
     func addAddress() {
-        let newAddress = Address(context: adder.managedObjectContext)
-
-        newAddress.title = labelTextField.text?.lowercased().pure()
-        newAddress.street1 = street1TextField.text?.pure()
-        newAddress.street2 = street2TextField.text?.pure()
-        newAddress.city = city
-        newAddress.state = state
-        newAddress.zip = zipTextField.text?.pure()
-        newAddress.uid = AppDelegate.user.uid
-
-        if adder.saveContext() {
-            performSegue(withIdentifier: "unwindToYou", sender: nil)
+        guard let t = labelTextField.text?.lowercased().pure(), let s1 = street1TextField.text?.pure(), let zip = zipTextField.text?.pure() else {
+            showOkayAlert(title: "nope".taloneCased(), message: "there is not enough information here to qualify as a real address.  you can literally type whatever you want, and other people will see it, if you send it to them. your choice, obviously. but if you want to save it, you're going to have to do better than this.".taloneCased(), handler: nil)
+            return
         }
+        
+        let s2 = street2TextField.text?.pure()
+        if let loc = savedLocation {
+            Address.create(title: t, street1: s1, street2: s2, city: loc.city, zip: zip, state: loc.state, country: loc.country)
+        } else { fatalError() }
+        
+        try? CoreDataGod.managedContext.save()
+        performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     
     // MARK: - Navigation
@@ -87,38 +59,14 @@ class AddNewAddressVC: UIViewController {
         }
     }
     
-    var city: String?
-    var state: String?
+    var savedLocation: SearchLocation?
     
     @IBAction func unwindToAddNewAddress( _ segue: UIStoryboardSegue) {
         if let vc = segue.source as? CityStateSearchVC {
-            let loc = vc.selectedLocation
-            guard let c = loc[.city], let s = loc[.state] else { fatalError() }
-            city = c
-            state = s
-            cityStateTextField.text = c.capitalized + ", " + s.capitalized
-            save(location: loc, vc.saveType)
-        }
-    }
-
-     // MARK: Save Functions
-    /// Used by unwind segue from state/city selector
-    private func save(location loc: [DefaultsSavedLocationKeys: String], _ type: SaveType) {
-        if !(type == .none) {
-            // Use core data
-            guard let city = loc[.city], let state = loc[.state], let country = loc[.country] else { fatalError() }
-            let user = AppDelegate.user
-            let locType: String = ["home", "alternate"][type.rawValue]
-            if let locations = user.searchLocations {
-                for s in (locations as [SearchLocation]) {
-                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType {
-                        return
-                    }
-                }
-            }
-            // Use core data
-            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country, community: "")
-            s.type = locType
+            guard let loc = vc.locationForSave else { fatalError() }
+            savedLocation = loc
+            cityStateTextField.text = loc.displayName()
+            try? CoreDataGod.managedContext.save()
         }
     }
     
@@ -144,7 +92,7 @@ class AddNewAddressVC: UIViewController {
 
 extension AddNewAddressVC {
     private func showReplaceAlert() {
-        showOkayOrCancelAlert(title: "Uh Oh", message: "An address with this label already exists. Replace??", okayHandler: { (_) in
+        showOkayOrCancelAlert(title: "Uh Oh", message: "An address with this label already exists. Replace?".taloneCased(), okayHandler: { (_) in
             self.addAddress()
         }, cancelHandler: nil)
     }
@@ -161,7 +109,7 @@ extension AddNewAddressVC {
         let outletCollection = [labelTextField, street1TextField, cityStateTextField, zipTextField]
         for tf in outletCollection {
             guard let x = tf!.text?.pure(), !x.isEmpty else {
-                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.", handler: nil)
+                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.".taloneCased(), handler: nil)
                 return false
             }
         }

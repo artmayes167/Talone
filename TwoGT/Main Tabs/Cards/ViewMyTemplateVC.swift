@@ -16,7 +16,7 @@ class ViewMyTemplateVC: UIViewController {
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var card: Card? {
+    var card: CardTemplate? {
         didSet {
             if isViewLoaded {
                 setCardData()
@@ -27,13 +27,9 @@ class ViewMyTemplateVC: UIViewController {
     var cardAddresses: [NSManagedObject] = []
     
     func setCardData() {
-        var arr: [NSManagedObject] = []
         if let c = card {
-            let a: [CardAddress] = c.addresses
-            let p: [CardPhoneNumber] = c.phoneNumbers
-            let e: [CardEmail] = c.emails
-            arr.append(contentsOf: a + p + e)
-            templateTitleLabel.text = c.title
+            cardAddresses = c.allAddresses()
+            templateTitleLabel.text = c.templateTitle
             handleLabel.text = c.userHandle
             
             if let imageFromStorage = c.image {
@@ -44,7 +40,6 @@ class ViewMyTemplateVC: UIViewController {
                 imageButton.setImage( #imageLiteral(resourceName: "avatar.png"), for: .normal)
             }
         }
-        cardAddresses = arr
         tableView.reloadData()
     }
 
@@ -56,11 +51,11 @@ class ViewMyTemplateVC: UIViewController {
     func typeForClass(_ c: String?) -> CardElementTypes {
         guard let name = c else { fatalError() }
         switch name {
-        case CardAddress().entity.name:
+        case Address().entity.name:
             return .address
-        case CardPhoneNumber().entity.name:
+        case PhoneNumber().entity.name:
             return .phoneNumber
-        case CardEmail().entity.name:
+        case Email().entity.name:
             return .email
         default:
             fatalError()
@@ -105,17 +100,17 @@ extension ViewMyTemplateVC: UITableViewDelegate, UITableViewDataSource {
         switch typeForClass(object.entity.name) {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
-            guard let a = object as? CardAddress else { fatalError() }
+            guard let a = object as? Address else { fatalError() }
             cell.detailsLabel.text = a.title
             return cell
         case .phoneNumber:
             let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
-            guard let p = object as? CardPhoneNumber else { fatalError() }
+            guard let p = object as? PhoneNumber else { fatalError() }
             cell.detailsLabel.text = p.title
             return cell
         case .email:
             let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
-            guard let e = object as? CardEmail else { fatalError() }
+            guard let e = object as? Email else { fatalError() }
             cell.detailsLabel.text = e.title
             return cell
         }
