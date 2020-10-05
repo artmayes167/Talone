@@ -15,45 +15,31 @@ protocol LinkedNeedsCountChangeDetectable: UIViewController {
     func havesLinkedNeedsCountChanged()
 }
 
+/** Class that encapsulates functionality need to observe changes in user's Have items stored in Firestore */
 class LinkedNeedsObserver {
 
     var haves: [Have] = []
-    var reobservers = [LinkedNeedsCountChangeDetectable]() // Todo: In Swift 6, switch to Set from Array
+    var reobservers = Set<UIViewController>()       // VCs that need to be notified if the count of linked needs in a have changes.
+    var fetcher: HavesObserver = HavesDbFetcher()   // For testing: Override with a class that conforms to HavesObserver
 
-    var fetcher: HavesObserver = HavesDbFetcher()    // For testing: Override with a class that conforms to HavesObserver
-
-    private func getHaves() {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<Have> = Have.fetchRequest()
-        do {
-            let u = try managedContext.fetch(fetchRequest)
-
-            haves = u.filter {
-                if let item = $0.haveItem {
-                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
-                } else {
-                    print("----------No haveItem found on have")
-                    return false
-                }
-            }
-        } catch _ as NSError {
-          fatalError()
-        }
-    }
-
+    /**
+     VCs interested to know the real-time changes to the count of linked needs of a Have should register for change events by calling this method.
+        - parameters:
+            - vc:ViewController that conforms to LinkedNeedsCountChangeDetectable protocol */
     func registerForUpdates(_ vc: LinkedNeedsCountChangeDetectable) {
-        reobservers.append(vc)
+        reobservers.insert(vc)
     }
 
     func deregisterForUpdates(_ vc: LinkedNeedsCountChangeDetectable) {
-        reobservers = reobservers.filter { $0 !== vc }
+        reobservers.remove(vc)
     }
 
     func stopObservingHaveChanges() {
         fetcher.stopObserving()
     }
 
+    /**
+    Application shall call this method when the UI is interested to know real-time Firestore changes to Haves owned/posted by the current user. Any updates to the number of needs that are linked to any Have of the user will trigger a visible Toast. Certain VCs can also register to be further notified of the change by calling registerForUpdates() method.  Call stopObservingHaveChanges() when observation of Firestore is no longer needed.   */
     func startObservingHaveChanges() {
 
         fetcher.observeMyHaves { [self] fibHaveItems in
@@ -118,7 +104,7 @@ class LinkedNeedsObserver {
         }
     }
 
-    func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [HaveItem]) {
+    private func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [HaveItem]) {
         if owners.count > 0 {
             var str = ""
             let haveDesc = haveItems.count == 1 ? (haveItems[0].headline ?? haveItems[0].desc ?? "") : "haves."
@@ -137,9 +123,29 @@ class LinkedNeedsObserver {
         }
     }
 
-    func notifyObservers() {
-        for obs in reobservers {
-            obs.havesLinkedNeedsCountChanged()
+    private func notifyObservers() {
+        for obs in reobservers where obs is LinkedNeedsCountChangeDetectable {
+            (obs as! LinkedNeedsCountChangeDetectable).havesLinkedNeedsCountChanged()
+        }
+    }
+
+    private func getHaves() {
+        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+        let managedContext = d.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Have> = Have.fetchRequest()
+        do {
+            let u = try managedContext.fetch(fetchRequest)
+
+            haves = u.filter {
+                if let item = $0.haveItem {
+                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
+                } else {
+                    print("----------No haveItem found on have")
+                    return false
+                }
+            }
+        } catch _ as NSError {
+          fatalError()
         }
     }
 }
