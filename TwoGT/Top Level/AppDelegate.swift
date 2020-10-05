@@ -37,7 +37,8 @@ class AppDelegateHelper: NSObject {
     }
 
     class func createUser() -> User {
-        let user = User(context: managedContext)
+        let entity = NSEntityDescription.entity(forEntityName: "User", in: CoreDataGod.managedContext)!
+        let user = User(entity: entity, insertInto: CoreDataGod.managedContext)
         user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
         if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid
@@ -197,19 +198,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-//                // Replace this implementation with code to handle the error appropriately.
-//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+//    func saveContext () {
+//        let context = persistentContainer.viewContext
+//        if context.hasChanges {
+//            do {
+//                try context.save()
+//            } catch {
+////                // Replace this implementation with code to handle the error appropriately.
+////                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
+//        }
+//    }
 
 }
 

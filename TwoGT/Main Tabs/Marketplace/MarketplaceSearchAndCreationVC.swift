@@ -91,18 +91,31 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     /// This will add to and pull from user defaults, for purposes of app operation.  It is simply a reference to the last-used location.
 
     private func setInitialValues() {
+        creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex)!)
+        categoryTextField.text = creationManager.getCategory()?.rawValue
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
-            guard let locations = CoreDataGod.user.searchLocations else { return }
-            let l = locations.filter { $0.city == city && $0.state == state }
+            let locations = CoreDataGod.user.searchLocations
+            guard var l = locations else {
+                let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
+                creationManager.setLocation(newLoc)
+                searchLocation = newLoc
+                DispatchQueue.main.async {
+                    self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
+                }
+                setSearchButtons()
+                return
+            }
+            l = l.filter { $0.city == city && $0.state == state }
             if !l.isEmpty {
                 creationManager.setLocation(l.first!)
+                searchLocation = l.first
             }
             DispatchQueue.main.async {
                 self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
             }
         }
-        creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex)!)
+        setSearchButtons()
     }
 
     private func setUIForCurrents() {
@@ -244,7 +257,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func setSearchButtons() {
-        let success = creationManager.getLocationOrNil() != nil
+        let success = creationManager.getLocationOrNil() != nil ? true : false
         seeMatchingHavesButton.isEnabled = success
         seeMatchingNeedsButton.isEnabled = success
     }
@@ -289,7 +302,6 @@ class NeedsTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        needs.removeFirst(1)
         tableView.reloadData()
     }
 
