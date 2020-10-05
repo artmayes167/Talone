@@ -14,15 +14,15 @@ class CompleteAndSendCardVC: UIViewController {
     private var templates: [String] {
         get {
             var possibles: [String] = ["none"]
-            var cards: [Card] = []
+            var cards: [CardTemplate] = []
             
-            let c = AppDelegate.user.cardTemplates ?? [] // [Card]
+            let c = CoreDataGod.user.cardTemplates ?? [] // [Card]
                 
             if !c.isEmpty {
                 cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
             }
         
-            let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.title! }
+            let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.templateTitle }
             for t in mappedTemplates {
                 if !(t == "") && !(t == "none") { possibles.append(t) }
             }
@@ -37,50 +37,76 @@ class CompleteAndSendCardVC: UIViewController {
     @IBOutlet weak var templateSelectionTableViewContainer: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-    private var haveItem: HavesBase.HaveItem?
-    private var needItem: NeedsBase.NeedItem?
-    private var interaction: Interaction? {
+    private var haveItem: HavesBase.HaveItem? {
         didSet {
-            if interaction == nil { return }
-            guard let r = received else { fatalError() }
-            relevantCard = r ? interaction?.receivedCard?.first : interaction?.sentCard?.first
+            if let h = haveItem {
+                /// see if there's a contact associated with the haveItem
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == h.owner }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                }
+                contact = Contact.create(newPersonHandle: h.owner, newPersonUid: h.createdBy)
+            }
         }
     }
+    private var needItem: NeedsBase.NeedItem? {
+        didSet {
+            if let n = needItem {
+                /// see if there's a contact associated with the haveItem
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == n.owner }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                }
+                contact = Contact.create(newPersonHandle: n.owner, newPersonUid: n.createdBy)
+            }
+        }
+    }
+    
+    private var contact: Contact?
     
     private var received: Bool?
     
-    private var relevantCard: CardTemplateInstance?
-    
-    func configure(received: Bool? = nil, interaction: Interaction? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+    /// Four possible combinations: received=true&contact, received=false&contact, only haveItem, only needItem
+    func configure(received: Bool? = nil, contact: Contact? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+        if received == nil && contact == nil && haveItem == nil && needItem == nil { fatalError() }
         self.received = received
-        self.interaction = interaction
+        self.contact = contact
         self.haveItem = haveItem
         self.needItem = needItem
         if isViewLoaded {
-            configure()
+            updateUI()
         }
     }
     
-    private func getRecipientUid() -> String? {
-        return haveItem?.createdBy ?? needItem?.createdBy ?? relevantCard?.uid
+    private func getRecipientUid() -> String {
+        return contact!.contactUid
     }
-    private func getRecipientHandle() -> String? {
-        return haveItem?.owner ?? needItem?.owner ?? interaction?.referenceUserHandle
+    
+    private func getRecipientHandle() -> String {
+        return contact!.contactHandle
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
     }
     
-    private func configure() {
-        guard let handle = getRecipientHandle() else { fatalError() }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateUI()
+    }
+    
+    private func updateUI() {
+        let handle = getRecipientHandle()
         headerTitleLabel.text = "new card to \(handle)"
-        templateTextField.text = "none"
+        templateTextField.text = contact?.sentCards?.first?.templateTitle ?? CoreDataGod.user.cardTemplates!.first!.templateTitle
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
-        continueOrAlertWithRecipientUid()
+        sendCard()
     }
     
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {
@@ -97,56 +123,29 @@ class CompleteAndSendCardVC: UIViewController {
     }
     */
     
-    private func continueOrAlertWithRecipientUid() {
-        /// check id
-        guard let recipientUid = getRecipientUid() else {
-            /// No id
-            showOkayOrCancelAlert(title: "careful", message: "this is an old card, so it will crash the app.  proceed anyway?", okayHandler: { _ in
-                self.sendCard(card: nil, nil)
-            }, cancelHandler: nil)
-            return
-        }
-        if let c = checkTemplate(id: recipientUid) {
-            sendCard(card: c, recipientUid)
-        }
+    private func templateNamed(_ name: String) -> CardTemplate {
+        guard let temps = CoreDataGod.user.cardTemplates else { fatalError() }
+        let t = temps.filter { $0.templateTitle == name }
+        return t.first!
     }
     
-    private func checkTemplate(id: String) -> Card? {
-        // If no template has been selected
-        if !(templateTextField.text == "none") {
-            let cards: [Card] = AppDelegate.user.cardTemplates!
-            let filteredCards = cards.isEmpty ? [] : cards.filter { $0.title == templateTextField.text?.lowercased() }
-            if !filteredCards.isEmpty {
-                return filteredCards.first
-            }
-        } else {
-            showOkayOrCancelAlert(title: "notice", message: "You have chosen 'none', which will functionally erase all the contact details the other person has.  if this is what you want, hit okay.", okayHandler: { (_) in
-                self.sendCard(card: nil, id)
-            }, cancelHandler: nil)
-        }
-        return nil
+    private func buildTemplate() -> CardTemplateInstance {
+        let t = templateNamed(templateTextField.text!)
+        return CardTemplateInstance.create(toHandle: getRecipientHandle(), card: t, message: messageTextView.text.pure())
+        
     }
 
-    private func sendCard(card c: Card?, _ receiverUid: String?) {
-        guard let recipientUid = receiverUid else { fatalError() }
-        
-        // Already checked for existing category
-        let card = c == nil ? CardTemplateInstance.create(cardCategory: "none", notes: "Nope", image: nil) : c
-        // Now we have a card template, or nothing
-        
-        let handle = AppDelegate.user.handle!
-        let myUid = AppDelegate.user.uid!
-        guard let recipientHandle = getRecipientHandle() else { fatalError() }
-        let cardInstance = CardTemplateInstance.create(card: card, codableCard: nil, fromHandle: handle, toHandle: recipientHandle, message: messageTextView.text.pure())
+    private func sendCard() {
+        let cardInstance = buildTemplate()
         let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance)
         // TODO: Move this logic to another utility class.
-        let fibCard = CardsBase.FiBCardItem(createdBy: myUid, createdFor: recipientUid, payload: data.base64EncodedString(), owner: handle)
+        let fibCard = CardsBase.FiBCardItem(createdBy: CoreDataGod.user.uid, createdFor: getRecipientUid(), payload: data.base64EncodedString(), owner: CoreDataGod.user.handle)
         
         CardsDbWriter().addCard(fibCard) { error in
             if let e = error {
                 print(e.localizedDescription)
             } else {
-                self.view.makeToast("Successfully sent a card to \(recipientHandle)") { [weak self] _ in
+                self.view.makeToast("Successfully sent a card to \(self.getRecipientHandle())") { [weak self] _ in
                     if let nav = self?.navigationController {
                         nav.popViewController(animated: true)
                     } else {
@@ -178,7 +177,7 @@ extension CompleteAndSendCardVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuseIdentifier = String(format: "cell%i", indexPath.row%2)
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! SavedLocationCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! TemplateNameCell
         cell.titleLabel.text = templates[indexPath.row]
         return cell
     }
@@ -188,4 +187,8 @@ extension CompleteAndSendCardVC: UITableViewDataSource, UITableViewDelegate {
         templateSelectionTableViewContainer.isHidden = true
         view.layoutIfNeeded()
     }
+}
+
+class TemplateNameCell: UITableViewCell {
+    @IBOutlet weak var titleLabel: UILabel!
 }

@@ -12,51 +12,47 @@ import LocalAuthentication
 import FBSDKCoreKit
 import Firebase
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    class func getUser() -> User {
+typealias CoreDataGod = AppDelegateHelper
+class AppDelegateHelper: NSObject {
+    static let user = AppDelegateHelper.getUser()
+    
+    class var managedContext: NSManagedObjectContext {
         guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
+        return d.persistentContainer.viewContext
+    }
+    
+    class func getUser() -> User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-
         do {
             if let u = try managedContext.fetch(fetchRequest).first {
                 print("Successfully fetched User")
                 return u
             } else {
                 print("Creating new User")
-                return AppDelegate.createUser()
+                return self.createUser()
             }
         } catch _ as NSError {
-          return AppDelegate.createUser()
+            return self.createUser()
         }
     }
 
     class func createUser() -> User {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
-        let entity =
-          NSEntityDescription.entity(forEntityName: "User",
-                                     in: managedContext)!
-
-       guard let user = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? User else {
-                                                fatalError()
-        }
-
-        user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)
+        let user = User(context: managedContext)
+        user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
         if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid
-            _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str)
+            _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str, uid: uid)
+            _ = CardTemplate.create(cardCategory: "none", image: nil)
             return user
         } else {
             fatalError()
         }
     }
-
-    static let user = AppDelegate.getUser()
-
+}
+    
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     var window: UIWindow?
     var newsFetcher = NewsFeedFetcher()     // TODO: decide better place for data holders/fetchers/writers
     static var cardObserver = CardReceiverObserver()
@@ -117,25 +113,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         do {
             BackgroundTask.run(application: application) { backgroundTask in
-                _ = save()
+                _ = try? persistentContainer.viewContext.save()
                 backgroundTask.end()
             }
         }
     }
 
-    func save() -> Bool {
-        if persistentContainer.viewContext.hasChanges {
-            persistentContainer.viewContext.insert(AppDelegate.user)
-            do {
-                try persistentContainer.viewContext.save()
-                return true
-            } catch {
-                return false
-            }
-        }
-        return true
-    }
-
+    /// May move to a flow coordinator
     func setToFlow(storyboardName: String, identifier viewControllerIdentifier: String) {
         DispatchQueue.main.async {
             self.window = UIWindow(frame: UIScreen.main.bounds)

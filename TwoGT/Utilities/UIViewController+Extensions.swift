@@ -115,10 +115,10 @@ extension UIViewController {
     /** you must include one of `interaction`, `haveItem` or `needItem`.
             This VC manages creation of cards, and provides a less-annoying textView experience for me.
     */
-    func showCompleteAndSendCardHelper(received: Bool? = nil, interaction: Interaction? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
+    func showCompleteAndSendCardHelper(received: Bool? = nil, contact: Contact? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "New Card Helper") as! CompleteAndSendCardVC
-        helper.configure(received: received, interaction: interaction, haveItem: haveItem, needItem: needItem)
+        helper.configure(received: received, contact: contact, haveItem: haveItem, needItem: needItem)
         present(helper, animated: true, completion: nil)
         
     }

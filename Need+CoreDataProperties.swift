@@ -2,7 +2,7 @@
 //  Need+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/30/20.
+//  Created by Arthur Mayes on 10/4/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -20,13 +20,6 @@ extension Need {
     @NSManaged public var parentHaveItemId: String?
     @NSManaged public var parentNeedItemId: String?
     @NSManaged public var personalNotes: String?
-    @NSManaged public var needItem: NeedItem?
-    @NSManaged public var purpose: Purpose?
 
-    @NSManaged var childNeeds: [Need]
-    
-}
-
-extension Need : Identifiable {
-
+    @NSManaged public var childNeeds: [Need]?
 }

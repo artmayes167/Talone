@@ -14,10 +14,6 @@ class MyNeedsSearchDisplayVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageHeader: PageHeader!
-    
-    var purposes: Set<Purpose>? = {
-        return AppDelegate.user.purposes as? Set<Purpose>
-    }()
 
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
@@ -39,21 +35,14 @@ class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func getNeeds() {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
+        
         let fetchRequest: NSFetchRequest<Need> = Need.fetchRequest()
         do {
-            let u = try managedContext.fetch(fetchRequest)
-            
+            let u = try CoreDataGod.managedContext.fetch(fetchRequest)
             needs = u.filter {
-                if let item = $0.needItem {
-                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
-                } else {
-                    print("----------No needItem found on Need")
-                    return false
-                }
+                return $0.owner == CoreDataGod.user.handle
             }
-        } catch _ as NSError {
+        } catch {
           fatalError()
         }
         if isViewLoaded {
@@ -84,10 +73,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
 
 extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return needs.count
@@ -100,7 +86,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyNeedCell
         let need = needs[indexPath.item]
         managedObjectContext.refresh(need, mergeChanges: true)
-        cell.configure(need.needItem!)
+        cell.configure(need)
        
         return cell
     }
@@ -126,19 +112,19 @@ class MyNeedCell: UICollectionViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var joinedLabel: UILabel?
     
-    func configure(_ need: NeedItem) {
+    func configure(_ need: Need) {
         
         let size = CGSize(width: 128.0, height: 128.0)
         let aspectScaledToFitImage = UIImage(named: (need.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
         categoryImage.image = aspectScaledToFitImage
         titleLabel.text = need.headline 
-        locationLabel.text = need.need?.purpose?.cityState?.displayName()
+        locationLabel.text = need.location?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())
         
         // This works and returns [Need] type
         
-        if let cn = need.need?.childNeeds, !cn.isEmpty {
+        if let cn = need.childNeeds, !cn.isEmpty {
             joinedLabel?.text = "\(cn.count)"
         } else {
             joinedLabel?.text = ""

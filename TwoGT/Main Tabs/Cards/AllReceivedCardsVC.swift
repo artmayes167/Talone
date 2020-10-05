@@ -13,16 +13,16 @@ class AllReceivedCardsVC: UIViewController {
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     @IBOutlet weak var tableView: UITableView!
     
-    private var interactions: [Interaction] = [] {
+    private var contacts: [Contact] = [] {
         didSet {
             var dict: [String: [String]] = [:]
-            for i in interactions {
-                if let s = i.referenceUserHandle, let firstChar = s.first {
+            for c in contacts {
+                if let firstChar = c.contactHandle.first {
                     if var array = dict[String(firstChar)] {
-                        array.append(s)
+                        array.append(c.contactHandle)
                         //print("in dict: %@, in array: %@", dict[String(firstChar)]!, array)
                     } else {
-                        dict[String(firstChar)] = [s]
+                        dict[String(firstChar)] = [c.contactHandle]
                     }
                 } else { fatalError() }
             }
@@ -44,15 +44,15 @@ class AllReceivedCardsVC: UIViewController {
         }
     }
     
-    private func getInteractions() {
-        let i = AppDelegate.user.interactions ?? []
-        interactions = i
+    private func getContacts() {
+        let c = CoreDataGod.user.contacts ?? []
+        contacts = c
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cardHeaderView.setTitleText("all contacts")
-        getInteractions()
+        getContacts()
     }
     
     @IBAction func goToSearch(_ sender: UIButton) {
@@ -66,8 +66,8 @@ class AllReceivedCardsVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toInteraction" {
             let vc = segue.destination as! ViewContactVC
-            guard let i = sender as? Interaction else { fatalError() }
-            vc.configure(received: true, interaction: i, template: nil)
+            guard let c = sender as? Contact else { fatalError() }
+            vc.configure(received: true, contact: c, template: nil)
         }
     }
 

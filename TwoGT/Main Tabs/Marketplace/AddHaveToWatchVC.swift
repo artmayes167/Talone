@@ -13,86 +13,50 @@ import CoreData
 
 class AddHaveToWatchModel: NSObject {
     func storeWatchingNeedToDatabase(item: HavesBase.HaveItem, creationManager: PurposeCreationManager, controller: UIViewController) {
-        let c = creationManager
         let have = item
 
         let needsWriter = NeedsDbWriter()
         // add Need to DB
-        needsWriter.createNeedAndJoinHave(have, usingHandle: AppDelegate.user.handle ?? "Anonymous") { (error, firebaseNeedItem) in
+        needsWriter.createNeedAndJoinHave(have, usingHandle: CoreDataGod.user.handle) { (error, firebaseNeedItem) in
             if error == nil, let needItem = firebaseNeedItem {
-                let n = Need.createNeed(item: NeedItem.createNeedItem(item: needItem))
-                let h = HaveItem.createHaveItem(item: have)
-                let _ = Have.createHave(item: h)
+                let n = Need.createNeed(item: needItem)
+                let _ = Have.createHave(item: have)
                 n.parentHaveItemId = have.id
-                c.setNeed(n)
-
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
-                            }
-                        }
-                    } else {
-                        fatalError()
-                    }
-                } else {
-                    fatalError()
-                }
-                
             } else {
                 controller.showOkayAlert(title: "Nope", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
     
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     func storeWatchingHaveToDatabase(item: HavesBase.HaveItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         
         let c = creationManager
         let haveItem = item
-        
-        guard let loc = c.getLocationOrNil()?.locationInfo(), let user = Auth.auth().currentUser  else { fatalError()
-        }
-
-        // if need-type nor location is not selected, display an error message
         
         /// Create new Db needItem, based on the parent Have's haveItem
         let h = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
                                           description: c.getDescription() ?? haveItem.description,
                                           validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+                                          createdBy: CoreDataGod.user.uid,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: c.getLocationOrNil()!))
 
         let havesWriter = HavesDbWriter()
         /// Create a new backend need
         havesWriter.addHave(h, completion: { error in
             if error == nil {
                 // Create CD Have and HaveItem
-                let cdHave = Have.createHave(item: HaveItem.createHaveItem(item: h))
-                
-                // Set have in creationManager
-                c.setHave(cdHave)
-                
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                if let p = c.getSavedPurpose() {
-                    AppDelegate.user.addToPurposes(p)
-                    if appDelegate.save() {
-                        DispatchQueue.main.async {
-                            controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                                // TODO: - Create unwind segue to my needs
-                                controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
-                            }
+                let _ = Have.createHave(item: h)
+                do {
+                    try CoreDataGod.managedContext.save()
+                    DispatchQueue.main.async {
+                        controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
+                            // TODO: - Create unwind segue to my needs
+                            controller.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
                         }
-                    } else {
-                        fatalError()
                     }
-                } else {
-                    fatalError()
+                } catch {
+                    print("Failed to save in AddHaveToWatchVC")
                 }
                 
             } else {

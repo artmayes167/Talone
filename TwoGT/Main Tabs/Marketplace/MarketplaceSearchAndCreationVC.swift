@@ -35,6 +35,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Variables
     var creationManager: PurposeCreationManager = PurposeCreationManager()
     var model: MarketplaceModel?
+    
+    var searchLocation: SearchLocation?
 
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
@@ -91,12 +93,16 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func setInitialValues() {
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
-            creationManager.setLocation(city: city, state: state, country: loc[DefaultsSavedLocationKeys.country.rawValue] ?? "USA", community: loc[DefaultsSavedLocationKeys.community.rawValue] ?? "")
+            guard let locations = CoreDataGod.user.searchLocations else { return }
+            let l = locations.filter { $0.city == city && $0.state == state }
+            if !l.isEmpty {
+                creationManager.setLocation(l.first!)
+            }
             DispatchQueue.main.async {
                 self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
             }
         }
-        creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
+        creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex)!)
     }
 
     private func setUIForCurrents() {
@@ -119,16 +125,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         let success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         if success {
-            let success2 = creationManager.checkPrimaryNavigationParameters(save: true) // also creates purpose
-            if success2 {
-                switch creationManager.currentCreationType() {
-                case .need:
-                    model?.storeNeedToDatabase(controller: self)
-                case .have:
-                    model?.storeHaveToDatabase(controller: self)
-                default:
-                    print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
-                }
+            switch creationManager.currentCreationType() {
+            case .need:
+                model?.storeNeedToDatabase(controller: self)
+            case .have:
+                model?.storeHaveToDatabase(controller: self)
+            default:
+                print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
             }
 
         } else {
@@ -137,21 +140,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func seeMatchingNeeds(_ sender: Any) {
-        let success = creationManager.checkPrimaryNavigationParameters(save: true)
-        if success {
-            fetchMatchingNeeds()
-        } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
-        }
+        guard let _ = searchLocation else { return }
+        fetchMatchingNeeds()
     }
 
     @IBAction func seeMatchingHaves(_ sender: Any) {
-        let success = creationManager.checkPrimaryNavigationParameters(save: true)
-        if success {
-            fetchMatchingHaves()
-        } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
-        }
+        guard let _ = searchLocation else { return }
+        fetchMatchingHaves()
     }
 
     // MARK: - NeedSelectionDelegate
@@ -188,51 +183,28 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     /// Unwind segue here is responsible for dealing with creating and saving the search location
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         if let s = segue.source as? CityStateSearchVC {
-
-            var loc = s.selectedLocation
-            guard let city = loc[.city], let state = loc[.state] else { fatalError() }
-            creationManager.setLocation(city: city, state: state, country: loc[.country] ?? "USA", community: loc[.community] ?? "")
-
-            loc[.display] = creationManager.getLocationOrNil()?.displayName()
-            whereTextField.text = loc[.display]
-            var dict: [String: String] = [:]
-            for (key, value) in loc {
-                dict[key.rawValue] = value
-            }
+            guard let loc = s.locationForSave else { fatalError() }
+            searchLocation = loc
+            whereTextField.text = loc.displayName()
+            let dict = ["city": loc.city, "state": loc.state]
             UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
             setSearchButtons()
-            saveFor(s.saveType)
-        }
-    }
-
-     // MARK: Save Functions
-    /// Used by unwind segue from state/city selector
-    private func saveFor(_ type: SaveType) {
-        guard let loc = creationManager.getLocationOrNil() else { fatalError() }
-        if !(type == .none) {
-            guard let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
-            let user = AppDelegate.user
-            let locType: String = ["home", "alternate"][type.rawValue]
-            if let locations = user.searchLocations {
-                for s in (locations as [SearchLocation]) {
-                    if s.city == city && s.state == state && s.country == country && s.community == "" && s.type == locType { return }
-                }
-            }
-            // Use core data
-            let s: SearchLocation = SearchLocation.createSearchLocation(city: city, state: state, country: country, community: "")
-            s.type = locType
+            try? CoreDataGod.managedContext.save()
         }
     }
 
      // MARK: - Private Functions
 
     private func fetchMatchingNeeds() {
-        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil() else { fatalError() }
+        let city = loc.city
+        let state = loc.state
         showSpinner()
+        
         NeedsDbFetcher().fetchAllNeeds(city: city, state: state, country: loc.country, maxCount: 20) { array in
             guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
             let newArray = array.filter { $0.category.lowercased() ==  cat}
-            let finalArray = newArray.filter { $0.owner != AppDelegate.user.handle }
+            let finalArray = newArray.filter { $0.owner != AppDelegateHelper.user.handle }
             if finalArray.isEmpty {
                 self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
                     self.hideSpinner()
@@ -246,10 +218,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func fetchMatchingHaves() {
         showSpinner()
-        guard let loc = creationManager.getLocationOrNil(), let city = loc.city, let state = loc.state, let country = loc.country else { fatalError() }
+        guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         guard let v = creationManager.getCategory()?.firebaseValue() else { fatalError() }
-        HavesDbFetcher().fetchHaves(matching: [v], city, state, country) { array in
-            let finalArray = array.filter { $0.owner != AppDelegate.user.handle }
+        HavesDbFetcher().fetchHaves(matching: [v], loc.city, loc.state, loc.country) { array in
+            let finalArray = array.filter { $0.owner != AppDelegateHelper.user.handle }
             if finalArray.isEmpty {
                 self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
                     self.hideSpinner()
@@ -263,7 +235,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func checkSaveButton() {
         // Check cityState and category, but don't save
-        var success = creationManager.checkPrimaryNavigationParameters(save: false)
+        var success = creationManager.getLocationOrNil() != nil
         if success {
             // returns true if able to set both headline and description
             success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
@@ -272,7 +244,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func setSearchButtons() {
-        let success = creationManager.checkPrimaryNavigationParameters(save: false)
+        let success = creationManager.getLocationOrNil() != nil
         seeMatchingHavesButton.isEnabled = success
         seeMatchingNeedsButton.isEnabled = success
     }

@@ -20,7 +20,7 @@ class CardReceiverObserver {
     func observeCardReceptions() {
 
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
-            let interactions: [Interaction]? = AppDelegate.user.interactions
+            let contacts: [Contact]? = CoreDataGod.user.contacts
             var newCards = [CardsBase.FiBCardItem]()
             var modifiedCards = newCards
 
@@ -39,11 +39,11 @@ class CardReceiverObserver {
                 }
 
                 var isExisting = false
-                if interactions == nil || (interactions?.isEmpty ?? true) {
+                if contacts == nil || (contacts?.isEmpty ?? true) {
                     newCards.append(fibCard)
                     
                 } else {
-                    for interaction in interactions! where fibCard.owner == interaction.referenceUserHandle {
+                    for contact in contacts! where fibCard.owner == contact.contactHandle {
                         modifiedCards.append(fibCard)
                         isExisting = true
                     }

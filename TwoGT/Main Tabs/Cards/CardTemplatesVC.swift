@@ -12,17 +12,17 @@ class CardTemplatesVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var cardTemplates: [Card] {
+    private var cardTemplates: [CardTemplate] {
         get {
-            var cards: [Card] = []
-            let c = AppDelegate.user.cardTemplates ?? [] // [Card]
+            var cards: [CardTemplate] = []
+            let c = AppDelegateHelper.user.cardTemplates ?? [] // [Card]
             
-            /// Onlt templates, not instances
+            /// Only templates, not instances
             if !c.isEmpty {
                 cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
             }
             
-            return cards.isEmpty ? [] : cards.sorted { return $0.title! < $1.title! }
+            return cards.isEmpty ? [] : cards.sorted { return $0.templateTitle < $1.templateTitle }
         }
     }
     
@@ -65,7 +65,7 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
         let reuseIdentifier = String(format: "cell%i", indexPath.item%2)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TemplatesCollectionViewCell
         
-        cell.nameLabel.text = cardTemplates[indexPath.item].title
+        cell.nameLabel.text = cardTemplates[indexPath.item].templateTitle
         return cell
     }
     

@@ -9,355 +9,6 @@
 import UIKit
 import CoreData
 
-extension Purpose {
-
-    class func create(type: String, cityState: CityState) -> Purpose {
-        print("Started Purpose -> create")
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Purpose",
-                                     in: managedContext)!
-
-       let purpose = Purpose(entity: entity, insertInto: managedContext)
-        purpose.setValue(type, forKeyPath: "category")
-
-        let cs: NSManagedObject = CityState.create(city: cityState.city!, state: cityState.state!, country: cityState.country!, communityName: "")
-
-        purpose.setValue(cs as? CityState, forKeyPath: "cityState")
-        print("---------This is what the purpose looks like after adding values in Purpose extension------- \(purpose)")
-        do {
-          try managedContext.save()
-            print("Successfully created Purpose in Purpose extension!")
-            return purpose
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-
-    func cdKey() -> String? {
-        return cityState?.displayName()
-    }
-}
-
-extension CityState {
-    
-    /**
-     - Parameter country: USA by default, as this app is only currently intended for distribution in the US
-     - Parameter communityName: Intended for future development
-     */
-    class func create(city: String, state: String, country: String = "USA", communityName: String = "") -> CityState {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "CityState",
-                                     in: managedContext)!
-
-        let cityState: CityState = CityState(entity: entity, insertInto: managedContext) as CityState
-
-        let community = Community.create(communityName: communityName)
-
-        cityState.country = country
-        cityState.city = city
-        cityState.state = state
-        cityState.addToCommunities(community)
-        do {
-          try managedContext.save()
-            return cityState
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-
-    func displayName() -> String {
-        if let c = city, let s = state {
-            return c.capitalized + ", " + s.capitalized
-        } else { fatalError() }
-    }
-
-    func locationInfo() -> AppLocationInfo {
-        let a = AppLocationInfo.create(city: city!, state: state!, country: country!)
-        return a
-    }
-}
-
-/**
- `Card` is a template with the data that will be shared, identified by `title`
- 
- Discussion of variables:
- `uid`: The uid created by FiB (FireBase) for User on account creation.  Any reference to `uid` must refer only to the thisUser.
- `handle`: The unique identifier used by CoreData to differentiate between thisUser and otherUser
- `comments`: On a Card template, the comments field will be nil.  Comments are messages sent to other users, customized when Card is subclassed in a `CardTemplateInstance`.
- */
-extension Card {
-    /**
-        Only thisUser created cards
-     - Parameter image: perfectly fine for this to be nil
-     - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
-     - Parameter notes: personal notes on a card that will only be stored on the template, never shared.
-     */
-    
-    class func create(cardCategory title: String, notes: String?, image: Data?) -> Card {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let card = newCard(managedContext: managedContext, title: title)
-        
-        card.image = image
-        card.comments = nil
-        card.personalNotes = notes
-
-        do {
-          try managedContext.save()
-            return card
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-    
-    class func newCard(managedContext: NSManagedObjectContext, title: String) -> Card {
-        let entity = NSEntityDescription.entity(forEntityName: "Card",
-                                     in: managedContext)!
-
-       guard let c = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Card else { fatalError() }
-        c.uid = AppDelegate.user.uid
-        c.userHandle = AppDelegate.user.handle
-        c.title = title.lowercased()
-        return c
-    }
-}
-
-/**
-        An instance of a `Card` that contains the data defined in *one of the templates*, personalized with comments.  Only call to create new
- 
-            This object is associated with an `Interaction` object, and will not be otherwise accessible after creation. `CardTemplateInstance` should never set personal notes on creation, but should set comments.  Comments are a message to or from the other user, depending on the context
- */
-extension CardTemplateInstance {
-    /** - Parameter card: if set, will attempt to create from `card`.  Else, `codableCard` must be set. `card` takes precedence.
-        - Parameter codableCard:  if set, in the absence of `card`, will attempt to create from `codableCard`.  Else, `card` must be set
-     */
-    class func create(card: Card?, codableCard: CodableCardTemplateInstance?, fromHandle sender: String, toHandle receiver: String, message: String?) -> CardTemplateInstance {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "CardTemplateInstance",
-                                     in: managedContext)!
-
-       guard let instance = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? CardTemplateInstance else {
-                                                fatalError()
-        }
-        
-        instance.receiverUserHandle = receiver
-        instance.senderUserHandle = sender
-        if let c = card {
-            instance.image = c.image
-            instance.uid = c.uid
-            instance.userHandle = c.userHandle // used for display
-            instance.senderUserHandle = sender
-            instance.receiverUserHandle = receiver
-            instance.title = c.title?.lowercased()
-            instance.personalNotes = c.personalNotes
-            
-            // addresses, phones, and emails are fetched by title
-            
-        } else if let c = codableCard {
-            instance.image = c.image
-            instance.uid = c.uid
-            instance.userHandle = c.userHandle
-            instance.receiverUserHandle = sender // used for display
-            instance.senderUserHandle = receiver
-            instance.title = c.title?.lowercased()
-            CardAddress.arrayFrom(dictionary: c.addresses)
-            CardEmail.arrayFrom(dictionary: c.emails)
-            CardPhoneNumber.arrayFrom(dictionary: c.phoneNumbers)
-        } else {
-            instance.uid = AppDelegate.user.uid
-            instance.userHandle = AppDelegate.user.handle
-        }
-        
-        instance.comments = message
-        
-        do {
-          try managedContext.save()
-            return instance
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-    
-    /**
-     This finds the existing interaction, or creates a new one, and creates/replaces the old `CardTemplateInstance`.  Since the instance is automatically pulled from CD according to uid, there is no further work to do.
- 
-     */
-    class func createOrFindAndReturn(codableInstance: CodableCardTemplateInstance) -> CardTemplateInstance {
-        // First check for existing instances
-        let interactions: [Interaction] = AppDelegate.user.interactions ?? []
-        let filteredInteractions = interactions.isEmpty ? [] : interactions.filter { $0.referenceUserHandle == codableInstance.senderUserHandle }
-        print(codableInstance.senderUserHandle)
-        if !filteredInteractions.isEmpty {
-            if let f = filteredInteractions.first {
-                print(f)
-                
-                DispatchQueue.main.async {
-                    /// make sure we have the received card
-                    if let nonCodableInstance = f.receivedCard {
-                        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-                        let managedContext = appDelegate.persistentContainer.viewContext
-                        //                        for address in nonCodableInstance.addresses {
-                        //                            managedContext.delete(address)
-                        //                        }
-                        //                        for phone in nonCodableInstance.phoneNumbers {
-                        //                            managedContext.delete(phone)
-                        //                        }
-                        //                        for email in nonCodableInstance.emails {
-                        //                            managedContext.delete(email)
-                        //                        }
-                        /// delete those cards
-                        for instance in nonCodableInstance {
-                            managedContext.delete(instance)
-                        }
-                        
-                        do {
-                            try managedContext.save()
-                        } catch {
-                            fatalError()
-                        }
-                    }
-                }
-            }
-        } else {
-            _ = Interaction.create(newPersonHandle: codableInstance.senderUserHandle, templateName: codableInstance.title)
-        }
-        
-        let card = CardTemplateInstance.create(card: nil, codableCard: codableInstance, fromHandle: codableInstance.senderUserHandle, toHandle: codableInstance.receiverUserHandle, message: codableInstance.comments)
-        return card
-    }
-}
-
-/// Additional required items for payload indicators
-/// createdAt, modifiedAt, createdBy (uid), createdFor (uid), senderHandle
-/// Exists solely to Encode for payload
-struct CodableCardTemplateInstance: Codable {
-    
-    let receiverUserHandle: String
-    let senderUserHandle: String
-    
-    let uid: String
-    let image: Data?
-    let userHandle: String
-    let comments: String?
-    let title: String?
-    
-    let addresses: [[String: String]]
-    let emails: [[String: String]]
-    let phoneNumbers: [[String: String]]
-    
-    enum CodingKeys: String, CodingKey {
-        case receiverUserHandle, senderUserHandle
-        case uid, image, userHandle, comments, title
-        case addresses, emails, phoneNumbers
-    }
-    
-    init(instance: CardTemplateInstance) {
-        receiverUserHandle = instance.receiverUserHandle!
-        senderUserHandle = instance.senderUserHandle!
-        
-        image = instance.image
-        uid = instance.uid!  // may not be necessary
-        userHandle = instance.userHandle!
-        comments = instance.comments
-        title = instance.title
-        
-        var addressBook: [[String: String]] = []
-        for a in instance.addresses {
-            addressBook.append(a.dictionaryValue())
-        }
-        addresses = addressBook
-        
-        var phoneBook: [[String: String]] = []
-        for p in instance.phoneNumbers {
-            phoneBook.append(p.dictionaryValue())
-        }
-        phoneNumbers = phoneBook
-        
-        var emailBook: [[String: String]] = [] 
-        for e in instance.emails {
-            emailBook.append(e.dictionaryValue())
-        }
-        emails = emailBook
-    }
-}
-
-typealias GateKeeper = CodableCardTemplateInstanceManager
-
-class CodableCardTemplateInstanceManager {
-    /**
-    This is the only method FiB should need to call to encode card data.
-     - Returns: JSON-formatted string
-     */
-    func buildCodableInstanceAndEncode(instance: CardTemplateInstance) -> Data {
-        let codableInstance = CodableCardTemplateInstance(instance: instance)
-        let encoder = newJSONEncoder()
-        
-        do {
-            let data = try encoder.encode(codableInstance)
-            return data
-        } catch {
-            fatalError()
-        }
-    }
-    
-    /**
-        This is the only method FiB should need to call to decode card data.
-        - Parameter data: JSON-formatted string
-     */
-    func decodeCodableInstance(data: Data) -> CardTemplateInstance {
-        let decoder = newJSONDecoder()
-        do {
-            let codableInstance = try decoder.decode(CodableCardTemplateInstance.self, from: data)
-            return CardTemplateInstance.createOrFindAndReturn(codableInstance: codableInstance)
-        } catch {
-            fatalError()
-        }
-    }
-}
-
-extension Community {
-    class func create(communityName: String) -> Community {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Community",
-                                     in: managedContext)!
-
-       guard let community = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Community else {
-                                                fatalError()
-        }
-
-        community.setValue(communityName, forKeyPath: "name")
-
-        do {
-          try managedContext.save()
-            return community
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-}
-
 extension User {
     func sortedAddresses() -> [String: [SearchLocation]] {
         var dict: [String: [SearchLocation]] = [:]
@@ -374,42 +25,176 @@ extension User {
     }
 }
 
-extension CardEmail {
-    class func create(title: String?, email: Email?, dictionary: [String: String] = [:]) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = appDelegate.persistentContainer.viewContext
+/**
+ `CardTemplate` is a template with the data that will be shared, identified by `id`(uid + templateTitle)
+ 
+ Discussion of variables:
+ `uid`: The uid created by FiB (FireBase) for User on account creation.  Any reference to `uid` must refer only to the thisUser.
+ `handle`: The unique identifier used by CoreData to differentiate between thisUser and otherUser
 
-        let entity = NSEntityDescription.entity(forEntityName: "CardEmail",
-                                     in: managedContext)!
-
-       guard let cardEmail = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? CardEmail else {
-                                                fatalError()
+ */
+extension CardTemplate {
+    /**
+        Only thisUser created cards
+     - Parameter image: perfectly fine for this to be nil
+     - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
+     */
+    
+    class func create(cardCategory title: String, image: Data?) -> CardTemplate {
+        var card: CardTemplate?
+        if let temps = CoreDataGod.user.cardTemplates?.filter({ $0.templateTitle == title }) {
+            card = temps.first
+        }
+        if card == nil {
+            let entity = NSEntityDescription.entity(forEntityName: "CardTemplate", in: CoreDataGod.managedContext)!
+            card = CardTemplate(entity: entity, insertInto: CoreDataGod.managedContext)
+            card!.templateTitle = title.lowercased()
+            card!.uid = AppDelegateHelper.user.uid
+            card!.userHandle = AppDelegateHelper.user.handle
         }
         
-        if let e = email {
-            cardEmail.title = e.title?.lowercased()
-            cardEmail.emailString = e.emailString
-            cardEmail.uid = e.uid
-        } else if !dictionary.isEmpty {
-            let e = dictionary
-            cardEmail.title = e["title"]?.lowercased()
-            cardEmail.emailString = e["emailString"]
-            cardEmail.uid = e["uid"]
-        } else {
-            fatalError()
-        }
-        
-        cardEmail.templateTitle = title
+        card!.image = image
 
-        do {
-          try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        try? CoreDataGod.managedContext.save()
+        return card!
     }
-    /// Template title not included
+}
+
+/**
+        An instance of a `CardTemplate` that contains the data defined in *one of the templates*, personalized with comments.  Only call to create new
+ */
+extension CardTemplateInstance {
+    /** - Parameter card: if set, will attempt to create from `card`.  Else, `codableCard` must be set. `card` takes precedence.
+        - Parameter codableCard:  if set, in the absence of `card`, will attempt to create from `codableCard`.  Else, `card` must be set
+     */
+    class func create(toHandle: String, card c: CardTemplate, message: String = "", personalNotes: String = "") -> CardTemplateInstance {
+
+        let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: CoreDataGod.managedContext)!
+        let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
+        
+        instance.message = message
+        instance.receiverUserHandle = toHandle
+        instance.personalNotes = personalNotes
+        
+        instance.image = c.image
+        instance.uid = c.uid
+        instance.userHandle = c.userHandle
+        instance.templateTitle = c.templateTitle
+        
+        instance.message = message
+        instance.addresses = c.addresses
+        instance.emails = c.emails
+        instance.phoneNumbers = c.phoneNumbers
+        
+        try? CoreDataGod.managedContext.save()
+        return instance
+    }
+    
+    class func create(codableCard c: CodableCardTemplateInstance) -> CardTemplateInstance {
+        let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: CoreDataGod.managedContext)!
+        let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
+        instance.image = c.image
+        instance.uid = c.uid
+        instance.userHandle = c.userHandle
+        instance.receiverUserHandle = c.receiverUserHandle
+        instance.templateTitle = c.templateTitle
+        instance.message = c.message
+        instance.addresses = NSSet(array: Address.addressesFrom(array: c.addresses))
+        instance.emails = NSSet(array: Email.emailsFrom(array: c.emails))
+        instance.phoneNumbers = NSSet(array: PhoneNumber.phoneNumbersFrom(array: c.phoneNumbers))
+        return instance
+    }
+}
+
+/// Additional required items for payload indicators
+/// createdAt, modifiedAt, createdBy (uid), createdFor (uid), senderHandle
+/// Exists solely to Encode for payload
+struct CodableCardTemplateInstance: Codable {
+    
+    let receiverUserHandle: String // to -- if received, this will be AppDelegateHelper.user.handle
+    
+    let uid: String
+    let image: Data?
+    let userHandle: String // sender's user handle
+    let message: String?
+    let templateTitle: String
+    
+    let addresses: [[String: String]]
+    let emails: [[String: String]]
+    let phoneNumbers: [[String: String]]
+    
+    enum CodingKeys: String, CodingKey {
+        case receiverUserHandle
+        case uid, image, userHandle, message, templateTitle
+        case addresses, emails, phoneNumbers
+    }
+    
+    init(instance: CardTemplateInstance) {
+        receiverUserHandle = instance.receiverUserHandle!
+        uid = instance.uid
+        image = instance.image
+        userHandle = instance.userHandle
+        message = instance.message
+        templateTitle = instance.templateTitle
+        
+        var addressBook: [[String: String]] = []
+        if let adds = instance.addresses {
+            for a in adds {
+                if let add = a as? Address {
+                    addressBook.append(add.dictionaryValue())
+                }
+            }
+        }
+        addresses = addressBook
+        
+        var phoneBook: [[String: String]] = []
+        if let phones = instance.phoneNumbers {
+            for p in phones {
+                if let ph = p as? PhoneNumber {
+                    phoneBook.append(ph.dictionaryValue())
+                }
+            }
+        }
+        phoneNumbers = phoneBook
+        
+        var emailBook: [[String: String]] = [] 
+        if let emails = instance.emails {
+            for e in emails {
+                if let email = e as? Email {
+                    emailBook.append(email.dictionaryValue())
+                }
+            }
+        }
+        emails = emailBook
+    }
+}
+
+extension Community {
+    class func create(communityName: String) -> Community {
+
+        let entity = NSEntityDescription.entity(forEntityName: "Community", in: CoreDataGod.managedContext)!
+        let community = Community(entity: entity, insertInto: CoreDataGod.managedContext)
+
+        community.name = communityName
+
+        try? CoreDataGod.managedContext.save()
+        return community
+    }
+}
+
+extension Email {
+    class func create(name: String, emailAddress: String, uid: String?) -> Email {
+        let entity = NSEntityDescription.entity(forEntityName: "Email", in: CoreDataGod.managedContext)!
+        let email = Email(entity: entity, insertInto: CoreDataGod.managedContext)
+        
+        email.title = name.lowercased()
+        email.emailString = emailAddress
+        email.uid = uid ?? AppDelegateHelper.user.uid
+
+        try? CoreDataGod.managedContext.save()
+        return email
+    }
+    
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
         dict["title"] = title
@@ -418,134 +203,64 @@ extension CardEmail {
         return dict
     }
     
-    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
-    class func arrayFrom(dictionary: [[String: String]]) {
-        for e in dictionary {
-            CardEmail.create(title: nil, email: nil, dictionary: e)
+    class func emailsFrom(array: [[String: String]]) -> [Email] {
+        var arr: [Email] = []
+        for dict in array {
+            let e = Email.create(name: dict["title"]!, emailAddress: dict["emailString"]!, uid: dict["uid"])
+            arr.append(e)
         }
-    }
-}
-
-extension Email {
-    class func create(name: String, emailAddress: String) -> Email {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Email",
-                                     in: managedContext)!
-
-       guard let email = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Email else {
-                                                fatalError()
-        }
-        email.title = name.lowercased()
-        email.emailString = emailAddress
-        email.uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue)
-
-        do {
-          try managedContext.save()
-            return email
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-}
-
-extension Item {
-    func areAllRequiredFieldsFilled(light: Bool) -> Bool {
-        guard let c = category, !c.isEmpty else { return false }
-        if light { return true } else {
-            return !(desc?.isEmpty ?? true) && !(headline?.isEmpty ?? true)
-        }
+        return arr
     }
 }
 
 extension SearchLocation {
-    class func createSearchLocation(city: String, state: String, country: String = "USA", community: String = "") -> SearchLocation {
+    class func createSearchLocation(city: String, state: String, country: String = "USA", community: String = "", type: String) -> SearchLocation {
 
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "SearchLocation",
-                                     in: managedContext)!
-
-       guard let searchLocation = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? SearchLocation else {
-                                                fatalError()
-        }
-        searchLocation.setValue(city, forKeyPath: "city")
-        searchLocation.setValue(state, forKeyPath: "state")
-        searchLocation.setValue(country, forKeyPath: "country")
-        searchLocation.setValue(community, forKeyPath: "community")
-        do {
-          try managedContext.save()
-            return searchLocation
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        let entity = NSEntityDescription.entity(forEntityName: "SearchLocation", in: CoreDataGod.managedContext)!
+        let searchLocation = SearchLocation(entity: entity, insertInto: CoreDataGod.managedContext)
+        
+        searchLocation.city = city
+        searchLocation.state = state
+        searchLocation.country = country
+        searchLocation.community = community
+        searchLocation.type = type
+        // don't save yet
+        return searchLocation
     }
 
     func displayName() -> String {
-        if let c = city, let s = state {
-            return c.capitalized + ", " + s.capitalized
-        } else { fatalError() }
+        return city.capitalized + ", " + state.capitalized
     }
 }
 
-extension CardAddress {
-    class func create(title: String?, address: Address?, dictionary: [String: String] = [:] ) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "CardAddress",
-                                     in: managedContext)!
-
-       guard let cardAddress = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? CardAddress else {
-                                                fatalError()
-        }
-         // unique
-        cardAddress.templateTitle = title  // unique
-        /// from thisUser
-        if let a = address {
-            cardAddress.title = a.title?.lowercased()
-            cardAddress.street1 = a.street1
-            cardAddress.street2 = a.street2
-            cardAddress.city = a.city
-            cardAddress.state = a.state
-            cardAddress.country = a.country
-            cardAddress.uid = a.uid // from owner
-            cardAddress.zip = a.zip
-            /// from otherUser
-        } else if !dictionary.isEmpty {
-            let dict = dictionary
-            cardAddress.title = dict["title"]?.lowercased()
-            cardAddress.street1 =  dict["street1"]
-            cardAddress.street2 = dict["street2"]
-            cardAddress.city =  dict["city"]
-            cardAddress.state =  dict["state"]
-            cardAddress.country =  dict["country"]
-            cardAddress.uid =  dict["uid"] // from owner
-            cardAddress.zip =  dict["zip"]
-        }
+extension Address {  // :)
+    
+    /// Only called by thisUser to create
+    class func create(title: String, street1: String, street2: String?, city: String, zip: String?, state: String, country: String) {
         
-
-        do {
-          try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
+        let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+        add.title = title
+        add.street1 = street1
+        add.street2 = street2
+        add.city = city
+        add.state = state
+        add.country = country
+        add.uid = AppDelegateHelper.user.uid
+        add.zip = zip
+        
+        try? CoreDataGod.managedContext.save()
     }
     
+    
+    func displayName() -> String {
+        return String(format: "\(street1) \n\(city), \(state)")
+    }
+    
+    /// To someone else
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
-        dict["title"] = title?.lowercased()
+        dict["title"] = title
         dict["street1"] = street1
         dict["street2"] = street2
         dict["city"] = city
@@ -556,114 +271,65 @@ extension CardAddress {
         return dict
     }
     
-    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
-    class func arrayFrom(dictionary: [[String: String]]) {
-        for a in dictionary {
-            CardAddress.create(title: nil, address: nil, dictionary: a)
+    /// From someone else
+    class func addressesFrom(array: [[String: String]]) -> [Address] {
+        var arr: [Address] = []
+        for dict in array {
+            let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
+            let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+            add.title = dict["title"]!
+            add.street1 = dict["street1"]!
+            add.street2 = dict["street2"]
+            add.city = dict["city"]!
+            add.state = dict["state"]!
+            add.country = dict["country"]!
+            add.uid = dict["uid"]!
+            add.zip = dict["zip"]
+            arr.append(add)
         }
+        _ = try? CoreDataGod.managedContext.save()
+        return arr
     }
 }
 
-extension Address {
-    func displayName() -> String {
-        return String(format: "\(street1!) \n\(city!), \(state!)")
-    }
-//    class func createAddress(city: String, state: String, country: String = "USA", type: String = "home") -> Address {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-//
-//        let managedContext = appDelegate.persistentContainer.viewContext
-//
-//        let entity = NSEntityDescription.entity(forEntityName: "Address",
-//                                     in: managedContext)!
-//
-//       guard let address = NSManagedObject(entity: entity,
-//                                              insertInto: managedContext) as? Address else {
-//                                                fatalError()
-//        }
-//        address.setValue(type, forKeyPath: "type")
-//        do {
-//          try managedContext.save()
-//            return address
-//        } catch let error as NSError {
-//            print("Could not save. \(error), \(error.userInfo)")
-//            fatalError()
-//        }
-//    }
-
-    func locationInfoOrNil() -> AppLocationInfo? {
-        if let _ = city, let _ = state, let _ = country {
-            return self
-        }
-        return nil
-    }
-}
-
-extension CardPhoneNumber {
-    class func create(title: String?, phoneNumber: PhoneNumber?, dictionary: [String: String] = [:]) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "CardPhoneNumber",
-                                     in: managedContext)!
-
-       guard let cardNum = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? CardPhoneNumber else {
-                                                fatalError()
-        }
+extension PhoneNumber {
+    class func create(title: String, number: String, uid: String?) -> PhoneNumber {
+        let entity = NSEntityDescription.entity(forEntityName: "PhoneNumber", in: CoreDataGod.managedContext)!
+        let phoneNum = PhoneNumber(entity: entity, insertInto: CoreDataGod.managedContext)
         
-        cardNum.templateTitle = title
+        phoneNum.title = title
+        phoneNum.number = number
+        phoneNum.uid = uid ?? AppDelegateHelper.user.uid
         
-        if let p = phoneNumber {
-            cardNum.title = p.title?.lowercased()
-            cardNum.number = p.number
-            cardNum.uid = p.uid
-        } else if !dictionary.isEmpty {
-            let p = dictionary
-            cardNum.title = p["title"]?.lowercased()
-            cardNum.number = p["number"]
-            cardNum.uid = p["uid"]
-        }
-        
-
-        do {
-          try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        try? CoreDataGod.managedContext.save()
+        return phoneNum
     }
     
     /// Template title not included
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
-        dict["title"] = title?.lowercased()
+        dict["title"] = title
         dict["number"] = number
         dict["uid"] = uid // from owner
         return dict
     }
     
-    /// Check to see if the array of emails exists first, then delete them and call this function with the dictionary from the `CodableCardTemplateInstance`
-    class func arrayFrom(dictionary: [[String: String]]) {
-        for p in dictionary {
-            CardEmail.create(title: nil, email: nil, dictionary: p)
+    class func phoneNumbersFrom(array: [[String: String]]) -> [PhoneNumber] {
+        var arr: [PhoneNumber] = []
+        for p in array {
+            let p = PhoneNumber.create(title: p["title"]!, number: p["number"]!, uid: p["uid"]!)
+            arr.append(p)
         }
+        return arr
     }
 }
 
-extension NeedItem {
-    class func createNeedItem(item: NeedsBase.NeedItem) -> NeedItem {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+extension Need {
+    class func createNeed(item: NeedsBase.NeedItem) -> Need {
 
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "NeedItem",
-                                     in: managedContext)!
-
-       guard let needItem = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? NeedItem else {
-                                                fatalError()
-        }
+        let entity = NSEntityDescription.entity(forEntityName: "Need", in: CoreDataGod.managedContext)!
+        let needItem = Need(entity: entity, insertInto: CoreDataGod.managedContext)
+        
         needItem.headline = item.headline
         needItem.category = item.category
         needItem.desc = item.description
@@ -672,63 +338,25 @@ extension NeedItem {
         needItem.createdBy = item.createdBy
         needItem.createdAt = item.createdAt?.dateValue()
         needItem.modifiedAt = item.modifiedAt?.dateValue()
-        needItem.id = item.id
-        do {
-          try managedContext.save()
-            return needItem
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-}
-
-extension Need {
-    class func createNeed(item: NeedItem) -> Need {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Need",
-                                     in: managedContext)!
-
-       guard let need = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Need else {
-                                                fatalError()
-        }
-        need.setValue(item, forKey: "needItem")
-        do {
-          try managedContext.save()
-            return need
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        needItem.id = item.id!
+        
+        try? CoreDataGod.managedContext.save()
+        return needItem
     }
 
     func deleteNeed() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-        managedContext.delete(self)
-        try? managedContext.save()
+        CoreDataGod.managedContext.delete(self)
+        try? CoreDataGod.managedContext.save()
     }
 
 }
 
-extension HaveItem {
-    class func createHaveItem(item: HavesBase.HaveItem) -> HaveItem {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+extension Have {
+    class func createHave(item: HavesBase.HaveItem) -> Have {
 
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "HaveItem",
-                                     in: managedContext)!
-
-       guard let haveItem = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? HaveItem else {
-                                                fatalError()
-        }
+        let entity = NSEntityDescription.entity(forEntityName: "Have", in: CoreDataGod.managedContext)!
+        let haveItem = Have(entity: entity, insertInto: CoreDataGod.managedContext)
+        
         haveItem.headline = item.headline
         haveItem.category = item.category
         haveItem.desc = item.description
@@ -737,104 +365,44 @@ extension HaveItem {
         haveItem.createdBy = item.createdBy
         haveItem.createdAt = item.createdAt?.dateValue()
         haveItem.modifiedAt = item.modifiedAt?.dateValue()
-        haveItem.id = item.id
-        do {
-          try managedContext.save()
-            return haveItem
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
-    }
-
-    func update() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        try? managedContext.save()
-    }
-
-}
-
-extension Have {
-    class func createHave(item: HaveItem) -> Have {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "Have",
-                                     in: managedContext)!
-
-       guard let have = NSManagedObject(entity: entity,
-                                              insertInto: managedContext) as? Have else {
-                                                fatalError()
-        }
-        // This should set the haveItem's `have` value
-        have.haveItem = item
-        do {
-          try managedContext.save()
-            return have
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        haveItem.id = item.id! 
+        
+        try? CoreDataGod.managedContext.save()
+        return haveItem
     }
 
     func deleteHave() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-        managedContext.delete(self)
-        try? managedContext.save()
+        CoreDataGod.managedContext.delete(self)
+        try? CoreDataGod.managedContext.save()
     }
 
 }
 
 extension AppLocationInfo {
     class func create(city: String, state: String, country: String) -> AppLocationInfo {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-
-        let managedContext = appDelegate.persistentContainer.viewContext
-
-        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo",
-                                     in: managedContext)!
-
-        let locationInfo = AppLocationInfo(entity: entity, insertInto: managedContext)
+        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo", in: CoreDataGod.managedContext)!
+        let locationInfo = AppLocationInfo(entity: entity, insertInto: CoreDataGod.managedContext)
 
         locationInfo.country = country
         locationInfo.city = city
         locationInfo.state = state
 
-        do {
-          try managedContext.save()
-            return locationInfo
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        try? CoreDataGod.managedContext.save()
+        return locationInfo
     }
 }
 
-extension Interaction {
+extension Contact {
     /// Setting the `newPersonHandle` enables CoreData to find this `Interaction`, and `templateName` is a marker to allow the user to change which template is associated with which other userHandle
-    class func create(newPersonHandle handle: String, templateName template: String?) -> Interaction {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
+    class func create(newPersonHandle handle: String, newPersonUid uid: String) -> Contact {
 
-        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Contact", in: CoreDataGod.managedContext)!
+        let contact = Contact(entity: entity, insertInto: CoreDataGod.managedContext)
 
-        let entity = NSEntityDescription.entity(forEntityName: "Interaction",
-                                     in: managedContext)!
+        contact.
+        contact.contactHandle = handle
 
-        let interaction = Interaction(entity: entity, insertInto: managedContext)
-
-        interaction.referenceUserHandle = handle
-        interaction.templateName = template?.lowercased() ?? "none"
-
-        do {
-          try managedContext.save()
-            return interaction
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            fatalError()
-        }
+        try? CoreDataGod.managedContext.save()
+        return contact
     }
 }

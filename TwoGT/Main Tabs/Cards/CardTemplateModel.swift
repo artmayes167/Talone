@@ -11,7 +11,7 @@ import CoreData
 /// The data model used to populate the table view on appearance
 struct CardTemplateModel {
     
-    private var card: Card? {
+    private var card: CardTemplate? {
         didSet {
             configure()
         }
@@ -22,36 +22,39 @@ struct CardTemplateModel {
         }
     }
     
-    mutating func set(card: Card?) {
+    mutating func set(card: CardTemplate?) {
         self.card = card
     }
     
      // MARK: - PRIVATE PARTS (look away)
-    // Only use these for new creation
+    ///filter all possibles to remove added
     private var addresses: [Address] {
         get {
-            let adds = AppDelegate.user.addresses
-            guard let a = adds, !(a.isEmpty) else { return [] }
-            let sortedAdds = a.sorted { return $0.title! < $1.title! }
-            return sortedAdds.filter { $0.entity.name != CardAddress().entity.name }
+            let adds = AppDelegateHelper.user.addresses
+            guard var a = adds, !(a.isEmpty) else { return [] }
+            guard let c = card else { return a }
+            a = a.filter { !($0.templates?.contains(c) ?? false) }
+            return a.sorted { return $0.title < $1.title }
         }
     }
     
     private var phoneNumbers: [PhoneNumber] {
         get {
-            let phones =  AppDelegate.user.phoneNumbers
-            guard let p = phones, !(p.isEmpty) else { return [] }
-            let sortedPhones = p.sorted { return $0.title! < $1.title! }
-            return sortedPhones.filter { $0.entity.name != CardPhoneNumber().entity.name }
+            let phones =  AppDelegateHelper.user.phoneNumbers
+            guard var p = phones, !(p.isEmpty) else { return [] }
+            guard let c = card else { return p }
+            p = p.filter { !($0.templates?.contains(c) ?? false) }
+            return  p.sorted { return $0.title < $1.title }
         }
     }
     
     private var emails: [Email] {
         get {
-            let ems =  AppDelegate.user.emails
-            guard let e = ems, !(e.isEmpty) else { return [] }
-            let sortedEmails = e.sorted { return $0.title! < $1.title! }
-            return sortedEmails.filter { $0.entity.name != CardEmail().entity.name }
+            let ems =  AppDelegateHelper.user.emails
+            guard var e = ems, !(e.isEmpty) else { return [] }
+            guard let c = card else { return e }
+            e = e.filter { !($0.templates?.contains(c) ?? false) }
+            return e.sorted { return $0.title < $1.title }
         }
     }
     
@@ -61,8 +64,8 @@ struct CardTemplateModel {
     /// - Private: The traditional method for rearranging rows in a table view, heavily modified
     private mutating func moveItem(to destinationIndexPath: IndexPath) {
         guard sourceIndexPath!.section != destinationIndexPath.section else { return }
-        guard var sourceArray = sourceIndexPath!.section == 0 ? allAdded : allPossibles,
-              var destinationArray = destinationIndexPath.section == 0 ? allAdded : allPossibles else { fatalError() }
+        var sourceArray = sourceIndexPath!.section == 0 ? allAdded : allPossibles
+        var destinationArray = destinationIndexPath.section == 0 ? allAdded : allPossibles
         
         sourceArray.remove(at: sourceIndexPath!.row)
         destinationArray.append(movingObject!) //insert(movingObject!, at: destinationIndexPath.row)
@@ -88,46 +91,37 @@ struct CardTemplateModel {
     
      // MARK: - Accessors & Array Management
     /// Contains all `addresses`, `emails`, and `phoneNumbers` user has previously saved
-   var allPossibles: [NSManagedObject]?
+   var allPossibles: [NSManagedObject] = []
     /// Will contain all `addresses`, `emails`, and `phoneNumbers` user adds by dragging
-   var allAdded: [NSManagedObject]?
+   var allAdded: [NSManagedObject] = []
     /// set by `moveStarted`
     var sourceIndexPath: IndexPath?
     
     
     private mutating func configure() {
-        /// If we are editing
+        allPossibles = addresses + phoneNumbers + emails
         if let c = card {
-            /// Filtering for allPossibles
-            /// Card Items from card
-            let a = c.addresses
-            let p = c.phoneNumbers
-            let e = c.emails
-            allAdded = a + p + e
-            
-            var adds = addresses
-            var phones = phoneNumbers
-            var ems = emails
-            /// filter out any non-Card-unique items that are already included
-            for add in a {
-                adds = adds.filter { $0.title != add.title }
+            if let adds = c.addresses {
+                for a in adds {
+                    if let add = a as? Address {
+                        allAdded.append(add)
+                    }
+                }
             }
-            for phone in p {
-                phones = phones.filter { $0.title != phone.title }
+            if let phones = c.phoneNumbers {
+                for p in phones {
+                    if let ph = p as? PhoneNumber {
+                        allAdded.append(ph)
+                    }
+                }
             }
-            for email in e {
-                ems = ems.filter { $0.title != email.title }
+            if let emails = c.emails {
+                for e in emails {
+                    if let email = e as? Email {
+                        allAdded.append(email)
+                    }
+                }
             }
-            
-            allPossibles = adds + phones + ems
-            
-        } else {
-            var arr: [NSManagedObject] = []
-            let a = addresses
-            let p = phoneNumbers
-            let e = emails
-            allPossibles = a + p + e
-            allAdded = []
         }
     }
     

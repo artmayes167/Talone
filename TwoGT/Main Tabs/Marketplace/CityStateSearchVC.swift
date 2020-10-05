@@ -16,6 +16,17 @@ struct USState: Decodable {
 
 enum SaveType: Int, CaseIterable {
     case home, alternate, none
+    
+    func stringValue() -> String {
+        switch self {
+        case .home:
+            return "home"
+        case .alternate:
+            return "alternate"
+        default:
+            return "none"
+        }
+    }
 }
 
 class CityStateSearchVC: UIViewController {
@@ -38,7 +49,7 @@ class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var statesCoverView: UIView?
     
-    let user = AppDelegate.user
+    let user = CoreDataGod.user
     
     private var statesTVC: LocationPickerTVC?
     private var citiesTVC: LocationPickerTVC?
@@ -47,9 +58,10 @@ class CityStateSearchVC: UIViewController {
     private var sections: Dictionary<String, [SearchLocation]> = [:]
     
     var saveType: SaveType = .none
-    var selectedLocation: [DefaultsSavedLocationKeys: String] = [:]
     var stateSelector: LocationPickerTVC?
     var citySelector: LocationPickerTVC?
+    
+    var locationForSave: SearchLocation?
 
     /// To be set by presenting controller, defaults to `unwindToMarketplaceSearch`
     public var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
@@ -194,7 +206,7 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
         let key = ["home", "alternate"][indexPath.section]
         guard let s = sections[key] else { fatalError() }
         let loc = s[indexPath.row]
-        selectedLocation = [.city: loc.city!, .state: loc.state!]
+        locationForSave = loc
         searchButton.isEnabled = true
     }
 }
@@ -212,7 +224,6 @@ extension CityStateSearchVC: LocationPickerDelegate {
             // Hide the table in the stack
             stateContainer.isHidden = true
             statesCoverView?.isHidden = true
-            selectedLocation[.state] = item
             if let arr = states.first(where: { $0.name.uppercased() == item.uppercased() })?.cities {
                 cityTextField.text = ""
                 cityInputView.isHidden = false
@@ -221,8 +232,8 @@ extension CityStateSearchVC: LocationPickerDelegate {
         case .city:
             cityTextField.text = item
             cityContainer.isHidden = true
-            selectedLocation[.city] = item
             searchButton.isEnabled = true
+            locationForSave = SearchLocation.createSearchLocation(city: item, state: stateTextField.text!, type: saveType.stringValue())
         default:
             print("Forgot to set ItemType in CityStateSearchVC")
         }

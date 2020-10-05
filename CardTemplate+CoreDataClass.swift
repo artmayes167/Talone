@@ -1,5 +1,5 @@
 //
-//  Address+CoreDataClass.swift
+//  CardTemplate+CoreDataClass.swift
 //  TwoGT
 //
 //  Created by Arthur Mayes on 10/4/20.
@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(Address)
-public class Address: AppLocationInfo {
+@objc(CardTemplate)
+public class CardTemplate: NSManagedObject {
 
 }

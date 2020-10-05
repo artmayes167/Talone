@@ -1,167 +1,139 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Address" representedClassName="Address" parentEntity="AppLocationInfo" syncable="YES">
-        <attribute name="street1" optional="YES" attributeType="String"/>
+        <attribute name="street1" attributeType="String" defaultValueString=""/>
         <attribute name="street2" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
-        <attribute name="uid" optional="YES" attributeType="String"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <attribute name="uid" attributeType="String" defaultValueString=""/>
         <attribute name="zip" optional="YES" attributeType="String"/>
+        <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="addresses" inverseEntity="CardTemplate"/>
     </entity>
     <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES">
         <attribute name="city" attributeType="String" defaultValueString=""/>
         <attribute name="country" attributeType="String" defaultValueString="USA"/>
         <attribute name="state" attributeType="String" defaultValueString=""/>
     </entity>
-    <entity name="Card" representedClassName="Card" syncable="YES">
-        <attribute name="comments" optional="YES" attributeType="String"/>
+    <entity name="CardTemplate" representedClassName="CardTemplate" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
-        <attribute name="personalNotes" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="templateTitle" optional="YES" attributeType="String"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
         <attribute name="userHandle" optional="YES" attributeType="String"/>
-        <fetchedProperty name="addresses" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardAddress" predicateString="templateTitle == $FETCH_SOURCE.title AND uid == $FETCH_SOURCE.uid"/>
-        </fetchedProperty>
-        <fetchedProperty name="emails" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardEmail" predicateString="templateTitle == $FETCH_SOURCE.title AND uid == $FETCH_SOURCE.uid"/>
-        </fetchedProperty>
-        <fetchedProperty name="phoneNumbers" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardPhoneNumber" predicateString="templateTitle == $FETCH_SOURCE.title AND uid == $FETCH_SOURCE.uid"/>
-        </fetchedProperty>
+        <relationship name="addresses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Address" inverseName="templates" inverseEntity="Address"/>
+        <relationship name="emails" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Email" inverseName="templates" inverseEntity="Email"/>
+        <relationship name="phoneNumbers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PhoneNumber" inverseName="templates" inverseEntity="PhoneNumber"/>
+        <relationship name="socialMedia" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SocialMedia" inverseName="templates" inverseEntity="SocialMedia"/>
     </entity>
-    <entity name="CardAddress" representedClassName="CardAddress" parentEntity="Address" syncable="YES">
-        <attribute name="templateTitle" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CardEmail" representedClassName="CardEmail" parentEntity="Email" syncable="YES">
-        <attribute name="templateTitle" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CardPhoneNumber" representedClassName="CardPhoneNumber" parentEntity="PhoneNumber" syncable="YES">
-        <attribute name="templateTitle" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CardTemplateInstance" representedClassName="CardTemplateInstance" parentEntity="Card" syncable="YES">
-        <attribute name="receiverUserHandle" optional="YES" attributeType="String"/>
-        <attribute name="senderUserHandle" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CityState" representedClassName="CityState" parentEntity="AppLocationInfo" syncable="YES">
-        <relationship name="communities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Community" inverseName="cityState" inverseEntity="Community"/>
-        <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="cityState" inverseEntity="Purpose"/>
+    <entity name="CardTemplateInstance" representedClassName="CardTemplateInstance" parentEntity="CardTemplate" syncable="YES">
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="personalNotes" optional="YES" attributeType="String"/>
+        <attribute name="receiverUserHandle" attributeType="String" defaultValueString=""/>
     </entity>
     <entity name="Community" representedClassName="Community" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="cityState" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CityState" inverseName="communities" inverseEntity="CityState"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+    </entity>
+    <entity name="Contact" representedClassName="Contact" syncable="YES">
+        <attribute name="contactHandle" attributeType="String" defaultValueString=""/>
+        <attribute name="contactUid" attributeType="String" defaultValueString=""/>
+        <fetchedProperty name="rating" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="ContactRating" predicateString="contactHandle == $FETCH_SOURCE.contactHandle"/>
+        </fetchedProperty>
+        <fetchedProperty name="receivedCards" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="userHandle == $FETCH_SOURCE.contactHandle"/>
+        </fetchedProperty>
+        <fetchedProperty name="sentCards" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="receiverUserHandle == $FETCH_SOURCE.contactHandle"/>
+        </fetchedProperty>
+    </entity>
+    <entity name="ContactRating" representedClassName="ContactRating" syncable="YES">
+        <attribute name="bad" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="contactHandle" attributeType="String" defaultValueString=""/>
+        <attribute name="good" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="justSo" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Email" representedClassName="Email" syncable="YES">
-        <attribute name="emailString" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
-        <attribute name="uid" optional="YES" attributeType="String"/>
+        <attribute name="emailString" attributeType="String" defaultValueString=""/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <attribute name="uid" attributeType="String" defaultValueString=""/>
+        <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="emails" inverseEntity="CardTemplate"/>
     </entity>
-    <entity name="Event" representedClassName="Event" syncable="YES">
-        <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="events" inverseEntity="Purpose"/>
-    </entity>
-    <entity name="Have" representedClassName="Have" syncable="YES">
+    <entity name="Have" representedClassName="Have" parentEntity="Item" syncable="YES">
         <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
-        <relationship name="haveItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HaveItem" inverseName="have" inverseEntity="HaveItem"/>
-        <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="haves" inverseEntity="Purpose"/>
         <fetchedProperty name="childHaves" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="parentHaveItemId  == $FETCH_SOURCE.haveItem.id"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="parentHaveItemId  == $FETCH_SOURCE.id"/>
         </fetchedProperty>
         <fetchedProperty name="childNeeds" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentHaveItemId  == $FETCH_SOURCE.haveItem.id"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentHaveItemId  == $FETCH_SOURCE.id"/>
         </fetchedProperty>
     </entity>
-    <entity name="HaveItem" representedClassName="HaveItem" parentEntity="Item" syncable="YES">
-        <relationship name="have" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Have" inverseName="haveItem" inverseEntity="Have"/>
-    </entity>
     <entity name="ImageInfo" representedClassName="ImageInfo" syncable="YES">
+        <attribute name="handle" attributeType="String" defaultValueString=""/>
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageURLString" optional="YES" attributeType="String"/>
-        <attribute name="type" optional="YES" attributeType="String"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="images" inverseEntity="User"/>
-    </entity>
-    <entity name="Interaction" representedClassName="Interaction" syncable="YES">
-        <attribute name="referenceUserHandle" optional="YES" attributeType="String"/>
-        <attribute name="templateName" optional="YES" attributeType="String"/>
-        <fetchedProperty name="rating" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="InteractionRating" predicateString="referenceUserHandle == $FETCH_SOURCE. senderUserHandle"/>
-        </fetchedProperty>
-        <fetchedProperty name="receivedCard" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="senderUserHandle == $FETCH_SOURCE. referenceUserHandle AND title == $FETCH_SOURCE.templateName"/>
-        </fetchedProperty>
-        <fetchedProperty name="sentCard" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="receiverUserHandle == $FETCH_SOURCE. referenceUserHandle AND title == $FETCH_SOURCE.templateName"/>
-        </fetchedProperty>
-    </entity>
-    <entity name="InteractionRating" representedClassName="InteractionRating" syncable="YES">
-        <attribute name="bad" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="good" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="justSo" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="referenceUserHandle" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Item" representedClassName="Item" isAbstract="YES" syncable="YES">
-        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="category" attributeType="String" defaultValueString=""/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="createdBy" optional="YES" attributeType="String"/>
+        <attribute name="createdBy" attributeType="String" defaultValueString=""/>
         <attribute name="desc" optional="YES" attributeType="String"/>
         <attribute name="headline" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="String" defaultValueString=""/>
         <attribute name="modifiedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="owner" optional="YES" attributeType="String"/>
+        <attribute name="owner" attributeType="String" defaultValueString=""/>
         <attribute name="validUntil" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SearchLocation" inverseName="items" inverseEntity="SearchLocation"/>
     </entity>
-    <entity name="Need" representedClassName="Need" syncable="YES">
+    <entity name="Need" representedClassName="Need" parentEntity="Item" syncable="YES">
         <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="parentNeedItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String" defaultValueString=""/>
-        <relationship name="needItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NeedItem" inverseName="need" inverseEntity="NeedItem"/>
-        <relationship name="purpose" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Purpose" inverseName="needs" inverseEntity="Purpose"/>
         <fetchedProperty name="childNeeds" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.needItem.id"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.id"/>
         </fetchedProperty>
     </entity>
-    <entity name="NeedItem" representedClassName="NeedItem" parentEntity="Item" syncable="YES">
-        <relationship name="need" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Need" inverseName="needItem" inverseEntity="Need"/>
-    </entity>
     <entity name="PhoneNumber" representedClassName="PhoneNumber" syncable="YES">
-        <attribute name="number" optional="YES" attributeType="String"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
-        <attribute name="uid" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="Purpose" representedClassName="Purpose" syncable="YES">
-        <attribute name="category" optional="YES" attributeType="String" defaultValueString=""/>
-        <relationship name="cityState" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CityState" inverseName="purpose" inverseEntity="CityState"/>
-        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="purpose" inverseEntity="Event"/>
-        <relationship name="haves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Have" inverseName="purpose" inverseEntity="Have"/>
-        <relationship name="needs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Need" inverseName="purpose" inverseEntity="Need"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="purposes" inverseEntity="User"/>
+        <attribute name="number" attributeType="String" defaultValueString=""/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <attribute name="uid" attributeType="String" defaultValueString=""/>
+        <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="phoneNumbers" inverseEntity="CardTemplate"/>
     </entity>
     <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
-        <attribute name="community" optional="YES" attributeType="String"/>
-        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="community" attributeType="String" defaultValueString=""/>
+        <attribute name="type" attributeType="String" defaultValueString=""/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="location" inverseEntity="Item"/>
     </entity>
     <entity name="SocialMedia" representedClassName="SocialMedia" syncable="YES">
         <attribute name="personalURLString" optional="YES" attributeType="String"/>
-        <attribute name="siteName" optional="YES" attributeType="String"/>
+        <attribute name="siteName" attributeType="String" defaultValueString=""/>
         <attribute name="siteURLString" optional="YES" attributeType="String"/>
-        <attribute name="userName" optional="YES" attributeType="String"/>
+        <attribute name="uid" attributeType="String" defaultValueString=""/>
+        <attribute name="userName" attributeType="String" defaultValueString=""/>
+        <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="socialMedia" inverseEntity="CardTemplate"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
-        <attribute name="handle" optional="YES" attributeType="String"/>
-        <attribute name="uid" optional="YES" attributeType="String"/>
-        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ImageInfo" inverseName="user" inverseEntity="ImageInfo"/>
-        <relationship name="purposes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Purpose" inverseName="user" inverseEntity="Purpose"/>
+        <attribute name="handle" attributeType="String" defaultValueString=""/>
+        <attribute name="uid" attributeType="String" defaultValueString=""/>
         <fetchedProperty name="addresses" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Address" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
         <fetchedProperty name="cardTemplates" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Card" predicateString="uid == $FETCH_SOURCE.uid"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplate" predicateString="uid == $FETCH_SOURCE.uid"/>
+        </fetchedProperty>
+        <fetchedProperty name="contacts" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Contact"/>
         </fetchedProperty>
         <fetchedProperty name="emails" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Email" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
-        <fetchedProperty name="interactions" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Interaction"/>
+        <fetchedProperty name="haves" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="User" predicateString="uid  == $FETCH_SOURCE.uid"/>
+        </fetchedProperty>
+        <fetchedProperty name="images" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="ImageInfo" predicateString="handle == $FETCH_SOURCE.handle"/>
+        </fetchedProperty>
+        <fetchedProperty name="needs" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
         <fetchedProperty name="phoneNumbers" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="PhoneNumber" predicateString="uid  == $FETCH_SOURCE.uid"/>
@@ -170,33 +142,25 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="SearchLocation"/>
         </fetchedProperty>
         <fetchedProperty name="socialMedia" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="SocialMedia"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="SocialMedia" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
     </entity>
     <elements>
-        <element name="Address" positionX="-652.3203125" positionY="-1105.24609375" width="128" height="118"/>
-        <element name="AppLocationInfo" positionX="-495.3125" positionY="-846.609375" width="128" height="88"/>
-        <element name="Card" positionX="-1012.35546875" positionY="-1182.7421875" width="128" height="191"/>
-        <element name="CardAddress" positionX="-652.44140625" positionY="-1179.01171875" width="128" height="58"/>
-        <element name="CardEmail" positionX="-859.06640625" positionY="-1175.4609375" width="128" height="58"/>
-        <element name="CardPhoneNumber" positionX="-657.6484375" positionY="-1361.21875" width="128" height="58"/>
-        <element name="CardTemplateInstance" positionX="-1008.234375" positionY="-1267.5234375" width="128" height="73"/>
-        <element name="CityState" positionX="-493.51171875" positionY="-739.9609375" width="128" height="73"/>
-        <element name="Community" positionX="-494.88671875" positionY="-653.93359375" width="128" height="73"/>
-        <element name="Email" positionX="-861.94921875" positionY="-1104.32421875" width="128" height="88"/>
-        <element name="Event" positionX="-979.62890625" positionY="-528.1171875" width="128" height="58"/>
-        <element name="Have" positionX="-1287.453125" positionY="-508.421875" width="128" height="146"/>
-        <element name="HaveItem" positionX="-1144.36328125" positionY="-302.9140625" width="128" height="58"/>
-        <element name="ImageInfo" positionX="-1271.828125" positionY="-1082.19921875" width="128" height="118"/>
-        <element name="Interaction" positionX="-845.02734375" positionY="-1352.19140625" width="128" height="131"/>
-        <element name="InteractionRating" positionX="-1218.8046875" positionY="-1494.87890625" width="128" height="103"/>
-        <element name="Item" positionX="-1302.953125" positionY="-266.1953125" width="128" height="163"/>
-        <element name="Need" positionX="-1452.10546875" positionY="-508.046875" width="128" height="146"/>
-        <element name="NeedItem" positionX="-1452.00390625" positionY="-283.90234375" width="128" height="58"/>
-        <element name="PhoneNumber" positionX="-651.63671875" positionY="-1283.03515625" width="128" height="88"/>
-        <element name="Purpose" positionX="-1325.11328125" positionY="-753.93359375" width="128" height="133"/>
-        <element name="SearchLocation" positionX="-686.0234375" positionY="-850.25390625" width="128" height="73"/>
-        <element name="SocialMedia" positionX="-1261.48046875" positionY="-1214.06640625" width="128" height="103"/>
-        <element name="User" positionX="-914.83203125" positionY="-956.6640625" width="128" height="221"/>
+        <element name="Address" positionX="-794.7265625" positionY="-1100.89453125" width="128" height="133"/>
+        <element name="AppLocationInfo" positionX="-499.671875" positionY="-918.25" width="128" height="88"/>
+        <element name="CardTemplate" positionX="-1009.5703125" positionY="-1201.79296875" width="128" height="163"/>
+        <element name="CardTemplateInstance" positionX="-1007.9609375" positionY="-1319.7421875" width="128" height="88"/>
+        <element name="Community" positionX="-755.1953125" positionY="-804.30859375" width="128" height="58"/>
+        <element name="Contact" positionX="-1148.48046875" positionY="-1199.6875" width="128" height="131"/>
+        <element name="ContactRating" positionX="-1320.62890625" positionY="-1275.8828125" width="128" height="103"/>
+        <element name="Email" positionX="-793.1484375" positionY="-1325.4609375" width="128" height="103"/>
+        <element name="Have" positionX="-1079.56640625" positionY="-949.38671875" width="128" height="116"/>
+        <element name="ImageInfo" positionX="-939.30078125" positionY="-719.0390625" width="128" height="103"/>
+        <element name="Item" positionX="-1120.2578125" positionY="-788.41796875" width="128" height="193"/>
+        <element name="Need" positionX="-1252.671875" positionY="-951.24609375" width="128" height="116"/>
+        <element name="PhoneNumber" positionX="-792.8984375" positionY="-1212.4765625" width="128" height="103"/>
+        <element name="SearchLocation" positionX="-752.06640625" positionY="-904.4140625" width="128" height="88"/>
+        <element name="SocialMedia" positionX="-789.2265625" positionY="-1473.546875" width="128" height="133"/>
+        <element name="User" positionX="-935.80859375" positionY="-950.37890625" width="128" height="236"/>
     </elements>
 </model>

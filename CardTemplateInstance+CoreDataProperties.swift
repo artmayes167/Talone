@@ -2,7 +2,7 @@
 //  CardTemplateInstance+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/30/20.
+//  Created by Arthur Mayes on 10/4/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -17,7 +17,8 @@ extension CardTemplateInstance {
         return NSFetchRequest<CardTemplateInstance>(entityName: "CardTemplateInstance")
     }
 
-    @NSManaged public var receiverUserHandle: String?
-    @NSManaged public var senderUserHandle: String?
+    @NSManaged public var receiverUserHandle: String
+    @NSManaged public var personalNotes: String?
+    @NSManaged public var message: String?
 
 }

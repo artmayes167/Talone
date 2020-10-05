@@ -11,45 +11,16 @@ import CoreData
 
 class CoreDataImageHelper: NSObject {
     static let shareInstance = CoreDataImageHelper()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     func saveImage(data: Data) {
-        /// remove old image, if it exists
-        if let i = fetchAllImages() {
-            for x in i {
-                AppDelegate.user.removeFromImages(x)
-                context.delete(x)
-            }
-        }
         
-        let imageInfo = ImageInfo(context: context)
+        let imageInfo = ImageInfo(context: CoreDataGod.managedContext)
         imageInfo.image = data
-        imageInfo.type = "userImage"
-        AppDelegate.user.addToImages(imageInfo)
-        do {
-            try context.save()
-            print("Image is saved")
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func fetchImage() -> ImageInfo? {
-        if let fetchingImage = fetchAllImages() {
-            return fetchingImage.first
-        }
-        return nil
+        imageInfo.handle = CoreDataGod.user.handle
+        try? CoreDataGod.managedContext.save()
     }
     
     func fetchAllImages() -> [ImageInfo]? {
-        var fetchingImage = [ImageInfo]()
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ImageInfo")
-        do {
-            fetchingImage = try context.fetch(fetchRequest) as! [ImageInfo]
-            return fetchingImage.filter { $0.type == "userImage" }
-        } catch {
-            print("Error while fetching the image")
-        }
-        return nil
+        return CoreDataGod.user.images
     }
 }

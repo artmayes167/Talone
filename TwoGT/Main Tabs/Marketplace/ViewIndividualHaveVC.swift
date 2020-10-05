@@ -24,7 +24,6 @@ class ViewIndividualHaveVC: UIViewController {
     @IBOutlet weak var headerTitleLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var doYouLabel: UILabel!
     @IBOutlet weak var needDescriptionTextView: UITextView!
     @IBOutlet weak var personalNotesTextView: UITextView! // editable
     @IBOutlet weak var joinThisHaveButton: DesignableButton!
@@ -44,9 +43,6 @@ class ViewIndividualHaveVC: UIViewController {
 
     func populateUI() {
         guard let h = haveItem, let cityState = creationManager?.getLocationOrNil() else { return }
-        guard let t = creationManager?.currentCreationTypeString() else { fatalError() }
-        let str = "Do you " + t + "..."
-        doYouLabel.text = str
         locationLabel.text = String(format: "%@ in %@", h.category, cityState.displayName())
         needDescriptionTextView.text = haveItem?.description
         

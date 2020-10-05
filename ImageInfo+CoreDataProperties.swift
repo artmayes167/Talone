@@ -2,7 +2,7 @@
 //  ImageInfo+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 9/17/20.
+//  Created by Arthur Mayes on 10/4/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -17,14 +17,13 @@ extension ImageInfo {
         return NSFetchRequest<ImageInfo>(entityName: "ImageInfo")
     }
 
-    @NSManaged public var type: String?
     @NSManaged public var image: Data?
-    @NSManaged public var imageURLString: String?
     @NSManaged public var imageName: String?
-    @NSManaged public var user: User?
+    @NSManaged public var imageURLString: String?
+    @NSManaged public var handle: String
 
 }
 
 extension ImageInfo : Identifiable {
-
+    public var id: String { handle }
 }

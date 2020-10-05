@@ -24,22 +24,13 @@ class ViewContactVC: UIViewController {
     
     private var received: Bool?
     
-    private var interaction: Interaction? {
+    private var contact: Contact? {
         didSet {
             if let r = received {
-                if let i = r ? interaction!.receivedCard?.first : interaction!.sentCard?.first {
+                if let i = r ? contact!.receivedCards?.first : contact!.sentCards?.first {
                     /// crash if I fucked up
                     cardInstance = i
                 }
-            }
-        }
-    }
-    
-    /// Only looking at the template
-    private var cardTemplate: Card? {
-        didSet {
-            if isViewLoaded {
-                setCardData()
             }
         }
     }
@@ -53,12 +44,22 @@ class ViewContactVC: UIViewController {
         }
     }
     
+    
+    /// Only looking at the template -- received = false
+    private var cardTemplate: CardTemplate? {
+        didSet {
+            if isViewLoaded {
+                setCardData()
+            }
+        }
+    }
+    
     private var cardAddresses: [NSManagedObject] = []
     
     
     /// If
-    func configure(received: Bool? = nil, interaction: Interaction? = nil, template: Card? = nil) {
-        if received == nil && interaction == nil && template == nil { fatalError() }
+    func configure(received: Bool? = nil, contact: Contact? = nil, template: CardTemplate? = nil) {
+        if received == nil && contact == nil && template == nil { fatalError() }
         
         if let r = received {
             self.received = r

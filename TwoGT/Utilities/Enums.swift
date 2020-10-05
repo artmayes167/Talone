@@ -43,10 +43,6 @@ enum ProfileButtonType {
     case me, card
 }
 
-enum NeedType: String, CaseIterable, DatabaseReady {
-    case none, food, clothes, shelter, furniture, service, miscellany
-}
-
 enum CardElementTypes: String, RawRepresentable {
     case address, phoneNumber, email
 }

@@ -27,7 +27,8 @@ extension CardTemplateModel {
         Calls internal method `moveStarted`, setting values for the `movingObject` and the `sourceIndexPath`
     */
     mutating func dragItems(for indexPath: IndexPath) -> [UIDragItem] {
-        guard let added = allAdded, let possibles = allPossibles else { fatalError() }
+        let added = allAdded
+        let possibles = allPossibles
         let object = indexPath.section == 0 ? added[indexPath.row] : possibles[indexPath.row]
         moveStarted(with: object, indexPath: indexPath)
         do {
