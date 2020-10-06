@@ -24,11 +24,6 @@ class EnterEmailVC: UIViewController {
         super.viewDidAppear(animated)
         textField.becomeFirstResponder()
     }
-    @IBAction func forgetIt(_ sender: Any) {
-        view.makeToast("See you later?") { _ in
-            abort()
-        }
-    }
     
     @IBAction func submitEmail(_ sender: Any) {
 
