@@ -218,20 +218,20 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func fetchMatchingNeeds() {
         guard let loc = creationManager.getLocationOrNil() else { fatalError() }
-        let city = loc.city
-        let state = loc.state
         showSpinner()
+        guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
+        let msg = cat.lowercased() == "any" ?
+            "There are no needs for any category, in this city." :
+            "There are no results for this category, in this city."
 
-        NeedsDbFetcher().fetchAllNeeds(city: city, state: state, country: loc.country, maxCount: 20) { array in
-            guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
-            let newArray = array.filter { $0.category.lowercased() ==  cat}
-            let finalArray = newArray.filter { $0.owner != AppDelegateHelper.user.handle }
-            if finalArray.isEmpty {
-                self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
+        NeedsDbFetcher().fetchNeedsFor(category: cat, city: loc.city, state: loc.state, country: loc.country, maxCount: 20, filterOutThisUser: true) { array in
+
+            if array.isEmpty {
+                self.showOkayAlert(title: "".taloneCased(), message: msg.taloneCased()) { (_) in
                     self.hideSpinner()
                 }
             } else {
-                self.performSegue(withIdentifier: "toNeedsCollection", sender: finalArray)
+                self.performSegue(withIdentifier: "toNeedsCollection", sender: array)
                 self.hideSpinner()
             }
         }

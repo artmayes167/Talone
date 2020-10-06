@@ -12,19 +12,35 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class NeedsDbFetcher: NeedsBase {
-    func fetchAllNeeds(city: String, state: String, country: String?, maxCount: Int, completion: @escaping ([NeedItem]) -> Void) {
+
+    func fetchNeedsFor(category: String, city: String, state: String, country: String?, maxCount: Int, filterOutThisUser: Bool, completion: @escaping ([NeedItem]) -> Void) {
         let db = Firestore.firestore()
 
-        db.collection("needs").whereField("locationInfo.city", isEqualTo: city)
+        var t = db.collection("needs").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country ?? "USA")
             .limit(to: maxCount)
-            .order(by: "modifiedAt", descending: true)
+        if category.lowercased() != "any" {
+            t = t.whereField("category", isEqualTo: category)
+        }
+// TODO: Firestore issue
+// As of Oct 6, 2020, Firestore has an issue that it REQUIRES result set be
+// ordered by the same field where inequality filtering was used. We WOULD LIKE to use
+// whereField("createdBy") isNotEqualTo: uid), but there's a limitation. We can't order the results by
+// modifiedAt -timestamp. We need to fetch current User's needs as well and filter them out manually before
+// providing them to UI code. However, in our case, since we limit the query, we want to receive the latest needs
+// (as oldest needs may be already outdated. Ordering by "CreatedBy" field would result in some old Needs as well.
+//        if let uid = Auth.auth().currentUser?.uid, filterOutThisUser {
+//            t = t.whereField("createdBy", isNotEqualTo: uid)
+//        }
+//         t.order(by: "createdBy", descending: true)
+
+        t.order(by: "modifiedAt", descending: true)
             .getDocuments { (snapshot, error) in
                 if let error = error {
                     print(error)
                 } else if let snapshot = snapshot {
-                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
+                    var needs = snapshot.documents.compactMap { (document) -> NeedItem? in
                         print(document)
                         var item: NeedItem?
                         do {
@@ -33,6 +49,9 @@ class NeedsDbFetcher: NeedsBase {
                             print(error)
                         }
                         return item
+                    }
+                    if let uid = Auth.auth().currentUser?.uid {
+                        needs = needs.filter { $0.createdBy != uid }
                     }
                     completion(needs)
                 }
@@ -71,8 +90,7 @@ class NeedsDbFetcher: NeedsBase {
 
     // NOTE: FOLLOWING QUERY REQUIRES COMPOSITE INDEX WHICH CURRENTLY IS MISSING.
     // Consider if this query is required. We can have certain amount of composite indexes, that's fine.
-    // Index can be created:
-    // https://console.firebase.google.com/v1/r/project/talone-23f99/firestore/indexes?create_composite=Ckpwcm9qZWN0cy90YWxvbmUtMjNmOTkvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL25lZWRzL2luZGV4ZXMvXxABGg0KCWNyZWF0ZWRCeRABGhUKEWxvY2F0aW9uSW5mby5jaXR5EAEaGAoUbG9jYXRpb25JbmZvLmNvdW50cnkQARoWChJsb2NhdGlvbkluZm8uc3RhdGUQARoNCgljcmVhdGVkQXQQARoMCghfX25hbWVfXxAB
+
     func fetchUserNeeds(userId: String, city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
         let db = Firestore.firestore()
         var sinceEpoch = 0
