@@ -2546,21 +2546,21 @@
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.30000001192092896" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plus" translatesAutoresizingMaskIntoConstraints="NO" id="jCo-sF-vLg">
-                                <rect key="frame" x="107" y="0.0" width="200" height="200"/>
+                                <rect key="frame" x="132" y="0.0" width="150" height="150"/>
                                 <color key="tintColor" systemColor="systemBlueColor"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u2h-3y-BA2" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="107" y="0.0" width="200" height="200"/>
+                                <rect key="frame" x="132" y="0.0" width="150" height="150"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="EU6-je-P1Z"/>
-                                    <constraint firstAttribute="height" constant="200" id="Nbr-ku-gaY"/>
+                                    <constraint firstAttribute="width" constant="150" id="EU6-je-P1Z"/>
+                                    <constraint firstAttribute="height" constant="150" id="Nbr-ku-gaY"/>
                                 </constraints>
                                 <color key="tintColor" red="0.1068746122" green="0.31821065990000003" blue="0.11078013339999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" image="avatar"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="100"/>
+                                        <real key="value" value="75"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -2568,10 +2568,10 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zGU-aK-Mxr" userLabel="NamePlateDesignable View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="20" y="146" width="374" height="40"/>
+                                <rect key="frame" x="20" y="110" width="374" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TFw-BD-TEg">
-                                        <rect key="frame" x="12" y="8" width="350" height="24"/>
+                                        <rect key="frame" x="12" y="4" width="350" height="24"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -2584,8 +2584,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="TFw-BD-TEg" firstAttribute="top" secondItem="zGU-aK-Mxr" secondAttribute="top" constant="8" id="7sH-GD-Ps4"/>
-                                    <constraint firstAttribute="bottom" secondItem="TFw-BD-TEg" secondAttribute="bottom" constant="8" id="QeE-23-L5L"/>
+                                    <constraint firstItem="TFw-BD-TEg" firstAttribute="top" secondItem="zGU-aK-Mxr" secondAttribute="top" constant="4" id="7sH-GD-Ps4"/>
+                                    <constraint firstAttribute="bottom" secondItem="TFw-BD-TEg" secondAttribute="bottom" constant="4" id="QeE-23-L5L"/>
                                     <constraint firstAttribute="trailing" secondItem="TFw-BD-TEg" secondAttribute="trailing" constant="12" id="Qm1-St-vfF"/>
                                     <constraint firstItem="TFw-BD-TEg" firstAttribute="centerX" secondItem="zGU-aK-Mxr" secondAttribute="centerX" id="Z0M-wQ-Gym"/>
                                     <constraint firstItem="TFw-BD-TEg" firstAttribute="leading" secondItem="zGU-aK-Mxr" secondAttribute="leading" constant="12" id="blL-bT-ZFg"/>
@@ -2603,7 +2603,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="42" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aLi-PT-aOx">
-                                <rect key="frame" x="20" y="208" width="374" height="600"/>
+                                <rect key="frame" x="20" y="158" width="374" height="650"/>
                                 <color key="backgroundColor" red="0.65670483729999996" green="0.74328558580000004" blue="0.99775256850000005" alpha="0.76728381850000005" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -2802,7 +2802,7 @@
                             <constraint firstItem="aLi-PT-aOx" firstAttribute="top" secondItem="u2h-3y-BA2" secondAttribute="bottom" constant="8" symbolic="YES" id="BdN-a9-6Fk"/>
                             <constraint firstItem="Trf-xW-tRI" firstAttribute="trailing" secondItem="zGU-aK-Mxr" secondAttribute="trailing" constant="20" id="CEE-Ly-hME"/>
                             <constraint firstItem="aLi-PT-aOx" firstAttribute="bottom" secondItem="Trf-xW-tRI" secondAttribute="bottom" id="FRv-HL-qxE"/>
-                            <constraint firstItem="zGU-aK-Mxr" firstAttribute="top" secondItem="u2h-3y-BA2" secondAttribute="bottom" constant="-54" id="FW9-as-uXb"/>
+                            <constraint firstItem="zGU-aK-Mxr" firstAttribute="top" secondItem="u2h-3y-BA2" secondAttribute="bottom" constant="-40" id="FW9-as-uXb"/>
                             <constraint firstItem="jCo-sF-vLg" firstAttribute="trailing" secondItem="u2h-3y-BA2" secondAttribute="trailing" id="Jg1-h6-LTD"/>
                             <constraint firstItem="Trf-xW-tRI" firstAttribute="trailing" secondItem="aLi-PT-aOx" secondAttribute="trailing" constant="20" id="M6g-Y8-JAg"/>
                             <constraint firstItem="Trf-xW-tRI" firstAttribute="bottom" secondItem="y3G-Zq-Scf" secondAttribute="bottom" id="MYW-5B-gfP"/>

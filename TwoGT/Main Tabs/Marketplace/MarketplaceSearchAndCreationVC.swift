@@ -22,7 +22,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Outlets
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var categoriesPopOver: UIView!
-    @IBOutlet weak var whereTextLabel: UILabel!
+//    @IBOutlet weak var whereTextLabel: UILabel!
     @IBOutlet weak var whereTextField: UITextField!
     @IBOutlet weak var buttonsAndDescriptionView: UIView!
     @IBOutlet weak var seeMatchingHavesButton: DesignableButton!
@@ -43,8 +43,8 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
             let title = currentNeedHaveSelectedSegmentIndex == 0 ? "Create a New Need".taloneCased() : "Create a New Have".taloneCased()
             createNewNeedHaveButton.setTitle(title.taloneCased(), for: .normal)
-            let whereText = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?".taloneCased() : "Where Do You Have It?".taloneCased()
-            whereTextLabel.text = whereText.taloneCased()
+//            let whereText = currentNeedHaveSelectedSegmentIndex == 0 ? "Where Do You Need It?".taloneCased() : "Where Do You Have It?".taloneCased()
+//            whereTextLabel.text = whereText.taloneCased()
         }
     }
 
