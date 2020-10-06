@@ -14,6 +14,7 @@ import CoreData
 class EnterEmailVC: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var submitEmailButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,23 +40,32 @@ class EnterEmailVC: UIViewController {
             actionCodeSettings.setIOSBundleID(Bundle.main.bundleIdentifier!)
             actionCodeSettings.setAndroidPackageName("com.example.android",
                                                      installIfNotAvailable: false, minimumVersion: "12")
-            Auth.auth().sendSignInLink(toEmail: email,
-                                       actionCodeSettings: actionCodeSettings) { error in
-                                        if let error = error {
-                                            self.showOkayAlert(title: "Error", message: error.localizedDescription, handler: nil)
-                                            return
-                                        }
-                                        // The link was successfully sent. Inform the user.
-                                        // Save the email locally so you don't need to ask the user for it again
-                                        // if they open the link on the same device.
-                                        UserDefaults.standard.set(email, forKey: DefaultsKeys.taloneEmail.rawValue)
-                                        self.showOkayAlert(title: "", message: "Check your email for link") { (_ action: UIAlertAction) in
-                                            self.performSegue(withIdentifier: "toVerification", sender: nil)
-                                        }
+            Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { error in
+                if let error = error {
+                    self.showOkayAlert(title: "Error", message: error.localizedDescription, handler: nil)
+                    return
+                }
+                // The link was successfully sent. Inform the user.
+                // Save the email locally so you don't need to ask the user for it again
+                // if they open the link on the same device.
+                UserDefaults.standard.set(email, forKey: DefaultsKeys.taloneEmail.rawValue)
+                self.showOkayAlert(title: "", message: "Check your email for link") { (_ action: UIAlertAction) in
+                    self.performSegue(withIdentifier: "toVerification", sender: nil)
+                }
             }
         } else {
             self.showOkayAlert(title: "", message: "Email can't be empty", handler: nil)
         }
+    }
+    
+    override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let t = textField.text {
+            if t.contains("@") && t.contains(".") {
+                submitEmailButton.isEnabled = true
+            }
+            if (t.count > 50) && string != "" { return false }
+        }
+        return true
     }
 }
 
