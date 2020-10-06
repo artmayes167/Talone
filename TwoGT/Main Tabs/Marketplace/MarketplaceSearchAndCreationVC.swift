@@ -127,6 +127,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     private func setUIForCurrents() {
         if let loc = creationManager.getLocationOrNil() {
             whereTextField.text = loc.displayName()
+            setSearchButtons()
         }
         // Get last saved location from defaults?
         /// Country is USA by default
@@ -204,6 +205,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         if let s = segue.source as? CityStateSearchVC {
             guard let loc = s.locationForSave else { fatalError() }
             searchLocation = loc
+            creationManager.setLocation(loc)
             whereTextField.text = loc.displayName()
             let dict = ["city": loc.city, "state": loc.state]
             UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
