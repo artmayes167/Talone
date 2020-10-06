@@ -96,6 +96,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         categoryTextField.text = creationManager.getCategory()?.rawValue
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
+            let _ = CoreDataGod.user.sortedAddresses(clean: true)
             let locations = CoreDataGod.user.searchLocations
             guard var l = locations else {
                 let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
@@ -111,6 +112,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             if !l.isEmpty {
                 creationManager.setLocation(l.first!)
                 searchLocation = l.first
+            } else {
+                let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
+                creationManager.setLocation(newLoc)
+                searchLocation = newLoc
             }
             DispatchQueue.main.async {
                 self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()

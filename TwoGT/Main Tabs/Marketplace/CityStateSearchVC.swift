@@ -180,7 +180,7 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func setApplicableSections() {
-        sections = user.sortedAddresses()
+        sections = user.sortedAddresses(clean: false)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

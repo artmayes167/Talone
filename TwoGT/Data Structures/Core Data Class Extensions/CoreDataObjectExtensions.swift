@@ -10,13 +10,16 @@ import UIKit
 import CoreData
 
 extension User {
-    func sortedAddresses() -> [String: [SearchLocation]] {
+    func sortedAddresses(clean: Bool) -> [String: [SearchLocation]] {
         var dict: [String: [SearchLocation]] = [:]
         if let locs = searchLocations {
             var home: [SearchLocation] = []
             var alternate: [SearchLocation] = []
             for s in locs {
                 if s.type == "home" { home.append(s) } else if s.type == "alternate" { alternate.append(s) }
+                if clean {
+                    if s.type == "none" { CoreDataGod.managedContext.delete(s)}
+                }
             }
             if !home.isEmpty { dict["home"] = home }
             if !alternate.isEmpty { dict["alternate"] = alternate }
