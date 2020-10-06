@@ -26,6 +26,21 @@ extension User {
         }
         return dict
     }
+    
+    func allAddresses() -> [NSManagedObject] {
+        var a: [NSManagedObject] = []
+        if let add = addresses {
+            a.append(contentsOf: add)
+        }
+        if let p = phoneNumbers {
+            a.append(contentsOf: p)
+        }
+        if let e = emails {
+            a.append(contentsOf: e)
+        }
+        
+        return a
+    }
 }
 
 /**

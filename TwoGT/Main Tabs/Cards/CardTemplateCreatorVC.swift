@@ -104,7 +104,7 @@ class CardTemplateCreatorVC: UIViewController {
                 imageButton.setImage(potentialImage, for: .normal)
             } else {
                 showOkayOrCancelAlert(title: "hmm".taloneCased(), message: "no images have been set. Would you like to add one?".taloneCased()) { (_) in
-                    self.performSegue(withIdentifier: "unwindToCreation", sender: nil)
+                    self.performSegue(withIdentifier: "unwindToDashboard", sender: nil)
                 } cancelHandler: { (_) in }
                 imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
             }

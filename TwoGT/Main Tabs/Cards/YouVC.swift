@@ -72,19 +72,13 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch AddressSections(rawValue: section) {
         case .address:
-            if let adds = CoreDataGod.user.addresses {
-                addresses = adds
-            }
+            if let adds = CoreDataGod.user.addresses { addresses = adds }
             return addresses.count
         case .phoneNumber:
-            if let phones = CoreDataGod.user.phoneNumbers {
-                phoneNumbers = phones
-            }
+            if let phones = CoreDataGod.user.phoneNumbers { phoneNumbers = phones }
             return phoneNumbers.count
         case .email:
-            if let ems = CoreDataGod.user.emails {
-                emails = ems
-            }
+            if let ems = CoreDataGod.user.emails { emails = ems }
             return emails.count
         default:
             fatalError()

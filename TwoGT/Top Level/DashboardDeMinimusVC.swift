@@ -35,5 +35,9 @@ final class DashboardDeMinimusVC: UIViewController {
         timer?.invalidate()
     }
     
-    @IBAction func unwindToDashboardDeMinimus( _ segue: UIStoryboardSegue) { }
+    @IBAction func unwindToDashboardDeMinimus( _ segue: UIStoryboardSegue) {
+        if let _ = segue.source as? CardTemplateCreatorVC {
+            self.performSegue(withIdentifier: "toYouVC", sender: nil)
+        }
+    }
 }

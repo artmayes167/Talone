@@ -165,12 +165,7 @@ class EnterHandleVC: UIViewController {
         _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
         
         showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-            appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
+            self.performSegue(withIdentifier: "toYou", sender: nil)
         }
-    }
-
-    @IBAction func back(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
     }
 }

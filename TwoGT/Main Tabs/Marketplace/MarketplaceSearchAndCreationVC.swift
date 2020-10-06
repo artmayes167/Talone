@@ -293,9 +293,7 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         return false
     }
 
-    func textViewDidEndEditing(_ textView: UITextView) {
-
-    }
+    func textViewDidEndEditing(_ textView: UITextView) { }
 }
 
  // MARK: -
