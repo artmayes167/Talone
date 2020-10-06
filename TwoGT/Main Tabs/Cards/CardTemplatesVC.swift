@@ -68,6 +68,10 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if cardTemplates[indexPath.item].templateTitle == "no data" {
+            showOkayAlert(title: "no data template".taloneCased(), message: "this template is designed to be used to communicate without disclosing any data about yourself, except your handle. Sending someone this template will effectively block them from communicating with you.  use it wisely.".taloneCased(), handler: nil)
+            return
+        }
         performSegue(withIdentifier: "toMyTemplate", sender: indexPath)
     }
 }

@@ -12,7 +12,12 @@ class AddNewEmailVC: UIViewController {
     @IBOutlet weak var labelTextField: DesignableTextField!
     @IBOutlet weak var emailTextField: DesignableTextField!
     
-    private var emails: [Email] = CoreDataGod.user.emails ?? []
+    private var emails: [Email] {
+        get {
+            let ems =  CoreDataGod.user.emails ?? []
+            return ems.isEmpty ? [] : ems.sorted { return $0.title < $1.title }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

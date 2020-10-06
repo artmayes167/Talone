@@ -13,7 +13,12 @@ class AddNewPhoneNumberVC: UIViewController {
     @IBOutlet weak var labelTextField: DesignableTextField!
     @IBOutlet weak var numberTextField: DesignableTextField!
     
-    private var phoneNumbers: [PhoneNumber] = CoreDataGod.user.phoneNumbers ?? []
+    private var phoneNumbers: [PhoneNumber] {
+        get {
+            let phones =  CoreDataGod.user.phoneNumbers ?? []
+            return phones.isEmpty ? [] : phones.sorted { return $0.title < $1.title }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

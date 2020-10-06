@@ -121,6 +121,9 @@ class CityStateSearchVC: UIViewController {
         for x in SaveType.allCases {
             if x.rawValue == sender.selectedSegmentIndex {
                 saveType = x
+                if let l = locationForSave {
+                    l.type = x.stringValue()
+                }
                 continue
             }
         }

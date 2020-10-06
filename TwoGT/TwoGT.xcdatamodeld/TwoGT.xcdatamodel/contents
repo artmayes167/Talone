@@ -121,7 +121,7 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplate" predicateString="uid == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
         <fetchedProperty name="contacts" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Contact"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Contact" predicateString="contactHandle != $FETCH_SOURCE.handle"/>
         </fetchedProperty>
         <fetchedProperty name="emails" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Email" predicateString="uid  == $FETCH_SOURCE.uid"/>
@@ -139,7 +139,7 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="PhoneNumber" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
         <fetchedProperty name="searchLocations" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="SearchLocation"/>
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="SearchLocation" predicateString="city != $FETCH_SOURCE.uid"/>
         </fetchedProperty>
         <fetchedProperty name="socialMedia" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="SocialMedia" predicateString="uid  == $FETCH_SOURCE.uid"/>

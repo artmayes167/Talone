@@ -123,7 +123,14 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
-        sendCard()
+        if templateTextField.text == "no data" {
+            showOkayOrCancelAlert(title: "no data template".taloneCased(), message: "this template is designed to be used to communicate without disclosing any data about yourself, except your handle. Sending someone this template will effectively block them from communicating with you.  use it wisely.".taloneCased()) { (_) in
+                self.sendCard()
+            } cancelHandler: { (_) in }
+
+        } else {
+            sendCard()
+        }
     }
     
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {

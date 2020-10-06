@@ -37,13 +37,16 @@ extension CardTemplate {
     /**
         Only thisUser created cards
      - Parameter image: perfectly fine for this to be nil
-     - Parameter title: This is a unique identifier for the card, set by the thisUser.  Namespace collision will result in replacement of the `Card`
+     - Parameter title: This is a unique identifier for the card, set by You.  Namespace collision will result in replacement of the `CardTemplate`
      */
     
     class func create(cardCategory title: String, image: Data?) -> CardTemplate {
         var card: CardTemplate?
-        if let temps = CoreDataGod.user.cardTemplates?.filter({ $0.templateTitle == title }) {
-            card = temps.first
+        if let temps = CoreDataGod.user.cardTemplates, !temps.isEmpty {
+            let z = temps.filter({ $0.templateTitle == title })
+            if !(z.isEmpty) {
+                card = z.first
+            }
         }
         if card == nil {
             let entity = NSEntityDescription.entity(forEntityName: "CardTemplate", in: CoreDataGod.managedContext)!

@@ -29,10 +29,10 @@ class AppDelegateHelper: NSObject {
                 return u
             } else {
                 print("Creating new User")
-                return self.createUser()
+                return AppDelegateHelper.createUser()
             }
         } catch _ as NSError {
-            return self.createUser()
+            return AppDelegateHelper.createUser()
         }
     }
 
@@ -40,10 +40,8 @@ class AppDelegateHelper: NSObject {
         let entity = NSEntityDescription.entity(forEntityName: "User", in: CoreDataGod.managedContext)!
         let user = User(entity: entity, insertInto: CoreDataGod.managedContext)
         user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
-        if let str = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
+        if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid
-            _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: str, uid: uid)
-            _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
             return user
         } else {
             fatalError()

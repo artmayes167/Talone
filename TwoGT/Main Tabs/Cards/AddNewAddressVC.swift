@@ -20,7 +20,12 @@ class AddNewAddressVC: UIViewController {
     @IBOutlet weak var zipTextField: DesignableTextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    private var addresses: [Address] = CoreDataGod.user.addresses ?? []
+    private var addresses: [Address] {
+        get {
+            let adds =  CoreDataGod.user.addresses ?? []
+            return adds.isEmpty ? [] : adds.sorted { return $0.title < $1.title }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

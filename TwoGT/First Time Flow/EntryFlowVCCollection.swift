@@ -21,6 +21,7 @@ class EnterEmailVC: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        textField.becomeFirstResponder()
     }
     @IBAction func forgetIt(_ sender: Any) {
         view.makeToast("See you later?") { _ in
@@ -117,13 +118,13 @@ class EnterVerificationVC: UIViewController {
                     return
                 } else if let r = result {
                     UserDefaults.standard.setValue(r.user.uid, forKey: DefaultsKeys.uid.rawValue)
-                    self.view.makeToast("You have successfully signed up!", duration: 2.0, position: .center) { (_) in
+                    self.view.makeToast("You have successfully signed up!".taloneCased(), duration: 2.0, position: .center) { (_) in
                         self.performSegue(withIdentifier: "toHandle", sender: nil)
                     }
                 }
             }
         } else {
-            self.showOkayAlert(title: "", message: "Looks like we don't have a proper email or link after all...") { (_ action: UIAlertAction) in
+            self.showOkayAlert(title: "".taloneCased(), message: "Looks like we don't have a proper email or link after all...".taloneCased()) { (_ action: UIAlertAction) in
                 _ = self.navigationController?.popViewController(animated: true)
             }
         }
@@ -137,21 +138,28 @@ class EnterVerificationVC: UIViewController {
 
 class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        textField.becomeFirstResponder()
+    }
 
     @IBAction func submitHandle(_ sender: UIButton) {
         guard let t = textField.text, !(t.count < 4)  else {
-            showOkayAlert(title: "Oops", message: "Please choose a handle with 4 or more characters") { _ in }
+            showOkayAlert(title: "Oops".taloneCased(), message: "Please choose a handle with 4 or more characters".taloneCased()) { _ in }
             return
         }
         let handle = t.pure()
         // TODO: - Set the handle on the back end
         // completion
         UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
-        guard let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let _ = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
+        UserDefaults.standard.synchronize() // to prevent a crash
+        guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
         // create user.
         let _ = CoreDataGod.user
+        _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
+        _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
         
-        showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.")) { _ in
+        showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
             appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
         }

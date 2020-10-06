@@ -70,13 +70,13 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                             mainVC.view.alpha = 1
                         }
                     } else if let e = error {
-                        self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
+                        self.showOkayOrCancelAlert(title: "Something went wrong: \(e.localizedDescription).".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
-                            fatalError("\(e.localizedDescription)")
+                            self.checkIfAuthenticatedAndProgress()
                         })
                     } else {
-                        self.showOkayOrCancelAlert(title: "Something went wrong.", message: "Try again?", okayHandler: { (_) in
+                        self.showOkayOrCancelAlert(title: "Something went wrong.".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
                             fatalError("No success or error, just unanticipated failure.")
