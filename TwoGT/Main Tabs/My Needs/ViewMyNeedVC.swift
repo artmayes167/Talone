@@ -77,9 +77,10 @@ class ViewMyNeedVC: UIViewController {
         let parentHave = n.parentHaveItemId
         let handle = CoreDataGod.user.handle
 
+        let needId = n.id
         n.deleteNeed()          // Remove from CoreData
-        // Remove from Remote database
-        NeedsDbWriter().deleteNeed(id: n.id!, userHandle: handle, associatedHaveId: parentHave) { error in
+                                // Remove from Remote database
+        NeedsDbWriter().deleteNeed(id: needId!, userHandle: handle, associatedHaveId: parentHave) { error in
             if error == nil {
                 self.view.makeToast("You have Deleted the Need".taloneCased(), duration: 1.0, position: .center) {_ in
                     self.performSegue(withIdentifier: "dismissToMyNeeds", sender: self)
