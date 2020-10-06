@@ -36,6 +36,7 @@ class IntroYouVC: YouVC {
                     c.addToEmails(e)
                 }
             }
+            _ = try? CoreDataGod.managedContext.save()
         }
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
