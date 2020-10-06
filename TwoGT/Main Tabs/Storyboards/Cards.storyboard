@@ -1794,10 +1794,10 @@
             </objects>
             <point key="canvasLocation" x="2577" y="2605"/>
         </scene>
-        <!--ViewContactVC-Contacts-->
+        <!--MyContactVC-Contacts-->
         <scene sceneID="wWO-Ga-wDc">
             <objects>
-                <viewController storyboardIdentifier="My Contact Card" title="ViewContactVC-Contacts" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0wT-Ee-Xxb" customClass="MyContactVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="My Contact Card" title="MyContactVC-Contacts" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0wT-Ee-Xxb" customClass="MyContactVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Nq-cW-s4x">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2095,10 +2095,10 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="NP6-bf-iu2" firstAttribute="top" secondItem="e8P-uA-NE1" secondAttribute="top" id="4jl-hg-mR2"/>
                                     <constraint firstAttribute="trailing" secondItem="NP6-bf-iu2" secondAttribute="trailing" id="9LF-XX-zLt"/>
                                     <constraint firstItem="e8P-uA-NE1" firstAttribute="trailing" secondItem="NP6-bf-iu2" secondAttribute="trailing" id="Jfk-RN-GKY"/>
-                                    <constraint firstItem="NP6-bf-iu2" firstAttribute="bottom" secondItem="BIs-qM-Fuc" secondAttribute="bottom" constant="24" id="UuY-y0-0kR"/>
+                                    <constraint firstItem="NP6-bf-iu2" firstAttribute="top" secondItem="BIs-qM-Fuc" secondAttribute="top" id="Pho-R9-aa4"/>
+                                    <constraint firstItem="NP6-bf-iu2" firstAttribute="bottom" secondItem="BIs-qM-Fuc" secondAttribute="bottom" constant="-30" id="UuY-y0-0kR"/>
                                     <constraint firstItem="NP6-bf-iu2" firstAttribute="centerX" secondItem="GFX-tm-za4" secondAttribute="centerX" id="fCB-Ft-XFI"/>
                                     <constraint firstItem="NP6-bf-iu2" firstAttribute="leading" secondItem="e8P-uA-NE1" secondAttribute="leading" id="szI-tQ-ccY"/>
                                 </constraints>
@@ -2135,40 +2135,13 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="NRo-OU-aTE">
                                         <rect key="frame" x="12" y="12" width="366" height="50"/>
                                         <subviews>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZfT-PW-vFe" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="50"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="Onh-0E-Pdh"/>
-                                                </constraints>
-                                                <state key="normal" title="save notes">
-                                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                                </state>
-                                                <state key="disabled">
-                                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="8"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                        <real key="value" value="2"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="saveNotes:" destination="0wT-Ee-Xxb" eventType="touchUpInside" id="YiZ-Ms-nOK"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YT7-55-ybB" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="50"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="IHT-Tc-GeK"/>
                                                 </constraints>
-                                                <state key="normal" title="manage shared info">
+                                                <state key="normal" title="send new message">
                                                     <color key="titleColor" systemColor="systemBlueColor"/>
                                                 </state>
                                                 <state key="disabled" title="manage shared info">
@@ -2186,7 +2159,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="manageDataShare:" destination="0wT-Ee-Xxb" eventType="touchUpInside" id="pIk-Ty-kxc"/>
+                                                    <action selector="sendCard:" destination="0wT-Ee-Xxb" eventType="touchUpInside" id="Qr9-9A-JH4"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2297,18 +2270,16 @@
                         <outlet property="imageButton" destination="lks-3q-4d3" id="0H1-sf-cfv"/>
                         <outlet property="messageTextView" destination="ZPI-i7-Nca" id="ghf-Fy-azL"/>
                         <outlet property="notesView" destination="Pin-DI-704" id="YoR-sC-RrE"/>
-                        <outlet property="saveNotesButton" destination="ZfT-PW-vFe" id="oMV-5S-dbW"/>
                         <outlet property="sendCardButton" destination="YT7-55-ybB" id="UWK-Sa-oPv"/>
                         <outlet property="tableView" destination="BeB-1a-rcu" id="vBq-ap-GOe"/>
                         <outlet property="templateTitleLabel" destination="pc0-hc-f8u" id="bds-sW-vhd"/>
                         <segue destination="tO4-mY-r5C" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="Ttj-Wk-nrJ"/>
-                        <segue destination="tO4-mY-r5C" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="joE-Bu-p9a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pQX-oT-hhU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="tO4-mY-r5C" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4794" y="1871"/>
+            <point key="canvasLocation" x="5293" y="1930"/>
         </scene>
         <!--RatingVC-->
         <scene sceneID="y01-Pq-saz">
@@ -2431,7 +2402,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fZA-Bd-ilP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5471" y="1920"/>
+            <point key="canvasLocation" x="5955" y="1816"/>
         </scene>
         <!--ViewContactVC-Template-->
         <scene sceneID="lDh-nP-XNR">
@@ -2765,33 +2736,6 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="yd2-EB-K9m">
                                         <rect key="frame" x="12" y="12" width="366" height="50"/>
                                         <subviews>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBG-oE-zwa" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="50"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="wfE-Fb-6sV"/>
-                                                </constraints>
-                                                <state key="normal" title="save notes">
-                                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                                </state>
-                                                <state key="disabled">
-                                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="8"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                        <real key="value" value="2"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="saveNotes:" destination="nSe-0l-Oo9" eventType="touchUpInside" id="tfO-OK-stx"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUm-CE-VBA" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="50"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2924,7 +2868,6 @@
                         <outlet property="imageButton" destination="Xz0-08-Ouh" id="bs4-1h-E2f"/>
                         <outlet property="messageTextView" destination="7UP-u9-lUS" id="ZFg-LH-f5U"/>
                         <outlet property="notesView" destination="3sK-Lk-PUK" id="nWl-Mq-jJo"/>
-                        <outlet property="saveNotesButton" destination="jBG-oE-zwa" id="FUE-Uq-XFg"/>
                         <outlet property="sendCardButton" destination="NUm-CE-VBA" id="STi-b1-59W"/>
                         <outlet property="tableView" destination="FM3-PJ-pcR" id="C2q-4s-bhj"/>
                         <outlet property="templateTitleLabel" destination="YBF-Cm-b4L" id="FeQ-y2-OMp"/>
@@ -2936,10 +2879,10 @@
             </objects>
             <point key="canvasLocation" x="2512" y="1871"/>
         </scene>
-        <!--ViewContactVC-Contacts-->
+        <!--TheirContactVC-Contacts-->
         <scene sceneID="82p-Ie-WGM">
             <objects>
-                <viewController storyboardIdentifier="Their Contact Card" title="ViewContactVC-Contacts" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5VJ-vZ-g3x" customClass="TheirContactVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Their Contact Card" title="TheirContactVC-Contacts" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5VJ-vZ-g3x" customClass="TheirContactVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="G9K-ov-pt9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3237,11 +3180,11 @@
                                     </view>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="4gv-aQ-dKw" firstAttribute="top" secondItem="YUa-Rd-vYT" secondAttribute="top" id="8QL-CX-ASR"/>
                                     <constraint firstItem="4gv-aQ-dKw" firstAttribute="leading" secondItem="zmb-kN-w1C" secondAttribute="leading" id="A4N-dS-vAz"/>
                                     <constraint firstAttribute="trailing" secondItem="4gv-aQ-dKw" secondAttribute="trailing" id="Fqj-sE-hmp"/>
-                                    <constraint firstItem="4gv-aQ-dKw" firstAttribute="top" secondItem="zmb-kN-w1C" secondAttribute="top" id="Rol-g4-7RJ"/>
                                     <constraint firstItem="4gv-aQ-dKw" firstAttribute="centerX" secondItem="NPr-KH-b16" secondAttribute="centerX" id="Tou-SZ-7zy"/>
-                                    <constraint firstItem="4gv-aQ-dKw" firstAttribute="bottom" secondItem="YUa-Rd-vYT" secondAttribute="bottom" constant="24" id="V5C-gz-J4v"/>
+                                    <constraint firstItem="4gv-aQ-dKw" firstAttribute="bottom" secondItem="YUa-Rd-vYT" secondAttribute="bottom" constant="-30" id="V5C-gz-J4v"/>
                                     <constraint firstItem="zmb-kN-w1C" firstAttribute="trailing" secondItem="4gv-aQ-dKw" secondAttribute="trailing" id="z5c-cD-0Fh"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="YUa-Rd-vYT"/>
@@ -3277,40 +3220,13 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="03Q-8q-efp">
                                         <rect key="frame" x="12" y="12" width="366" height="50"/>
                                         <subviews>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aHd-up-lMd" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="50"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="wPN-q3-alE"/>
-                                                </constraints>
-                                                <state key="normal" title="save notes">
-                                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                                </state>
-                                                <state key="disabled">
-                                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="8"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                        <real key="value" value="2"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="saveNotes:" destination="5VJ-vZ-g3x" eventType="touchUpInside" id="vQL-ws-rnF"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCL-UY-uRP" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="50"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="bKB-lR-whV"/>
                                                 </constraints>
-                                                <state key="normal" title="manage shared info">
+                                                <state key="normal" title="save personal notes">
                                                     <color key="titleColor" systemColor="systemBlueColor"/>
                                                 </state>
                                                 <state key="disabled" title="manage shared info">
@@ -3328,7 +3244,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="manageDataShare:" destination="5VJ-vZ-g3x" eventType="touchUpInside" id="V9Z-V0-2FB"/>
+                                                    <action selector="saveNotes:" destination="5VJ-vZ-g3x" eventType="touchUpInside" id="WBs-Z5-ONK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -3439,18 +3355,16 @@
                         <outlet property="imageButton" destination="VyX-ST-ZBj" id="lnh-Lg-LNA"/>
                         <outlet property="messageTextView" destination="efl-yG-JLJ" id="eWa-Sd-gAg"/>
                         <outlet property="notesView" destination="Yv8-nj-uCz" id="j6A-LL-4PS"/>
-                        <outlet property="saveNotesButton" destination="aHd-up-lMd" id="vU0-28-rmH"/>
-                        <outlet property="sendCardButton" destination="HCL-UY-uRP" id="Q0g-t5-sNG"/>
+                        <outlet property="saveNotesButton" destination="HCL-UY-uRP" id="LAT-ia-KDj"/>
                         <outlet property="tableView" destination="oTO-aw-53K" id="cjU-zm-Wkk"/>
                         <outlet property="templateTitleLabel" destination="Vdh-u0-f5R" id="F0K-nT-0iE"/>
                         <segue destination="i3z-gS-s8Q" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="KVr-or-IrY"/>
-                        <segue destination="i3z-gS-s8Q" kind="unwind" identifier="unwindToTemplates" unwindAction="unwindToCardTemplates:" id="nJS-6G-c02"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ATL-ZB-b2X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="i3z-gS-s8Q" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5600" y="1473"/>
+            <point key="canvasLocation" x="4635" y="1938"/>
         </scene>
         <!--RatingVC-->
         <scene sceneID="rUu-FA-Odj">
@@ -3573,7 +3487,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lTt-MK-Bci" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7212" y="2312"/>
+            <point key="canvasLocation" x="4010" y="1862"/>
         </scene>
     </scenes>
     <designables>
@@ -3590,7 +3504,7 @@
             <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="HCL-UY-uRP">
-            <size key="intrinsicContentSize" width="135" height="30"/>
+            <size key="intrinsicContentSize" width="137" height="30"/>
         </designable>
         <designable name="IUo-8p-lol">
             <size key="intrinsicContentSize" width="30" height="34"/>
@@ -3617,19 +3531,10 @@
             <size key="intrinsicContentSize" width="538" height="538"/>
         </designable>
         <designable name="YT7-55-ybB">
-            <size key="intrinsicContentSize" width="135" height="30"/>
-        </designable>
-        <designable name="ZfT-PW-vFe">
-            <size key="intrinsicContentSize" width="74" height="30"/>
-        </designable>
-        <designable name="aHd-up-lMd">
-            <size key="intrinsicContentSize" width="74" height="30"/>
+            <size key="intrinsicContentSize" width="132" height="30"/>
         </designable>
         <designable name="bCD-7d-8P0">
             <size key="intrinsicContentSize" width="538" height="538"/>
-        </designable>
-        <designable name="jBG-oE-zwa">
-            <size key="intrinsicContentSize" width="74" height="30"/>
         </designable>
         <designable name="lks-3q-4d3">
             <size key="intrinsicContentSize" width="538" height="538"/>

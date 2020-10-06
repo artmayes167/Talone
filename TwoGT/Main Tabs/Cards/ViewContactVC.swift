@@ -19,16 +19,8 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var templateTitleLabel: UILabel!
     @IBOutlet weak var notesView: UITextView!
-    @IBOutlet weak var saveNotesButton: DesignableButton!
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
-    
-    // MARK: - IBActions
-   @IBAction func saveNotes(_ sender: UIButton) {
-       if let t = notesView.text?.pure() {
-           saveNotes(t)
-       }
-   }
     
     @IBAction func manageDataShare(_ sender: UIButton) {
         sendCard()
@@ -60,7 +52,7 @@ class ViewContactVC: UIViewController {
         updateUI()
     }
     
-    private func call(number: String) {
+    func call(number: String) {
         DispatchQueue.main.async {
             if let url = URL(string: String(format: "tel:%@", number)) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -140,6 +132,15 @@ class ViewContactVC: UIViewController {
 }
 
 class TheirContactVC: ViewContactVC {
+    @IBOutlet weak var saveNotesButton: DesignableButton?
+    
+    // MARK: - IBActions
+   @IBAction func saveNotes(_ sender: UIButton) {
+       if let t = notesView.text?.pure() {
+           saveNotes(t)
+       }
+   }
+    
     var theirCard: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
@@ -166,10 +167,6 @@ class TheirContactVC: ViewContactVC {
             self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
         }
     }
-    
-    override func sendCard() {
-        showCompleteAndSendCardHelper(card: theirCard)
-    }
 }
 
 class MyContactVC: ViewContactVC {
@@ -192,12 +189,17 @@ class MyContactVC: ViewContactVC {
         }
     }
     
-    override func sendCard() {
+    @IBAction func sendCard(_ sender: UIButton) {
         showCompleteAndSendCardHelper(card: myCard)
     }
 }
 
 class MyTemplateVC: ViewContactVC {
+    
+    @IBAction func editCard(_ sender: UIButton) {
+        
+    }
+    
     var template: CardTemplate? {
         didSet { if isViewLoaded { setCardData() } }
     }
@@ -212,10 +214,6 @@ class MyTemplateVC: ViewContactVC {
         if let c = template {
             cardAddresses = c.allAddresses()
         }
-    }
-    
-    override func sendCard() {
-//        showCompleteAndSendCardHelper(card: myCard)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

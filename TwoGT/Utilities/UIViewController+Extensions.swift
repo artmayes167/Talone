@@ -131,6 +131,7 @@ extension UIViewController: UITextFieldDelegate {
         return true
     }
     
+    /// Call super on override
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if (t.count > 50) && string != "" { return false }
