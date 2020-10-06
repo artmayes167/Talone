@@ -145,7 +145,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         let success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         if !success {
-            showOkayAlert(title: "hold on", message: "you can search with the 'any' category, but it doesn't make much sense to create something as vague as that.  pick a different category up top.", handler: nil)
+            showOkayAlert(title: "hold on", message: String(format: "you need these three things: a headline, a description, and a category. \n\nif you added a headline and description... you can search with the 'any' category, but it doesn't make much sense to create something as vague as that. pick a different category up top."), handler: nil)
             return
         } else {
             switch creationManager.currentCreationType() {
