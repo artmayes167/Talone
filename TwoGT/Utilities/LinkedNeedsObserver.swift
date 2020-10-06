@@ -45,7 +45,7 @@ class LinkedNeedsObserver {
         fetcher.observeMyHaves { [self] fibHaveItems in
 
             var addedNeedOwners = [String]()
-            var changedHaves = [HaveItem]()
+            var changedHaves = [Have]()
             var isRedrawRequired = false
 
             // Get the latest haves from CD.
@@ -53,18 +53,18 @@ class LinkedNeedsObserver {
 
             // Cross-reference needs
             for have in self.haves {
-                for fibHave in fibHaveItems where fibHave.id == have.haveItem?.id {
-                    if let needStubs = fibHave.needs, let haveItem = have.haveItem {
+                for fibHave in fibHaveItems where fibHave.id == have.id {
+                    if let needStubs = fibHave.needs {
                         var isChanged = false
-                        changedHaves.append(haveItem)   // for showing on UI
+                        changedHaves.append(have)   // for showing on UI
 
-                        let cdNeeds = have.childNeeds
+                        let cdNeeds = have.childNeeds ?? []
 
                         // First determine if there are any new needStubs that are missing from CD
                         // These are the people that have linked with this have.
                         for needStub in needStubs {
                             var found = false
-                            for cdNeed in cdNeeds where cdNeed.needItem?.id == needStub.id {
+                            for cdNeed in cdNeeds where cdNeed.id == needStub.id {
                                 found = true
                                 break
                             }
@@ -72,7 +72,7 @@ class LinkedNeedsObserver {
                                 // create a new need (gets appended to childItems implicitly)
                                 var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
                                 fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
-                                let n = Need.createNeed(item: NeedItem.createNeedItem(item: fibNeed))
+                                let n = Need.createNeed(item: fibNeed)
                                 n.parentHaveItemId = fibHave.id
                                 addedNeedOwners.append(fibNeed.owner)
                                 isChanged = true
@@ -83,7 +83,7 @@ class LinkedNeedsObserver {
                         // These are the people that have removed the link with this have.
                         for cdNeed in cdNeeds {
                             var found = false
-                            for needStub in needStubs where needStub.id == cdNeed.needItem?.id {
+                            for needStub in needStubs where needStub.id == cdNeed.id {
                                 found = true
                                 break
                             }
@@ -93,7 +93,7 @@ class LinkedNeedsObserver {
                             }
                         }
                         if isChanged {
-                            haveItem.update() // store changes to CD
+                            try? CoreDataGod.managedContext.save() // store changes to CD
                             isRedrawRequired = true
                         }
                     }
@@ -104,7 +104,7 @@ class LinkedNeedsObserver {
         }
     }
 
-    private func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [HaveItem]) {
+    private func notifyUserOfNewLinks(_ owners: [String], _ haveItems: [Have]) {
         if owners.count > 0 {
             var str = ""
             let haveDesc = haveItems.count == 1 ? (haveItems[0].headline ?? haveItems[0].desc ?? "") : "haves."
@@ -136,14 +136,7 @@ class LinkedNeedsObserver {
         do {
             let u = try managedContext.fetch(fetchRequest)
 
-            haves = u.filter {
-                if let item = $0.haveItem {
-                    return item.value(forKeyPath: "owner") as? String == AppDelegate.user.handle
-                } else {
-                    print("----------No haveItem found on have")
-                    return false
-                }
-            }
+            haves = u.filter { return $0.owner == CoreDataGod.user.handle }
         } catch _ as NSError {
           fatalError()
         }

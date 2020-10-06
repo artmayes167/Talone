@@ -17,14 +17,17 @@ class MyHavesSearchDisplayVC: UIViewController {
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
 
-    var haves: [Have] = CoreDataGod.user.haves ?? []
+    var haves: [Have] {
+        get {
+            return CoreDataGod.user.haves ?? []
+        }
+    }
 
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.minimumInteritemSpacing = 12
-        getHaves()                  // load from CoreData
         AppDelegate.linkedNeedsObserver.registerForUpdates(self)    // register to receive any updates in linked needs.
     }
 
@@ -49,7 +52,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
 
     @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-        getHaves()
+        
     }
 }
 
