@@ -144,18 +144,18 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     @IBAction func createNeedHaveTouched(_ sender: Any) {
         let success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        if success {
+        if !success {
+            showOkayAlert(title: "hold on", message: "you can search with the 'any' category, but it doesn't make much sense to create something as vague as that.  pick a different category up top.", handler: nil)
+            return
+        } else {
             switch creationManager.currentCreationType() {
             case .need:
                 model?.storeNeedToDatabase(controller: self)
             case .have:
                 model?.storeHaveToDatabase(controller: self)
             default:
-                print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
+                print("Got to joinThisNeed in Marketplace, without setting a creation type")
             }
-
-        } else {
-            view.makeToast("Failed to create and update a purpose in MarketplaceSearchAndCreationVC -> createNeedHaveTouched".taloneCased())
         }
     }
 

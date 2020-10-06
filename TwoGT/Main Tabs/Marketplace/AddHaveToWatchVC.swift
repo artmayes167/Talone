@@ -118,11 +118,8 @@ class AddHaveToWatchVC: UIViewController {
             fatalError()
         }
 
-        let success = c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        if !success {
-            showOkayAlert(title: "hold on", message: "you can search with the 'any' category, but it doesn't make much sense to create something as vague as that.  pick a different category up top.", handler: nil)
-            return
-        }
+        _ = c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+        
         switch c.currentCreationType() {
         case .need:
             model.storeWatchingNeedToDatabase(item: have, creationManager: c, controller: self)
