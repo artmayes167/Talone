@@ -20,19 +20,19 @@ class AddHaveToWatchModel: NSObject {
         needsWriter.createNeedAndJoinHave(have, usingHandle: CoreDataGod.user.handle) { (error, firebaseNeedItem) in
             if error == nil, let needItem = firebaseNeedItem {
                 let n = Need.createNeed(item: needItem)
-                let _ = Have.createHave(item: have)
+                _ = Have.createHave(item: have)
                 n.parentHaveItemId = have.id
             } else {
                 controller.showOkayAlert(title: "Nope", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
-    
+
     func storeWatchingHaveToDatabase(item: HavesBase.HaveItem, creationManager: PurposeCreationManager, controller: UIViewController) {
-        
+
         let c = creationManager
         let haveItem = item
-        
+
         /// Create new Db needItem, based on the parent Have's haveItem
         let h = HavesDbWriter.HaveItem(category: haveItem.category, headline: c.getHeadline() ?? haveItem.headline,
                                           description: c.getDescription() ?? haveItem.description,
@@ -46,7 +46,7 @@ class AddHaveToWatchModel: NSObject {
         havesWriter.addHave(h, completion: { error in
             if error == nil {
                 // Create CD Have and HaveItem
-                let _ = Have.createHave(item: h)
+                _ = Have.createHave(item: h)
                 do {
                     try CoreDataGod.managedContext.save()
                     DispatchQueue.main.async {
@@ -58,7 +58,7 @@ class AddHaveToWatchModel: NSObject {
                 } catch {
                     print("Failed to save in AddHaveToWatchVC")
                 }
-                
+
             } else {
                 controller.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)", handler: nil)
             }
@@ -69,13 +69,10 @@ class AddHaveToWatchModel: NSObject {
 class AddHaveToWatchVC: UIViewController {
 
     @IBOutlet weak var headlineTextField: DesignableTextField!
-    
     @IBOutlet weak var descriptionTextView: ActiveTextView!
-    
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
-    
-    
+
     var haveItem: HavesBase.HaveItem? {
         didSet {
             if isViewLoaded {
@@ -92,14 +89,14 @@ class AddHaveToWatchVC: UIViewController {
             }
         }
     }
-    
+
     var model = AddHaveToWatchModel()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         populateUI()
     }
-    
+
     func populateUI() {
         guard let c = creationManager else { return }
         switch c.currentCreationType() {
@@ -111,16 +108,16 @@ class AddHaveToWatchVC: UIViewController {
             fatalError()
         }
     }
-    
+
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {
         view.endEditing(false)
     }
-    
-    
+
     @IBAction func save(_ sender: Any) {
         guard let c = creationManager, let have = haveItem else {
             fatalError()
         }
+
         let success = c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
         if !success { fatalError() }
         switch c.currentCreationType() {
@@ -130,6 +127,9 @@ class AddHaveToWatchVC: UIViewController {
             model.storeWatchingHaveToDatabase(item: have, creationManager: c, controller: self)
         default:
             print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
+        }
+        self.view.makeToast("You have successfully linked to \(have.owner)'s have", duration: 2.0, position: .center) {_ in
+            self.dismiss(animated: true) { }
         }
     }
 

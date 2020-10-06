@@ -11,7 +11,7 @@ import CoreData
 
 enum CurrentCreationType: Int {
     case need, have, unknown
-    
+
     func stringValue() -> String {
         switch self {
         case .have:
@@ -35,7 +35,7 @@ class PurposeCreationManager: NSObject {
     private var searchLocation: SearchLocation?
     private var headline: String?
     private var desc: String?
-    
+
     func setCreationType(_ type: CurrentCreationType) {
         creationType = type
     }
@@ -64,7 +64,7 @@ class PurposeCreationManager: NSObject {
     func setHeadline(_ headline: String?, description: String?) -> Bool {
         self.headline = headline
         self.desc = description
-        if let h = headline, !h.isEmpty, let d = description, !d.isEmpty, !(category == .any) {
+        if let h = headline, !h.isEmpty, let d = description, !d.isEmpty, creationType != .unknown {
             return true
         }
         return false
