@@ -71,6 +71,9 @@ class CardTemplateCreatorVC: UIViewController {
         } else {
             model.set(card: nil)
         }
+        var contentInset: UIEdgeInsets = self.availableTableView.contentInset
+        contentInset.bottom = contentInset.bottom + 50
+        availableTableView.contentInset = contentInset
         availableTableView.reloadData()
         setDragAndDropDelegates()
     }

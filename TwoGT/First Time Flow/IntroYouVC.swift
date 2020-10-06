@@ -10,9 +10,9 @@ import UIKit
 
 class IntroYouVC: YouVC {
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showOkayAlert(title: "this is you".taloneCased(), message: String(format: "the data you input here is not shared with anyone, unless you add it to a template and send it to them.  you can access this section in the future from the dashboard. \n\nif you input any data, we will create a template for you to use.  feel free to view templates and edit them in the cards section. \n\nthe 'no data' template can be used to block other users, an is uneditable.").taloneCased(), handler: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        showOkayAlert(title: "this is you".taloneCased(), message: String(format: "the data you input here is not shared with anyone, unless you add it to a template and send it to them.  you can access this section in the future from the dashboard. \n\nif you input any data, we will create a template for you to use.  feel free to view templates and edit them in the cards section. \n\nthe 'no data' template can be used to block other users, and is uneditable.").taloneCased(), handler: nil)
     }
     
     @IBAction func next(_ sender: UIButton) {
