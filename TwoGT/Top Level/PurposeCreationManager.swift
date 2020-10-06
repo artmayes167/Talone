@@ -64,7 +64,7 @@ class PurposeCreationManager: NSObject {
     func setHeadline(_ headline: String?, description: String?) -> Bool {
         self.headline = headline
         self.desc = description
-        if let h = headline, !h.isEmpty, let d = description, !d.isEmpty, creationType != .unknown {
+        if let h = headline, !h.isEmpty, let d = description, !d.isEmpty, category != .any {
             return true
         }
         return false
