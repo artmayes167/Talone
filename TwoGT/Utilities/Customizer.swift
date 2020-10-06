@@ -114,7 +114,7 @@ extension Customizer {
             v.titleLabel?.backgroundColor = .clear
             view.backgroundColor = UIColor.hex("D8CEDD")
             view.borderColor = .black
-            view.borderWidth = 0
+            view.borderWidth = 2
         }
         
         else if let v = view as? CardPrimaryHeader {

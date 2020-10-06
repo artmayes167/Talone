@@ -782,9 +782,12 @@
                                                         <real key="value" value="8"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="seeTheirCard:" destination="7Td-ea-BLI" eventType="touchUpInside" id="rH9-L3-nE4"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hYi-dK-nud" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="27" y="101" width="153" height="40"/>
+                                                <rect key="frame" x="27" y="74" width="153" height="40"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="their shared data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V12-Ml-NaB">
                                                         <rect key="frame" x="12" y="6" width="129" height="28"/>
@@ -845,9 +848,12 @@
                                                         <real key="value" value="8"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="seeMyCard:" destination="7Td-ea-BLI" eventType="touchUpInside" id="y2e-bQ-AXl"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PRE-Nh-2dL" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="27.5" y="101" width="152.5" height="40"/>
+                                                <rect key="frame" x="27.5" y="74" width="152.5" height="40"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="your shared data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRI-dv-CJy">
                                                         <rect key="frame" x="12" y="6" width="128.5" height="28"/>
@@ -890,11 +896,11 @@
                                     <constraint firstItem="XiC-NQ-1lA" firstAttribute="height" secondItem="7af-Az-cgO" secondAttribute="height" id="ePj-7T-Al9"/>
                                 </constraints>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8U-wm-9qA" customClass="PageHeader" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="24" y="0.0" width="366" height="77"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M8U-wm-9qA" customClass="SecondaryPageHeader" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="12" y="0.0" width="390" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="communications with &lt;handle&gt;" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LUq-v7-ckS">
-                                        <rect key="frame" x="12" y="12" width="342" height="53"/>
+                                        <rect key="frame" x="12" y="12" width="366" height="26"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -902,7 +908,7 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="77" id="WUR-i2-2p2"/>
+                                    <constraint firstAttribute="height" constant="50" id="WUR-i2-2p2"/>
                                     <constraint firstAttribute="bottom" secondItem="LUq-v7-ckS" secondAttribute="bottom" constant="12" id="iUs-e2-fPv"/>
                                     <constraint firstItem="LUq-v7-ckS" firstAttribute="top" secondItem="M8U-wm-9qA" secondAttribute="top" constant="12" id="kKM-V1-0Ha"/>
                                     <constraint firstAttribute="trailing" secondItem="LUq-v7-ckS" secondAttribute="trailing" constant="12" id="qtN-fO-GgS"/>
@@ -916,18 +922,21 @@
                                         <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="titleLabel" destination="LUq-v7-ckS" id="JP8-7r-Cho"/>
+                                </connections>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Mqw-Qd-VmP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="M8U-wm-9qA" firstAttribute="top" secondItem="Mqw-Qd-VmP" secondAttribute="top" id="07W-pm-Kgc"/>
-                            <constraint firstItem="M8U-wm-9qA" firstAttribute="leading" secondItem="Mqw-Qd-VmP" secondAttribute="leading" constant="24" id="KFT-nD-n4e"/>
+                            <constraint firstItem="M8U-wm-9qA" firstAttribute="leading" secondItem="Mqw-Qd-VmP" secondAttribute="leading" constant="12" id="KFT-nD-n4e"/>
                             <constraint firstItem="Mqw-Qd-VmP" firstAttribute="trailing" secondItem="Wv3-JC-xpe" secondAttribute="trailing" id="NPB-Xq-EAZ"/>
                             <constraint firstItem="kyH-jP-Esa" firstAttribute="leading" secondItem="Mqw-Qd-VmP" secondAttribute="leading" id="TvA-3s-ZcW"/>
                             <constraint firstItem="Wv3-JC-xpe" firstAttribute="top" secondItem="Mqw-Qd-VmP" secondAttribute="top" id="TvT-Vr-dBv"/>
                             <constraint firstItem="Mqw-Qd-VmP" firstAttribute="bottom" secondItem="Wv3-JC-xpe" secondAttribute="bottom" id="X9G-Bd-uEp"/>
-                            <constraint firstItem="Mqw-Qd-VmP" firstAttribute="trailing" secondItem="M8U-wm-9qA" secondAttribute="trailing" constant="24" id="b0U-jd-xVg"/>
+                            <constraint firstItem="Mqw-Qd-VmP" firstAttribute="trailing" secondItem="M8U-wm-9qA" secondAttribute="trailing" constant="12" id="b0U-jd-xVg"/>
                             <constraint firstAttribute="trailing" secondItem="kyH-jP-Esa" secondAttribute="trailing" id="cug-7J-by5"/>
                             <constraint firstItem="Wv3-JC-xpe" firstAttribute="leading" secondItem="Mqw-Qd-VmP" secondAttribute="leading" id="d89-A5-LjK"/>
                             <constraint firstItem="hYi-dK-nud" firstAttribute="top" secondItem="M8U-wm-9qA" secondAttribute="bottom" constant="24" id="ljC-Af-ylS"/>
@@ -938,6 +947,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="PfC-K0-zui"/>
                     <connections>
+                        <outlet property="headerView" destination="M8U-wm-9qA" id="Jhw-KC-uOd"/>
+                        <outlet property="leftButton" destination="RA0-C6-xh1" id="BS5-Nf-Ys7"/>
+                        <outlet property="leftView" destination="XiC-NQ-1lA" id="a0h-fR-RL4"/>
+                        <outlet property="rightButton" destination="B1M-xO-Mvv" id="426-C8-poR"/>
+                        <outlet property="rightView" destination="7af-Az-cgO" id="3Pw-FK-xXT"/>
                         <segue destination="5VJ-vZ-g3x" kind="show" identifier="toTheirContact" id="LAy-q9-q1Q"/>
                         <segue destination="0wT-Ee-Xxb" kind="show" identifier="toMyContact" id="JRm-Fj-7lL"/>
                     </connections>

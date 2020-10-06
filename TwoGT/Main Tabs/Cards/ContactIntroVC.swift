@@ -10,6 +10,7 @@ import UIKit
 
 class ContactIntroVC: UIViewController {
     
+    @IBOutlet weak var headerView: SecondaryPageHeader!
     @IBOutlet weak var leftView: UIView!
     @IBOutlet weak var rightView: UIView!
     @IBOutlet weak var leftButton: UIButton!
@@ -29,6 +30,9 @@ class ContactIntroVC: UIViewController {
     
     private func populateUI() {
         guard let c = contact else { return }
+        
+        headerView.setTitleText("contact with \(c.contactHandle)")
+        
         if let t = c.receivedCards?.first {
             theirCard = t
             let color = leftView.backgroundColor
