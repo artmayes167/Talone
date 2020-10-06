@@ -35,7 +35,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
      // MARK: - Variables
     var creationManager: PurposeCreationManager = PurposeCreationManager()
     var model: MarketplaceModel?
-    
+
     var searchLocation: SearchLocation?
 
     var currentNeedHaveSelectedSegmentIndex = 0 {
@@ -96,7 +96,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         categoryTextField.text = creationManager.getCategory()?.rawValue
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
-            let _ = CoreDataGod.user.sortedAddresses(clean: true)
+            _ = CoreDataGod.user.sortedAddresses(clean: true)
             let locations = CoreDataGod.user.searchLocations
             guard var l = locations else {
                 let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
@@ -221,7 +221,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         let city = loc.city
         let state = loc.state
         showSpinner()
-        
+
         NeedsDbFetcher().fetchAllNeeds(city: city, state: state, country: loc.country, maxCount: 20) { array in
             guard let cat = self.creationManager.getCategory()?.rawValue else { fatalError() }
             let newArray = array.filter { $0.category.lowercased() ==  cat}
@@ -241,10 +241,23 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         showSpinner()
         guard let loc = creationManager.getLocationOrNil() else { fatalError() }
         guard let v = creationManager.getCategory()?.firebaseValue() else { fatalError() }
-        HavesDbFetcher().fetchHaves(matching: [v], loc.city, loc.state, loc.country) { array in
+
+        if v.lowercased() == "any" {
+            let msg = "There are no results for any categories in this city. If you have anything, please share"
+            HavesDbFetcher().fetchAllHaves(city: loc.city, loc.state, loc.country, maxCount: 10) { array in
+                handleResults(array, msg)
+            }
+        } else {
+            let msg = "There are no results for \(v.lowercased()), in this city. If you have anything, please share"
+            HavesDbFetcher().fetchHaves(matching: [v], loc.city, loc.state, loc.country) { array in
+                handleResults(array, msg)
+            }
+        }
+
+        func handleResults(_ array: [HavesBase.HaveItem], _ message: String) {
             let finalArray = array.filter { $0.owner != AppDelegateHelper.user.handle }
             if finalArray.isEmpty {
-                self.showOkayAlert(title: "".taloneCased(), message: "There are no results for this category, in this city.  Try creating one!".taloneCased()) { (_) in
+                self.showOkayAlert(title: "".taloneCased(), message: message.taloneCased()) { (_) in
                     self.hideSpinner()
                 }
             } else {
@@ -252,6 +265,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 self.hideSpinner()
             }
         }
+
     }
 
     private func checkSaveButton() {
