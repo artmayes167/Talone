@@ -19,6 +19,7 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var templateTitleLabel: UILabel!
     @IBOutlet weak var notesView: UITextView!
+    @IBOutlet weak var notesTitleLabel: UILabel?
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
@@ -102,7 +103,13 @@ class ViewContactVC: UIViewController {
         handleLabel.text = c.userHandle
         templateTitleLabel.text = c.templateTitle
         messageTextView.text = c.message
-        notesView.isHidden = true
+        if notesView.isEditable {
+            notesView.isHidden = false
+            notesTitleLabel?.isHidden = false
+        } else {
+            notesView.isHidden = true
+            notesTitleLabel?.isHidden = true
+        }
         
         let image = c.image
         if let imageFromStorage = image {
@@ -113,6 +120,7 @@ class ViewContactVC: UIViewController {
             let newImage = UIImage(named: "avatar")
             imageButton.setImage(newImage!, for: .normal)
         }
+        view.layoutIfNeeded()
     }
     
     func updateUIFor(template c: CardTemplate) {
@@ -128,6 +136,7 @@ class ViewContactVC: UIViewController {
             let newImage = UIImage(named: "avatar")
             imageButton.setImage(newImage!, for: .normal)
         }
+        view.layoutIfNeeded()
     }
 }
 
