@@ -84,3 +84,5 @@
 
 // Plus by scott desmond from the Noun Project
 // --- Added up to here to creativeCommons.json
+
+// warehouse by Wilson Joseph from the Noun Project

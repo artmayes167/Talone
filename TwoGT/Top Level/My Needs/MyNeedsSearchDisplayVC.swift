@@ -13,7 +13,6 @@ import CoreData
 class MyNeedsSearchDisplayVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var pageHeader: PageHeader!
 
     let spacer = CGFloat(1)
     let numberOfItemsInRow = CGFloat(1)
@@ -53,7 +52,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func populateUI() {
-        pageHeader.setTitleText("All \(needs.count) of My Needs") 
+        //pageHeader.setTitleText("All \(needs.count) of My Needs") 
     }
     
     // MARK: - Navigation

@@ -12,7 +12,6 @@ import CoreData
 class MyHavesSearchDisplayVC: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var pageHeader: PageHeader!
 
     let spacer = CGFloat(2)
     let numberOfItemsInRow = CGFloat(1)
@@ -52,7 +51,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
 
     func populateUI() {
-        pageHeader.setTitleText("All \(haves.count) of My Haves")
+//        pageHeader.setTitleText("All \(haves.count) of My Haves")
         collectionView.reloadData()
     }
 
