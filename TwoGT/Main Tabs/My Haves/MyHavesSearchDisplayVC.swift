@@ -102,7 +102,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 128.0)
+        return CGSize(width: width, height: 100.0)
     }
 }
 
@@ -124,9 +124,7 @@ class MyHaveCell: UICollectionViewCell {
     @IBOutlet weak var joinedLabel: UILabel?
 
     func configure(_ have: Have) {
-
-        let size = CGSize(width: 128.0, height: 128.0)
-        let aspectScaledToFitImage = UIImage(named: (have.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
+        let aspectScaledToFitImage = UIImage(named: (have.category?.lowercased())!)
         categoryImage.image = aspectScaledToFitImage
         titleLabel.text = have.headline
         locationLabel.text = have.location?.displayName()

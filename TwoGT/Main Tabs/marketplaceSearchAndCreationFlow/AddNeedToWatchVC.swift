@@ -86,7 +86,7 @@ class AddNeedToWatchVC: UIViewController {
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: ActiveTextView!
     @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
+    //@IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
     
     var needItem: NeedsBase.NeedItem? {
         didSet {
@@ -96,7 +96,7 @@ class AddNeedToWatchVC: UIViewController {
         }
     }
 
-    // Manages live activity in the app
+    // Manages live activity in the marketplace search and creation flow
     var creationManager: PurposeCreationManager? {
         didSet {
             if isViewLoaded {

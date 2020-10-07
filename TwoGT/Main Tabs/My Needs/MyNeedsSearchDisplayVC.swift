@@ -100,7 +100,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 128.0)
+        return CGSize(width: width, height: 100.0)
     }
 }
 
@@ -114,8 +114,7 @@ class MyNeedCell: UICollectionViewCell {
     
     func configure(_ need: Need) {
         
-        let size = CGSize(width: 128.0, height: 128.0)
-        let aspectScaledToFitImage = UIImage(named: (need.category?.lowercased())!)!.af.imageAspectScaled(toFit: size)
+        let aspectScaledToFitImage = UIImage(named: (need.category?.lowercased())!)
         categoryImage.image = aspectScaledToFitImage
         titleLabel.text = need.headline 
         locationLabel.text = need.location?.displayName()

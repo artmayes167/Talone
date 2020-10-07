@@ -42,9 +42,9 @@ class NeedsSearchDisplayVC: UIViewController {
     
     private func populateUI() {
         guard let c = creationManager else { fatalError() }
-        categoryLabel.text = c.getCategory()?.rawValue.capitalized
+        categoryLabel.text = "Need: " + c.getCategory()!.rawValue
         if c.getLocationOrNil() != nil {
-            cityStateLabel.text = c.getLocationOrNil()?.displayName()
+            cityStateLabel.text = c.getLocationOrNil()?.displayName().taloneCased()
         }
     }
     
@@ -69,7 +69,7 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PurposeCell
-        cell.configure(needs[indexPath.item])
+        cell.configure(needs[indexPath.item], row: indexPath.row)
         return cell
     }
     
@@ -82,7 +82,7 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 128.0)
+        return CGSize(width: width, height: 50.0)
     }
 }
 
@@ -91,10 +91,10 @@ class PurposeCell: UICollectionViewCell {
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    func configure(_ need: NeedsBase.NeedItem) {
-        let size = CGSize(width: 128.0, height: 128.0)
-        let aspectScaledToFitImage = UIImage(named: need.category.lowercased())!.af.imageAspectScaled(toFit: size)
+    func configure(_ need: NeedsBase.NeedItem, row: Int) {
+        let aspectScaledToFitImage = UIImage(named: need.category.lowercased())
         categoryImage.image = aspectScaledToFitImage
+        categoryImage.tintColor = [UIColor.systemPurple.withAlphaComponent(0.77), UIColor.systemGreen.withAlphaComponent(0.77)][row%2]
         titleLabel.text = need.description // different identifier needed?
     }
 }

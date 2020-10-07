@@ -22,6 +22,13 @@ class AddHaveToWatchModel: NSObject {
                 let n = Need.createNeed(item: needItem)
                 _ = Have.createHave(item: have)
                 n.parentHaveItemId = have.id
+                try? CoreDataGod.managedContext.save()
+                DispatchQueue.main.async {
+                    controller.view.makeToast("You have successfully linked to \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
+                        // TODO: - Create unwind segue to my needs
+                        controller.performSegue(withIdentifier: "unwindToMyNeeds", sender: nil)
+                    }
+                }
             } else {
                 controller.showOkayAlert(title: "Nope", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
             }
@@ -71,7 +78,7 @@ class AddHaveToWatchVC: UIViewController {
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: ActiveTextView!
     @IBOutlet weak var infoLabel: UILabel!
-    @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
+   // @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
 
     var haveItem: HavesBase.HaveItem? {
         didSet {
@@ -127,9 +134,6 @@ class AddHaveToWatchVC: UIViewController {
             model.storeWatchingHaveToDatabase(item: have, creationManager: c, controller: self)
         default:
             print("Got to joinThisNeed in ViewIndividualNeedVC, without setting a creation type")
-        }
-        self.view.makeToast("You have successfully linked to \(have.owner)'s have", duration: 2.0, position: .center) {_ in
-            self.dismiss(animated: true) { }
         }
     }
 
