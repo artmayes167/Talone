@@ -50,10 +50,25 @@ class ViewMyNeedVC: UIViewController {
     }
 
     func populateUI() {
-        guard let n = need?.category, let loc = need?.location else { return }
-        locationLabel.text = n + " in " + loc.displayName()
-        pageHeaderView.setTitleText(need?.headline ?? "No Headline!")
-        needDescriptionTextView.text = need?.desc ?? "No Description!"
+        if let c = need?.category {
+            if let cityState = need?.location {
+                locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
+            } else {
+                locationLabel.text = String(format: "%@", c)
+            }
+        }
+        var hl: String = ""
+        if let n = need?.headline {
+            hl = n
+        }
+        pageHeaderView.setTitleText(!hl.isEmpty ? hl : "No Headline!".taloneCased())
+        var str: String = ""
+        if let n = need?.desc {
+            str = n
+        }
+        needDescriptionTextView.text = !str.isEmpty ? str : "No Description!".taloneCased()
+        personalNotesTextView.text = need?.personalNotes
+        view.layoutIfNeeded()
     }
 
     // MARK: - Keyboard Notifications

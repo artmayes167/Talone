@@ -19,7 +19,6 @@ class ViewMyHaveVC: UIViewController {
         }
     }
 
-    @IBOutlet weak var headerTitleLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var haveDescriptionTextView: UITextView!
@@ -34,10 +33,7 @@ class ViewMyHaveVC: UIViewController {
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let owner = have?.owner ?? CoreDataGod.user.handle {
-            headerTitleLabel.text = String(format: "%@'s Have", owner)
-        }
+        populateUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,10 +42,25 @@ class ViewMyHaveVC: UIViewController {
     }
 
     func populateUI() {
-        guard let c = have?.category, let cityState = have?.location else { return }
-        locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
-        pageHeaderView.setTitleText(have?.headline ?? "No Headline!")
-        haveDescriptionTextView.text = have?.desc ?? "No Description!"
+        if let c = have?.category {
+            if let cityState = have?.location {
+                locationLabel.text = String(format: "%@ in %@", c, cityState.displayName())
+            } else {
+                locationLabel.text = String(format: "%@", c)
+            }
+        }
+        
+        var hl: String = ""
+        if let h = have?.headline {
+            hl = h
+        }
+        pageHeaderView.setTitleText(!hl.isEmpty ? hl : "No Headline!".taloneCased())
+        var str: String = ""
+        if let n = have?.desc {
+            str = n
+        }
+        haveDescriptionTextView.text = !str.isEmpty ? str : "No Description!".taloneCased()
+        personalNotesTextView.text = have?.personalNotes
         view.layoutIfNeeded()
     }
 
@@ -65,7 +76,6 @@ class ViewMyHaveVC: UIViewController {
             } else {
                 self.showOkayAlert(title: "Error", message: "Error while deleting have. Error: \(error!.localizedDescription)", handler: nil)
             }
-
         }
     }
     

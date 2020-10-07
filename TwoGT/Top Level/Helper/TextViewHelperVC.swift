@@ -29,11 +29,18 @@ final class TextViewHelperVC: UIViewController, UITextViewDelegate {
         textView.text = initialText
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        textView.becomeFirstResponder()
+    }
+    
     @IBAction func endEditing(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     @IBAction func save(_ sender: Any) {
         modifyingTextView?.text = textView.text
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) { [unowned self] in
+            // force didEndEditing, hopefully
+            self.modifyingTextView?.delegate?.textViewDidEndEditing?(self.modifyingTextView!)
+        }
     }
 }

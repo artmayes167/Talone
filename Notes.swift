@@ -59,7 +59,7 @@
 // service by Manohara from the Noun Project
 
 // roof by Andrejs Kirma from the Noun Project
-// --- Added up to here to creativeCommons.json
+
 // Picture Frame by Vectorstall from the Noun Project
 
 // iphone xs max by Jamison Wieser from the Noun Project
@@ -83,3 +83,4 @@
 // template by IYIKON from the Noun Project
 
 // Plus by scott desmond from the Noun Project
+// --- Added up to here to creativeCommons.json

@@ -23,7 +23,8 @@ class MyHavesSearchDisplayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumInteritemSpacing = 2
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 2
         getHaves()
         AppDelegate.linkedNeedsObserver.registerForUpdates(self)    // register to receive any updates in linked needs.
     }
@@ -102,7 +103,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 100.0)
+        return CGSize(width: width, height: 85.0)
     }
 }
 
@@ -124,8 +125,7 @@ class MyHaveCell: UICollectionViewCell {
     @IBOutlet weak var joinedLabel: UILabel?
 
     func configure(_ have: Have) {
-        let aspectScaledToFitImage = UIImage(named: (have.category?.lowercased())!)
-        categoryImage.image = aspectScaledToFitImage
+        categoryImage.image = UIImage(named: (have.category?.lowercased())!)
         titleLabel.text = have.headline
         locationLabel.text = have.location?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")

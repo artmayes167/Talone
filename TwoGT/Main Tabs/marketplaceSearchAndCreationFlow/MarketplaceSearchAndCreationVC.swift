@@ -77,11 +77,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         model = MarketplaceModel(creationManager: creationManager)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkSaveButton()
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         view.endEditing(true)
@@ -106,6 +101,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                     self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
                 }
                 setSearchButtons()
+                checkSaveButton()
                 return
             }
             l = l.filter { $0.city == city && $0.state == state }
@@ -122,12 +118,14 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             }
         }
         setSearchButtons()
+        checkSaveButton()
     }
 
     private func setUIForCurrents() {
         if let loc = creationManager.getLocationOrNil() {
             whereTextField.text = loc.displayName()
             setSearchButtons()
+            checkSaveButton()
         }
         // Get last saved location from defaults?
         /// Country is USA by default
@@ -176,6 +174,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         creationManager.setCategory(need)
         setSearchButtons()
+        checkSaveButton()
         view.layoutIfNeeded()
     }
 
@@ -307,7 +306,10 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         return false
     }
 
-    func textViewDidEndEditing(_ textView: UITextView) { }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print("-----------------ended editing called")
+        checkSaveButton()
+    }
 }
 
  // MARK: -

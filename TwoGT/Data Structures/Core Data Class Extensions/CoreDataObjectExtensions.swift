@@ -18,7 +18,7 @@ extension User {
             for s in locs {
                 if s.type == "home" { home.append(s) } else if s.type == "alternate" { alternate.append(s) }
                 if clean {
-                    if s.type == "none" { CoreDataGod.managedContext.delete(s)}
+                    /// This is a safe space for deleting things we might need to delete
                 }
             }
             if !home.isEmpty { dict["home"] = home }
@@ -368,6 +368,24 @@ extension Need {
         needItem.createdAt = item.createdAt?.dateValue()
         needItem.modifiedAt = item.modifiedAt?.dateValue()
         needItem.id = item.id!
+        let loc = item.locationInfo
+        
+        if let s = CoreDataGod.user.searchLocations {
+            if !s.isEmpty {
+                let k = s.filter { $0.isEqual(loc) }
+                if !k.isEmpty {
+                    needItem.location = k.first
+                } else {
+                    let inCaseIsEqualDoesNotWork = s.filter ({ $0.state == loc.state && $0.city == loc.city })
+                    if !inCaseIsEqualDoesNotWork.isEmpty {
+                        needItem.location = inCaseIsEqualDoesNotWork.first
+                    }
+                }
+            }
+        }
+        if needItem.location == nil {
+            needItem.location = SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+        }
         
         try? CoreDataGod.managedContext.save()
         return needItem
@@ -394,7 +412,25 @@ extension Have {
         haveItem.createdBy = item.createdBy
         haveItem.createdAt = item.createdAt?.dateValue()
         haveItem.modifiedAt = item.modifiedAt?.dateValue()
-        haveItem.id = item.id! 
+        haveItem.id = item.id!
+        
+        let loc = item.locationInfo
+        if let s = CoreDataGod.user.searchLocations {
+            if !s.isEmpty {
+                let k = s.filter { $0.isEqual(loc) }
+                if !k.isEmpty {
+                    haveItem.location = k.first
+                } else {
+                    let inCaseIsEqualDoesNotWork = s.filter ({ $0.state == loc.state && $0.city == loc.city })
+                    if !inCaseIsEqualDoesNotWork.isEmpty {
+                        haveItem.location = inCaseIsEqualDoesNotWork.first
+                    }
+                }
+            }
+        }
+        if haveItem.location == nil {
+            haveItem.location = SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+        }
         
         try? CoreDataGod.managedContext.save()
         return haveItem

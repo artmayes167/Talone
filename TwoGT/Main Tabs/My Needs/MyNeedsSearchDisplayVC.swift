@@ -24,7 +24,8 @@ class MyNeedsSearchDisplayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumInteritemSpacing = 2
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 2
         
         getNeeds()
     }
@@ -100,7 +101,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 100.0)
+        return CGSize(width: width, height: 85.0)
     }
 }
 
@@ -113,11 +114,9 @@ class MyNeedCell: UICollectionViewCell {
     @IBOutlet weak var joinedLabel: UILabel?
     
     func configure(_ need: Need) {
-        
-        let aspectScaledToFitImage = UIImage(named: (need.category?.lowercased())!)
-        categoryImage.image = aspectScaledToFitImage
+        categoryImage.image = UIImage(named: (need.category?.lowercased())!)
         titleLabel.text = need.headline 
-        locationLabel.text = need.location?.displayName()
+        locationLabel.text = need.location?.displayName() ?? "Saved before location worked"
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())
         
