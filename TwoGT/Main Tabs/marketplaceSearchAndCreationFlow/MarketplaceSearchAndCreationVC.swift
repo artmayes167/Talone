@@ -223,15 +223,15 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             "There are no needs for any category, in this city." :
             "There are no results for this category, in this city."
 
-        NeedsDbFetcher().fetchNeedsFor(category: cat, city: loc.city, state: loc.state, country: loc.country, maxCount: 20, filterOutThisUser: true) { array in
+        NeedsDbFetcher().fetchNeedsFor(category: cat, city: loc.city, state: loc.state, country: loc.country, maxCount: 20, filterOutThisUser: true) { array, error in
+            self.hideSpinner()
 
+            if error != nil { self.showOkayAlert(title: "", message: error!.localizedDescription) {_ in } }
             if array.isEmpty {
                 self.showOkayAlert(title: "".taloneCased(), message: msg.taloneCased()) { (_) in
-                    self.hideSpinner()
                 }
             } else {
                 self.performSegue(withIdentifier: "toNeedsCollection", sender: array)
-                self.hideSpinner()
             }
         }
     }
@@ -243,17 +243,17 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
         if v.lowercased() == "any" {
             let msg = "There are no results for any categories in this city. If you have anything, please share"
-            HavesDbFetcher().fetchAllHaves(city: loc.city, loc.state, loc.country, maxCount: 10) { array in
-                handleResults(array, msg)
+            HavesDbFetcher().fetchAllHaves(city: loc.city, loc.state, loc.country, maxCount: 10) { array, error in
+                handleResults(array, msg, error)
             }
         } else {
             let msg = "There are no results for \(v.lowercased()), in this city. If you have anything, please share"
-            HavesDbFetcher().fetchHaves(matching: [v], loc.city, loc.state, loc.country) { array in
-                handleResults(array, msg)
+            HavesDbFetcher().fetchHaves(matching: [v], loc.city, loc.state, loc.country) { array, error in
+                handleResults(array, msg, error)
             }
         }
 
-        func handleResults(_ array: [HavesBase.HaveItem], _ message: String) {
+        func handleResults(_ array: [HavesBase.HaveItem], _ message: String, _ error: Error?) {
             let finalArray = array.filter { $0.owner != AppDelegateHelper.user.handle }
             if finalArray.isEmpty {
                 self.showOkayAlert(title: "".taloneCased(), message: message.taloneCased()) { (_) in
