@@ -33,10 +33,34 @@ class RatingVC: UIViewController {
             goodLabel.text = String(goodCount)
         }
     }
+    
+    private var rating: ContactRating? {
+        didSet {
+            if let r = rating {
+                goodCount = Int(r.good)
+                justCount = Int(r.justSo)
+                badCount = Int(r.bad)
+                
+                goodLabel.text = String(goodCount)
+                justLabel.text = String(justCount)
+                badLabel.text = String(badCount)
+            }
+        }
+    }
+    
+    func configure(contact: Contact) {
+        let r = contact.rating
+        if r == nil {
+            let rating = ContactRating.create(handle: contact.contactHandle)
+            self.rating = rating
+        } else {
+            rating = r?.first
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
     

@@ -14,7 +14,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageHeader: PageHeader!
 
-    let spacer = CGFloat(1)
+    let spacer = CGFloat(2)
     let numberOfItemsInRow = CGFloat(1)
 
     var haves: [Have] = []
@@ -89,7 +89,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
         let have = haves[indexPath.item]
         managedObjectContext.refresh(have, mergeChanges: true)
 
-        cell.configure(have)
+        cell.configure(have, indexPath: indexPath)
 
         return cell
     }
@@ -103,7 +103,7 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 85.0)
+        return CGSize(width: width, height: 75.0)
     }
 }
 
@@ -124,19 +124,43 @@ class MyHaveCell: UICollectionViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var joinedLabel: UILabel?
 
-    func configure(_ have: Have) {
+    func configure(_ have: Have, indexPath: IndexPath) {
         categoryImage.image = UIImage(named: (have.category?.lowercased())!)
         titleLabel.text = have.headline
         locationLabel.text = have.location?.displayName()
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: have.createdAt ?? Date())
+        
+        var bgColor: UIColor = .white
+        switch indexPath.row%2 {
+        case 0:
+            bgColor = UIColor.hex("EAB1FF")
+        case 1:
+            bgColor = UIColor.hex("AAD6A0")
+        default:
+            print("somehow, the remainder of dividing by two is larger than one")
+        }
+        contentView.backgroundColor = bgColor
 
-        // This works and returns [Need] type
+        var color: UIColor = .darkGray
+        switch indexPath.row%2 {
+        case 0:
+            color = UIColor.hex("717F6E")
+        case 1:
+            color = UIColor.hex("5D2126")
+        default:
+            print("somehow, the remainder of dividing by two is larger than one")
+        }
+        categoryImage.tintColor = color
 
         if let cn = have.childNeeds, !cn.isEmpty {
-            joinedLabel?.text = "\(cn.count)"
+            if cn.count > 1 {
+                joinedLabel?.text = "\(cn.count) people watching"
+            } else {
+                joinedLabel?.text = "1 person watching"
+            }
         } else {
-            joinedLabel?.text = ""
+            joinedLabel?.text = "nobody's watching yet"
         }
     }
 }

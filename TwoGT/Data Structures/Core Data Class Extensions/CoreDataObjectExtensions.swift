@@ -471,3 +471,20 @@ extension Contact {
         return contact
     }
 }
+
+/// will eventually be extended to share ratings
+extension ContactRating {
+    class func create(handle: String, good: Int = 0, just: Int = 0, bad: Int = 0) -> ContactRating {
+
+        let entity = NSEntityDescription.entity(forEntityName: "ContactRating", in: CoreDataGod.managedContext)!
+        let rating = ContactRating(entity: entity, insertInto: CoreDataGod.managedContext)
+
+        rating.good = Int64(good)
+        rating.justSo = Int64(just)
+        rating.bad = Int64(bad)
+        rating.contactHandle = handle
+
+        try? CoreDataGod.managedContext.save()
+        return rating
+    }
+}

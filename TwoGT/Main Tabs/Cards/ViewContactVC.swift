@@ -154,6 +154,8 @@ class TheirContactVC: ViewContactVC {
         didSet { if isViewLoaded { setCardData() } }
     }
     
+    var contact: Contact?
+    
     override func setCardData() {
         if let c = theirCard {
             setCardAddresses(card: c)
@@ -176,6 +178,18 @@ class TheirContactVC: ViewContactVC {
             self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
         }
     }
+    
+     // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toRatings" {
+            if let vc = segue.destination as? RatingVC {
+                if let c = contact {
+                    vc.configure(contact: c)
+                }
+                
+            }
+        }
+    }
 }
 
 class MyContactVC: ViewContactVC {
@@ -183,6 +197,8 @@ class MyContactVC: ViewContactVC {
     var myCard: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
+    
+    var contact: Contact?
     
     override func updateUI() {
         if let m = myCard {
@@ -201,6 +217,18 @@ class MyContactVC: ViewContactVC {
     @IBAction func sendCard(_ sender: UIButton) {
         showCompleteAndSendCardHelper(card: myCard)
     }
+    
+    // MARK: - Navigation
+   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if segue.identifier == "toRatings" {
+           if let vc = segue.destination as? RatingVC {
+               if let c = contact {
+                   vc.configure(contact: c)
+               }
+               
+           }
+       }
+   }
 }
 
 class MyTemplateVC: ViewContactVC {

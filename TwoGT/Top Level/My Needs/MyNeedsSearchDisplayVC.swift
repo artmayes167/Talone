@@ -87,7 +87,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyNeedCell
         let need = needs[indexPath.item]
         managedObjectContext.refresh(need, mergeChanges: true)
-        cell.configure(need)
+        cell.configure(need, indexPath: indexPath)
        
         return cell
     }
@@ -101,7 +101,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
         width = (width - spacer)/numberOfItemsInRow
-        return CGSize(width: width, height: 85.0)
+        return CGSize(width: width, height: 75.0)
     }
 }
 
@@ -113,19 +113,43 @@ class MyNeedCell: UICollectionViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var joinedLabel: UILabel?
     
-    func configure(_ need: Need) {
+    func configure(_ need: Need, indexPath: IndexPath) {
         categoryImage.image = UIImage(named: (need.category?.lowercased())!)
         titleLabel.text = need.headline 
         locationLabel.text = need.location?.displayName() ?? "Saved before location worked"
         let formatter = DateFormatter.sharedFormatter(forRegion: nil, format: "MMMM d, yyyy")
         createdAtLabel.text = formatter.string(from: need.createdAt ?? Date())
         
-        // This works and returns [Need] type
+        var bgColor: UIColor = .white
+        switch indexPath.row%2 {
+        case 0:
+            bgColor = UIColor.hex("EAB1FF")
+        case 1:
+            bgColor = UIColor.hex("AAD6A0")
+        default:
+            print("somehow, the remainder of dividing by two is larger than one")
+        }
+        contentView.backgroundColor = bgColor
         
+        var color: UIColor = .darkGray
+        switch indexPath.row%2 {
+        case 0:
+            color = UIColor.hex("717F6E")
+        case 1:
+            color = UIColor.hex("5D2126")
+        default:
+            print("somehow, the remainder of dividing by two is larger than one")
+        }
+        categoryImage.tintColor = color
+
         if let cn = need.childNeeds, !cn.isEmpty {
-            joinedLabel?.text = "\(cn.count)"
+                if cn.count > 1 {
+                    joinedLabel?.text = "\(cn.count) people watching"
+                } else {
+                    joinedLabel?.text = "1 person watching"
+                }
         } else {
-            joinedLabel?.text = ""
+            joinedLabel?.text = "nobody's watching yet"
         }
     }
 }

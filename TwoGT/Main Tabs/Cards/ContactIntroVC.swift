@@ -83,11 +83,17 @@ class ContactIntroVC: UIViewController {
         case "toTheirContact":
             guard let vc = segue.destination as? TheirContactVC else { fatalError() }
             vc.theirCard = theirCard
+            vc.contact = contact
         case "toMyContact":
             guard let vc = segue.destination as? MyContactVC else { fatalError() }
             vc.myCard = myCard
+            vc.contact = contact
         default:
             print("Different segue = \(String(describing: segue.identifier))")
         }
+    }
+    
+    @IBAction func unwindToMainContact( _ segue: UIStoryboardSegue) {
+
     }
 }

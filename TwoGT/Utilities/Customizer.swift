@@ -101,7 +101,7 @@ extension Customizer {
             v.titleLabel?.font = UIFont.systemFont(ofSize: 24.0, weight: .thin)
             v.titleLabel?.textColor = .black
             v.titleLabel?.backgroundColor = .clear
-            view.backgroundColor = UIColor.hex("999999")
+            view.backgroundColor = UIColor.hex("CDDDD1")
             view.borderColor = .black
             view.borderWidth = 2
         }
@@ -123,7 +123,7 @@ extension Customizer {
             v.titleLabel?.font = UIFont.systemFont(ofSize: 24.0, weight: .thin)
             v.titleLabel?.textColor = .black
             v.titleLabel?.backgroundColor = .clear
-            view.backgroundColor = UIColor.hex("5165BE")
+            view.backgroundColor = UIColor.hex("85A682").withAlphaComponent(0.77)
             view.borderColor = .black
             view.borderWidth = 0
         }
