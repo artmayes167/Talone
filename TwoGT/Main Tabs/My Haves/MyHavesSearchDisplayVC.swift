@@ -23,7 +23,7 @@ class MyHavesSearchDisplayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumInteritemSpacing = 12
+        layout.minimumInteritemSpacing = 2
         getHaves()
         AppDelegate.linkedNeedsObserver.registerForUpdates(self)    // register to receive any updates in linked needs.
     }

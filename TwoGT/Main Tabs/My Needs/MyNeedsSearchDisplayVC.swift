@@ -24,7 +24,7 @@ class MyNeedsSearchDisplayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumInteritemSpacing = 12
+        layout.minimumInteritemSpacing = 2
         
         getNeeds()
     }
