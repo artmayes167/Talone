@@ -36,7 +36,7 @@ class ContactIntroVC: UIViewController {
         if let t = c.receivedCards?.first {
             theirCard = t
             let color = leftView.backgroundColor
-            let newColor = color?.withAlphaComponent(0.9)
+            let newColor = color?.withAlphaComponent(0.77)
             leftView.backgroundColor = newColor
             leftButton.setTitle("see their card".taloneCased(), for: .normal)
             leftButton.isEnabled = true
@@ -51,7 +51,7 @@ class ContactIntroVC: UIViewController {
         if let m = c.sentCards?.first {
             myCard = m
             let color = rightView.backgroundColor
-            let newColor = color?.withAlphaComponent(0.9)
+            let newColor = color?.withAlphaComponent(0.77)
             rightView.backgroundColor = newColor
             rightButton.setTitle("see your card".taloneCased(), for: .normal)
         } else {

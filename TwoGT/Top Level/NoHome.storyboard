@@ -873,12 +873,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thoth" translatesAutoresizingMaskIntoConstraints="NO" id="qys-BE-czs">
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                            </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8w-Lh-TRT">
                                 <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="feh-hh-Lv7" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="10" width="398" height="341.5"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <rect key="frame" x="8" y="34" width="398" height="341.5"/>
+                                        <color key="backgroundColor" red="1" green="0.92421371285647103" blue="0.99780424483912455" alpha="0.27498929794520549" colorSpace="custom" customColorSpace="sRGB"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                 <real key="value" value="3"/>
@@ -889,14 +892,14 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="xRr-ra-7Ef">
-                                        <rect key="frame" x="24" y="0.0" width="366" height="454.5"/>
+                                        <rect key="frame" x="24" y="24" width="366" height="454.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0C-3d-hL9" customClass="PageHeader" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="366" height="50"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cards" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6m-hg-p5K">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cards" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6m-hg-p5K">
                                                         <rect key="frame" x="12" y="0.0" width="342" height="50"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
                                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -951,7 +954,7 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aah-6T-jIC">
                                                         <rect key="frame" x="12" y="8" width="342" height="114"/>
-                                                        <string key="text">This is not a legal notice, because we don't need a legal notice to tell you we won't have access to your personal data, notwithstanding the email address you used to sign up with.  Ha ha, we know an email address.</string>
+                                                        <string key="text">this is not a legal notice, because we don't need a legal notice to tell you we won't have access to your personal data, notwithstanding the email address you used to sign up with.  ha ha, we know an email address.</string>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -979,16 +982,16 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="mmz-tC-qDA"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                <state key="normal" title="Go to Cards">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" title="go to cards">
                                                     <color key="titleColor" systemColor="systemBlueColor"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="8"/>
+                                                        <real key="value" value="0.0"/>
                                                     </userDefinedRuntimeAttribute>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                         <real key="value" value="2"/>
@@ -999,7 +1002,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="1" green="0.92421371285647103" blue="0.99780424483912455" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="1" green="0.92421371285647103" blue="0.99780424483912455" alpha="0.22126498287671234" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="lJB-ZR-6yZ" secondAttribute="trailing" id="Li1-VF-JiP"/>
                                             <constraint firstAttribute="trailing" secondItem="F3V-dd-WUI" secondAttribute="trailing" id="QUa-vq-xRh"/>
@@ -1010,16 +1013,17 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="xRr-ra-7Ef" firstAttribute="bottom" secondItem="YIC-Aq-xSa" secondAttribute="bottom" constant="-30" id="2d0-v1-6V3"/>
                                     <constraint firstItem="feh-hh-Lv7" firstAttribute="leading" secondItem="2SM-lB-pPC" secondAttribute="leading" constant="8" id="3fM-Oc-MKF"/>
                                     <constraint firstAttribute="trailing" secondItem="xRr-ra-7Ef" secondAttribute="trailing" constant="24" id="Csm-IK-JSR"/>
-                                    <constraint firstItem="xRr-ra-7Ef" firstAttribute="bottom" secondItem="YIC-Aq-xSa" secondAttribute="bottom" constant="-30" id="Mjz-ht-rbx"/>
                                     <constraint firstItem="xRr-ra-7Ef" firstAttribute="leading" secondItem="V8w-Lh-TRT" secondAttribute="leading" constant="24" id="Shw-gl-2QG"/>
                                     <constraint firstItem="xRr-ra-7Ef" firstAttribute="centerX" secondItem="V8w-Lh-TRT" secondAttribute="centerX" id="Wda-co-Jn0"/>
                                     <constraint firstItem="feh-hh-Lv7" firstAttribute="top" secondItem="G0C-3d-hL9" secondAttribute="bottom" constant="-40" id="dtr-Wl-6Cr"/>
                                     <constraint firstItem="Owh-QB-Mw6" firstAttribute="top" secondItem="feh-hh-Lv7" secondAttribute="bottom" constant="-87" id="kq7-rC-pce"/>
                                     <constraint firstItem="2SM-lB-pPC" firstAttribute="trailing" secondItem="feh-hh-Lv7" secondAttribute="trailing" constant="8" id="lwM-ni-obL"/>
-                                    <constraint firstItem="xRr-ra-7Ef" firstAttribute="top" secondItem="YIC-Aq-xSa" secondAttribute="top" id="swc-0W-bFG"/>
+                                    <constraint firstItem="xRr-ra-7Ef" firstAttribute="top" secondItem="YIC-Aq-xSa" secondAttribute="top" constant="24" id="swc-0W-bFG"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="YIC-Aq-xSa"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="2SM-lB-pPC"/>
@@ -1028,9 +1032,13 @@
                         <viewLayoutGuide key="safeArea" id="6UO-MP-xjr"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6UO-MP-xjr" firstAttribute="bottom" secondItem="qys-BE-czs" secondAttribute="bottom" id="8QJ-hJ-vP5"/>
                             <constraint firstItem="6UO-MP-xjr" firstAttribute="bottom" secondItem="V8w-Lh-TRT" secondAttribute="bottom" id="JdQ-6O-8VA"/>
                             <constraint firstItem="V8w-Lh-TRT" firstAttribute="leading" secondItem="eM9-0g-HoB" secondAttribute="leading" id="NTo-Rm-saq"/>
+                            <constraint firstItem="qys-BE-czs" firstAttribute="leading" secondItem="6UO-MP-xjr" secondAttribute="leading" id="Vbi-bW-R4L"/>
                             <constraint firstItem="V8w-Lh-TRT" firstAttribute="top" secondItem="6UO-MP-xjr" secondAttribute="top" id="dUR-gu-PwW"/>
+                            <constraint firstItem="qys-BE-czs" firstAttribute="top" secondItem="6UO-MP-xjr" secondAttribute="top" id="dZh-vG-whU"/>
+                            <constraint firstItem="6UO-MP-xjr" firstAttribute="trailing" secondItem="qys-BE-czs" secondAttribute="trailing" id="egZ-NG-4Ix"/>
                             <constraint firstAttribute="trailing" secondItem="V8w-Lh-TRT" secondAttribute="trailing" id="kpi-Q0-tFu"/>
                         </constraints>
                     </view>
@@ -1115,7 +1123,7 @@
                                         <rect key="frame" x="12" y="-6" width="390" height="624.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="obe-nM-Fgt" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="145" y="23.5" width="100" height="0.0"/>
+                                                <rect key="frame" x="145" y="2" width="100" height="18"/>
                                                 <color key="backgroundColor" red="0.45250050585434509" green="0.63707010610659909" blue="0.43178446130863291" alpha="0.76771190068493156" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="P7f-Xd-eDn"/>
@@ -3201,7 +3209,7 @@
             <objects>
                 <viewController id="P1s-0b-Pxg" customClass="ViewMyNeedVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GCO-qv-i4M">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun" translatesAutoresizingMaskIntoConstraints="NO" id="IkP-JJ-GqA" customClass="TopCap" customModule="Talone" customModuleProvider="target">
@@ -3770,6 +3778,9 @@
         <designable name="CXd-gs-PCz">
             <size key="intrinsicContentSize" width="87" height="30"/>
         </designable>
+        <designable name="IkP-JJ-GqA">
+            <size key="intrinsicContentSize" width="634" height="299"/>
+        </designable>
         <designable name="Iti-aD-tMA">
             <size key="intrinsicContentSize" width="200" height="200"/>
         </designable>
@@ -3783,7 +3794,7 @@
             <size key="intrinsicContentSize" width="94" height="36"/>
         </designable>
         <designable name="TKH-AD-Wdu">
-            <size key="intrinsicContentSize" width="30" height="30"/>
+            <size key="intrinsicContentSize" width="46" height="30"/>
         </designable>
         <designable name="YL6-H6-cv3">
             <size key="intrinsicContentSize" width="210" height="36"/>
@@ -3800,11 +3811,14 @@
         <designable name="gpj-3T-H7R">
             <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
+        <designable name="mEp-5T-V5V">
+            <size key="intrinsicContentSize" width="634" height="299"/>
+        </designable>
         <designable name="oiG-ER-Fkg">
             <size key="intrinsicContentSize" width="81" height="30"/>
         </designable>
         <designable name="p2p-np-jna">
-            <size key="intrinsicContentSize" width="123" height="41"/>
+            <size key="intrinsicContentSize" width="78" height="30"/>
         </designable>
         <designable name="vnT-3S-yc3">
             <size key="intrinsicContentSize" width="30" height="30"/>
@@ -3833,6 +3847,7 @@
         <image name="sun" width="634" height="299"/>
         <image name="sunBottom" width="634" height="299"/>
         <image name="tempLogoKarl1" width="200" height="200"/>
+        <image name="thoth" width="186" height="272"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -3923,98 +3938,11 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
             <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -4025,26 +3953,8 @@
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
