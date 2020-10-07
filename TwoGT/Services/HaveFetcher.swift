@@ -58,7 +58,7 @@ class HavesDbFetcher: HavesBase, HavesObserver {
         listener?.remove()
     }
 
-    func fetchHaves(matching needs: [String], _ city: String, _ state: String, _ country: String, completion: @escaping ([HaveItem]) -> Void) {
+    func fetchHaves(matching needs: [String], _ city: String, _ state: String, _ country: String, completion: @escaping ([HaveItem], Error?) -> Void) {
         let db = Firestore.firestore()
 
         db.collection("haves").whereField("locationInfo.city", isEqualTo: city)
@@ -68,7 +68,7 @@ class HavesDbFetcher: HavesBase, HavesObserver {
             //.whereField("createdBy", isLessThan: "")
             .getDocuments { (snapshot, error) in
             if let error = error {
-                print(error)
+                completion([], error)
             } else if let snapshot = snapshot {
                 let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
                     print(document)
@@ -80,12 +80,12 @@ class HavesDbFetcher: HavesBase, HavesObserver {
                     }
                     return item
                 }
-                completion(haves)
+                completion(haves, nil)
             }
         }
     }
 
-    func fetchAllHaves(city: String, _ state: String, _ country: String, maxCount: Int, completion: @escaping ([HaveItem]) -> Void) {
+    func fetchAllHaves(city: String, _ state: String, _ country: String, maxCount: Int, completion: @escaping ([HaveItem], Error?) -> Void) {
         let db = Firestore.firestore()
 
         db.collection("haves").whereField("locationInfo.city", isEqualTo: city)
@@ -95,10 +95,9 @@ class HavesDbFetcher: HavesBase, HavesObserver {
             .order(by: "modifiedAt", descending: true)
             .getDocuments { (snapshot, error) in
             if let error = error {
-                print(error)
+                completion([], error)
             } else if let snapshot = snapshot {
                 let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
-                    print(document)
                     var item: HaveItem?
                     do {
                         item = try document.data(as: HaveItem.self)
@@ -107,32 +106,33 @@ class HavesDbFetcher: HavesBase, HavesObserver {
                     }
                     return item
                 }
-                completion(haves)
+                completion(haves, nil)
             }
         }
     }
 
-    func fetchMyHaves(_ completion: @escaping ([HaveItem]) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
-
-        db.collection("haves").whereField("createdBy", isEqualTo: uid)
-            .getDocuments { (snapshot, error) in
-            if let error = error {
-                print(error)
-            } else if let snapshot = snapshot {
-                let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
-                    print(document)
-                    var item: HaveItem?
-                    do {
-                        item = try document.data(as: HaveItem.self)
-                    } catch {
-                        print(error)
-                    }
-                    return item
-                }
-                completion(haves)
-            }
-        }
-    }
+// Currently Unused code:
+//    func fetchMyHaves(_ completion: @escaping ([HaveItem]) -> Void) {
+//        guard let uid = Auth.auth().currentUser?.uid else { return }
+//        let db = Firestore.firestore()
+//
+//        db.collection("haves").whereField("createdBy", isEqualTo: uid)
+//            .getDocuments { (snapshot, error) in
+//            if let error = error {
+//                print(error)
+//            } else if let snapshot = snapshot {
+//                let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
+//                    print(document)
+//                    var item: HaveItem?
+//                    do {
+//                        item = try document.data(as: HaveItem.self)
+//                    } catch {
+//                        print(error)
+//                    }
+//                    return item
+//                }
+//                completion(haves)
+//            }
+//        }
+//    }
 }

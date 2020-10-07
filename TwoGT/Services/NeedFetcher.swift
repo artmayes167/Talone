@@ -13,7 +13,7 @@ import FirebaseFirestoreSwift
 
 class NeedsDbFetcher: NeedsBase {
 
-    func fetchNeedsFor(category: String, city: String, state: String, country: String?, maxCount: Int, filterOutThisUser: Bool, completion: @escaping ([NeedItem]) -> Void) {
+    func fetchNeedsFor(category: String, city: String, state: String, country: String?, maxCount: Int, filterOutThisUser: Bool, completion: @escaping ([NeedItem], Error?) -> Void) {
         let db = Firestore.firestore()
 
         var t = db.collection("needs").whereField("locationInfo.city", isEqualTo: city)
@@ -21,7 +21,7 @@ class NeedsDbFetcher: NeedsBase {
             .whereField("locationInfo.country", isEqualTo: country ?? "USA")
             .limit(to: maxCount)
         if category.lowercased() != "any" {
-            t = t.whereField("category", isEqualTo: category)
+            t = t.whereField("category", isEqualTo: category.capitalized)
         }
 // TODO: Firestore issue
 // As of Oct 6, 2020, Firestore has an issue that it REQUIRES result set be
@@ -39,9 +39,9 @@ class NeedsDbFetcher: NeedsBase {
             .getDocuments { (snapshot, error) in
                 if let error = error {
                     print(error)
+                    completion([], error)
                 } else if let snapshot = snapshot {
                     var needs = snapshot.documents.compactMap { (document) -> NeedItem? in
-                        print(document)
                         var item: NeedItem?
                         do {
                             item = try document.data(as: NeedItem.self)
@@ -53,71 +53,71 @@ class NeedsDbFetcher: NeedsBase {
                     if let uid = Auth.auth().currentUser?.uid {
                         needs = needs.filter { $0.createdBy != uid }
                     }
-                    completion(needs)
+                    completion(needs, nil)
                 }
             }
     }
+// CODE CURRENTLY NOT IN USE:
+//    func fetchNeed(id: String, completion: @escaping (NeedItem?, Error?) -> Void) {
+//        let db = Firestore.firestore()
+//
+//        db.collection("needs").whereField("id", isEqualTo: id)
+//            .getDocuments { (snapshot, error) in
+//                if let error = error {
+//                    completion(nil, error)
+//                } else if let snapshot = snapshot {
+//                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
+//                        var item: NeedItem?
+//                        do {
+//                            item = try document.data(as: NeedItem.self)
+//                        } catch {
+//                            print(error)
+//                        }
+//                        return item
+//                    }
+//                    completion(needs.count > 0 ? needs[0] : nil, error)
+//                }
+//            }
+//    }
 
-    func fetchNeed(id: String, completion: @escaping (NeedItem?) -> Void) {
-        let db = Firestore.firestore()
-
-        db.collection("needs").whereField("id", isEqualTo: id)
-            .getDocuments { (snapshot, error) in
-                if let error = error {
-                    print(error)
-                } else if let snapshot = snapshot {
-                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
-                        print(document)
-                        var item: NeedItem?
-                        do {
-                            item = try document.data(as: NeedItem.self)
-                        } catch {
-                            print(error)
-                        }
-                        return item
-                    }
-                    completion(needs.count > 0 ? needs[0] : nil)
-                }
-            }
-    }
-
+// CODE CURRENTLY NOT IN USE:
     // Convenience function
-    func fetchMyNeeds(city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
-        if let userId = Auth.auth().currentUser?.uid {
-            fetchUserNeeds(userId: userId, city: city, state: state, country, since: since, completion: completion)
-         }
-    }
-
-    // NOTE: FOLLOWING QUERY REQUIRES COMPOSITE INDEX WHICH CURRENTLY IS MISSING.
-    // Consider if this query is required. We can have certain amount of composite indexes, that's fine.
-
-    func fetchUserNeeds(userId: String, city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
-        let db = Firestore.firestore()
-        var sinceEpoch = 0
-
-        if since != nil { sinceEpoch = Int(since?.timeIntervalSince1970 ?? 0 * 1000) }
-
-        db.collection("needs").whereField("createdBy", isEqualTo: userId)
-            .whereField("locationInfo.city", isEqualTo: city)
-            .whereField("locationInfo.state", isEqualTo: state)
-            .whereField("locationInfo.country", isEqualTo: country ?? "USA")
-            .whereField("createdAt", isGreaterThan: sinceEpoch)
-            .getDocuments { (snapshot, error) in
-                if let error = error {
-                    print(error)
-                } else if let snapshot = snapshot {
-                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
-                        print(document)
-                        var item: NeedItem?
-                        do {
-                            item = try document.data(as: NeedItem.self)
-                        } catch {
-                            print(error)
-                        }
-                        return item
-                    }
-                    completion(needs)
-                }
-            }
-    }
+//    func fetchMyNeeds(city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
+//        if let userId = Auth.auth().currentUser?.uid {
+//            fetchUserNeeds(userId: userId, city: city, state: state, country, since: since, completion: completion)
+//         }
+//    }
+//
+//    // NOTE: FOLLOWING QUERY REQUIRES COMPOSITE INDEX WHICH CURRENTLY IS MISSING.
+//    // Consider if this query is required. We can have certain amount of composite indexes, that's fine.
+//
+//    func fetchUserNeeds(userId: String, city: String, state: String, _ country: String?, since: Date? = nil, completion: @escaping ([NeedItem]) -> Void) {
+//        let db = Firestore.firestore()
+//        var sinceEpoch = 0
+//
+//        if since != nil { sinceEpoch = Int(since?.timeIntervalSince1970 ?? 0 * 1000) }
+//
+//        db.collection("needs").whereField("createdBy", isEqualTo: userId)
+//            .whereField("locationInfo.city", isEqualTo: city)
+//            .whereField("locationInfo.state", isEqualTo: state)
+//            .whereField("locationInfo.country", isEqualTo: country ?? "USA")
+//            .whereField("createdAt", isGreaterThan: sinceEpoch)
+//            .getDocuments { (snapshot, error) in
+//                if let error = error {
+//                    print(error)
+//                } else if let snapshot = snapshot {
+//                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
+//                        print(document)
+//                        var item: NeedItem?
+//                        do {
+//                            item = try document.data(as: NeedItem.self)
+//                        } catch {
+//                            print(error)
+//                        }
+//                        return item
+//                    }
+//                    completion(needs)
+//                }
+//            }
+//    }
 }
