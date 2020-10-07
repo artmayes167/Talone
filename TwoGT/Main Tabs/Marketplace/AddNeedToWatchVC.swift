@@ -12,8 +12,6 @@ import Toast_Swift
 import CoreData
 
 class AddNeedToWatchModel: NSObject {
-    
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     func storeWatchingNeedToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
         let needItem = item
@@ -86,12 +84,9 @@ class AddNeedToWatchModel: NSObject {
 class AddNeedToWatchVC: UIViewController {
 
     @IBOutlet weak var headlineTextField: DesignableTextField!
-    
     @IBOutlet weak var descriptionTextView: ActiveTextView!
-    
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
-    
     
     var needItem: NeedsBase.NeedItem? {
         didSet {
