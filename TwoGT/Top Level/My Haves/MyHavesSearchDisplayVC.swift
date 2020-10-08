@@ -65,9 +65,9 @@ class MyHavesSearchDisplayVC: UIViewController {
         }
     }
 
-    @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-        getHaves()
-    }
+//    @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
+//        getHaves()
+//    }
 }
 
 extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {

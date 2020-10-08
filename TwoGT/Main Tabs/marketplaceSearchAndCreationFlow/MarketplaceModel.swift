@@ -58,7 +58,7 @@ class MarketplaceModel: NSObject {
                 try? CoreDataGod.managedContext.save()
                 DispatchQueue.main.async {
                     controller?.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                        controller?.performSegue(withIdentifier: "unwindToMyHaves", sender: nil)
+                        controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
                         controller?.hideSpinner()
                     }
                 }
