@@ -95,6 +95,6 @@ class PurposeCell: UICollectionViewCell {
         let aspectScaledToFitImage = UIImage(named: need.category.lowercased())
         categoryImage.image = aspectScaledToFitImage
         categoryImage.tintColor = [UIColor.systemPurple.withAlphaComponent(0.77), UIColor.systemGreen.withAlphaComponent(0.77)][row%2]
-        titleLabel.text = need.description // different identifier needed?
+        titleLabel.text = need.headline
     }
 }

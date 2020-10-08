@@ -90,6 +90,6 @@ class HaveCell: UICollectionViewCell {
         let aspectScaledToFitImage = UIImage(named: have.category.lowercased())
         categoryImage.image = aspectScaledToFitImage
         categoryImage.tintColor = [UIColor.red.withAlphaComponent(0.77), UIColor.blue.withAlphaComponent(0.77)][row%2]
-        titleLabel.text = have.description // different identifier needed?
+        titleLabel.text = have.headline
     }
 }

@@ -77,13 +77,14 @@ class AddHaveToWatchVC: UIViewController {
 
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: ActiveTextView!
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var trackLabel: UILabel!
+    //@IBOutlet weak var infoLabel: UILabel!
    // @IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
 
     var haveItem: HavesBase.HaveItem? {
         didSet {
             if isViewLoaded {
-                //populateUI()
+                populateUI()
             }
         }
     }
@@ -105,14 +106,13 @@ class AddHaveToWatchVC: UIViewController {
     }
 
     func populateUI() {
-        guard let c = creationManager else { return }
-        switch c.currentCreationType() {
-        case .need:
-            infoLabel.text = "We will create a Need to track this Need.  You can find it in MyNeeds."
-        case .have:
-            infoLabel.text = "We will create a Have to track this Need.  You can find it in MyHaves."
-        default:
-            fatalError()
+        guard let h = haveItem else { return }
+        if  let headline = h.headline, !headline.isEmpty {
+            trackLabel.text = headline
+        } else if !h.category.isEmpty {
+            trackLabel.text = "tracking" + h.category
+        } else {
+            trackLabel.text = "tracking" + h.owner + "'s have"
         }
     }
 

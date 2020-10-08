@@ -85,7 +85,7 @@ class AddNeedToWatchVC: UIViewController {
 
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: ActiveTextView!
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var trackLabel: UILabel!
     //@IBOutlet var endEditingGestureRecognizer: UITapGestureRecognizer!
     
     var needItem: NeedsBase.NeedItem? {
@@ -113,14 +113,13 @@ class AddNeedToWatchVC: UIViewController {
     }
     
     func populateUI() {
-        guard let c = creationManager else { return }
-        switch c.currentCreationType() {
-        case .need:
-            infoLabel.text = "we will create a `need` to track this.  You can find it in `my needs`.".taloneCased()
-        case .have:
-            infoLabel.text = "we will create a `have` to track this.  You can find it in `my haves`.".taloneCased()
-        default:
-            fatalError()
+        guard let n = needItem else { return }
+        if  let headline = n.headline, !headline.isEmpty {
+            trackLabel.text = headline
+        } else if !n.category.isEmpty {
+            trackLabel.text = "tracking" + n.category
+        } else {
+            trackLabel.text = "tracking" + n.owner + "'s have"
         }
     }
     
