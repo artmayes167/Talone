@@ -28,13 +28,17 @@ class CardTemplatesVC: UIViewController {
     
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     
-    let spacer = CGFloat(0)
+    let spacer = CGFloat(5)
     let numberOfItemsInRow = CGFloat(3)
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cardHeaderView.setTitleText("templates")
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.sectionInset = UIEdgeInsets(top: spacer, left: spacer, bottom: spacer, right: spacer)
+        layout.minimumInteritemSpacing = spacer
+        layout.minimumLineSpacing = spacer
     }
     
 
@@ -79,7 +83,7 @@ extension CardTemplatesVC: UICollectionViewDataSource, UICollectionViewDelegate 
 extension CardTemplatesVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var width = UIScreen.main.bounds.width
-        width = (width - spacer)/numberOfItemsInRow
+        width = (width - (spacer * (numberOfItemsInRow + 1)))/numberOfItemsInRow
         return CGSize(width: width, height: width)
     }
 }
