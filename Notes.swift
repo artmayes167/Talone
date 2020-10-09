@@ -89,3 +89,7 @@
 // world-tecnologia-background-template by spearheart0 on Vecteezy
 
 // --- Added up to here to creativeCommons.json
+
+// Contacts book by Magicon from the Noun Project
+
+// Who by Adrien Coquet from the Noun Project

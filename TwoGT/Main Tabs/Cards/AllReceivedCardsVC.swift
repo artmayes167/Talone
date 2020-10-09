@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllReceivedCardsVC: UIViewController {
+class AllReceivedCardsVC: UIViewController, UIAdaptivePresentationControllerDelegate {
 
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     @IBOutlet weak var tableView: UITableView!
@@ -48,12 +48,19 @@ class AllReceivedCardsVC: UIViewController {
         showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
     }
     
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        tableView.reloadData()
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCardIntro" {
             let vc = segue.destination as! ContactIntroVC
             guard let c = sender as? Contact else { fatalError() }
             vc.contact = c
+        } else {
+            segue.destination.presentationController?.delegate = self
+            
         }
     }
 }
@@ -78,7 +85,12 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
         let u = contacts.filter { $0.contactHandle == handle }
-        cell.configure(handle: handle, image: u.first?.receivedCards?.first?.image)
+        if let trueContact = u.first {
+            cell.configure(contact: trueContact)
+        } else {
+            fatalError()
+        }
+        
         return cell
     }
     
@@ -102,14 +114,10 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
 
 class ContactListCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var presenceAndRatingView: PresenceAndRatingDisplay!
     
-    func configure(handle: String, image: Data?) {
-        nameLabel.text = handle
-        if let i = image, let d = UIImage(data: i) {
-            userImageView.image = d
-        } else {
-            userImageView.image = #imageLiteral(resourceName: "avatar.png")
-        }
+    func configure(contact: Contact) {
+        nameLabel.text = contact.contactHandle
+        presenceAndRatingView.contact = contact
     }
 }
