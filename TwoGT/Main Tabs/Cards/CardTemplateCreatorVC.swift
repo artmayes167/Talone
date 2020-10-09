@@ -42,7 +42,7 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.rowHeight = UITableView.automaticDimension
         availableTableView.estimatedRowHeight = 62
         
-        let images = CoreDataImageHelper.shareInstance.fetchAllImages()
+        let images = CoreDataImageHelper.shared.fetchAllImages()
         if let i = images?.first?.image {
             imageButton.isEnabled = true
             plusImage.isHidden = false

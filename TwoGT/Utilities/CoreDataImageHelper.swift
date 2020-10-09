@@ -10,13 +10,22 @@ import UIKit
 import CoreData
 
 class CoreDataImageHelper: NSObject {
-    static let shareInstance = CoreDataImageHelper()
+    static let shared = CoreDataImageHelper()
     
     func saveImage(data: Data) {
         let imageInfo = ImageInfo(context: CoreDataGod.managedContext)
         imageInfo.image = data
         imageInfo.handle = CoreDataGod.user.handle
         try? CoreDataGod.managedContext.save()
+    }
+    
+    func deleteAllImages() {
+        let images = Array(CoreDataGod.user.images ?? [])
+        if !images.isEmpty {
+            for image in images {
+                CoreDataGod.managedContext.delete(image)
+            }
+        }
     }
     
     func fetchAllImages() -> [ImageInfo]? {

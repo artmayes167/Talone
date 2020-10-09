@@ -18,11 +18,13 @@ class EnterEmailVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
+        
+        UserDefaults.standard.setValue(State.enterEmail.rawValue, forKey: State.stateDefaultsKey.rawValue)
+        //textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textField.becomeFirstResponder()
+        showOkayAlert(title: "READ EVERYTHING", message: String(format:"you're special. you're about to embark on an adventure in sociietal reconfiguration.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\n and read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
     }
     
     @IBAction func submitEmail(_ sender: Any) {
@@ -64,7 +66,7 @@ class EnterEmailVC: UIViewController {
     }
 }
 
-class EnterVerificationVC: UIViewController {
+class VerificationVC: UIViewController {
 
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
@@ -86,6 +88,7 @@ class EnterVerificationVC: UIViewController {
 
         // Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(passwordlessSignInSuccessful), name: NSNotification.Name(rawValue: "PasswordlessEmailNotificationSuccess"), object: nil)
+        UserDefaults.standard.setValue(State.verify.rawValue, forKey: State.stateDefaultsKey.rawValue)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -104,6 +107,7 @@ class EnterVerificationVC: UIViewController {
             let _ = UserDefaults.standard.string(forKey: "Link") {
             signInButton.isEnabled = true
             signInInfo.isHidden = true
+            setStackState()
         } else {
             signInButton.isEnabled = false
         }
@@ -144,6 +148,11 @@ class EnterVerificationVC: UIViewController {
 class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        UserDefaults.standard.setValue(State.enterHandle.rawValue, forKey: State.stateDefaultsKey.rawValue)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         textField.becomeFirstResponder()
     }
@@ -165,7 +174,7 @@ class EnterHandleVC: UIViewController {
         _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
         
         showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
-            self.performSegue(withIdentifier: "toYou", sender: nil)
+            self.performSegue(withIdentifier: "toImport", sender: nil)
         }
     }
 }

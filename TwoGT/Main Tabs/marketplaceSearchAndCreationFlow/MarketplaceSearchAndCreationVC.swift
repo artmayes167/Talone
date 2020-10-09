@@ -269,12 +269,13 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
     private func checkSaveButton() {
         // Check cityState and category, but don't save
-        var success = creationManager.getLocationOrNil() != nil
-        if success {
-            // returns true if able to set both headline and description
-            success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-            createNewNeedHaveButton.isEnabled = success
-        }
+        createNewNeedHaveButton.isEnabled = true
+//        var success = creationManager.getLocationOrNil() != nil
+//        if success {
+//            // returns true if able to set both headline and description
+//            success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
+//            createNewNeedHaveButton.isEnabled = success
+//        }
     }
 
     private func setSearchButtons() {

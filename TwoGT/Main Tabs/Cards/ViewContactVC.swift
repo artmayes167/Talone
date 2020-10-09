@@ -310,7 +310,7 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
             switch typeForClass(object.entity.name) {
             case .email:
                 guard let e = object as? Email else { return }
-                launchEmail(to: e.emailString)
+                launchEmail(to: [e.emailString], body: "From \(CoreDataGod.user.handle): ")
             case .phoneNumber:
                 guard let p = object as? PhoneNumber else { return }
                 call(number: p.number)
@@ -335,36 +335,5 @@ extension ViewContactVC: UITextViewDelegate {
         }
         return false
     }
-}
-
-// MARK: -
-extension ViewContactVC: MFMailComposeViewControllerDelegate {
-   func launchEmail(to recipient: String) {
-        let toRecipents = [recipient]
-        let mc: MFMailComposeViewController = MFMailComposeViewController()
-        mc.mailComposeDelegate = self
-        mc.setToRecipients(toRecipents)
-        self.present(mc, animated: true, completion: nil)
-   }
-
-   func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
-       var message = ""
-       switch result {
-       case .cancelled:
-           message = "Mail cancelled"
-       case .saved:
-           message = "Mail saved"
-       case .sent:
-           message = "Mail sent"
-       case .failed:
-           message = "Mail sent failure: \(String(describing: error?.localizedDescription))."
-       default:
-           message = "Something unanticipated has occurred"
-           break
-       }
-       self.dismiss(animated: true) {
-        self.showOkayAlert(title: "", message: message.taloneCased(), handler: nil)
-       }
-   }
 }
 

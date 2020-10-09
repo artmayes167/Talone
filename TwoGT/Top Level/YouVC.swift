@@ -26,10 +26,14 @@ enum AddressSections: Int, CaseIterable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setInitialUI()
+    }
+    
+    func setInitialUI() {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 62
         
-        if let im = CoreDataImageHelper.shareInstance.fetchAllImages() {
+        if let im = CoreDataImageHelper.shared.fetchAllImages() {
             if let imageFromStorage = im.first?.image {
                 let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
@@ -110,7 +114,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        return 40
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -241,10 +245,10 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
         
         let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
         if let imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3) {
-            CoreDataImageHelper.shareInstance.saveImage(data: imageData)
+            CoreDataImageHelper.shared.saveImage(data: imageData)
             showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
             
-            if let im = CoreDataImageHelper.shareInstance.fetchAllImages() {
+            if let im = CoreDataImageHelper.shared.fetchAllImages() {
                 if let imageFromStorage = im.first?.image {
                     let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                     imageButton.imageView?.contentMode = .scaleAspectFill

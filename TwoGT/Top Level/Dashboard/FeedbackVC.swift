@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import MessageUI
 
 class ViewControllerElements {
     var identifier: String?
@@ -20,7 +19,7 @@ class Feedback {
     var userId: String?
     var handle: String {
         get {
-            return UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous"
+            return CoreDataGod.user.handle
         }
     }
     var feedback: String?
@@ -73,7 +72,7 @@ class FeedbackVC: UIViewController {
         feedback.userId = user.uid
         feedback.feedback = feedbackTextView.text
         // submit
-        launchEmail(body: feedbackTextView.text)
+        launchOwnerEmail(subject: "feedback", body: feedbackTextView.text)
     }
     
     @IBAction func copyEmailToClipboard(_ sender: Any) {
@@ -112,42 +111,5 @@ extension FeedbackVC: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         
-    }
-}
-
- // MARK: -
-extension FeedbackVC: MFMailComposeViewControllerDelegate {
-
-    func launchEmail(body: String) {
-
-        let emailTitle = "Feedback on " + topViewControllerIdentifier
-        let toRecipents = ["artmayes167@icloud.com"]
-        let mc: MFMailComposeViewController = MFMailComposeViewController()
-        mc.mailComposeDelegate = self
-        mc.setSubject(emailTitle)
-        mc.setMessageBody(body, isHTML: false)
-        mc.setToRecipients(toRecipents)
-
-        self.present(mc, animated: true, completion: nil)
-    }
-
-    func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
-        var message = ""
-        switch result {
-        case .cancelled:
-            message = "Mail cancelled"
-        case .saved:
-            message = "Mail saved"
-        case .sent:
-            message = "Mail sent"
-        case .failed:
-            message = "Mail sent failure: \(String(describing: error?.localizedDescription))."
-        default:
-            message = "Something unanticipated has occurred"
-            break
-        }
-        self.dismiss(animated: true) {
-            self.showOkayAlert(title: "", message: message, handler: nil)
-        }
     }
 }

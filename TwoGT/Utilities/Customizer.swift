@@ -83,14 +83,15 @@ extension Customizer {
     
     fileprivate func configure(button: DesignableButton) {
         if let b = button as? ModalBackButton {
-            b.setImage(UIImage(named: "downArrow"), for: .normal)
-            b.setTitle("", for: .normal)
-            b.tintColor = .purple
-            b.backgroundColor = .white
-            b.borderWidth = 2
-            b.borderColor = .purple
-            b.cornerRadius = 8
-            b.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+            b.isHidden = true
+//            b.setImage(UIImage(named: "downArrow"), for: .normal)
+//            b.setTitle("", for: .normal)
+//            b.tintColor = .purple
+//            b.backgroundColor = .white
+//            b.borderWidth = 2
+//            b.borderColor = .purple
+//            b.cornerRadius = 8
+//            b.imageEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         }
     }
     

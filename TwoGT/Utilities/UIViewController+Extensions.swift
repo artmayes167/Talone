@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MessageUI
 
 extension UIViewController {
     
@@ -15,13 +16,13 @@ extension UIViewController {
         return []
     }
     
-    /// Show an Alert with an "Ok" button.
+    /// Show an Alert with an "Ok" button, automatically set to use the Talone case rules.
     ///
     /// - Parameters:
-    ///   - title: The title for the Alert.
-    ///   - message: The message for the Alert.
+    ///   - title: The title for the Alert, `taloneCased()`
+    ///   - message: The message for the Alert, `taloneCased()`
     func showOkayAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
-        let alert = UIAlertController(title: title, message: message.taloneCased(), preferredStyle: .alert)
+        let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
         let action1 = UIAlertAction(title: "ok".taloneCased(), style: .cancel, handler: handler)
         alert.addAction(action1)
         DispatchQueue.main.async {
@@ -32,8 +33,8 @@ extension UIViewController {
     /// Show and Alert with an "Ok" button and a "Cancel" button.
     ///
     /// - Parameters:
-    ///   - title: The title for the Alert.
-    ///   - message: The message for the Alert.
+    ///   - title: The title for the Alert, `taloneCased()`
+    ///   - message: The message for the Alert, `taloneCased()
     ///   - okayHandler: A block to execute when the user taps "Ok".
     func showOkayOrCancelAlert(title: String, message: String, okayHandler: ((UIAlertAction) -> Void)?, cancelHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
@@ -47,8 +48,8 @@ extension UIViewController {
     /// Show and Alert with a "Retry" button and a "Cancel" button.
     ///
     /// - Parameters:
-    ///   - title: The title for the Alert.
-    ///   - message: The message for the Alert.
+    ///   - title: The title for the Alert, `taloneCased()`
+    ///   - message: The message for the Alert, `taloneCased()
     ///   - okayHandler: A block to execute when the user taps "Retry".
     func showRetryOrCancelAlert(title: String, message: String, retryHandler: ((UIAlertAction) -> Void)?, cancelHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
@@ -150,4 +151,45 @@ class ModalContainerVC: UIViewController {
     }
     
     // Copy Toast code from BaseSwipeVC?
+}
+
+// MARK: -
+extension UIViewController: MFMailComposeViewControllerDelegate {
+    func launchEmail(to recipients: [String], subject: String = "", body: String) {
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setSubject("Talone: " + subject)
+        mc.setMessageBody(body, isHTML: false)
+        mc.setToRecipients(recipients)
+        self.present(mc, animated: true, completion: nil)
+   }
+    
+    func launchOwnerEmail(subject: String = "", body: String) {
+        let mc: MFMailComposeViewController = MFMailComposeViewController()
+        mc.mailComposeDelegate = self
+        mc.setSubject("Talone: " + subject)
+        mc.setMessageBody(body, isHTML: false)
+        mc.setToRecipients(["artmayes167@icloud.com"])
+        self.present(mc, animated: true, completion: nil)
+   }
+
+   public func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {
+       var message = ""
+       switch result {
+       case .cancelled:
+           message = "Mail cancelled"
+       case .saved:
+           message = "Mail saved"
+       case .sent:
+           message = "Mail sent"
+       case .failed:
+           message = "Mail sent failure: \(String(describing: error?.localizedDescription))."
+       default:
+           message = "Something unanticipated has occurred"
+           break
+       }
+       self.dismiss(animated: true) {
+        self.showOkayAlert(title: "", message: message.taloneCased(), handler: nil)
+       }
+   }
 }

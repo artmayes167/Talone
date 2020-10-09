@@ -14,46 +14,14 @@ import Firebase
 // Only use touch/face ID, or passcode to enter app?  Like Venmo
 
 class LogInVC: UIViewController { //, LoginButtonDelegate {
-//    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
-//        Profile.loadCurrentProfile { (profile, error) in
-//            if error == nil {
-//                self.performSegue(withIdentifier: "toMain", sender: nil)
-//            }
-//            // Error Handling
-//
-//        }
-//
-//    }
-
-//    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
-//
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfAuthenticatedAndProgress()
-//        let loginButton = FBLoginButton()
-//        loginButton.center = view.center
-//        view.addSubview(loginButton)
-//        loginButton.permissions = ["public_profile", "email"]
-//        loginButton.delegate = self
-//
-//        guard let token = AccessToken.current else { return }
-//        if !token.isExpired {
-//        Profile.loadCurrentProfile { (profile, error) in
-//            if error == nil {
-//                self.performSegue(withIdentifier: "toMain", sender: nil)
-//            }
-//            // Error Handling
-//
-//        }
-//                }
     }
     
     func checkIfAuthenticatedAndProgress() {
-
-        // May want to look at deleting a user
-        if Auth.auth().currentUser?.isEmailVerified ?? false, (/*Auth.auth().currentUser?.isAnonymous ??*/ false) == false  {
+        if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue), AppDelegate.stateManager.configureIntro() == nil, (Auth.auth().currentUser?.isEmailVerified ?? false) {
             print("Email verified!!! User not anonymous!")
             authenticationWithTouchID() { (success, error) in
                 DispatchQueue.main.async {
@@ -86,19 +54,15 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
             }
         } else {
             DispatchQueue.main.async() {
-                self.performSegue(withIdentifier: "toEnterEmail", sender: nil)
+                /// This covers the two cases besides the email verification
+                if let name = AppDelegate.stateManager.configureIntro() {
+                    self.performSegue(withIdentifier: name.segueValue(), sender: nil)
+                } else {
+                    /// First time entering the noob train
+                    self.performSegue(withIdentifier: "toEnterEmail", sender: nil)
+                }
             }
         }
-
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //self.performSegue(withIdentifier: "toMain", sender: nil)
     }
     
     func authenticationWithTouchID(completion: @escaping (Bool, Error?) -> Void) {

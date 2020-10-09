@@ -144,6 +144,12 @@
         <fetchedProperty name="socialMedia" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="SocialMedia" predicateString="uid  == $FETCH_SOURCE.uid"/>
         </fetchedProperty>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="handle"/>
+                <constraint value="uid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="Address" positionX="-794.7265625" positionY="-1100.89453125" width="128" height="133"/>
