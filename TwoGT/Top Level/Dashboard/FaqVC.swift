@@ -90,6 +90,6 @@ class FaqCell: UITableViewCell {
     
     func configure(_ faq: Faq) {
         questionLabel.text = faq.question
-        answerLabel.text = faq.answer
+        answerLabel.text = String(format: faq.answer)
     }
 }
