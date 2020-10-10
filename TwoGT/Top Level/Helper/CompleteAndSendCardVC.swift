@@ -69,17 +69,13 @@ class CompleteAndSendCardVC: UIViewController {
         didSet {
             if let i = cardInstance {
                 // check if a received card, and get
-                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactUid == i.uid }) {
-                    if !c.isEmpty {
-                        contact = c.first
-                        return
-                    }
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactUid == i.uid }), !c.isEmpty  {
+                    contact = c.first
+                    return
                     // check if a sent card, and get
-                } else if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == i.receiverUserHandle }) {
-                    if !c.isEmpty {
-                        contact = c.first
-                        return
-                    }
+                } else if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == i.receiverUserHandle }), !c.isEmpty {
+                    contact = c.first
+                    return
                 } else {
                     fatalError()
                 }

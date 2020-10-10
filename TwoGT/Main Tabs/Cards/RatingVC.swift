@@ -30,34 +30,28 @@ class RatingVC: UIViewController {
     @IBOutlet weak var justButton: RatingButton!
     @IBOutlet weak var goodButton: RatingButton!
     
-    var adder = 1
+    private var adder = 1
     
-    var badCount: Int = 0 {
-        didSet {
-            badLabel.text = String(badCount)
-        }
-    }
-    var justCount: Int = 0 {
-        didSet {
-            justLabel.text = String(justCount)
-        }
-    }
-    var goodCount: Int = 0 {
-        didSet {
-            goodLabel.text = String(goodCount)
-        }
-    }
+    private var badCount: Int = 0
+    private var justCount: Int = 0
+    private var goodCount: Int = 0
     
     private var rating: ContactRating? {
         didSet {
-            if let r = rating {
+            updateUI()
+        }
+    }
+    
+    func updateUI() {
+        if let r = rating {
+            if isViewLoaded {
                 goodCount = Int(r.good)
                 justCount = Int(r.justSo)
                 badCount = Int(r.bad)
                 
-                goodLabel.text = String(goodCount)
-                justLabel.text = String(justCount)
                 badLabel.text = String(badCount)
+                justLabel.text = String(justCount)
+                goodLabel.text = String(goodCount)
             }
         }
     }
@@ -79,7 +73,7 @@ class RatingVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        updateUI()
         // Do any additional setup after loading the view.
     }
     

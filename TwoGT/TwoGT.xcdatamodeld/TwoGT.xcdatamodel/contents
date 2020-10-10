@@ -7,6 +7,11 @@
         <attribute name="uid" attributeType="String" defaultValueString=""/>
         <attribute name="zip" optional="YES" attributeType="String"/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="addresses" inverseEntity="CardTemplate"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="title"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES">
         <attribute name="city" attributeType="String" defaultValueString=""/>
@@ -27,6 +32,11 @@
         <attribute name="message" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
         <attribute name="receiverUserHandle" attributeType="String" defaultValueString=""/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="receiverUserHandle"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Community" representedClassName="Community" syncable="YES">
         <attribute name="name" attributeType="String" defaultValueString=""/>
@@ -43,18 +53,34 @@
         <fetchedProperty name="sentCards" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="CardTemplateInstance" predicateString="receiverUserHandle == $FETCH_SOURCE.contactHandle"/>
         </fetchedProperty>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="contactHandle"/>
+                <constraint value="contactUid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="ContactRating" representedClassName="ContactRating" syncable="YES">
         <attribute name="bad" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="contactHandle" attributeType="String" defaultValueString=""/>
         <attribute name="good" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="justSo" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="contactHandle"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Email" representedClassName="Email" syncable="YES">
         <attribute name="emailString" attributeType="String" defaultValueString=""/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="uid" attributeType="String" defaultValueString=""/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="emails" inverseEntity="CardTemplate"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="title"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Have" representedClassName="Have" parentEntity="Item" syncable="YES">
         <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
@@ -97,6 +123,11 @@
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="uid" attributeType="String" defaultValueString=""/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="phoneNumbers" inverseEntity="CardTemplate"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="title"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="community" attributeType="String" defaultValueString=""/>
@@ -110,6 +141,11 @@
         <attribute name="uid" attributeType="String" defaultValueString=""/>
         <attribute name="userName" attributeType="String" defaultValueString=""/>
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="socialMedia" inverseEntity="CardTemplate"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="siteName"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="handle" attributeType="String" defaultValueString=""/>
