@@ -27,3 +27,6 @@ As events unfold, I want to keep feedback open, so that self-defining communitie
 
 - The owner of a Have may create an Event, and link related Haves, and/or related Needs
 - Events will have a notification mechanism to alert all parties when created
+
+Known Issues:
+- If the project stops recognizing Firebase (including Auth), see: https://github.com/firebase/firebase-ios-sdk/issues/6066#issuecomment-662580211
