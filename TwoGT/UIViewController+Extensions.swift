@@ -12,10 +12,12 @@ import MessageUI
 
 extension UIViewController {
     
+    /// Override point for subclasses that support feedback
     @objc func getKeyElements() -> [String] {
         return []
     }
     
+     // MARK: - Alert convenience methods
     /// Show an Alert with an "Ok" button, automatically set to use the Talone case rules.
     ///
     /// - Parameters:
@@ -60,6 +62,31 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    /// Show and Alert with a "learn more" button and a "nope" button.
+    ///
+    /// - Parameters:
+    ///   - title: The title for the Alert, `taloneCased()`
+    ///   - message: The message for the Alert, `taloneCased()`
+    ///   - urlString: the absolute string for the url to open on press of 'learn more'
+    func showEducationalAlert(title: String, message: String, urlString: String) {
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "learn more".taloneCased(), style: .default) { _ in
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "if you're seeing this message, i put in a bad link.").taloneCased(), handler: nil)
+            }
+        }
+        let action2 = UIAlertAction(title: "nope".taloneCased(), style: .cancel, handler: nil)
+        alert.addAction(action1)
+        alert.addAction(action2)
+        present(alert, animated: true, completion: nil)
+    }
+    
     func showAdminPasswordAlert(title: String, message: String, okayHandler: @escaping ((UIAlertAction) -> Void)) {
         let alertController = UIAlertController(title: title.taloneCased(), message: message, preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -82,6 +109,7 @@ extension UIViewController {
     }
     
      // MARK: - Spinner Controls
+    /// Custom activity indicator
     func showSpinner() {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let spinner = helperBoard.instantiateViewController(withIdentifier: "Spinner") as! SpinnerVC
