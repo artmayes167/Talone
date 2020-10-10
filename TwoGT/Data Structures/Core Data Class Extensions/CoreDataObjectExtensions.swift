@@ -216,7 +216,7 @@ extension Email {
         let entity = NSEntityDescription.entity(forEntityName: "Email", in: CoreDataGod.managedContext)!
         let email = Email(entity: entity, insertInto: CoreDataGod.managedContext)
         
-        email.title = name.lowercased()
+        email.title = name
         email.emailString = emailAddress
         email.uid = uid ?? AppDelegateHelper.user.uid
 

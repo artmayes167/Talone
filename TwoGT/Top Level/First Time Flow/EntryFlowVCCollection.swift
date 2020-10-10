@@ -178,8 +178,6 @@ class EnterHandleVC: UIViewController {
         // create user.
         let _ = CoreDataGod.user
         _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
-        let c = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
-        print("-----------new template = \(c)")
         
         showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
             self.performSegue(withIdentifier: "toImport", sender: nil)

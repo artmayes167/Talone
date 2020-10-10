@@ -30,20 +30,13 @@ class IntroYouVC: YouVC {
         
         setProfileData()
         
-        showOkayAlert(title: "this is you".taloneCased(), message: String(format: "the data you input here is not shared with anyone, unless you add it to a template and send it to them.  you can access this section in the future from the dashboard. \n\nif you input any data, we will create a template for you to use.  feel free to view templates and edit them in the cards section. \n\nthe 'no data' template can be used to block other users, and is uneditable.").taloneCased(), handler: nil)
+        showOkayAlert(title: "this is you".taloneCased(), message: String(format: "the data you input here is not shared with anyone, unless you add it to a template and send it to them.  you can access this section in the future from the dashboard. \n\nif you input any data at this time, we will create a template for you to use.  feel free to view templates and edit them in the cards section. \n\nthe 'no data' template can be used to block other users, and is uneditable.").taloneCased(), handler: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if animated {
             UserDefaults.standard.setValue(nil, forKey: State.stateDefaultsKey.rawValue)
-        } // only save on intentional dismissal
-    }
-    
-    deinit {
-        let u = UserDefaults.standard
-        if u.string(forKey: State.stateDefaultsKey.rawValue) != nil {
-            u.setValue(State.youIntro.rawValue, forKey: State.stateDefaultsKey.rawValue)
         }
     }
     
@@ -64,6 +57,7 @@ class IntroYouVC: YouVC {
                         if let d = response.data, let dataAsImage = UIImage(data: d), let reducedData = try? dataAsImage.heicData(compressionQuality: 0.3) {
                             CoreDataImageHelper.shared.deleteAllImages()
                             CoreDataImageHelper.shared.saveImage(data: reducedData)
+                            self.setState()
                             self.showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
                             
                             if let im = CoreDataImageHelper.shared.fetchAllImages() {
@@ -90,6 +84,13 @@ class IntroYouVC: YouVC {
         }
     }
     
+    func setState() {
+        let u = UserDefaults.standard
+        if u.string(forKey: State.stateDefaultsKey.rawValue) != State.youIntro.rawValue {
+            u.setValue(State.youIntro.rawValue, forKey: State.stateDefaultsKey.rawValue)
+        }
+    }
+    
     @IBAction func next(_ sender: UIButton) {
         let a = CoreDataGod.user.allAddresses()
         if a.count > 1 || imageButton.isSelected {
@@ -101,7 +102,8 @@ class IntroYouVC: YouVC {
                     }
                 }
             }
-            let c = CardTemplate.create(cardCategory: "first", image: imageData)
+            let _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
+            let c = CardTemplate.create(cardCategory: "my first template", image: imageData)
             for x in a {
                 if let add = x as? Address {
                     c.addToAddresses(add)
@@ -115,5 +117,11 @@ class IntroYouVC: YouVC {
         }
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
+    }
+    
+    // only save this state if something has been added
+    override func unwindToYouVC(_ segue: UIStoryboardSegue) {
+        setState()
+        tableView.reloadData()
     }
 }
