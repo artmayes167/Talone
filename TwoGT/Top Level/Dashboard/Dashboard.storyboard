@@ -476,7 +476,7 @@
                                                             <constraint firstAttribute="height" constant="50" id="yeF-BJ-0yc"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                                        <state key="normal" title="you">
+                                                        <state key="normal" title="me">
                                                             <color key="titleColor" systemColor="systemBlueColor"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
@@ -2276,10 +2276,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Tkq-bO-34E">
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Tkq-bO-34E">
                                                     <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrG-Rj-C4M">
+                                                        <view contentMode="scaleToFill" verticalHuggingPriority="252" translatesAutoresizingMaskIntoConstraints="NO" id="LrG-Rj-C4M">
                                                             <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvE-bD-3AE">
@@ -2292,12 +2292,13 @@
                                                             <color key="backgroundColor" systemColor="systemGray6Color"/>
                                                             <constraints>
                                                                 <constraint firstItem="CvE-bD-3AE" firstAttribute="top" secondItem="LrG-Rj-C4M" secondAttribute="top" constant="6" id="JMN-X5-Ya8"/>
+                                                                <constraint firstAttribute="height" priority="750" constant="50" id="dd6-vR-GNE"/>
                                                                 <constraint firstAttribute="bottom" secondItem="CvE-bD-3AE" secondAttribute="bottom" id="ihd-r9-HvF"/>
                                                                 <constraint firstAttribute="trailing" secondItem="CvE-bD-3AE" secondAttribute="trailing" constant="6" id="u01-OU-bgw"/>
                                                                 <constraint firstItem="CvE-bD-3AE" firstAttribute="leading" secondItem="LrG-Rj-C4M" secondAttribute="leading" constant="6" id="uVU-Py-Cas"/>
                                                             </constraints>
                                                         </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ldk-pk-ZFj">
+                                                        <view contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Ldk-pk-ZFj">
                                                             <rect key="frame" x="0.0" y="50" width="390" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKd-YV-o4o">
@@ -2343,6 +2344,10 @@
                                                 <constraint firstAttribute="bottom" secondItem="Tkq-bO-34E" secondAttribute="bottom" id="iBN-p7-dX5"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="answerLabel" destination="cKd-YV-o4o" id="C3Y-gk-mGm"/>
+                                            <outlet property="questionLabel" destination="CvE-bD-3AE" id="zIa-08-U07"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -3999,6 +4004,9 @@
         <designable name="gHp-za-Dc9">
             <size key="intrinsicContentSize" width="34" height="30"/>
         </designable>
+        <designable name="hxF-ZO-Lpn">
+            <size key="intrinsicContentSize" width="634" height="299"/>
+        </designable>
         <designable name="kAG-di-EIn">
             <size key="intrinsicContentSize" width="96" height="34"/>
         </designable>
@@ -4021,7 +4029,7 @@
             <size key="intrinsicContentSize" width="538" height="538"/>
         </designable>
         <designable name="ndh-of-ccx">
-            <size key="intrinsicContentSize" width="38" height="41"/>
+            <size key="intrinsicContentSize" width="33" height="41"/>
         </designable>
         <designable name="oxy-Ur-4T7">
             <size key="intrinsicContentSize" width="538" height="538"/>

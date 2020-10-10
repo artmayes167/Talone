@@ -16,18 +16,72 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="landingKarl1" translatesAutoresizingMaskIntoConstraints="NO" id="ZDa-zx-Pv6">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appIcon" translatesAutoresizingMaskIntoConstraints="NO" id="r7d-eq-E9n">
+                                <rect key="frame" x="157" y="398" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="7Ak-Gi-V4I"/>
+                                    <constraint firstAttribute="width" constant="100" id="aOZ-tB-nbZ"/>
+                                </constraints>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="0QP-W7-c8Q">
+                                <rect key="frame" x="50" y="326" width="314" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&quot;Freedom is participation in power&quot;" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I5i-By-qAF">
+                                        <rect key="frame" x="0.0" y="0.0" width="314" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- Cicero" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYj-Fa-QZh">
+                                        <rect key="frame" x="0.0" y="30" width="314" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.44" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tempLogoKarl1" translatesAutoresizingMaskIntoConstraints="NO" id="DF1-nV-NBS">
+                                <rect key="frame" x="157" y="398" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="F50-b2-096"/>
+                                    <constraint firstAttribute="height" constant="100" id="kpJ-Rt-tpF"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="ngy-Ac-gHe">
+                                <rect key="frame" x="26" y="522" width="362" height="102"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="“I must create a system, or be enslaved by another man's. I will not reason and compare: my business is to create.”" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IwV-jb-dYO">
+                                        <rect key="frame" x="0.0" y="0.0" width="362" height="54"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="― William Blake, Jerusalem: The Emanation of the Giant Albion" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqe-ib-YZd">
+                                        <rect key="frame" x="0.0" y="66" width="362" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ZDa-zx-Pv6" secondAttribute="trailing" id="Asr-xv-MKJ"/>
-                            <constraint firstItem="ZDa-zx-Pv6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AyV-BU-fcd"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ZDa-zx-Pv6" secondAttribute="bottom" id="hXP-jp-RE0"/>
-                            <constraint firstItem="ZDa-zx-Pv6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="tPV-Mz-S78"/>
+                            <constraint firstItem="0QP-W7-c8Q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="0Pe-cq-8O1"/>
+                            <constraint firstItem="0QP-W7-c8Q" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="5GS-Lk-xA4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ngy-Ac-gHe" secondAttribute="trailing" constant="24" id="6Kk-2n-0nl"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0QP-W7-c8Q" secondAttribute="trailing" constant="50" id="Fei-Kd-xTc"/>
+                            <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="ngy-Ac-gHe" secondAttribute="trailing" constant="50" id="Hcb-BF-QBA"/>
+                            <constraint firstItem="ngy-Ac-gHe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="24" id="Im6-sL-esD"/>
+                            <constraint firstItem="DF1-nV-NBS" firstAttribute="top" secondItem="0QP-W7-c8Q" secondAttribute="bottom" constant="24" id="Xoa-iM-RWc"/>
+                            <constraint firstItem="DF1-nV-NBS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="dn6-Rm-5ac"/>
+                            <constraint firstItem="DF1-nV-NBS" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="jVN-dP-RWz"/>
+                            <constraint firstItem="ngy-Ac-gHe" firstAttribute="top" secondItem="DF1-nV-NBS" secondAttribute="bottom" constant="24" id="moM-IY-K1p"/>
+                            <constraint firstItem="r7d-eq-E9n" firstAttribute="centerY" secondItem="DF1-nV-NBS" secondAttribute="centerY" id="ncr-73-lCT"/>
+                            <constraint firstItem="ngy-Ac-gHe" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="oei-40-unI"/>
+                            <constraint firstItem="ngy-Ac-gHe" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="50" id="qLh-Yp-DA1"/>
+                            <constraint firstItem="r7d-eq-E9n" firstAttribute="centerX" secondItem="DF1-nV-NBS" secondAttribute="centerX" id="vug-zZ-zKl"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,6 +91,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="landingKarl1" width="320" height="548"/>
+        <image name="appIcon" width="180" height="180"/>
+        <image name="tempLogoKarl1" width="200" height="200"/>
     </resources>
 </document>
