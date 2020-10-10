@@ -19,14 +19,11 @@ class ImportVC: UIViewController, LoginButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // check for valid token
-        guard let token = AccessToken.current else { return }
-        if !token.isExpired {
-            Profile.loadCurrentProfile { (profile, error) in
-                if error == nil {
-                    self.performSegue(withIdentifier: "toYouIntro", sender: profile)
-                } else {
-                    self.configureFBLogin()
-                }
+        Profile.loadCurrentProfile { (profile, error) in
+            if error == nil && profile != nil {
+                self.performSegue(withIdentifier: "toYouIntro", sender: profile)
+            } else {
+                self.configureFBLogin()
             }
         }
     }
@@ -37,7 +34,7 @@ class ImportVC: UIViewController, LoginButtonDelegate {
     
     func configureFBLogin() {
         if let l = loginButton {
-            l.permissions = ["public_profile", "email", "user_friends"]
+            l.permissions = ["public_profile", "email"]
             l.delegate = self
         }
     }
@@ -59,7 +56,6 @@ class ImportVC: UIViewController, LoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         /// unlikely this will be called
     }
-
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
