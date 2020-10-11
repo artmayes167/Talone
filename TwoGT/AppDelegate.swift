@@ -121,6 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "TwoGT")
+        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 guard let rootVC = self.window?.rootViewController else {
