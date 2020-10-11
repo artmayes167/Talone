@@ -14,10 +14,17 @@ import Firebase
 // Only use touch/face ID, or passcode to enter app?  Like Venmo
 
 class LogInVC: UIViewController { //, LoginButtonDelegate {
+    
+    @IBOutlet weak var topImage: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfAuthenticatedAndProgress()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        topImage.cycleOpacity()
     }
     
     func checkIfAuthenticatedAndProgress() {

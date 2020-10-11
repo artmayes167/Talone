@@ -102,3 +102,19 @@ extension UIView {
         layer.removeAnimation(forKey: "shadowGlowingAnimationOpacity")
     }
 }
+
+extension UIImageView {
+    func cycleOpacity() {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = 0.5
+        animation.toValue = 1
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        animation.duration = CFTimeInterval(0.5)
+        layer.add(animation, forKey: "fadeToCover")
+    }
+    
+    func endCycleOpacity() {
+        layer.removeAnimation(forKey: "fadeToCover")
+    }
+}
