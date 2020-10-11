@@ -115,6 +115,8 @@ class IntroYouVC: YouVC {
             }
             _ = try? CoreDataGod.managedContext.save()
         }
+        let u = UserDefaults.standard
+        u.setValue(nil, forKey: State.stateDefaultsKey.rawValue)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
         appDelegate.setToFlow(storyboardName: "NoHome", identifier: "Main App VC")
     }
