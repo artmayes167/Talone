@@ -30,15 +30,29 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>Sign in </string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.ArthurMayes.Talone</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>Sign_in</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>https://talone.page.link/85EH</string>
+				<string>talone.page.link</string>
 			</array>
 		</dict>
 	</array>
+    <key>FirebaseDynamicLinksCustomDomains</key>
+    <array>
+    <string>https://talone.page.link/85EH</string>
+    </array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<false/>
 	<key>FacebookAppID</key>
@@ -66,6 +80,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSFaceIdUsageDescription</key>
+	<string>Authentication required to access the secure data</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -76,8 +92,6 @@
 	</array>
 	<key>UISceneStoryboardFile</key>
 	<string>Main</string>
-	<key>NSFaceIdUsageDescription</key>
-	<string>Authentication required to access the secure data</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

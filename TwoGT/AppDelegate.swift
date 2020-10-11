@@ -11,6 +11,8 @@ import CoreData
 import LocalAuthentication
 import FBSDKCoreKit
 import Firebase
+import FirebaseDynamicLinks
+
 
 extension AppDelegate {
     fileprivate func handlePasswordlessSignIn(withURL url: URL) -> Bool {
@@ -51,22 +53,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let stateManager = StateManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let def = UserDefaults.standard
-        if !def.bool(forKey: "vigilant") {
-            def.set(false, forKey: "vigilant")
-        }
-        if def.string(forKey: "admin") == nil {
-            def.set("xxxx", forKey: "admin")
-        }
+//        let def = UserDefaults.standard
+//        if !def.bool(forKey: "vigilant") {
+//            def.set(false, forKey: "vigilant")
+//        }
+//        if def.string(forKey: "admin") == nil {
+//            def.set("xxxx", forKey: "admin")
+//        }
 
         // Notify FB application delegate
-        ApplicationDelegate.shared.application(
-                   application,
-                   didFinishLaunchingWithOptions: launchOptions
-               )
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
+        
         
         return true
     }
@@ -82,7 +82,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
+        //return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
+        //var returnedUrl: URL?
+        let handled = DynamicLinks.dynamicLinks().handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
+            if let u = dynamiclink?.url {
+                _ = self.handlePasswordlessSignIn(withURL: u)
+            }
+          }
+//        if let u = returnedUrl {
+//            return handlePasswordlessSignIn(withURL: u)
+//        } else {
+//            return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
+//        }
+        return handled
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {

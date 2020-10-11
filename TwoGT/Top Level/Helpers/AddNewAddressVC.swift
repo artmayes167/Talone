@@ -59,7 +59,7 @@ class AddNewAddressVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCityState" {
-            view.endEditing(true)
+            view.endEditing(true) /// doesn't seem to be working
             guard let vc = segue.destination as? CityStateSearchVC else { fatalError() }
             vc.unwindSegueIdentifier = "unwindToNewAddress"
         }

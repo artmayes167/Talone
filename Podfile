@@ -14,6 +14,7 @@ target 'TwoGT' do
   
   # Add the Firebase pod for Google Analytics
   pod 'Firebase/Analytics' # Crypto
+  pod 'Firebase/DynamicLinks'
 
   # Add the pods for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore
