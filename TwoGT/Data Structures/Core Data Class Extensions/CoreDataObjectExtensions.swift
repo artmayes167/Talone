@@ -18,7 +18,7 @@ extension User {
             for s in locs {
                 if s.type == "home" { home.append(s) } else if s.type == "alternate" { alternate.append(s) }
                 if clean {
-                    /// This is a safe space for deleting things we might need to delete
+                    
                 }
             }
             if !home.isEmpty { dict["home"] = home }
@@ -354,7 +354,7 @@ extension PhoneNumber {
 }
 
 extension Need {
-    class func createNeed(item: NeedsBase.NeedItem) -> Need {
+    class func  createNeed(item: NeedsBase.NeedItem) -> Need {
 
         let entity = NSEntityDescription.entity(forEntityName: "Need", in: CoreDataGod.managedContext)!
         let needItem = Need(entity: entity, insertInto: CoreDataGod.managedContext)

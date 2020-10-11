@@ -53,20 +53,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let stateManager = StateManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        let def = UserDefaults.standard
-//        if !def.bool(forKey: "vigilant") {
-//            def.set(false, forKey: "vigilant")
-//        }
-//        if def.string(forKey: "admin") == nil {
-//            def.set("xxxx", forKey: "admin")
-//        }
+        let def = UserDefaults.standard
+        if !def.bool(forKey: "vigilant") {
+            def.set(false, forKey: "vigilant")
+        }
+        if def.string(forKey: "admin") == nil {
+            def.set("xxxx", forKey: "admin")
+        }
 
         // Notify FB application delegate
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-        
         
         return true
     }

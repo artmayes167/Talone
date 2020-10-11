@@ -47,6 +47,7 @@ class EnterEmailVC: UIViewController {
                 // if they open the link on the same device.
                 UserDefaults.standard.set(email, forKey: DefaultsKeys.taloneEmail.rawValue)
                 self.showOkayAlert(title: "", message: "Check your email for link") { (_ action: UIAlertAction) in
+                    UserDefaults.standard.set(nil, forKey: "Link")
                     self.performSegue(withIdentifier: "toVerification", sender: nil)
                 }
             }
@@ -116,7 +117,6 @@ class VerificationVC: UIViewController {
             signInInfo.isHidden = true
             setStackState()
         } else {
-            signInButton.isEnabled = false
         }
     }
 
@@ -124,13 +124,16 @@ class VerificationVC: UIViewController {
         if let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let link = UserDefaults.standard.string(forKey: "Link") {
             Auth.auth().signIn(withEmail: email, link: link) { (result , error) in
                 if let error = error {
-                    self.showOkayAlert(title: "", message: error.localizedDescription) { (_ action: UIAlertAction) in
+                    self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (_) in
                         // TODO: Check the error and invalidate link only if the error is specifically about
                         // the link (e.g. expired, already used etc.)
                         UserDefaults.standard.set(nil, forKey: "Link")
                         // navigate back
                         self.navigationController?.popViewController(animated: true)
+                    } cancelHandler: { (_) in
+                        UserDefaults.standard.set(nil, forKey: "Link")
                     }
+
                     return
                 } else if let r = result {
                     UserDefaults.standard.setValue(r.user.uid, forKey: DefaultsKeys.uid.rawValue)
@@ -140,7 +143,7 @@ class VerificationVC: UIViewController {
                 }
             }
         } else {
-            self.showOkayAlert(title: "".taloneCased(), message: "Looks like we don't have a proper email or link after all...".taloneCased()) { (_ action: UIAlertAction) in
+            self.showOkayAlert(title: "", message: "Looks like we don't have a proper email or link after all...") { (_ action: UIAlertAction) in
                 _ = self.navigationController?.popViewController(animated: true)
             }
         }
@@ -179,7 +182,7 @@ class EnterHandleVC: UIViewController {
         let _ = CoreDataGod.user
         _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
         
-        showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
+        showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "as an elite tester, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.".taloneCased())) { _ in
             self.performSegue(withIdentifier: "toImport", sender: nil)
         }
     }
