@@ -195,7 +195,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
             let vc = segue.destination as! HavesSearchDisplayVC
             vc.configure(haveItems: h, creationManager: creationManager)
         default:
-            print("Different segue")
+            print("toSearchLocation")
         }
     }
 
@@ -292,6 +292,9 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
             categoriesPopOver.isHidden = false
             textField.resignFirstResponder()
             view.layoutIfNeeded()
+        } else if textField == whereTextField {
+            textField.resignFirstResponder()
+            performSegue(withIdentifier: "toSearchLocation", sender: nil)
         }
     }
 
