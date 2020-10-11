@@ -17,9 +17,14 @@ class AppDelegateHelper: NSObject {
     static let user = AppDelegateHelper.getUser()
     
     class var managedContext: NSManagedObjectContext {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        return d.persistentContainer.viewContext
+        return self.stack.managedContext
     }
+    
+    // MARK: - Properties
+    fileprivate static var stack: CoreDataStack = {
+      let manager = DataMigrationManager(modelNamed: "TwoGT", enableMigrations: true)
+      return manager.stack
+    }()
     
     class func getUser() -> User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()

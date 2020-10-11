@@ -130,8 +130,7 @@ class LinkedNeedsObserver {
     }
 
     private func getHaves() {
-        guard let d = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedContext = d.persistentContainer.viewContext
+        let managedContext = CoreDataGod.managedContext
         let fetchRequest: NSFetchRequest<Have> = Have.fetchRequest()
         do {
             let u = try managedContext.fetch(fetchRequest)

@@ -154,8 +154,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
-        let managedObjectContext = appDelegate.persistentContainer.viewContext
+        let managedObjectContext = CoreDataGod.managedContext
         if editingStyle == .delete {
             switch AddressSections(rawValue: indexPath.section) {
             case .address:

@@ -33,7 +33,7 @@
 //
 //  // MARK: - Properties
 //  fileprivate lazy var stack: CoreDataStack = {
-//    let manager = DataMigrationManager(modelNamed: "UnCloudNotesDataModel", enableMigrations: true)
+//    let manager = DataMigrationManager(modelNamed: "TwoGT", enableMigrations: true)
 //    return manager.stack
 //  }()
 //

@@ -110,32 +110,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        do {
-            BackgroundTask.run(application: application) { backgroundTask in
-                _ = try? persistentContainer.viewContext.save()
-                backgroundTask.end()
-            }
-        }
+//        do {
+//            BackgroundTask.run(application: application) { backgroundTask in
+//                _ = try? persistentContainer.viewContext.save()
+//                backgroundTask.end()
+//            }
+//        }
     }
 
-    // MARK: - Core Data stack
-    lazy var persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "TwoGT")
-        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                guard let rootVC = self.window?.rootViewController else {
-                    /// log error
-                    return
-                }
-                let message = String(format: "here's the error: %@.  let us know what happened, because there doesn't seem to be a good way to handle this yet.", error.userInfo)
-                rootVC.showOkayAlert(title: "okay", message: message, handler: { _ in
-                    rootVC.launchOwnerEmail(subject: "core data error", body: message)
-                })
-                return
-            }
-        })
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return container
-    }()
+//    // MARK: - Core Data stack
+//    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+//        let container = NSPersistentCloudKitContainer(name: "TwoGT")
+//        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
+//        container.loadPersistentStores(completionHandler: { (_, error) in
+//            if let error = error as NSError? {
+//                guard let rootVC = self.window?.rootViewController else {
+//                    /// log error
+//                    return
+//                }
+//                let message = String(format: "here's the error: %@.  let us know what happened, because there doesn't seem to be a good way to handle this yet.", error.userInfo)
+//                rootVC.showOkayAlert(title: "okay", message: message, handler: { _ in
+//                    rootVC.launchOwnerEmail(subject: "core data error", body: message)
+//                })
+//                return
+//            }
+//        })
+//        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//        return container
+//    }()
 }

@@ -21,7 +21,8 @@ class WarehouseMainVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        myHavesDisplay?.getHaves()
+        myNeedsDisplay?.getNeeds()
         // Do any additional setup after loading the view.
     }
     
@@ -76,13 +77,9 @@ class WarehouseMainVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyHaves" {
-            if let vc = segue.destination as? MyHavesSearchDisplayVC {
-                myHavesDisplay = vc
-            }
-        } else if segue.identifier == "toMyHaves" {
-            if let vc = segue.destination as? MyNeedsSearchDisplayVC {
-                myNeedsDisplay = vc
-            }
+            myHavesDisplay = segue.destination as! MyHavesSearchDisplayVC 
+        } else if segue.identifier == "toMyNeeds" {
+            myNeedsDisplay = segue.destination as! MyNeedsSearchDisplayVC
         }
     }
 

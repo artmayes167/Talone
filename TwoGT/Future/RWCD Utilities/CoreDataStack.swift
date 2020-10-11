@@ -29,9 +29,9 @@
 import Foundation
 import CoreData
 
-protocol UsesCoreDataObjects: class {
-  var managedObjectContext: NSManagedObjectContext? { get set }
-}
+//protocol UsesCoreDataObjects: class {
+//  var managedObjectContext: NSManagedObjectContext? { get set }
+//}
 
 class CoreDataStack {
 
@@ -46,7 +46,7 @@ class CoreDataStack {
     return storeContainer.newBackgroundContext()
   }
   
-  var storeName: String = "UnCloudNotesDataModel"
+  var storeName: String = "TwoGT"
   var storeURL : URL {
     let storePaths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
     let storePath = storePaths[0] as NSString
