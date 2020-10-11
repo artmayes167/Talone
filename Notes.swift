@@ -93,3 +93,5 @@
 // Contacts book by Magicon from the Noun Project
 
 // Who by Adrien Coquet from the Noun Project
+
+// borrow by Adrien Coquet from the Noun Project
