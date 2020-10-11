@@ -140,7 +140,7 @@ class VerificationVC: UIViewController {
                 }
             }
         } else {
-            self.showOkayAlert(title: "".taloneCased(), message: "Looks like we don't have a proper email or link after all...".taloneCased()) { (_ action: UIAlertAction) in
+            self.showOkayAlert(title: "", message: "Looks like we don't have a proper email or link after all...") { (_ action: UIAlertAction) in
                 _ = self.navigationController?.popViewController(animated: true)
             }
         }
@@ -179,7 +179,7 @@ class EnterHandleVC: UIViewController {
         let _ = CoreDataGod.user
         _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
         
-        showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "As an Elite Tester, you can provide Feedback from (almost) any page, by swiping left ( <- ). \n\nReturn by swiping right, or submitting feedback. \n\n Welcome to the first step in a new way to link people in communities.".taloneCased())) { _ in
+        showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "as an elite tester, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.".taloneCased())) { _ in
             self.performSegue(withIdentifier: "toImport", sender: nil)
         }
     }
