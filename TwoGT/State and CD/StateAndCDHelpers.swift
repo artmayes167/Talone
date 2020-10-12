@@ -13,7 +13,7 @@ import FBSDKCoreKit
 import Firebase
 
 typealias CoreDataGod = AppDelegateHelper
-class AppDelegateHelper: NSObject {
+final class AppDelegateHelper: NSObject {
     static let user = AppDelegateHelper.getUser()
     
     class var managedContext: NSManagedObjectContext {
@@ -27,7 +27,7 @@ class AppDelegateHelper: NSObject {
     }()
     
     class func getUser() -> User {
-        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: "User")
         do {
             if let u = try managedContext.fetch(fetchRequest).first {
                 print("Successfully fetched User")
@@ -42,8 +42,8 @@ class AppDelegateHelper: NSObject {
     }
 
     class func createUser() -> User {
-        let entity = NSEntityDescription.entity(forEntityName: "User", in: CoreDataGod.managedContext)!
-        let user = User(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: User().entity.name ?? "Fuck", in: CoreDataGod.managedContext)!
+        let user = User(context: CoreDataGod.managedContext)
         user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
         if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
             user.uid = uid

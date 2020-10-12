@@ -61,7 +61,7 @@ class IntroYouVC: YouVC {
                             self.showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
                             
                             if let im = CoreDataImageHelper.shared.fetchAllImages() {
-                                if let imageFromStorage = im.first?.image {
+                                if let imageFromStorage = im.last?.image {
                                     let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: self.imageButton.bounds.size)
                                     self.imageButton.imageView?.contentMode = .scaleAspectFill
                                     self.imageButton.setImage(i, for: .normal)

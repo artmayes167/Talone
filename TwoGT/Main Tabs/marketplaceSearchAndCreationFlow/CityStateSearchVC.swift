@@ -99,6 +99,12 @@ class CityStateSearchVC: UIViewController {
         savedLocationView.isHidden = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
      // MARK: - IBActions
     @IBAction func selectedNewOrSaved(_ sender: UISegmentedControl) {
         

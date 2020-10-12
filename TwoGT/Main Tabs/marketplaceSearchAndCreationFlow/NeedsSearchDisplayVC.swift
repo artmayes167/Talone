@@ -20,7 +20,7 @@ class NeedsSearchDisplayVC: UIViewController {
     }
     
      // MARK: -
-    let spacer = CGFloat(1)
+    let spacer = CGFloat(2)
     let numberOfItemsInRow = CGFloat(1)
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -31,7 +31,7 @@ class NeedsSearchDisplayVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumInteritemSpacing = 2
+        layout.minimumLineSpacing = 2
         
     }
     
@@ -68,7 +68,8 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PurposeCell
+        let reuseIdentifier = String(format: "cell%i", indexPath.item%2)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PurposeCell
         cell.configure(needs[indexPath.item], row: indexPath.row)
         return cell
     }
@@ -80,8 +81,8 @@ extension NeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSo
 
 extension NeedsSearchDisplayVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var width = UIScreen.main.bounds.width
-        width = (width - spacer)/numberOfItemsInRow
+        var width = collectionView.frame.width
+        width = (width - (spacer * numberOfItemsInRow + 1))/numberOfItemsInRow
         return CGSize(width: width, height: 50.0)
     }
 }

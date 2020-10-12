@@ -32,9 +32,10 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
             print("Email verified!!! User not anonymous!")
             authenticationWithTouchID() { (success, error) in
                 DispatchQueue.main.async {
+                    self.showSpinner()
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                     if success {
-                        // May move to AppDelegate
+                        self.hideSpinner()
                         appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
                         let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
                         let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
@@ -45,12 +46,14 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                             mainVC.view.alpha = 1
                         }
                     } else if let e = error {
+                        self.hideSpinner()
                         self.showOkayOrCancelAlert(title: "Something went wrong: \(e.localizedDescription).".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
-                            self.checkIfAuthenticatedAndProgress()
+                            
                         })
                     } else {
+                        self.hideSpinner()
                         self.showOkayOrCancelAlert(title: "Something went wrong.".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
@@ -74,13 +77,12 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
     
     func authenticationWithTouchID(completion: @escaping (Bool, Error?) -> Void) {
            let localAuthenticationContext = LAContext()
-           localAuthenticationContext.localizedFallbackTitle = "Please use your Passcode"
 
            var authorizationError: NSError?
            let reason = "Authentication required to access the secure data"
 
            if localAuthenticationContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authorizationError) {
-               
+               /// `deviceOwnerAuthentication` automagically handles fallback
                localAuthenticationContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, evaluateError in
                    
                    if success {
@@ -89,14 +91,8 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                                 completion(success, evaluateError)
                             }
                        }
-                   } else {
-                       // Failed to authenticate
-                       completion(success, evaluateError)
-                   
                    }
                }
-           } else {
-               completion(false, authorizationError)
            }
        }
 

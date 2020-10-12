@@ -67,9 +67,8 @@ extension CardTemplate {
             }
         }
         if card == nil {
-            let entity = NSEntityDescription.entity(forEntityName: "CardTemplate", in: CoreDataGod.managedContext)!
-            card = CardTemplate(entity: entity, insertInto: CoreDataGod.managedContext)
-            card!.templateTitle = title.lowercased()
+            card = CardTemplate(context: CoreDataGod.managedContext)
+            card!.templateTitle = title
             card!.uid = AppDelegateHelper.user.uid
             card!.userHandle = AppDelegateHelper.user.handle
         }

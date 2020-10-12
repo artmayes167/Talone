@@ -82,7 +82,6 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let managedObjectContext = CoreDataGod.managedContext
-
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyHaveCell
         let have = haves[indexPath.item]
         managedObjectContext.refresh(have, mergeChanges: true)

@@ -81,7 +81,6 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let managedObjectContext = CoreDataGod.managedContext
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyNeedCell
         let need = needs[indexPath.item]
         managedObjectContext.refresh(need, mergeChanges: true)

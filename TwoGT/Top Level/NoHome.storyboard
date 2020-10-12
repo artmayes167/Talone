@@ -321,7 +321,7 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" backgroundImage="dragonClose" id="leV-Gd-why">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <userDefinedRuntimeAttributes>
@@ -382,7 +382,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="q6m-hg-p5K" secondAttribute="trailing" constant="12" id="2hL-f0-ykH"/>
                                                     <constraint firstAttribute="bottom" secondItem="q6m-hg-p5K" secondAttribute="bottom" id="YDe-jq-ft7"/>
@@ -438,7 +438,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="aah-6T-jIC" secondAttribute="trailing" constant="12" id="ZWD-IW-rNh"/>
                                                     <constraint firstItem="aah-6T-jIC" firstAttribute="top" secondItem="Owh-QB-Mw6" secondAttribute="top" constant="8" id="e4i-ak-PgM"/>
@@ -621,7 +621,7 @@
                             <constraint firstItem="oXW-4e-cNY" firstAttribute="top" secondItem="XaQ-8v-ZfX" secondAttribute="bottom" id="x3y-bM-6Bb"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="warehouse" image="warehouseForTab" id="Mvf-jk-1Oj"/>
+                    <tabBarItem key="tabBarItem" title="my warehouse" image="warehouseForTab" id="Mvf-jk-1Oj"/>
                     <connections>
                         <outlet property="havesHeaderImageView" destination="OoY-cc-jlQ" id="41n-TW-yh1"/>
                         <outlet property="myHavesContainer" destination="oXW-4e-cNY" id="Yod-6Y-dov"/>
@@ -708,7 +708,7 @@
                                         <rect key="frame" x="12" y="-6" width="390" height="624.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="obe-nM-Fgt" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                                <rect key="frame" x="145" y="11" width="100" height="9"/>
+                                                <rect key="frame" x="145" y="2" width="100" height="18"/>
                                                 <color key="backgroundColor" red="0.45250050585434509" green="0.63707010610659909" blue="0.43178446130863291" alpha="0.76771190068493156" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="P7f-Xd-eDn"/>
@@ -853,7 +853,7 @@
                                             <constraint firstItem="IGr-w1-PXq" firstAttribute="leading" secondItem="Xtx-br-oaf" secondAttribute="leading" constant="12" id="N2W-zP-XQP"/>
                                             <constraint firstItem="YD4-4k-ybF" firstAttribute="leading" secondItem="Xtx-br-oaf" secondAttribute="leading" id="Ojn-tb-s0G"/>
                                             <constraint firstItem="8eY-fl-FGK" firstAttribute="leading" secondItem="Xtx-br-oaf" secondAttribute="leading" id="RNK-PA-FGn"/>
-                                            <constraint firstItem="8eY-fl-FGK" firstAttribute="top" secondItem="obe-nM-Fgt" secondAttribute="bottom" constant="-2" id="TWc-Cw-4xj"/>
+                                            <constraint firstItem="8eY-fl-FGK" firstAttribute="top" relation="lessThanOrEqual" secondItem="obe-nM-Fgt" secondAttribute="bottom" constant="-2" id="TWc-Cw-4xj"/>
                                             <constraint firstItem="43h-9s-zeq" firstAttribute="top" secondItem="8eY-fl-FGK" secondAttribute="bottom" id="VVA-fb-PhQ"/>
                                             <constraint firstItem="obe-nM-Fgt" firstAttribute="centerX" secondItem="Xtx-br-oaf" secondAttribute="centerX" id="Wbn-wb-Dna"/>
                                             <constraint firstAttribute="trailing" secondItem="YD4-4k-ybF" secondAttribute="trailing" id="XgW-OL-16H"/>
@@ -862,6 +862,7 @@
                                             <constraint firstAttribute="trailing" secondItem="qvQ-Ll-Yox" secondAttribute="trailing" id="ity-s1-gR1"/>
                                             <constraint firstItem="qvQ-Ll-Yox" firstAttribute="leading" secondItem="Xtx-br-oaf" secondAttribute="leading" id="oHt-tW-mWz"/>
                                             <constraint firstItem="pax-Ng-fiW" firstAttribute="leading" secondItem="Xtx-br-oaf" secondAttribute="leading" constant="50" id="p7G-HX-bGv"/>
+                                            <constraint firstItem="8eY-fl-FGK" firstAttribute="top" secondItem="obe-nM-Fgt" secondAttribute="bottom" priority="750" constant="-2" id="qRA-TF-yoY"/>
                                             <constraint firstAttribute="trailing" secondItem="pax-Ng-fiW" secondAttribute="trailing" constant="50" id="rr6-lC-MMa"/>
                                             <constraint firstAttribute="trailing" secondItem="IGr-w1-PXq" secondAttribute="trailing" constant="12" id="xm7-Vp-eJM"/>
                                             <constraint firstItem="pax-Ng-fiW" firstAttribute="centerX" secondItem="Xtx-br-oaf" secondAttribute="centerX" id="z6o-Nn-f3X"/>
@@ -873,7 +874,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2eH-my-IsL" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                 <subviews>
-                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BiU-Dy-anT" customClass="DesignableSegmentedControl" customModule="Talone" customModuleProvider="target">
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BiU-Dy-anT" customClass="DesignableSegmentedControl" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="30" y="9.5" width="330" height="32"/>
                                                         <color key="backgroundColor" red="0.69094694789416689" green="0.68642631017207978" blue="0.69521333269492391" alpha="0.77000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <segments>
@@ -881,7 +882,7 @@
                                                             <segment title="i have"/>
                                                         </segments>
                                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="selectedSegmentTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="selectedSegmentTintColor" red="0.2551218562" green="0.55270583520000005" blue="0.27055328150000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                 <real key="value" value="8"/>

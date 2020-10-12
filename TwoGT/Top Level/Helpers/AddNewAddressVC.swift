@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class AddNewAddressVC: UIViewController {
+class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegate {
     
      // MARK: - IBOutlets
     
@@ -55,11 +55,29 @@ class AddNewAddressVC: UIViewController {
     }
     
     // MARK: - Navigation
+    
+//    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+//        tableView.reloadData()
+//    }
+    
+    func presentationController(_ presentationController: UIPresentationController, willPresentWithAdaptiveStyle style: UIModalPresentationStyle, transitionCoordinator: UIViewControllerTransitionCoordinator?) {
+//        if let p = presentationController.presentedViewController.view {
+//            if p.canBecomeFirstResponder {
+//                if p.becomeFirstResponder() {
+//                    print("--------------First responder successfully passed.")
+//                } else {
+//                    print("---------------\(p) refuses to become first responder, but it could if it fucking wanted to.")
+//                }
+//            } else {
+//                print("---------------\(p) is incapable of becoming first responder, because reasons.")
+//            }
+//        } else
+    }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCityState" {
-            view.endEditing(true) /// doesn't seem to be working
+            segue.destination.presentationController?.delegate = self
             guard let vc = segue.destination as? CityStateSearchVC else { fatalError() }
             vc.unwindSegueIdentifier = "unwindToNewAddress"
         }
@@ -79,6 +97,7 @@ class AddNewAddressVC: UIViewController {
     // MARK: - Keyboard Notifications
     var initialContentInset: UIEdgeInsets = UIEdgeInsets()
    @objc func keyboardWillShow(notification: NSNotification) {
+    if let n = notification.userInfo?.description { print(n) }
        let userInfo = notification.userInfo!
        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -126,9 +145,50 @@ extension AddNewAddressVC {
  // MARK: - UITextFieldDelegate
 extension AddNewAddressVC {
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        var theTextFieldTruth = 0
         if textField == cityStateTextField {
-            textField.resignFirstResponder()
-            performSegue(withIdentifier: "toCityState", sender: nil)
+            let tfs: [UITextField] = [labelTextField, street1TextField, street2TextField, cityStateTextField, zipTextField]
+            for tf in tfs {
+                if tf.endEditing(true) {
+                    theTextFieldTruth += 1
+                    print("ended editing")
+                } else {
+                    print("refused to end editing")
+                }
+            }
+            if theTextFieldTruth == 5 {
+                performSegue(withIdentifier: "toCityState", sender: nil)
+            } else {
+                showOkayAlert(title: "", message: "this is a desperate attempt to dismiss the keyboard.", handler: nil)
+            }
         }
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == cityStateTextField {
+            var theTextFieldTruth = 0
+            let tfs: [UITextField] = [labelTextField, street1TextField, street2TextField, cityStateTextField, zipTextField]
+            for tf in tfs {
+                DispatchQueue.main.async {
+                    if tf.endEditing(true) {
+                        theTextFieldTruth += 1
+                        print("ended editing")
+                    } else {
+                        print("refused to end editing")
+                    }
+                }
+            }
+            if theTextFieldTruth == 5 {
+                performSegue(withIdentifier: "toCityState", sender: nil)
+                return false
+            } else {
+                showOkayAlert(title: "", message: "this is a desperate attempt to dismiss the keyboard.") { (_) in
+                    self.performSegue(withIdentifier: "toCityState", sender: nil)
+                }
+                return false
+            }
+        }
+        return true
     }
 }

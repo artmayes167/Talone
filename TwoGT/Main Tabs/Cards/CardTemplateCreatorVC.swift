@@ -58,7 +58,6 @@ class CardTemplateCreatorVC: UIViewController {
         if let c = card {
             model.set(card: c)
             
-            
             if let image = c.image {
                 /// image has been previously added to template
                 potentialImage = UIImage(data: image)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
@@ -131,7 +130,7 @@ class CardTemplateCreatorVC: UIViewController {
         /// Editing
         if let c = card {
             
-            c.templateTitle = titleTextField.text!.lowercased()
+            c.templateTitle = titleTextField.text!.pure()
             c.image = imageData
             
             let all = model.allAdded

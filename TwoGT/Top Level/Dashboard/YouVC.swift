@@ -247,8 +247,8 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
             CoreDataImageHelper.shared.saveImage(data: imageData)
             showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
             
-            if let im = CoreDataImageHelper.shared.fetchAllImages() {
-                if let imageFromStorage = im.first?.image {
+            if let im: [ImageInfo] = CoreDataImageHelper.shared.fetchAllImages() {
+                if let imageFromStorage = im.last?.image {
                     let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                     imageButton.imageView?.contentMode = .scaleAspectFill
                     imageButton.setImage(i, for: .normal)

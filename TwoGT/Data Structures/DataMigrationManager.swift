@@ -93,8 +93,8 @@ class DataMigrationManager {
   private lazy var currentModel: NSManagedObjectModel = .model(named: self.modelName)
   
   func performMigration() {
-    if !currentModel.isVersion4 {
-      fatalError("Can only handle migrations to version 4!")
+    if !currentModel.isVersion1 {
+      fatalError("Can only handle migrations to version 1!")
     }
     if let storeModel = self.storeModel {
         if storeModel.isVersion0 {
@@ -113,29 +113,30 @@ class DataMigrationManager {
                        toModel: destinationModel)
         
         performMigration()
-      } else if storeModel.isVersion2 {
-        let destinationModel = NSManagedObjectModel.version3
-        let mappingModel = NSMappingModel(from: nil,
-                                          forSourceModel: storeModel,
-                                          destinationModel: destinationModel)
-        
-        migrateStoreAt(URL: storeURL,
-                       fromModel: storeModel,
-                       toModel: destinationModel,
-                       mappingModel: mappingModel)
-        
-        performMigration()
-      } else if storeModel.isVersion3 {
-        let destinationModel = NSManagedObjectModel.version4
-        let mappingModel = NSMappingModel(from: nil,
-                                          forSourceModel: storeModel,
-                                          destinationModel: destinationModel)
-        
-        migrateStoreAt(URL: storeURL,
-                       fromModel: storeModel,
-                       toModel: destinationModel,
-                       mappingModel: mappingModel)
       }
+//        else if storeModel.isVersion2 {
+//        let destinationModel = NSManagedObjectModel.version3
+//        let mappingModel = NSMappingModel(from: nil,
+//                                          forSourceModel: storeModel,
+//                                          destinationModel: destinationModel)
+//        
+//        migrateStoreAt(URL: storeURL,
+//                       fromModel: storeModel,
+//                       toModel: destinationModel,
+//                       mappingModel: mappingModel)
+//        
+//        performMigration()
+//      } else if storeModel.isVersion3 {
+//        let destinationModel = NSManagedObjectModel.version4
+//        let mappingModel = NSMappingModel(from: nil,
+//                                          forSourceModel: storeModel,
+//                                          destinationModel: destinationModel)
+//        
+//        migrateStoreAt(URL: storeURL,
+//                       fromModel: storeModel,
+//                       toModel: destinationModel,
+//                       mappingModel: mappingModel)
+//      }
     }
   }
   
@@ -211,58 +212,51 @@ extension NSManagedObjectModel {
   }
     
     class var version0: NSManagedObjectModel {
-        return uncloudNotesModel(named: "TwoGT")
+        return taloneModel(named: "TwoGT")
     }
     var isVersion0: Bool {
       return self == type(of: self).version0
     }
   class var version1: NSManagedObjectModel {
-    return uncloudNotesModel(named: "Talone v1")
+    return taloneModel(named: "Talone v1")
   }
   var isVersion1: Bool {
     return self == type(of: self).version1
   }
   class var version2: NSManagedObjectModel {
-    return uncloudNotesModel(named: "Talone v2")
+    return taloneModel(named: "Talone v2")
   }
-  
+
   var isVersion2: Bool {
     return self == type(of: self).version2
   }
+//
+//  class var version3: NSManagedObjectModel {
+//    return taloneModel(named: "Talone v3")
+//  }
+//
+//  var isVersion3: Bool {
+//    return self == type(of: self).version3
+//  }
+//
+//  class var version4: NSManagedObjectModel {
+//    return taloneModel(named: "Talone v4")
+//  }
+//
+//  var isVersion4: Bool {
+//    return self == type(of: self).version4
+//  }
   
-  class var version3: NSManagedObjectModel {
-    return uncloudNotesModel(named: "Talone v3")
-  }
-  
-  var isVersion3: Bool {
-    return self == type(of: self).version3
-  }
-  
-  class var version4: NSManagedObjectModel {
-    return uncloudNotesModel(named: "Talone v4")
-  }
-  
-  var isVersion4: Bool {
-    return self == type(of: self).version4
-  }
-  
-  private class func modelURLs(
-    in modelFolder: String) -> [URL] {
+  private class func modelURLs(in modelFolder: String) -> [URL] {
     
-    return Bundle.main
-      .urls(forResourcesWithExtension: "mom",
-                        subdirectory:"\(modelFolder).momd") ?? []
+    return Bundle.main.urls(forResourcesWithExtension: "mom", subdirectory:"\(modelFolder).momd") ?? []
   }
   
-  class func modelVersionsFor(
-    modelNamed modelName: String) -> [NSManagedObjectModel] {
-    
-    return modelURLs(in: modelName)
-      .compactMap(NSManagedObjectModel.init)
+  class func modelVersionsFor(modelNamed modelName: String) -> [NSManagedObjectModel] {
+    return modelURLs(in: modelName).compactMap(NSManagedObjectModel.init)
   }
   
-  class func uncloudNotesModel(
-    named modelName: String) -> NSManagedObjectModel {
+  class func taloneModel(named modelName: String) -> NSManagedObjectModel {
     
     let model = modelURLs(in: "TwoGT")
       .filter { $0.lastPathComponent == "\(modelName).mom" }

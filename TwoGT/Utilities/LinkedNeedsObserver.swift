@@ -137,7 +137,7 @@ class LinkedNeedsObserver {
 
             haves = u.filter { return $0.owner == CoreDataGod.user.handle }
         } catch _ as NSError {
-          fatalError()
+          print("LinkedNeedsObserver couldn't find Haves")
         }
     }
 }

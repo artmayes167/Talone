@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Address" representedClassName="Address" parentEntity="AppLocationInfo" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="Talone v1">
+    <entity name="Address" representedClassName=".Address" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="street1" attributeType="String" defaultValueString=""/>
         <attribute name="street2" optional="YES" attributeType="String"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
@@ -13,12 +13,12 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="AppLocationInfo" representedClassName="AppLocationInfo" isAbstract="YES" syncable="YES">
+    <entity name="AppLocationInfo" representedClassName=".AppLocationInfo" isAbstract="YES" syncable="YES">
         <attribute name="city" attributeType="String" defaultValueString=""/>
         <attribute name="country" attributeType="String" defaultValueString="USA"/>
         <attribute name="state" attributeType="String" defaultValueString=""/>
     </entity>
-    <entity name="CardTemplate" representedClassName="CardTemplate" syncable="YES">
+    <entity name="CardTemplate" representedClassName=".CardTemplate" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="templateTitle" optional="YES" attributeType="String"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
@@ -28,7 +28,7 @@
         <relationship name="phoneNumbers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PhoneNumber" inverseName="templates" inverseEntity="PhoneNumber"/>
         <relationship name="socialMedia" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SocialMedia" inverseName="templates" inverseEntity="SocialMedia"/>
     </entity>
-    <entity name="CardTemplateInstance" representedClassName="CardTemplateInstance" parentEntity="CardTemplate" syncable="YES">
+    <entity name="CardTemplateInstance" representedClassName=".CardTemplateInstance" parentEntity="CardTemplate" syncable="YES">
         <attribute name="message" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
         <attribute name="receiverUserHandle" attributeType="String" defaultValueString=""/>
@@ -38,10 +38,10 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="Community" representedClassName="Community" syncable="YES">
+    <entity name="Community" representedClassName=".Community" syncable="YES">
         <attribute name="name" attributeType="String" defaultValueString=""/>
     </entity>
-    <entity name="Contact" representedClassName="Contact" syncable="YES">
+    <entity name="Contact" representedClassName=".Contact" syncable="YES">
         <attribute name="contactHandle" attributeType="String" defaultValueString=""/>
         <attribute name="contactUid" attributeType="String" defaultValueString=""/>
         <fetchedProperty name="rating" optional="YES">
@@ -60,7 +60,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="ContactRating" representedClassName="ContactRating" syncable="YES">
+    <entity name="ContactRating" representedClassName=".ContactRating" syncable="YES">
         <attribute name="bad" optional="YES" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="contactHandle" attributeType="String" defaultValueString=""/>
         <attribute name="good" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -71,7 +71,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="Email" representedClassName="Email" syncable="YES">
+    <entity name="Email" representedClassName=".Email" syncable="YES">
         <attribute name="emailString" attributeType="String" defaultValueString=""/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="uid" attributeType="String" defaultValueString=""/>
@@ -82,7 +82,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="Have" representedClassName="Have" parentEntity="Item" syncable="YES">
+    <entity name="Have" representedClassName=".Have" parentEntity="Item" syncable="YES">
         <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
         <fetchedProperty name="childHaves" optional="YES">
@@ -92,13 +92,13 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentHaveItemId  == $FETCH_SOURCE.id"/>
         </fetchedProperty>
     </entity>
-    <entity name="ImageInfo" representedClassName="ImageInfo" syncable="YES">
+    <entity name="ImageInfo" representedClassName=".ImageInfo" syncable="YES">
         <attribute name="handle" attributeType="String" defaultValueString=""/>
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageURLString" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="Item" representedClassName="Item" isAbstract="YES" syncable="YES">
+    <entity name="Item" representedClassName=".Item" isAbstract="YES" syncable="YES">
         <attribute name="category" attributeType="String" defaultValueString=""/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="createdBy" attributeType="String" defaultValueString=""/>
@@ -110,7 +110,7 @@
         <attribute name="validUntil" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SearchLocation" inverseName="items" inverseEntity="SearchLocation"/>
     </entity>
-    <entity name="Need" representedClassName="Need" parentEntity="Item" syncable="YES">
+    <entity name="Need" representedClassName=".Need" parentEntity="Item" syncable="YES">
         <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="parentNeedItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String" defaultValueString=""/>
@@ -118,7 +118,7 @@
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.id"/>
         </fetchedProperty>
     </entity>
-    <entity name="PhoneNumber" representedClassName="PhoneNumber" syncable="YES">
+    <entity name="PhoneNumber" representedClassName=".PhoneNumber" syncable="YES">
         <attribute name="number" attributeType="String" defaultValueString=""/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="uid" attributeType="String" defaultValueString=""/>
@@ -129,12 +129,12 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="SearchLocation" representedClassName="SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
+    <entity name="SearchLocation" representedClassName=".SearchLocation" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="community" attributeType="String" defaultValueString=""/>
         <attribute name="type" attributeType="String" defaultValueString=""/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="location" inverseEntity="Item"/>
     </entity>
-    <entity name="SocialMedia" representedClassName="SocialMedia" syncable="YES">
+    <entity name="SocialMedia" representedClassName=".SocialMedia" syncable="YES">
         <attribute name="personalURLString" optional="YES" attributeType="String"/>
         <attribute name="siteName" attributeType="String" defaultValueString=""/>
         <attribute name="siteURLString" optional="YES" attributeType="String"/>
@@ -147,7 +147,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="User" representedClassName="User" syncable="YES">
+    <entity name="User" representedClassName=".User" syncable="YES">
         <attribute name="handle" attributeType="String" defaultValueString=""/>
         <attribute name="uid" attributeType="String" defaultValueString=""/>
         <fetchedProperty name="addresses" optional="YES">
