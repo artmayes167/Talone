@@ -46,7 +46,7 @@ class CardTemplateCreatorVC: UIViewController {
         if let i = images?.first?.image {
             imageButton.isEnabled = true
             plusImage.isHidden = false
-            potentialImage = UIImage(data: i)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+            potentialImage = i.af.imageAspectScaled(toFit: imageButton.bounds.size)
         } else {
             imageButton.isEnabled = false
             plusImage.isHidden = true
@@ -60,7 +60,7 @@ class CardTemplateCreatorVC: UIViewController {
             
             if let image = c.image {
                 /// image has been previously added to template
-                potentialImage = UIImage(data: image)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                potentialImage = image.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(potentialImage, for: .normal)
                 imageButton.isSelected = true
@@ -115,23 +115,16 @@ class CardTemplateCreatorVC: UIViewController {
     }
     
     @IBAction func save(_ sender: UIButton) {
-        
         if (titleTextField.text?.isEmpty ?? true) || (model.allAdded.isEmpty) {
             showOkayAlert(title: "Nope", message: "Add a title and some contact information. a default template with no information already exists for you, titled \(DefaultTitles.noDataTemplate.rawValue)", handler: nil)
             return
-        }
-        var imageData: Data?
-        /// get the image if user has chosen to use it
-        if imageButton.isSelected {
-            let aspectScaledToFitImage = potentialImage!.af.imageAspectScaled(toFit: CGSize(width: 28.0, height: 28.0))
-            imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3)
         }
         
         /// Editing
         if let c = card {
             
             c.templateTitle = titleTextField.text!.pure()
-            c.image = imageData
+            c.image = potentialImage
             
             let all = model.allAdded
             
@@ -161,7 +154,7 @@ class CardTemplateCreatorVC: UIViewController {
                 }
             }
         } else { /// Creating
-            let c = CardTemplate.create(cardCategory: titleTextField.text!.pure(), image: imageData)
+            let c = CardTemplate.create(cardCategory: titleTextField.text!.pure(), image: potentialImage)
             let all = model.allAdded
             for x in all {
                 if let a = x as? Address {
@@ -174,7 +167,7 @@ class CardTemplateCreatorVC: UIViewController {
             }
         }
         
-        _ = try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
         view.makeToast("Card created!".taloneCased()) { [weak self] _ in
             self?.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
         }

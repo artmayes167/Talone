@@ -16,7 +16,7 @@ class AddNewPhoneNumberVC: UIViewController {
     private var phoneNumbers: [PhoneNumber] {
         get {
             let phones =  CoreDataGod.user.phoneNumbers ?? []
-            return phones.isEmpty ? [] : phones.sorted { return $0.title < $1.title }
+            return phones.isEmpty ? [] : phones.sorted { return $0.title! < $1.title! }
         }
     }
     
@@ -33,7 +33,7 @@ class AddNewPhoneNumberVC: UIViewController {
         }
         let uid = CoreDataGod.user.uid
         let _ = PhoneNumber.create(title: t, number: n, uid: uid)
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
         performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     

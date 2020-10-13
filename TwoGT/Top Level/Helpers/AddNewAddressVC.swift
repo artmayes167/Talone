@@ -23,7 +23,7 @@ class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegat
     private var addresses: [Address] {
         get {
             let adds =  CoreDataGod.user.addresses ?? []
-            return adds.isEmpty ? [] : adds.sorted { return $0.title < $1.title }
+            return adds.isEmpty ? [] : adds.sorted { return $0.title! < $1.title! }
         }
     }
 
@@ -50,7 +50,7 @@ class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegat
             Address.create(title: t, street1: s1, street2: s2, city: loc.city, zip: zip, state: loc.state, country: loc.country)
         } else { fatalError() }
         
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
         performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     
@@ -83,14 +83,12 @@ class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegat
         }
     }
     
-    var savedLocation: SearchLocation?
+    var savedLocation: CityStateSearchVC.Loc?
     
     @IBAction func unwindToAddNewAddress( _ segue: UIStoryboardSegue) {
         if let vc = segue.source as? CityStateSearchVC {
-            guard let loc = vc.locationForSave else { fatalError() }
-            savedLocation = loc
-            cityStateTextField.text = loc.displayName()
-            try? CoreDataGod.managedContext.save()
+            savedLocation = vc.loc
+            cityStateTextField.text = savedLocation!.displayName()
         }
     }
     

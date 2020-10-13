@@ -51,11 +51,19 @@ class FirebaseGeneric {
         var country: String
         var address: AddressInfo?
         var geoLocation: GeographicCoordinates?
-
-        init(locationInfo: AppLocationInfo) {
+        
+        init(locationInfo: LocationInfo) {
             self.city = locationInfo.city
             self.state = locationInfo.state
             self.country = locationInfo.country
+            self.address = nil
+            self.geoLocation = nil //GeographicCoordinates(latitude: coords.latitude!, longitude: coords.longitude!)
+        }
+
+        init(appLocationInfo: AppLocationInfo) {
+            self.city = appLocationInfo.city!
+            self.state = appLocationInfo.state!
+            self.country = appLocationInfo.country!
             self.address = nil
             self.geoLocation = nil //GeographicCoordinates(latitude: coords.latitude!, longitude: coords.longitude!)
         }

@@ -15,14 +15,15 @@ class CardTemplatesVC: UIViewController {
     private var cardTemplates: [CardTemplate] {
         get {
             var cards: [CardTemplate] = []
-            let c = AppDelegateHelper.user.cardTemplates ?? [] // [Card]
+//            AppDelegateHelper.managedContext.refreshAllObjects()
+            let c: [CardTemplate] = AppDelegateHelper.user.cardTemplates ?? [] // [Card]
             
             /// Only templates, not instances
             if !c.isEmpty {
                 cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
             }
             
-            return cards.isEmpty ? [] : cards.sorted { return $0.templateTitle < $1.templateTitle }
+            return cards.isEmpty ? [] : cards.sorted { return $0.templateTitle! < $1.templateTitle! }
         }
     }
     

@@ -15,16 +15,18 @@ class AddNeedToWatchModel: NSObject {
     func storeWatchingNeedToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
         let needItem = item
-        guard let loc: SearchLocation = c.getLocationOrNil() else { fatalError() }
-        // if neither need-type nor location is selected, display an error message
-        guard let user = Auth.auth().currentUser else { fatalError() } //
+        guard let loc: SearchLocation = CoreDataGod.user.searchLocations?.first(where: { ($0.city == item.locationInfo.city && $0.state == item.locationInfo.state) }),
+        let user = Auth.auth().currentUser else {
+            print("Somehow we tried to add a watching need with no search location saved, or Auth is fucked up")
+            fatalError()
+        } //
 
         let need = NeedsDbWriter.NeedItem(category: needItem.category, headline: c.getHeadline() ?? needItem.headline,
                                           description: c.getDescription() ?? needItem.description,
                                           validUntil: needItem.validUntil, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
                                           createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+                                          locationInfo: FirebaseGeneric.LocationInfo(appLocationInfo: loc))
 
         let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
 
@@ -32,7 +34,7 @@ class AddNeedToWatchModel: NSObject {
             if error == nil {
                 let n = Need.createNeed(item: need)
                 n.parentNeedItemId = needItem.id
-                try? CoreDataGod.managedContext.save()
+                CoreDataGod.save()
                 DispatchQueue.main.async {
                     controller.view.makeToast("you have successfully created a `need`!".taloneCased(), duration: 2.0, position: .center) {_ in
                         // TODO: - Create unwind segue to my needs
@@ -49,16 +51,18 @@ class AddNeedToWatchModel: NSObject {
     func storeWatchingHaveToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
         let needItem = item
-        guard let loc: SearchLocation = c.getLocationOrNil() else { fatalError() }
-        // if neither need-type nor location is selected, display an error message
-        guard let user = Auth.auth().currentUser else { fatalError() }
+        guard let loc: SearchLocation = CoreDataGod.user.searchLocations?.first(where: { ($0.city == item.locationInfo.city && $0.state == item.locationInfo.state) }),
+              let user = Auth.auth().currentUser else {
+            print("Somehow we tried to add a watching have with no search location saved, or Auth is fucked up")
+            fatalError()
+        }
 
         let have = HavesDbWriter.HaveItem(category: needItem.category, headline: c.getHeadline() ?? needItem.headline,
                                           description: c.getDescription() ?? needItem.description,
                                           validUntil: needItem.validUntil, //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue) ?? "Anonymous",
                                           createdBy: user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: loc))
+                                          locationInfo: FirebaseGeneric.LocationInfo(appLocationInfo: loc))
 
         let havesWriter = HavesDbWriter()       // TODO: Decide if this needs to be stored in singleton
 
@@ -67,7 +71,7 @@ class AddNeedToWatchModel: NSObject {
                 let _ = Have.createHave(item: have)
                 let newCD = Need.createNeed(item: needItem)
                 newCD.parentHaveItemId = have.id
-                try? CoreDataGod.managedContext.save()
+                CoreDataGod.save()
                 DispatchQueue.main.async {
                     controller.view.makeToast("you have successfully created a `have`!".taloneCased(), duration: 2.0, position: .center) {_ in
                         controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)

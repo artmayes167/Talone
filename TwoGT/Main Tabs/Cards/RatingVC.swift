@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class RatingButton: UIButton {
     var isConfiguredForSelected: Bool = false
@@ -56,18 +57,33 @@ class RatingVC: UIViewController {
         }
     }
     
+    fileprivate lazy var ratings: NSFetchedResultsController<ContactRating> = {
+        let context = CoreDataGod.managedContext
+      //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
+        let request: NSFetchRequest<ContactRating> = ContactRating.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(ContactRating.contactHandle), ascending: false)]
+      let ratings = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+      return ratings
+    }()
+    
     func configure(contact: Contact) {
-        if let r = contact.rating {
-            if r.isEmpty {
-                let rating = ContactRating.create(handle: contact.contactHandle)
-                self.rating = rating
-            } else {
-                rating = r.first
-            }
-        } else {
-            let rating = ContactRating.create(handle: contact.contactHandle)
-            self.rating = rating
+        do {
+          try ratings.performFetch()
+        } catch {
+          print("Error: \(error)")
         }
+        
+        
+        if let objects = self.ratings.fetchedObjects {
+            for rating in objects where contact.contactHandle == rating.contactHandle {
+                self.rating = rating
+                return
+            }
+        }
+        
+        _ = ContactRating.create(handle: contact.contactHandle!)
+        CoreDataGod.save()
+        configure(contact: contact)
         
     }
 
@@ -102,7 +118,7 @@ class RatingVC: UIViewController {
         r.bad = b
         r.justSo = j
         r.good = g
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
     }
 
     /*

@@ -90,7 +90,7 @@ class ViewMyNeedVC: UIViewController {
     private func deleteCurrentNeed() {
         guard let n = need else { return }
         let parentHave = n.parentHaveItemId
-        let handle = CoreDataGod.user.handle
+        let handle = CoreDataGod.user.handle!
 
         let needId = n.id
         n.deleteNeed()          // Remove from CoreData

@@ -93,7 +93,7 @@ class LinkedNeedsObserver {
                             }
                         }
                         if isChanged {
-                            try? CoreDataGod.managedContext.save() // store changes to CD
+                            CoreDataGod.save() // store changes to CD
                             isRedrawRequired = true
                         }
                     }

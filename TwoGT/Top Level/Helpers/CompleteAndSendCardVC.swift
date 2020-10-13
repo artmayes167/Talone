@@ -22,7 +22,7 @@ class CompleteAndSendCardVC: UIViewController {
                 cards = c.filter { $0.entity.name != CardTemplateInstance().entity.name }
             }
         
-            let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.templateTitle }
+            let mappedTemplates = cards.isEmpty ? [] : cards.map { $0.templateTitle! }
             for t in mappedTemplates {
                 possibles.append(t)
             }
@@ -96,11 +96,11 @@ class CompleteAndSendCardVC: UIViewController {
     }
     
     private func getRecipientUid() -> String {
-        return contact!.contactUid
+        return contact!.contactUid!
     }
     
     private func getRecipientHandle() -> String {
-        return contact!.contactHandle
+        return contact!.contactHandle!
     }
 
     override func viewDidLoad() {
@@ -159,7 +159,7 @@ class CompleteAndSendCardVC: UIViewController {
         let cardInstance = buildTemplate()
         let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance)
         // TODO: Move this logic to another utility class.
-        let fibCard = CardsBase.FiBCardItem(createdBy: CoreDataGod.user.uid, createdFor: getRecipientUid(), payload: data.base64EncodedString(), owner: CoreDataGod.user.handle)
+        let fibCard = CardsBase.FiBCardItem(createdBy: CoreDataGod.user.uid!, createdFor: getRecipientUid(), payload: data.base64EncodedString(), owner: CoreDataGod.user.handle!)
         
         CardsDbWriter().addCard(fibCard) { error in
             if let e = error {

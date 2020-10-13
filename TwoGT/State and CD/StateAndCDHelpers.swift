@@ -15,19 +15,29 @@ import Firebase
 typealias CoreDataGod = AppDelegateHelper
 final class AppDelegateHelper: NSObject {
     static let user = AppDelegateHelper.getUser()
+    private static var container: NSPersistentCloudKitContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    static var managedContext: NSManagedObjectContext = container.viewContext
     
-    class var managedContext: NSManagedObjectContext {
-        return self.stack.managedContext
+    class var managedContextOfAction: NSManagedObjectContext {
+        return container.newBackgroundContext()
+    }
+    
+    class func save() {
+        do {
+            try managedContext.save()
+        } catch {
+            print("!!!!!!!!_____________-Not saved.... again....")
+        }
     }
     
     // MARK: - Properties
-    fileprivate static var stack: CoreDataStack = {
-      let manager = DataMigrationManager(modelNamed: "TwoGT", enableMigrations: true)
-      return manager.stack
-    }()
+//    fileprivate static var stack: CoreDataStack = {
+//      let manager = DataMigrationManager() //(modelNamed: "TwoGT", enableMigrations: true)
+//      return manager.stack
+//    }()
     
     class func getUser() -> User {
-        let fetchRequest: NSFetchRequest<User> = NSFetchRequest(entityName: "User")
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         do {
             if let u = try managedContext.fetch(fetchRequest).first {
                 print("Successfully fetched User")
@@ -44,13 +54,7 @@ final class AppDelegateHelper: NSObject {
     class func createUser() -> User {
 //        let entity = NSEntityDescription.entity(forEntityName: User().entity.name ?? "Fuck", in: CoreDataGod.managedContext)!
         let user = User(context: CoreDataGod.managedContext)
-        user.handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
-        if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) {
-            user.uid = uid
             return user
-        } else {
-            fatalError()
-        }
     }
 }
 

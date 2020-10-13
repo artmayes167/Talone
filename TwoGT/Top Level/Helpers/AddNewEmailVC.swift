@@ -15,7 +15,7 @@ class AddNewEmailVC: UIViewController {
     private var emails: [Email] {
         get {
             let ems =  CoreDataGod.user.emails ?? []
-            return ems.isEmpty ? [] : ems.sorted { return $0.title < $1.title }
+            return ems.isEmpty ? [] : ems.sorted { return $0.title! < $1.title! }
         }
     }
     
@@ -29,7 +29,7 @@ class AddNewEmailVC: UIViewController {
         
         let _ = Email.create(name: labelTextField.text!.lowercased().pure(), emailAddress: emailTextField.text!.pure(), uid: CoreDataGod.user.uid)
 
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
         performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     

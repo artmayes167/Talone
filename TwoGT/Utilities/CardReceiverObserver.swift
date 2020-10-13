@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class CardReceiverObserver {
 
@@ -20,11 +21,25 @@ class CardReceiverObserver {
     func stopObserving() {
         fetcher.stopObserving()
     }
+    
+    fileprivate lazy var contacts: NSFetchedResultsController<Contact> = {
+        let context = CoreDataGod.managedContext
+      //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
+        let request: NSFetchRequest<Contact> = Contact.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Contact.contactHandle), ascending: false)]
+      let contacts = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+      return contacts
+    }()
 
     func observeCardReceptions() {
-
+        do {
+          try contacts.performFetch()
+        } catch {
+          print("Error: \(error)")
+        }
+        
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
-            let contacts: [Contact]? = CoreDataGod.user.contacts
+            
             var newCards = [CardsBase.FiBCardItem]()
             var modifiedCards = newCards
 
@@ -43,16 +58,13 @@ class CardReceiverObserver {
                 }
 
                 var isExisting = false
-                if contacts == nil || (contacts?.isEmpty ?? true) {
-                    newCards.append(fibCard)
-                    
-                } else {
-                    for contact in contacts! where fibCard.owner == contact.contactHandle {
+                if let objects = self.contacts.fetchedObjects {
+                    for contact in objects where fibCard.owner == contact.contactHandle {
                         modifiedCards.append(fibCard)
                         isExisting = true
                     }
-                    if !isExisting { newCards.append(fibCard) }
                 }
+                if !isExisting { newCards.append(fibCard) }
                 
             }
 

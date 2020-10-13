@@ -12,11 +12,11 @@ import CoreData
 class CoreDataImageHelper: NSObject {
     static let shared = CoreDataImageHelper()
     
-    func saveImage(data: Data) {
+    func saveImage(data: UIImage) {
         let imageInfo = ImageInfo(context: CoreDataGod.managedContext)
         imageInfo.image = data
         imageInfo.handle = CoreDataGod.user.handle
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
     }
     
     func deleteAllImages() {

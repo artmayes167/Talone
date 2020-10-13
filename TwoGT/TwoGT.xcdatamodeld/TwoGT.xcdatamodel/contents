@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="Talone">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="TwoGT">
     <entity name="Address" representedClassName=".Address" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="street1" attributeType="String" defaultValueString=""/>
         <attribute name="street2" optional="YES" attributeType="String"/>
@@ -19,7 +19,7 @@
         <attribute name="state" attributeType="String" defaultValueString=""/>
     </entity>
     <entity name="CardTemplate" representedClassName=".CardTemplate" syncable="YES">
-        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="ImageTransformer" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="templateTitle" optional="YES" attributeType="String"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
         <attribute name="userHandle" optional="YES" attributeType="String"/>
@@ -94,7 +94,7 @@
     </entity>
     <entity name="ImageInfo" representedClassName=".ImageInfo" syncable="YES">
         <attribute name="handle" attributeType="String" defaultValueString=""/>
-        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="ImageTransformer" allowsExternalBinaryDataStorage="YES" customClassName="."/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="imageURLString" optional="YES" attributeType="String"/>
     </entity>
@@ -192,12 +192,12 @@
         <element name="AppLocationInfo" positionX="-499.671875" positionY="-918.25" width="128" height="88"/>
         <element name="CardTemplate" positionX="-1009.5703125" positionY="-1201.79296875" width="128" height="163"/>
         <element name="CardTemplateInstance" positionX="-1007.9609375" positionY="-1319.7421875" width="128" height="88"/>
-        <element name="Community" positionX="-755.1953125" positionY="-804.30859375" width="128" height="58"/>
+        <element name="Community" positionX="-755.1953125" positionY="-783.734375" width="128" height="58"/>
         <element name="Contact" positionX="-1148.48046875" positionY="-1199.6875" width="128" height="131"/>
         <element name="ContactRating" positionX="-1320.62890625" positionY="-1275.8828125" width="128" height="103"/>
         <element name="Email" positionX="-793.1484375" positionY="-1325.4609375" width="128" height="103"/>
         <element name="Have" positionX="-1079.56640625" positionY="-949.38671875" width="128" height="116"/>
-        <element name="ImageInfo" positionX="-939.30078125" positionY="-719.0390625" width="128" height="103"/>
+        <element name="ImageInfo" positionX="-824.59765625" positionY="-692.25" width="128" height="103"/>
         <element name="Item" positionX="-1120.2578125" positionY="-788.41796875" width="128" height="193"/>
         <element name="Need" positionX="-1252.671875" positionY="-951.24609375" width="128" height="116"/>
         <element name="PhoneNumber" positionX="-792.8984375" positionY="-1212.4765625" width="128" height="103"/>

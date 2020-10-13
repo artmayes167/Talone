@@ -10,6 +10,13 @@ import UIKit
 import CoreData
 
 extension User {
+    
+    public override func awakeFromInsert() {
+      super.awakeFromInsert()
+        handle = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue)!
+        uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue)!
+    }
+    
     func sortedAddresses(clean: Bool) -> [String: [SearchLocation]] {
         var dict: [String: [SearchLocation]] = [:]
         if let locs = searchLocations {
@@ -58,24 +65,34 @@ extension CardTemplate {
      - Parameter title: This is a unique identifier for the card, set by You.  Namespace collision will result in replacement of the `CardTemplate`
      */
     
-    class func create(cardCategory title: String, image: Data?) -> CardTemplate {
+    public override func awakeFromInsert() {
+        uid = AppDelegateHelper.user.uid
+        userHandle = AppDelegateHelper.user.handle
+    }
+    
+    class func create(cardCategory title: String, image: UIImage?) -> CardTemplate {
         var card: CardTemplate?
         if let temps = CoreDataGod.user.cardTemplates, !temps.isEmpty {
             let z = temps.filter({ $0.templateTitle == title })
             if !(z.isEmpty) {
                 card = z.first
+                card!.image = image
+                CoreDataGod.managedContext.refresh(card!, mergeChanges: true)
             }
         }
         if card == nil {
-            card = CardTemplate(context: CoreDataGod.managedContext)
+            let manOfAction = CoreDataGod.managedContextOfAction
+            card = CardTemplate(context: manOfAction)
             card!.templateTitle = title
-            card!.uid = AppDelegateHelper.user.uid
-            card!.userHandle = AppDelegateHelper.user.handle
+            card!.image = image
+            
+            do {
+              try manOfAction.save()
+            } catch let error as NSError {
+              print("Error saving \(error)", terminator: "")
+            }
         }
         
-        card!.image = image
-
-        try? CoreDataGod.managedContext.save()
         return card!
     }
     
@@ -97,16 +114,16 @@ extension CardTemplateInstance {
      */
     class func create(toHandle: String, card c: CardTemplate, message: String = "", personalNotes: String = "") -> CardTemplateInstance {
 
-        let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: CoreDataGod.managedContext)!
-        let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let instance = CardTemplateInstance(context: manOfAction)
+//        let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: manOfAction)!
+//        let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
         
         instance.message = message
         instance.receiverUserHandle = toHandle
         instance.personalNotes = personalNotes
         
         instance.image = c.image
-        instance.uid = c.uid
-        instance.userHandle = c.userHandle
         instance.templateTitle = c.templateTitle
         
         instance.message = message
@@ -114,14 +131,20 @@ extension CardTemplateInstance {
         instance.emails = c.emails
         instance.phoneNumbers = c.phoneNumbers
         
-        try? CoreDataGod.managedContext.save()
+        do {
+          try manOfAction.save()
+        } catch let error as NSError {
+          print("Error saving \(error)", terminator: "")
+        }
         return instance
     }
     
     class func create(codableCard c: CodableCardTemplateInstance) -> CardTemplateInstance {
-        let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: CoreDataGod.managedContext)!
-        let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
-        instance.image = c.image
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let instance = CardTemplateInstance(context: manOfAction)
+        if let d = c.image, let image = UIImage(data: d) {
+            instance.image = image
+        }
         instance.uid = c.uid
         instance.userHandle = c.userHandle
         instance.receiverUserHandle = c.receiverUserHandle
@@ -142,7 +165,7 @@ struct CodableCardTemplateInstance: Codable {
     let receiverUserHandle: String // to -- if received, this will be AppDelegateHelper.user.handle
     
     let uid: String
-    let image: Data?
+    var image: Data? = nil
     let userHandle: String // sender's user handle
     let message: String?
     let templateTitle: String
@@ -158,12 +181,14 @@ struct CodableCardTemplateInstance: Codable {
     }
     
     init(instance: CardTemplateInstance) {
-        receiverUserHandle = instance.receiverUserHandle
-        uid = instance.uid
-        image = instance.image
-        userHandle = instance.userHandle
+        receiverUserHandle = instance.receiverUserHandle!
+        uid = instance.uid!
+        if let i = instance.image, let data = try? i.heicData(compressionQuality: 0.5) {
+            self.image = data
+        }
+        userHandle = instance.userHandle!
         message = instance.message
-        templateTitle = instance.templateTitle
+        templateTitle = instance.templateTitle!
         
         var addressBook: [[String: String]] = []
         if let adds = instance.addresses {
@@ -194,6 +219,8 @@ struct CodableCardTemplateInstance: Codable {
             }
         }
         emails = emailBook
+        
+        image = try? instance.image?.heicData(compressionQuality: 0.5)
     }
 }
 
@@ -205,21 +232,23 @@ extension Community {
 
         community.name = communityName
 
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
         return community
     }
 }
 
 extension Email {
     class func create(name: String, emailAddress: String, uid: String?) -> Email {
-        let entity = NSEntityDescription.entity(forEntityName: "Email", in: CoreDataGod.managedContext)!
-        let email = Email(entity: entity, insertInto: CoreDataGod.managedContext)
+        let manOfAction = CoreDataGod.managedContextOfAction
+//        let entity = NSEntityDescription.entity(forEntityName: "Email", in: CoreDataGod.managedContext)!
+//        let email = Email(entity: entity, insertInto: CoreDataGod.managedContext)
+        let email = Email(context: manOfAction)
         
         email.title = name
         email.emailString = emailAddress
         email.uid = uid ?? AppDelegateHelper.user.uid
 
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return email
     }
     
@@ -242,10 +271,12 @@ extension Email {
 }
 
 extension SearchLocation {
-    class func createSearchLocation(city: String, state: String, country: String = "USA", community: String = "", type: String) -> SearchLocation {
+    class func createSearchLocation(city: String, state: String, country: String = "USA", community: String = "", type: String) {
 
-        let entity = NSEntityDescription.entity(forEntityName: "SearchLocation", in: CoreDataGod.managedContext)!
-        let searchLocation = SearchLocation(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "SearchLocation", in: CoreDataGod.managedContext)!
+//        let searchLocation = SearchLocation(entity: entity, insertInto: CoreDataGod.managedContext)
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let searchLocation = SearchLocation(context: manOfAction)
         
         searchLocation.city = city
         searchLocation.state = state
@@ -253,11 +284,11 @@ extension SearchLocation {
         searchLocation.community = community
         searchLocation.type = type
         // don't save yet
-        return searchLocation
+        try? manOfAction.save()
     }
 
     func displayName() -> String {
-        return city.capitalized + ", " + state.capitalized
+        return city!.capitalized + ", " + state!.capitalized
     }
 }
 
@@ -266,8 +297,11 @@ extension Address {  // :)
     /// Only called by thisUser to create
     class func create(title: String, street1: String, street2: String?, city: String, zip: String?, state: String, country: String) {
         
-        let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
-        let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
+//        let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let add = Address(context: manOfAction)
+        
         add.title = title
         add.street1 = street1
         add.street2 = street2
@@ -277,7 +311,7 @@ extension Address {  // :)
         add.uid = AppDelegateHelper.user.uid
         add.zip = zip
         
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
     }
     
     
@@ -302,9 +336,11 @@ extension Address {  // :)
     /// From someone else
     class func addressesFrom(array: [[String: String]]) -> [Address] {
         var arr: [Address] = []
+        let manOfAction = CoreDataGod.managedContextOfAction
         for dict in array {
-            let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
-            let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+//            let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
+//            let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
+            let add = Address(context: manOfAction)
             add.title = dict["title"]!
             add.street1 = dict["street1"]!
             add.street2 = dict["street2"]
@@ -315,21 +351,24 @@ extension Address {  // :)
             add.zip = dict["zip"]
             arr.append(add)
         }
-        _ = try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return arr
     }
 }
 
 extension PhoneNumber {
     class func create(title: String, number: String, uid: String?) -> PhoneNumber {
-        let entity = NSEntityDescription.entity(forEntityName: "PhoneNumber", in: CoreDataGod.managedContext)!
-        let phoneNum = PhoneNumber(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "PhoneNumber", in: CoreDataGod.managedContext)!
+//        let phoneNum = PhoneNumber(entity: entity, insertInto: CoreDataGod.managedContext)
+        
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let phoneNum = PhoneNumber(context: manOfAction)
         
         phoneNum.title = title
         phoneNum.number = number
         phoneNum.uid = uid ?? AppDelegateHelper.user.uid
         
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return phoneNum
     }
     
@@ -355,44 +394,70 @@ extension PhoneNumber {
 extension Need {
     class func  createNeed(item: NeedsBase.NeedItem) -> Need {
 
-        let entity = NSEntityDescription.entity(forEntityName: "Need", in: CoreDataGod.managedContext)!
-        let needItem = Need(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "Need", in: CoreDataGod.managedContext)!
+//        let needItem = Need(entity: entity, insertInto: CoreDataGod.managedContext)
         
-        needItem.headline = item.headline
-        needItem.category = item.category
-        needItem.desc = item.description
-        needItem.validUntil = item.validUntil.dateValue()
-        needItem.owner = item.owner
-        needItem.createdBy = item.createdBy
-        needItem.createdAt = item.createdAt?.dateValue()
-        needItem.modifiedAt = item.modifiedAt?.dateValue()
-        needItem.id = item.id!
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let newNeed = Need(context: manOfAction)
+        
+        newNeed.headline = item.headline
+        newNeed.category = item.category
+        newNeed.desc = item.description
+        newNeed.validUntil = item.validUntil.dateValue()
+        newNeed.owner = item.owner
+        newNeed.createdBy = item.createdBy
+        newNeed.createdAt = item.createdAt?.dateValue()
+        newNeed.modifiedAt = item.modifiedAt?.dateValue()
+        newNeed.id = item.id!
         let loc = item.locationInfo
         
         if let s = CoreDataGod.user.searchLocations {
             if !s.isEmpty {
                 let k = s.filter { $0.isEqual(loc) }
                 if !k.isEmpty {
-                    needItem.location = k.first
+                    newNeed.location = k.first
                 } else {
                     let inCaseIsEqualDoesNotWork = s.filter ({ $0.state == loc.state && $0.city == loc.city })
                     if !inCaseIsEqualDoesNotWork.isEmpty {
-                        needItem.location = inCaseIsEqualDoesNotWork.first
+                        newNeed.location = inCaseIsEqualDoesNotWork.first
+                        try? manOfAction.save()
+                        return newNeed
                     }
                 }
             }
         }
-        if needItem.location == nil {
-            needItem.location = SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+        if newNeed.location == nil {
+            if let location = Need.getLocation(loc: loc) {
+                newNeed.location = location
+                try? manOfAction.save()
+                return newNeed
+            }
+            SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+            if let location2 = Need.getLocation(loc: loc) {
+                newNeed.location = location2
+            } else {
+                fatalError()
+            }
         }
         
-        try? CoreDataGod.managedContext.save()
-        return needItem
+        try? manOfAction.save()
+        return newNeed
+    }
+    
+    class func getLocation(loc: FirebaseGeneric.LocationInfo) -> SearchLocation? {
+        let locations: Array = CoreDataGod.user.searchLocations ?? []
+        if !locations.isEmpty {
+            let l: [SearchLocation] = locations.filter { $0.city == loc.city && $0.state == loc.state }
+            if !l.isEmpty {
+                return l.first
+            }
+        }
+        return nil
     }
 
     func deleteNeed() {
         CoreDataGod.managedContext.delete(self)
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
     }
 
 }
@@ -400,58 +465,77 @@ extension Need {
 extension Have {
     class func createHave(item: HavesBase.HaveItem) -> Have {
 
-        let entity = NSEntityDescription.entity(forEntityName: "Have", in: CoreDataGod.managedContext)!
-        let haveItem = Have(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "Have", in: CoreDataGod.managedContext)!
+//        let haveItem = Have(entity: entity, insertInto: CoreDataGod.managedContext)
         
-        haveItem.headline = item.headline
-        haveItem.category = item.category
-        haveItem.desc = item.description
-        haveItem.validUntil = item.validUntil?.dateValue()
-        haveItem.owner = item.owner
-        haveItem.createdBy = item.createdBy
-        haveItem.createdAt = item.createdAt?.dateValue()
-        haveItem.modifiedAt = item.modifiedAt?.dateValue()
-        haveItem.id = item.id!
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let newHave = Have(context: manOfAction)
+        
+        newHave.headline = item.headline
+        newHave.category = item.category
+        newHave.desc = item.description
+        newHave.validUntil = item.validUntil?.dateValue()
+        newHave.owner = item.owner
+        newHave.createdBy = item.createdBy
+        newHave.createdAt = item.createdAt?.dateValue()
+        newHave.modifiedAt = item.modifiedAt?.dateValue()
+        newHave.id = item.id!
         
         let loc = item.locationInfo
+        
         if let s = CoreDataGod.user.searchLocations {
             if !s.isEmpty {
                 let k = s.filter { $0.isEqual(loc) }
                 if !k.isEmpty {
-                    haveItem.location = k.first
+                    newHave.location = k.first
                 } else {
                     let inCaseIsEqualDoesNotWork = s.filter ({ $0.state == loc.state && $0.city == loc.city })
                     if !inCaseIsEqualDoesNotWork.isEmpty {
-                        haveItem.location = inCaseIsEqualDoesNotWork.first
+                        newHave.location = inCaseIsEqualDoesNotWork.first
+                        try? manOfAction.save()
+                        return newHave
                     }
                 }
             }
         }
-        if haveItem.location == nil {
-            haveItem.location = SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+        if newHave.location == nil {
+            if let location = Need.getLocation(loc: loc) {
+                newHave.location = location
+                try? manOfAction.save()
+                return newHave
+            }
+            SearchLocation.createSearchLocation(city: loc.city, state: loc.state, type: "none")
+            if let location2 = Need.getLocation(loc: loc) {
+                newHave.location = location2
+            } else {
+                fatalError()
+            }
         }
         
-        try? CoreDataGod.managedContext.save()
-        return haveItem
+        try? manOfAction.save()
+        return newHave
     }
 
     func deleteHave() {
         CoreDataGod.managedContext.delete(self)
-        try? CoreDataGod.managedContext.save()
+        CoreDataGod.save()
     }
 
 }
 
 extension AppLocationInfo {
     class func create(city: String, state: String, country: String) -> AppLocationInfo {
-        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo", in: CoreDataGod.managedContext)!
-        let locationInfo = AppLocationInfo(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo", in: CoreDataGod.managedContext)!
+//        let locationInfo = AppLocationInfo(entity: entity, insertInto: CoreDataGod.managedContext)
 
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let locationInfo = AppLocationInfo(context: manOfAction)
+        
         locationInfo.country = country
         locationInfo.city = city
         locationInfo.state = state
 
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return locationInfo
     }
 }
@@ -460,13 +544,16 @@ extension Contact {
     /// Setting the `newPersonHandle` enables CoreData to find this `Interaction`, and `templateName` is a marker to allow the user to change which template is associated with which other userHandle
     class func create(newPersonHandle handle: String, newPersonUid uid: String) -> Contact {
 
-        let entity = NSEntityDescription.entity(forEntityName: "Contact", in: CoreDataGod.managedContext)!
-        let contact = Contact(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "Contact", in: CoreDataGod.managedContext)!
+//        let contact = Contact(entity: entity, insertInto: CoreDataGod.managedContext)
+        
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let contact = Contact(context: manOfAction)
 
         contact.contactUid = uid
         contact.contactHandle = handle
 
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return contact
     }
 }
@@ -475,15 +562,18 @@ extension Contact {
 extension ContactRating {
     class func create(handle: String, good: Int = 0, just: Int = 0, bad: Int = 0) -> ContactRating {
 
-        let entity = NSEntityDescription.entity(forEntityName: "ContactRating", in: CoreDataGod.managedContext)!
-        let rating = ContactRating(entity: entity, insertInto: CoreDataGod.managedContext)
+//        let entity = NSEntityDescription.entity(forEntityName: "ContactRating", in: CoreDataGod.managedContext)!
+//        let rating = ContactRating(entity: entity, insertInto: CoreDataGod.managedContext)
 
+        let manOfAction = CoreDataGod.managedContextOfAction
+        let rating = ContactRating(context: manOfAction)
+        
         rating.good = Int64(good)
         rating.justSo = Int64(just)
         rating.bad = Int64(bad)
         rating.contactHandle = handle
 
-        try? CoreDataGod.managedContext.save()
+        try? manOfAction.save()
         return rating
     }
 }

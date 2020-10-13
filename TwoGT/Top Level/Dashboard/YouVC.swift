@@ -35,9 +35,8 @@ enum AddressSections: Int, CaseIterable {
         
         if let im = CoreDataImageHelper.shared.fetchAllImages() {
             if let imageFromStorage = im.first?.image {
-                let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
-                imageButton.setImage(i, for: .normal)
+                imageButton.setImage(imageFromStorage, for: .normal)
             }
         }
         
@@ -243,21 +242,19 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }
         
         let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
-        if let imageData = try? aspectScaledToFitImage.heicData(compressionQuality: 0.3) {
-            CoreDataImageHelper.shared.saveImage(data: imageData)
-            showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
-            
-            if let im: [ImageInfo] = CoreDataImageHelper.shared.fetchAllImages() {
-                if let imageFromStorage = im.last?.image {
-                    let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
-                    imageButton.imageView?.contentMode = .scaleAspectFill
-                    imageButton.setImage(i, for: .normal)
-                }
-                
-            } else {
-                view.makeToast("Image saving and rerendering failed")
-                imageButton.setImage(userPickedImage, for: .normal)
+        CoreDataImageHelper.shared.saveImage(data: aspectScaledToFitImage)
+        showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
+        
+        if let im: [ImageInfo] = CoreDataImageHelper.shared.fetchAllImages() {
+            if let imageFromStorage = im.last?.image {
+                let i = imageFromStorage.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(i, for: .normal)
             }
+            
+        } else {
+            view.makeToast("Image saving and rerendering failed")
+            imageButton.setImage(userPickedImage, for: .normal)
         }
         picker.dismiss(animated: true)
     }

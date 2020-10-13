@@ -35,62 +35,53 @@ import CoreData
 
 class CoreDataStack {
 
-  private let modelName: String
-
-  init(modelName: String) {
-    self.modelName = modelName
-  }
-
-  lazy var managedContext: NSManagedObjectContext = self.storeContainer.viewContext
-  var savingContext: NSManagedObjectContext {
-    return storeContainer.newBackgroundContext()
-  }
-  
-  var storeName: String = "TwoGT"
-  var storeURL : URL {
-    let storePaths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
-    let storePath = storePaths[0] as NSString
-    let fileManager = FileManager.default
-    
-    do {
-      try fileManager.createDirectory(
-        atPath: storePath as String,
-        withIntermediateDirectories: true,
-        attributes: nil)
-    } catch {
-      print("Error creating storePath \(storePath): \(error)")
-    }
-    
-    let sqliteFilePath = storePath
-      .appendingPathComponent(storeName + ".sqlite")
-    return URL(fileURLWithPath: sqliteFilePath)
-  }
-
-  lazy var storeDescription: NSPersistentStoreDescription = {
-    let description = NSPersistentStoreDescription(url: self.storeURL)
-    description.shouldMigrateStoreAutomatically = true
-    description.shouldInferMappingModelAutomatically = true
-    return description
-  }()
-  
-  private lazy var storeContainer: NSPersistentCloudKitContainer = {
-    let container = NSPersistentCloudKitContainer(name: self.modelName)
-    container.persistentStoreDescriptions = [self.storeDescription]
-    container.loadPersistentStores { (storeDescription, error) in
-      if let error = error {
-        fatalError("Unresolved error \(error)")
-      }
-    }
-    return container
-  }()
-
-  func saveContext () {
-    guard managedContext.hasChanges else { return }
-
-    do {
-      try managedContext.save()
-    } catch let error as NSError {
-      fatalError("Unresolved error \(error), \(error.userInfo)")
-    }
-  }
+//  private let modelName: String
+//
+//  init(modelName: String) {
+//    self.modelName = modelName
+//  }
+//
+//  lazy var managedContext: NSManagedObjectContext = self.storeContainer.viewContext
+////  var savingContext: NSManagedObjectContext {
+////    return storeContainer.newBackgroundContext()
+////  }
+//  
+//  private lazy var storeContainer: NSPersistentCloudKitContainer = {
+//    let container = NSPersistentCloudKitContainer(name: "TwoGT")
+//    if let f = container.persistentStoreDescriptions.first {
+//        f.shouldInferMappingModelAutomatically = true
+////        f.shouldMigrateStoreAutomatically = true
+//    }
+//    container.loadPersistentStores { (description, error) in
+//      if let error = error {
+//        fatalError("Unresolved error \(error)")
+//      } else {
+//        print("-------------description = \(description), ------------stores = \(container.persistentStoreCoordinator)")
+//      }
+//    }
+//    container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//    getCoreDataDBPath()
+//    return container
+//  }()
+//    
+//    func getCoreDataDBPath() {
+//        let path = FileManager
+//            .default
+//            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+////            .last?
+////            .absoluteString
+////            .replacingOccurrences(of: "file://", with: "")
+////            .removingPercentEncoding
+//        
+//        for url in path {
+//            print("----------------CoreData DB path: " + url.absoluteString)
+//        }
+//        //print("Core Data DB Path :: \(path ?? "Not found")")
+//    }
+//
+//  func saveContext () {
+//    guard managedContext.hasChanges else { return }
+//
+//    try? managedContext.save()
+//  }
 }

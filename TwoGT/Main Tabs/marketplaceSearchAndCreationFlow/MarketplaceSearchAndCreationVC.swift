@@ -36,8 +36,6 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     var creationManager: PurposeCreationManager = PurposeCreationManager()
     var model: MarketplaceModel?
 
-    var searchLocation: SearchLocation?
-
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
             creationManager.setCreationType(CurrentCreationType(rawValue: currentNeedHaveSelectedSegmentIndex )!)
@@ -91,28 +89,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
         categoryTextField.text = creationManager.getCategory()?.rawValue
         if let loc = UserDefaults.standard.dictionary(forKey: DefaultsKeys.lastUsedLocation.rawValue) as? [String: String] {
             guard let city = loc[DefaultsSavedLocationKeys.city.rawValue], let state = loc[DefaultsSavedLocationKeys.state.rawValue] else { return }
-            _ = CoreDataGod.user.sortedAddresses(clean: true)
-            let locations = CoreDataGod.user.searchLocations
-            guard var l = locations else {
-                let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
-                creationManager.setLocation(newLoc)
-                searchLocation = newLoc
-                DispatchQueue.main.async {
-                    self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
-                }
-                setSearchButtons()
-                checkSaveButton()
-                return
-            }
-            l = l.filter { $0.city == city && $0.state == state }
-            if !l.isEmpty {
-                creationManager.setLocation(l.first!)
-                searchLocation = l.first
-            } else {
-                let newLoc = SearchLocation.createSearchLocation(city: city, state: state, type: "none")
-                creationManager.setLocation(newLoc)
-                searchLocation = newLoc
-            }
+            let newLoc = CityStateSearchVC.Loc()
+            newLoc.city = city
+            newLoc.state = state
+            creationManager.setLocation(newLoc)
             DispatchQueue.main.async {
                 self.whereTextField.text = self.creationManager.getLocationOrNil()?.displayName()
             }
@@ -158,12 +138,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     @IBAction func seeMatchingNeeds(_ sender: Any) {
-        guard let _ = searchLocation else { return }
         fetchMatchingNeeds()
     }
 
     @IBAction func seeMatchingHaves(_ sender: Any) {
-        guard let _ = searchLocation else { return }
         fetchMatchingHaves()
     }
 
@@ -202,14 +180,11 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     /// Unwind segue here is responsible for dealing with creating and saving the search location
    @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
         if let s = segue.source as? CityStateSearchVC {
-            guard let loc = s.locationForSave else { fatalError() }
-            searchLocation = loc
-            creationManager.setLocation(loc)
-            whereTextField.text = loc.displayName()
-            let dict = ["city": loc.city, "state": loc.state]
+            creationManager.setLocation(s.loc)
+            whereTextField.text = s.loc.displayName()
+            let dict = ["city": s.loc.city, "state": s.loc.state]
             UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
             setSearchButtons()
-            try? CoreDataGod.managedContext.save()
         }
     }
 
@@ -268,14 +243,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     }
 
     private func checkSaveButton() {
-        // Check cityState and category, but don't save
         createNewNeedHaveButton.isEnabled = true
-//        var success = creationManager.getLocationOrNil() != nil
-//        if success {
-//            // returns true if able to set both headline and description
-//            success = creationManager.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-//            createNewNeedHaveButton.isEnabled = success
-//        }
     }
 
     private func setSearchButtons() {

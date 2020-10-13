@@ -17,12 +17,12 @@ class AddHaveToWatchModel: NSObject {
 
         let needsWriter = NeedsDbWriter()
         // add Need to DB
-        needsWriter.createNeedAndJoinHave(have, usingHandle: CoreDataGod.user.handle) { (error, firebaseNeedItem) in
+        needsWriter.createNeedAndJoinHave(have, usingHandle: CoreDataGod.user.handle!) { (error, firebaseNeedItem) in
             if error == nil, let needItem = firebaseNeedItem {
                 let n = Need.createNeed(item: needItem)
                 _ = Have.createHave(item: have)
                 n.parentHaveItemId = have.id
-                try? CoreDataGod.managedContext.save()
+                CoreDataGod.save()
                 DispatchQueue.main.async {
                     controller.view.makeToast("You have successfully linked to \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
                         // TODO: - Create unwind segue to my needs
@@ -45,8 +45,8 @@ class AddHaveToWatchModel: NSObject {
                                           description: c.getDescription() ?? haveItem.description,
                                           validUntil: haveItem.validUntil ?? Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60)), //valid until next 7 days
                                           owner: UserDefaults.standard.string(forKey: "userHandle") ?? "Anonymous",
-                                          createdBy: CoreDataGod.user.uid,
-                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: c.getLocationOrNil()!))
+                                          createdBy: CoreDataGod.user.uid!,
+                                          locationInfo: FirebaseGeneric.LocationInfo(locationInfo: haveItem.locationInfo))
 
         let havesWriter = HavesDbWriter()
         /// Create a new backend need
@@ -55,7 +55,7 @@ class AddHaveToWatchModel: NSObject {
                 // Create CD Have and HaveItem
                 _ = Have.createHave(item: h)
                 do {
-                    try CoreDataGod.managedContext.save()
+                    CoreDataGod.save()
                     DispatchQueue.main.async {
                         controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
                             // TODO: - Create unwind segue to my needs

@@ -32,7 +32,7 @@ class PurposeCreationManager: NSObject {
 
     private var creationType: CurrentCreationType = .unknown
     private var category: NeedType = .any
-    private var searchLocation: SearchLocation?
+    private var location: CityStateSearchVC.Loc?
     private var headline: String?
     private var desc: String?
 
@@ -52,12 +52,12 @@ class PurposeCreationManager: NSObject {
         return category
     }
 
-    func setLocation(_ loc: SearchLocation) {
-        searchLocation = loc
+    func setLocation(_ loc: CityStateSearchVC.Loc) {
+        location = loc
     }
 
-    func getLocationOrNil() -> SearchLocation? {
-        return searchLocation
+    func getLocationOrNil() -> CityStateSearchVC.Loc? {
+        return location
     }
 
     /// - Returns: `true` if able to set both headline and description,` false` otherwise

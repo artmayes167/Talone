@@ -113,7 +113,7 @@ class ViewContactVC: UIViewController {
         
         let image = c.image
         if let imageFromStorage = image {
-            let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+            let i = imageFromStorage.af.imageAspectScaled(toFit: imageButton.bounds.size)
             imageButton.imageView?.contentMode = .scaleAspectFill
             imageButton.setImage(i, for: .normal)
         } else {
@@ -129,7 +129,7 @@ class ViewContactVC: UIViewController {
         
         let image = c.image
         if let imageFromStorage = image {
-            let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+            let i = imageFromStorage.af.imageAspectScaled(toFit: imageButton.bounds.size)
             imageButton.imageView?.contentMode = .scaleAspectFill
             imageButton.setImage(i, for: .normal)
         } else {
@@ -174,7 +174,7 @@ class TheirContactVC: ViewContactVC {
     override func saveNotes(_ notes: String) {
         theirCard!.personalNotes = notes
         DispatchQueue.main.async {
-            _ = try? CoreDataGod.managedContext.save()
+            CoreDataGod.save()
             self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
         }
     }
@@ -310,10 +310,10 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
             switch typeForClass(object.entity.name) {
             case .email:
                 guard let e = object as? Email else { return }
-                launchEmail(to: [e.emailString], body: "From \(CoreDataGod.user.handle): ")
+                launchEmail(to: [e.emailString!], body: "From \(CoreDataGod.user.handle!): ")
             case .phoneNumber:
                 guard let p = object as? PhoneNumber else { return }
-                call(number: p.number)
+                call(number: p.number!)
             default:
                 showOkayAlert(title: "sorry".taloneCased(), message: "teleportation is not available with this model.".taloneCased(), handler: nil)
             }

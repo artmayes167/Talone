@@ -54,15 +54,15 @@ class IntroYouVC: YouVC {
                 imageButton.imageView?.af.setImage(withURL: url, placeholderImage: #imageLiteral(resourceName: "avatar.png"), completion:  { response in
                     print(url)
                     do {
-                        if let d = response.data, let dataAsImage = UIImage(data: d), let reducedData = try? dataAsImage.heicData(compressionQuality: 0.3) {
+                        if let d = response.data, let dataAsImage = UIImage(data: d) {
                             CoreDataImageHelper.shared.deleteAllImages()
-                            CoreDataImageHelper.shared.saveImage(data: reducedData)
+                            CoreDataImageHelper.shared.saveImage(data: dataAsImage)
                             self.setState()
                             self.showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
                             
                             if let im = CoreDataImageHelper.shared.fetchAllImages() {
                                 if let imageFromStorage = im.last?.image {
-                                    let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: self.imageButton.bounds.size)
+                                    let i = imageFromStorage.af.imageAspectScaled(toFit: self.imageButton.bounds.size)
                                     self.imageButton.imageView?.contentMode = .scaleAspectFill
                                     self.imageButton.setImage(i, for: .normal)
                                 } //
@@ -92,9 +92,10 @@ class IntroYouVC: YouVC {
     }
     
     @IBAction func next(_ sender: UIButton) {
+        let _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
         let a = CoreDataGod.user.allAddresses()
         if a.count > 1 || imageButton.isSelected {
-            var imageData: Data?
+            var imageData: UIImage?
             if imageButton.imageView!.image != #imageLiteral(resourceName: "avatar.png") {
                 if let im = CoreDataImageHelper.shared.fetchAllImages() {
                     if let imageFromStorage = im.first?.image {
@@ -102,18 +103,24 @@ class IntroYouVC: YouVC {
                     }
                 }
             }
-            let _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
-            let c = CardTemplate.create(cardCategory: "my first template", image: imageData)
-            for x in a {
-                if let add = x as? Address {
-                    c.addToAddresses(add)
-                } else if let p = x as? PhoneNumber {
-                    c.addToPhoneNumbers(p)
-                } else if let e = x as? Email {
-                    c.addToEmails(e)
+            let _ = CardTemplate.create(cardCategory: "my first template", image: imageData)
+            CoreDataGod.managedContext.refreshAllObjects()
+            if let temps: [CardTemplate] = CoreDataGod.user.cardTemplates {
+                let fTemps = temps.filter { $0.templateTitle == "my first template" }
+                if !fTemps.isEmpty {
+                    guard let t = fTemps.first else { fatalError() }
+                    for x in a {
+                        if let add = x as? Address {
+                            t.addToAddresses(add)
+                        } else if let p = x as? PhoneNumber {
+                            t.addToPhoneNumbers(p)
+                        } else if let e = x as? Email {
+                            t.addToEmails(e)
+                        }
+                    }
                 }
             }
-            _ = try? CoreDataGod.managedContext.save()
+            CoreDataGod.save()
         }
         let u = UserDefaults.standard
         u.setValue(nil, forKey: State.stateDefaultsKey.rawValue)

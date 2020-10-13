@@ -17,9 +17,9 @@ class AllReceivedCardsVC: UIViewController, UIAdaptivePresentationControllerDele
         didSet {
             var dict: [String: [String]] = [:]
             for c in contacts {
-                if let firstChar = c.contactHandle.first {
-                    if var array = dict[String(firstChar)] { array.append(c.contactHandle) }
-                    else { dict[String(firstChar)] = [c.contactHandle] }
+                if let firstChar = c.contactHandle!.first {
+                    if var array = dict[String(firstChar)] { array.append(c.contactHandle!) }
+                    else { dict[String(firstChar)] = [c.contactHandle!] }
                 } else { fatalError() }
             }
             contactList = dict

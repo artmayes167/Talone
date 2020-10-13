@@ -49,6 +49,8 @@ class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var statesCoverView: UIView?
     
+    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
+    
     let user = CoreDataGod.user
     
     private var statesTVC: LocationPickerTVC?
@@ -57,17 +59,37 @@ class CityStateSearchVC: UIViewController {
     private var allStates: [String] = []
     private var sections: Dictionary<String, [SearchLocation]> = [:]
     
-    var saveType: SaveType = .none
     var stateSelector: LocationPickerTVC?
     var citySelector: LocationPickerTVC?
+    let loc = Loc()
     
-    var locationForSave: SearchLocation?
+    class Loc {
+        var city: String = ""
+        var state: String = ""
+        var country: String = "USA"
+        var community: String = ""
+        var locationSaveCategory: SaveType = .none
+        
+        func createLocation() {
+            SearchLocation.createSearchLocation(city: city, state: state, country: country, community: community, type: locationSaveCategory.stringValue())
+        }
+        
+        func populateWith(_ l: SearchLocation) {
+            city = l.city!
+            state = l.state!
+        }
+        
+        func displayName() -> String {
+            return city + ", " + state
+        }
+    }
+    
+    // var locationForSave: SearchLocation?
 
     /// To be set by presenting controller, defaults to `unwindToMarketplaceSearch`
     public var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
     
-     // MARK: - View Life Cycle
-    @IBOutlet weak var pageHeaderView: SecondaryPageHeader!
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         pageHeaderView.setTitleText("Search Location")
@@ -99,13 +121,8 @@ class CityStateSearchVC: UIViewController {
         savedLocationView.isHidden = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
      // MARK: - IBActions
+    /// switches between view states
     @IBAction func selectedNewOrSaved(_ sender: UISegmentedControl) {
         
         switch sender.selectedSegmentIndex {
@@ -113,6 +130,9 @@ class CityStateSearchVC: UIViewController {
             savedLocationView.isHidden = true
             newCreationStack.isHidden = false
             view.layoutIfNeeded()
+            loc.city = cityTextField.text ?? ""
+            loc.state = stateTextField.text ?? ""
+            searchButton.isEnabled = (loc.city != "" && loc.state != "")
         case 1:
             savedLocationView.isHidden = false
             newCreationStack.isHidden = true
@@ -124,21 +144,20 @@ class CityStateSearchVC: UIViewController {
     }
     
     @IBAction func selectedTypeOfSave(_ sender: UISegmentedControl) {
-        for x in SaveType.allCases {
-            if x.rawValue == sender.selectedSegmentIndex {
-                saveType = x
-                if let l = locationForSave {
-                    l.type = x.stringValue()
-                }
-                continue
-            }
-        }
+        loc.locationSaveCategory = SaveType(rawValue: sender.selectedSegmentIndex)!
     }
     
     @IBAction func saveSearchLocation(_ sender: Any) {
+        if savedLocationView.isHidden {
+            loc.city = cityTextField.text!
+            loc.state = stateTextField.text!
+            loc.createLocation()
+        }
         performSegue(withIdentifier: unwindSegueIdentifier, sender: nil)
     }
     
+    
+     // MARK: - TextField-centric table management
     func textFieldDidBeginEditing(_ textField: UITextField) {
         switch textField {
         case stateTextField:
@@ -215,7 +234,7 @@ extension CityStateSearchVC: UITableViewDataSource, UITableViewDelegate {
         let key = ["home", "alternate"][indexPath.section]
         guard let s = sections[key] else { fatalError() }
         let loc = s[indexPath.row]
-        locationForSave = loc
+        self.loc.populateWith(loc)
         searchButton.isEnabled = true
     }
 }
@@ -230,6 +249,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
         switch type {
         case .state:
             stateTextField.text = item
+            loc.state = item
             // Hide the table in the stack
             stateContainer.isHidden = true
             statesCoverView?.isHidden = true
@@ -242,7 +262,7 @@ extension CityStateSearchVC: LocationPickerDelegate {
             cityTextField.text = item
             cityContainer.isHidden = true
             searchButton.isEnabled = true
-            locationForSave = SearchLocation.createSearchLocation(city: item, state: stateTextField.text!, type: saveType.stringValue())
+            loc.city = item
         default:
             print("Forgot to set ItemType in CityStateSearchVC")
         }

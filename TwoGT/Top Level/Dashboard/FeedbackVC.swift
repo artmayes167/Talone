@@ -19,7 +19,7 @@ class Feedback {
     var userId: String?
     var handle: String {
         get {
-            return CoreDataGod.user.handle
+            return CoreDataGod.user.handle!
         }
     }
     var feedback: String?

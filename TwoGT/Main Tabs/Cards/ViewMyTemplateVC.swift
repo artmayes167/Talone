@@ -33,7 +33,7 @@ class ViewMyTemplateVC: UIViewController {
             handleLabel.text = c.userHandle
             
             if let imageFromStorage = c.image {
-                let i = UIImage(data: imageFromStorage)!.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                let i = imageFromStorage.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(i, for: .normal)
             } else {

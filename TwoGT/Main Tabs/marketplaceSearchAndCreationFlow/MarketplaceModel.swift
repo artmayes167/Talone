@@ -31,7 +31,7 @@ class MarketplaceModel: NSObject {
         needsWriter.addNeed(need, completion: { [unowned controller] error in
             if error == nil {
                 let _ = Need.createNeed(item: need)
-                try? CoreDataGod.managedContext.save()
+                CoreDataGod.save()
                 DispatchQueue.main.async {
                     controller?.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
                         controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
@@ -55,7 +55,7 @@ class MarketplaceModel: NSObject {
         havesWriter.addHave(have, completion: { [unowned controller] error in
             if error == nil {
                 let _ = Have.createHave(item: have)
-                try? CoreDataGod.managedContext.save()
+                CoreDataGod.save()
                 DispatchQueue.main.async {
                     controller?.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
                         controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
@@ -82,8 +82,8 @@ class MarketplaceModel: NSObject {
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
         let desc = creationManager?.getDescription()
-        let uid = Auth.auth().currentUser?.uid ?? AppDelegateHelper.user.uid
-        let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle, createdBy: uid, locationInfo: locData)
+        let uid = (Auth.auth().currentUser?.uid ?? AppDelegateHelper.user.uid)!
+        let need = NeedsDbWriter.NeedItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
         return need
     }
     
@@ -98,8 +98,8 @@ class MarketplaceModel: NSObject {
         let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
         let headline = creationManager?.getHeadline()
         let desc = creationManager?.getDescription()
-        let uid = Auth.auth().currentUser?.uid ?? CoreDataGod.user.uid
-        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle, createdBy: uid, locationInfo: locData)
+        let uid = (Auth.auth().currentUser?.uid ?? CoreDataGod.user.uid)!
+        let have = HavesDbWriter.HaveItem(category: cat, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
         return have
     }
    
@@ -108,7 +108,7 @@ class MarketplaceModel: NSObject {
         let e = AppDelegateHelper.user.emails ?? []
         if !e.isEmpty {
             if let primaryEmail: Email = e.first(where: { $0.title == DefaultsKeys.taloneEmail.rawValue} )  {
-                emailString = primaryEmail.emailString
+                emailString = primaryEmail.emailString!
             }
         }
         return emailString
