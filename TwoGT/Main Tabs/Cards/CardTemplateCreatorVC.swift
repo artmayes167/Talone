@@ -115,7 +115,7 @@ class CardTemplateCreatorVC: UIViewController {
     }
     
     @IBAction func save(_ sender: UIButton) {
-        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded.isEmpty) {
+        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded.isEmpty && imageButton.image(for: .normal) == #imageLiteral(resourceName: "avatar.png"))  {
             showOkayAlert(title: "Nope", message: "Add a title and some contact information. a default template with no information already exists for you, titled \(DefaultTitles.noDataTemplate.rawValue)", handler: nil)
             return
         }

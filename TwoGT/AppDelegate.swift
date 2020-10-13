@@ -45,14 +45,14 @@ extension AppDelegate {
 }
     
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+public class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    var window: UIWindow?
+    public var window: UIWindow?
     static var cardObserver = CardReceiverObserver()
     static var linkedNeedsObserver = LinkedNeedsObserver()
     static let stateManager = StateManager()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let def = UserDefaults.standard
         if !def.bool(forKey: "vigilant") {
             def.set(false, forKey: "vigilant")
@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:] ) -> Bool {
         // Notify FB application delegate
            ApplicationDelegate.shared.application(
                 app,
@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             )
         }
 
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    public func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         //return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
         //var returnedUrl: URL?
         let handled = DynamicLinks.dynamicLinks().handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
@@ -96,19 +96,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return handled
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
+    public func applicationWillEnterForeground(_ application: UIApplication) {
         if Auth.auth().currentUser?.displayName != nil {
             AppDelegate.cardObserver.startObserving()
             AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
         }
     }
     
-    func applicationDidEnterBackground(_ application: UIApplication) {
+    public func applicationDidEnterBackground(_ application: UIApplication) {
         AppDelegate.cardObserver.stopObserving()
         AppDelegate.linkedNeedsObserver.stopObservingHaveChanges()
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
+    public func applicationWillResignActive(_ application: UIApplication) {
         do {
             BackgroundTask.run(application: application) { backgroundTask in
                 _ = try? persistentContainer.viewContext.save()
@@ -118,10 +118,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: - Core Data stack
-    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+    public lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "TwoGT")
-        container.persistentStoreDescriptions.first?.shouldInferMappingModelAutomatically = true
-        container.loadPersistentStores(completionHandler: { (_, error) in
+        container.loadPersistentStores(completionHandler: { (description, error) in
+            
             if let error = error as NSError? {
                 guard let rootVC = self.window?.rootViewController else {
                     /// log error
@@ -133,8 +133,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
                 return
             }
+//            description.shouldInferMappingModelAutomatically = true
         })
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return container
     }()
+    
+    public func saveContext() -> Bool {
+        if persistentContainer.viewContext.hasChanges {
+            persistentContainer.viewContext.insert(CoreDataGod.user)
+            do {
+                try persistentContainer.viewContext.save()
+                return true
+            }
+            catch {
+                return false
+            }
+        }
+        return true
+    }
 }

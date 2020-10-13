@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class FirebaseGeneric {
+public class FirebaseGeneric {
 
     enum GenericFirebaseError: Error {
         case noAuthUser, alreadyTaken, alreadyOwned, unauthorized, undefined
@@ -45,7 +45,7 @@ class FirebaseGeneric {
         }
     }
 
-    struct LocationInfo: Codable {
+    public struct LocationInfo: Codable {
         var city: String
         var state: String
         var country: String
@@ -78,10 +78,10 @@ class FirebaseGeneric {
     }
 }
 
-class NeedsBase: FirebaseGeneric {
+public class NeedsBase: FirebaseGeneric {
 
-    struct NeedItem: Identifiable, Codable {
-        @DocumentID var id: String? = UUID().uuidString
+    public struct NeedItem: Identifiable, Codable {
+        @DocumentID public var id: String? = UUID().uuidString
         var category: String // Inherited
         var headline: String?
         var description: String?
@@ -96,7 +96,7 @@ class NeedsBase: FirebaseGeneric {
 
 }
 
-class NeedsDbWriter: NeedsBase {
+public class NeedsDbWriter: NeedsBase {
     func addNeed(_ need: NeedItem, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
 

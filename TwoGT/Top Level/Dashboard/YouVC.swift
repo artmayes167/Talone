@@ -223,7 +223,7 @@ class AddressCell: UITableViewCell {
     
     func configure(name: String?, details: String?) {
         nameLabel.text = name == "taloneEmail" ? "secret" : name
-        detailsLabel.text = details
+        detailsLabel.text = details ?? ""
     }
 }
 

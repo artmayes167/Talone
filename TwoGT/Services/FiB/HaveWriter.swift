@@ -11,10 +11,10 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class HavesBase: FirebaseGeneric {
+public class HavesBase: FirebaseGeneric {
 
-    struct HaveItem: Codable {
-        @DocumentID var id: String? = UUID().uuidString
+    public struct HaveItem: Codable {
+        @DocumentID public var id: String? = UUID().uuidString
         var category: String
         var headline: String?
         var description: String?
@@ -28,7 +28,7 @@ class HavesBase: FirebaseGeneric {
         var locationInfo: LocationInfo
     }
 
-    struct NeedStub: Codable {
+    public struct NeedStub: Codable {
         var owner: String
         var id: String
         var createdBy: String
@@ -41,7 +41,7 @@ class HavesBase: FirebaseGeneric {
     }
 }
 
-class HavesDbWriter: HavesBase {
+public class HavesDbWriter: HavesBase {
     func addHave(_ have: HaveItem, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
 

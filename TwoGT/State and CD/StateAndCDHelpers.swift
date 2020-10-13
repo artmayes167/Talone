@@ -13,20 +13,23 @@ import FBSDKCoreKit
 import Firebase
 
 typealias CoreDataGod = AppDelegateHelper
-final class AppDelegateHelper: NSObject {
+public final class AppDelegateHelper: NSObject {
     static let user = AppDelegateHelper.getUser()
-    private static var container: NSPersistentCloudKitContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    static var managedContext: NSManagedObjectContext = container.viewContext
-    
-    class var managedContextOfAction: NSManagedObjectContext {
-        return container.newBackgroundContext()
+    private static var container: NSPersistentCloudKitContainer {
+        return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    }
+    static var managedContext: NSManagedObjectContext {
+        return container.viewContext
     }
     
+//    class var managedContextOfAction: NSManagedObjectContext {
+//        return container.newBackgroundContext()
+//    }
+    
     class func save() {
-        do {
-            try managedContext.save()
-        } catch {
-            print("!!!!!!!!_____________-Not saved.... again....")
+        let d = UIApplication.shared.delegate as! AppDelegate
+        if !d.saveContext() {
+            print("--------------Failed again.")
         }
     }
     
