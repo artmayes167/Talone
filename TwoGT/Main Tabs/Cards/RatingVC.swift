@@ -114,7 +114,7 @@ class RatingVC: UIViewController {
             }
         }
         guard let r = rating else { fatalError() }
-        guard let b = Int64(String(badLabel.text!)), let j = Int64(String(badLabel.text!)), let g = Int64(String(badLabel.text!)) else { return }
+        guard let b = Int64(String(badLabel.text!)), let j = Int64(String(justLabel.text!)), let g = Int64(String(goodLabel.text!)) else { return }
         r.bad = b
         r.justSo = j
         r.good = g

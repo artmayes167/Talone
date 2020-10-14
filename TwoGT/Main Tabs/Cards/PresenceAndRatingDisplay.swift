@@ -16,6 +16,7 @@ class PresenceAndRatingDisplay: UIView {
     var contact: Contact? {
         didSet {
             if let c = contact {
+                CoreDataGod.managedContext.refresh(c, mergeChanges: true)
                 configureWith(contact: c)
             }
         }

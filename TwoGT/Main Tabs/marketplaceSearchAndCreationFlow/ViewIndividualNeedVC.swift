@@ -53,7 +53,7 @@ class ViewIndividualNeedVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: Any) {
-        if let _ = CoreDataGod.user.cardTemplates, let n = needItem {
+        if let n = needItem {
             showCompleteAndSendCardHelper(needItem: n)
         } else {
             showOkayAlert(title: "hmm".taloneCased(), message: "you don't seem to have created any templates yet, or else there's a developer issue.", handler: nil)

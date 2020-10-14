@@ -64,18 +64,11 @@ class ViewIndividualHaveVC: UIViewController {
     }
 
     @IBAction func sendCard(_ sender: Any) {
-        
-        let fetchRequest: NSFetchRequest<CardTemplate> = CardTemplate.fetchRequest()
-        do {
-            let u: [CardTemplate] = try CoreDataGod.managedContext.fetch(fetchRequest)
-            if !u.isEmpty {
-                showCompleteAndSendCardHelper(haveItem: haveItem)
-                return
-            }
-        } catch {
-          fatalError()
+        if let h = haveItem {
+            showCompleteAndSendCardHelper(haveItem: h)
+        } else {
+            showOkayAlert(title: "hmm".taloneCased(), message: "you don't seem to have created any templates yet, or else there's a developer issue.", handler: nil)
         }
-        showOkayAlert(title: "hmm".taloneCased(), message: "you don't seem to have created any templates yet.", handler: nil)
     }
 
     @IBAction func seeCard(_ sender: Any) { }

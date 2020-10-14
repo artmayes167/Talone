@@ -54,16 +54,11 @@ class AddHaveToWatchModel: NSObject {
             if error == nil {
                 // Create CD Have and HaveItem
                 _ = Have.createHave(item: h)
-                do {
-                    CoreDataGod.save()
-                    DispatchQueue.main.async {
-                        controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                            // TODO: - Create unwind segue to my needs
-                            controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
-                        }
+                DispatchQueue.main.async {
+                    controller.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
+                        // TODO: - Create unwind segue to my needs
+                        controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
                     }
-                } catch {
-                    print("Failed to save in AddHaveToWatchVC")
                 }
 
             } else {

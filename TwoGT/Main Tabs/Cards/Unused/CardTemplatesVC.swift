@@ -45,11 +45,11 @@ class CardTemplatesVC: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toMyTemplate" {
-            guard let vc = segue.destination as? MyTemplateVC, let index = sender as? IndexPath else { fatalError() }
-            let template = cardTemplates[index.item]
-            vc.template = template
-        }
+//        if segue.identifier == "toMyTemplate" {
+//            guard let vc = segue.destination as? MyTemplateVC, let index = sender as? IndexPath else { fatalError() }
+//            let template = cardTemplates[index.item]
+//            vc.template = template
+//        }
     }
     
 

@@ -70,7 +70,7 @@ public extension CardTemplate {
         userHandle = AppDelegateHelper.user.handle
     }
     
-    class func create(cardCategory title: String, image: UIImage?) -> CardTemplate {
+    class func create(cardCategory title: String, image: UIImage?) -> Bool {
         var card: CardTemplate?
         if let temps = CoreDataGod.user.cardTemplates, !temps.isEmpty {
             let z = temps.filter({ $0.templateTitle == title })
@@ -85,11 +85,10 @@ public extension CardTemplate {
             card = CardTemplate(entity: entity, insertInto: CoreDataGod.managedContext)
             card!.templateTitle = title
             card!.image = image
-            CoreDataGod.managedContext.refresh(card!, mergeChanges: true)
             CoreDataGod.save()
         }
         
-        return card!
+       return card != nil
     }
     
     func allAddresses() -> [NSManagedObject] {
@@ -110,6 +109,7 @@ public extension CardTemplateInstance {
      */
     class func create(toHandle: String, card c: CardTemplate, message: String = "", personalNotes: String = "") -> CardTemplateInstance {
 
+        CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         let e = NSEntityDescription.entity(forEntityName: "CardTemplateInstance", in: CoreDataGod.managedContext)!
         let instance = CardTemplateInstance(entity: e, insertInto: CoreDataGod.managedContext)
         
@@ -171,6 +171,7 @@ public struct CodableCardTemplateInstance: Codable {
     }
     
     init(instance: CardTemplateInstance) {
+        CoreDataGod.managedContext.refresh(instance, mergeChanges: true)
         receiverUserHandle = instance.receiverUserHandle!
         uid = instance.uid!
         if let i = instance.image, let data = try? i.heicData(compressionQuality: 0.5) {
@@ -313,7 +314,7 @@ public extension Address {  // :)
     
     
     func displayName() -> String {
-        return String(format: street1! + city! + ", " +  state!)
+        return String(format: street1! + " " + city! + ", " +  state!)
     }
     
     /// To someone else
@@ -454,7 +455,6 @@ public extension Need {
 
 public extension Have {
     class func createHave(item: HavesBase.HaveItem) -> Have {
-
         let entity = NSEntityDescription.entity(forEntityName: "Have", in: CoreDataGod.managedContext)!
         let newHave = Have(entity: entity, insertInto: CoreDataGod.managedContext)
         
@@ -498,7 +498,7 @@ public extension Have {
                 fatalError()
             }
         }
-        
+        CoreDataGod.managedContext.refreshAllObjects()
         CoreDataGod.save()
         return newHave
     }

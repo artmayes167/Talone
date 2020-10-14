@@ -115,7 +115,8 @@ class CompleteAndSendCardVC: UIViewController {
     private func updateUI() {
         let handle = getRecipientHandle()
         headerTitleLabel.text = "new card to \(handle)"
-        templateTextField.text = contact?.sentCards?.first?.templateTitle ?? CoreDataGod.user.cardTemplates!.first!.templateTitle
+//        templateTextField.text =
+//            contact?.sentCards?.first?.templateTitle ?? CoreDataGod.user.cardTemplates!.first!.templateTitle
     }
     
     @IBAction func sendCard(_ sender: UIButton) {

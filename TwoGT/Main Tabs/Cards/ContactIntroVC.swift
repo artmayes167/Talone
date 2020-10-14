@@ -31,7 +31,7 @@ class ContactIntroVC: UIViewController {
     private func populateUI() {
         guard let c = contact else { return }
         
-        headerView.setTitleText("contact with \(c.contactHandle)")
+        headerView.setTitleText("contact with " + c.contactHandle!)
         
         if let t = c.receivedCards?.first {
             theirCard = t
@@ -71,7 +71,7 @@ class ContactIntroVC: UIViewController {
         case "see your card".taloneCased():
             performSegue(withIdentifier: "toMyContact", sender: nil)
         case "send new card".taloneCased():
-            showCompleteAndSendCardHelper(card: theirCard)
+            showCompleteAndSendCardHelper(contact: contact)
         default:
             fatalError()
         }

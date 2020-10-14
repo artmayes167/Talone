@@ -20,6 +20,7 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var templateTitleLabel: UILabel!
     @IBOutlet weak var notesView: UITextView!
     @IBOutlet weak var notesTitleLabel: UILabel?
+    @IBOutlet weak var messageTitleLabel: UILabel?
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
@@ -103,13 +104,6 @@ class ViewContactVC: UIViewController {
         handleLabel.text = c.userHandle
         templateTitleLabel.text = c.templateTitle
         messageTextView.text = c.message
-        if notesView.isEditable {
-            notesView.isHidden = false
-            notesTitleLabel?.isHidden = false
-        } else {
-            notesView.isHidden = true
-            notesTitleLabel?.isHidden = true
-        }
         
         let image = c.image
         if let imageFromStorage = image {
@@ -190,6 +184,12 @@ class TheirContactVC: ViewContactVC {
             }
         }
     }
+    
+    override func updateUIFor(card c: CardTemplateInstance) {
+        notesView.isHidden = false
+        notesTitleLabel?.isHidden = false
+        super.updateUIFor(card: c)
+    }
 }
 
 class MyContactVC: ViewContactVC {
@@ -202,8 +202,6 @@ class MyContactVC: ViewContactVC {
     
     override func updateUI() {
         if let m = myCard {
-            messageTextView.isEditable = true
-            notesView.isEditable = false
             updateUIFor(card: m)
         }
     }
@@ -215,7 +213,15 @@ class MyContactVC: ViewContactVC {
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
-        showCompleteAndSendCardHelper(card: myCard)
+        showCompleteAndSendCardHelper(contact: contact, card: myCard)
+    }
+    
+    override func updateUIFor(card c: CardTemplateInstance) {
+        notesView.isHidden = true
+        notesTitleLabel?.isHidden = true
+        messageTextView.isHidden = true
+        messageTitleLabel?.isHidden = true
+        super.updateUIFor(card: c)
     }
     
     // MARK: - Navigation
@@ -237,18 +243,18 @@ class MyTemplateVC: ViewContactVC {
         
     }
     
-    var template: CardTemplate? {
+    var instance: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
     
     override func updateUI() {
-        if let m = template {
+        if let m = instance {
             updateUIFor(template: m)
         }
     }
     
     override func setCardData() {
-        if let c = template {
+        if let c = instance {
             cardAddresses = c.allAddresses()
         }
     }
@@ -256,7 +262,7 @@ class MyTemplateVC: ViewContactVC {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toEditTemplate" {
             guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
-            vc.configure(card: template)
+            vc.configure(contact: nil, card: instance, haveItem: nil, needItem: nil)
         }
     }
 }

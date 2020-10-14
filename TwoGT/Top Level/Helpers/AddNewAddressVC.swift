@@ -40,7 +40,7 @@ class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegat
     }
     
     func addAddress() {
-        guard let t = labelTextField.text?.lowercased().pure(), let s1 = street1TextField.text?.pure(), let zip = zipTextField.text?.pure() else {
+        guard let t = labelTextField.text?.pure(), let s1 = street1TextField.text?.pure(), let zip = zipTextField.text?.pure() else {
             showOkayAlert(title: "nope".taloneCased(), message: "there is not enough information here to qualify as a real address.  you can literally type whatever you want, and other people will see it, if you send it to them. your choice, obviously. but if you want to save it, you're going to have to do better than this.".taloneCased(), handler: nil)
             return
         }
@@ -96,14 +96,15 @@ class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegat
     var initialContentInset: UIEdgeInsets = UIEdgeInsets()
    @objc func keyboardWillShow(notification: NSNotification) {
     if let n = notification.userInfo?.description { print(n) }
+    if initialContentInset == UIEdgeInsets() {
+        initialContentInset = self.scrollView.contentInset
+    }
        let userInfo = notification.userInfo!
        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         var contentInset = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 20
-        if initialContentInset == UIEdgeInsets() {
-            initialContentInset = self.scrollView.contentInset
-        }
+        contentInset.bottom = keyboardFrame.size.height + 50
+        
        
         scrollView.contentInset = contentInset
    }

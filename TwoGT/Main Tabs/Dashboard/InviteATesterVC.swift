@@ -47,7 +47,7 @@ final class InviteATesterVC: UIViewController {
         
         let comments = personalNotesTextView.text.pure()
         let str = String(format: "Invitee email: %@ \n Invitee name: %@ \n Comments: %@", e, n, comments)
-        launchOwnerEmail(subject: "\(AppDelegateHelper.user.handle)) Inviting A Tester!", body: str)
+        launchOwnerEmail(subject: AppDelegateHelper.user.handle! + "is inviting a tester!", body: str)
     }
 }
 

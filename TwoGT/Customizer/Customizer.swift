@@ -141,15 +141,16 @@ extension Customizer {
         }
     }
     
+     // MARK: - TableView cells
     fileprivate func configure(tableCell: UITableViewCell) {
         if let v = tableCell as? ParentAddressTableViewCell {
-            v.contentView.backgroundColor = UIColor.hex("CEDCCF")
+            v.contentView.backgroundColor = UIColor.hex("999999").withAlphaComponent(0.77)
         }
         else if let v = tableCell as? ParentEmailTableViewCell {
-            v.contentView.backgroundColor = UIColor.hex("BECBE3")
+            v.contentView.backgroundColor = UIColor.hex("BECBE3").withAlphaComponent(0.77)
         }
         else if let v = tableCell as? ParentPhoneTableViewCell {
-            v.contentView.backgroundColor = UIColor.hex("DBD9DE")
+            v.contentView.backgroundColor = UIColor.hex("997BC5").withAlphaComponent(0.77)
         }
     }
 }

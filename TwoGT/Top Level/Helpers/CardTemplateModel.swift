@@ -11,18 +11,14 @@ import CoreData
 /// The data model used to populate the table view on appearance
 struct CardTemplateModel {
     
-    private var card: CardTemplate? {
+    private var card: CardTemplateInstance? {
         didSet {
             configure()
         }
     }
-    private var editing: Bool {
-        get {
-            return card != nil
-        }
-    }
+    private var editing: Bool = true
     
-    mutating func set(card: CardTemplate?) {
+    mutating func set(card: CardTemplateInstance?) {
         self.card = card
     }
     

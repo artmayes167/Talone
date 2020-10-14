@@ -20,19 +20,83 @@ class CardTemplateCreatorVC: UIViewController {
     @IBOutlet weak var availableTableView: UITableView!
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
-    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var titleTextField: UITextField?
     @IBOutlet weak var plusImage: UIImageView!
-    
+    @IBOutlet weak var messageTextView: UITextView?
     
      // MARK: - Data
-    private var card: CardTemplate?
-    private var canEditTitle: Bool {
-        return card == nil
-    }
+//    private var card: CardTemplate?
+//    private var canEditTitle: Bool {
+//        return true
+//    }
     private var potentialImage: UIImage?
+    private var contact: Contact? {
+        didSet {
+            if let c = contact, cardInstance == nil {
+                cardInstance = c.sentCards?.first
+            }
+        }
+    }
     
-    func configure(card: CardTemplate?) {
-        self.card = card
+    private var haveItem: HavesBase.HaveItem? {
+        didSet {
+            if let h = haveItem {
+                /// see if there's a contact associated with the haveItem
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == h.owner }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                }
+                contact = Contact.create(newPersonHandle: h.owner, newPersonUid: h.createdBy)
+            }
+        }
+    }
+    private var needItem: NeedsBase.NeedItem? {
+        didSet {
+            if let n = needItem {
+                /// see if there's a contact associated with the haveItem
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == n.owner }) {
+                    if !c.isEmpty {
+                        contact = c.first
+                        return
+                    }
+                }
+                contact = Contact.create(newPersonHandle: n.owner, newPersonUid: n.createdBy)
+            }
+        }
+    }
+    private var cardInstance: CardTemplateInstance? {
+        didSet {
+            
+            guard let i = cardInstance else { return }
+            CoreDataGod.managedContext.refresh(i, mergeChanges: true)
+            if contact == nil {
+                // check if a received card, and get
+                if let c = CoreDataGod.user.contacts?.filter ({ $0.contactUid == i.uid }), !c.isEmpty  {
+                    contact = c.first
+                    return
+                    // check if a sent card, and get
+                } else if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == i.receiverUserHandle }), !c.isEmpty {
+                    contact = c.first
+                    return
+                } else {
+                    fatalError()
+                }
+            }
+        }
+    }
+    
+//    func configure(card: CardTemplate?) {
+//        self.card = card
+//    }
+    
+    func configure(contact: Contact?, card: CardTemplateInstance?, haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
+        if (contact == nil) && (card == nil) && (haveItem == nil) && (needItem == nil) { fatalError() }
+        self.contact = contact
+        self.cardInstance = card
+        self.haveItem = haveItem
+        self.needItem = needItem
     }
     
      // MARK: - View Life Cycle
@@ -50,11 +114,8 @@ class CardTemplateCreatorVC: UIViewController {
         }
         
         handleLabel.text = AppDelegateHelper.user.handle
-        
-        
-        if let c = card {
-            model.set(card: c)
-            
+        model.set(card: cardInstance)
+        if let c = cardInstance {
             if let image = c.image {
                 /// image has been previously added to template
                 potentialImage = image.af.imageAspectScaled(toFit: imageButton.bounds.size)
@@ -63,9 +124,7 @@ class CardTemplateCreatorVC: UIViewController {
                 imageButton.isSelected = true
                 imageButton.isEnabled = true
             }
-            titleTextField.text = c.templateTitle
-        } else {
-            model.set(card: nil)
+            titleTextField?.text = c.templateTitle
         }
         var contentInset: UIEdgeInsets = self.availableTableView.contentInset
         contentInset.bottom = contentInset.bottom + 50
@@ -102,7 +161,7 @@ class CardTemplateCreatorVC: UIViewController {
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(potentialImage, for: .normal)
             } else {
-                showOkayOrCancelAlert(title: "hmm", message: "no images have been set. Would you like to add one?") { (_) in
+                showOkayOrCancelAlert(title: "hmm", message: "no images have been set. would you like to add one?") { (_) in
                     self.changeImage(sender)
                 } cancelHandler: { (_) in }
                 imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
@@ -110,18 +169,17 @@ class CardTemplateCreatorVC: UIViewController {
         }
     }
     
+    @IBAction func blockUser(_ sender: UIButton) {
+        
+    }
+    
     @IBAction func save(_ sender: UIButton) {
-        if (titleTextField.text?.isEmpty ?? true) || (model.allAdded.isEmpty && imageButton.image(for: .normal) == #imageLiteral(resourceName: "avatar.png"))  {
-            showOkayAlert(title: "Nope", message: "Add a title and some contact information. a default template with no information already exists for you, titled \(DefaultTitles.noDataTemplate.rawValue)", handler: nil)
-            return
-        }
         
         /// Editing
-        if let c = card {
+        if let c = cardInstance {
             
-            c.templateTitle = titleTextField.text!.pure()
-            c.image = potentialImage
-            
+            c.templateTitle = "hi"
+            c.image = potentialImage ?? imageButton.image(for: .normal)
             let all = model.allAdded
             
             // remove addresses from object that have been removed
@@ -149,35 +207,60 @@ class CardTemplateCreatorVC: UIViewController {
                     }
                 }
             }
-            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
+            CoreDataGod.save()
         } else { /// Creating
-            let c = CardTemplate.create(cardCategory: titleTextField.text!.pure(), image: potentialImage)
-            let all = model.allAdded
-            for x in all {
-                if let a = x as? Address {
-                    c.addToAddresses(a)
-                } else if let p = x as? PhoneNumber {
-                    c.addToPhoneNumbers(p)
-                } else if let e = x as? Email {
-                    c.addToEmails(e)
+            let handle = contact!.contactHandle!
+            let success =  CardTemplate.create(cardCategory: handle, image: potentialImage)
+            if success {
+                if let c = CoreDataGod.user.cardTemplates?.first(where: { $0.templateTitle == handle }) {
+                    let all = model.allAdded
+                    for x in all {
+                        if let a = x as? Address {
+                            c.addToAddresses(a)
+                        } else if let p = x as? PhoneNumber {
+                            c.addToPhoneNumbers(p)
+                        } else if let e = x as? Email {
+                            c.addToEmails(e)
+                        }
+                    }
+                    cardInstance = CardTemplateInstance.create(toHandle: handle, card: c)
+                    CoreDataGod.managedContext.refresh(cardInstance!, mergeChanges: true)
                 }
             }
-            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         }
-        CoreDataGod.save()
-        view.makeToast("Card created!".taloneCased()) { [weak self] _ in
-            self?.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
+        sendCard()
+    }
+    
+    private func sendCard() {
+        let data = GateKeeper().buildCodableInstanceAndEncode(instance: cardInstance!)
+        // TODO: Move this logic to another utility class.
+        let fibCard = CardsBase.FiBCardItem(createdBy: CoreDataGod.user.uid!, createdFor: contact!.contactUid!, payload: data.base64EncodedString(), owner: CoreDataGod.user.handle!)
+        
+        CardsDbWriter().addCard(fibCard) { [weak self] error in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                self?.view.makeToast("Successfully sent a card to " + (self?.contact!.contactHandle!)!) { [weak self] _ in
+                    if let nav = self?.navigationController {
+                        nav.popViewController(animated: true)
+                    } else {
+                        self?.dismiss(animated: true, completion: nil)
+                    }
+                }
+            }
         }
     }
 }
 
-extension CardTemplateCreatorVC {
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if !canEditTitle {
-            showOkayAlert(title: "Nope".taloneCased(), message: "you're stuck with this title, until I make it changeable. who's got the power, now, chump?".taloneCased(), handler: nil)
-            return false
-        }
-        return true
+extension CardTemplateCreatorVC:  UITextViewDelegate {
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        showTextViewHelper(textView: messageTextView!, displayName: "message", initialText: messageTextView!.text)
+        return false
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
     }
 }
 

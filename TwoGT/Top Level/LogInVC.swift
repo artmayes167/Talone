@@ -93,6 +93,10 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                        }
                    }
                }
+           } else {
+            self.showOkayAlert(title: "nope", message: "This is probably a simulator error. check device capabilities before hitting okay.") { (_) in
+                self.authenticationWithTouchID(completion: completion)
+            }
            }
        }
 
