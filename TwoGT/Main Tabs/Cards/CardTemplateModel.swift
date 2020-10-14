@@ -23,10 +23,7 @@ struct CardTemplateModel {
     }
     
     mutating func set(card: CardTemplate?) {
-        if let c = card {
-            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
-            self.card = c
-        }
+        self.card = card
     }
     
      // MARK: - PRIVATE PARTS (look away)
@@ -35,16 +32,11 @@ struct CardTemplateModel {
         get {
             var adds: [Address] = []
             
-            let fetchRequest: NSFetchRequest<Address> = Address.fetchRequest()
-            do {
-                let u: [Address] = try CoreDataGod.managedContext.fetch(fetchRequest)
-                if !u.isEmpty {
-                    guard let c = card else { return u }
-                    let applicableAddresses = u.filter { !($0.templates?.contains(c) ?? false) }
-                    adds = applicableAddresses.sorted { return $0.title! < $1.title! }
-                }
-            } catch {
-                fatalError()
+            let u: [Address] = CoreDataGod.user.addresses ?? []
+            if !u.isEmpty {
+                guard let c = card else { return u }
+                let applicableAddresses = u.filter { !($0.templates?.contains(c) ?? false) }
+                adds = applicableAddresses.sorted { return $0.title! < $1.title! }
             }
             return adds
         }
@@ -54,16 +46,11 @@ struct CardTemplateModel {
         get {
             var phones: [PhoneNumber] = []
             
-            let fetchRequest: NSFetchRequest<PhoneNumber> = PhoneNumber.fetchRequest()
-            do {
-                let u: [PhoneNumber] = try CoreDataGod.managedContext.fetch(fetchRequest)
-                if !u.isEmpty {
-                    guard let c = card else { return u }
-                    let applicablePhones = u.filter { !($0.templates?.contains(c) ?? false) }
-                    phones = applicablePhones.sorted { return $0.title! < $1.title! }
-                }
-            } catch {
-                fatalError()
+            let u: [PhoneNumber] = CoreDataGod.user.phoneNumbers ?? []
+            if !u.isEmpty {
+                guard let c = card else { return u }
+                let applicablePhones = u.filter { !($0.templates?.contains(c) ?? false) }
+                phones = applicablePhones.sorted { return $0.title! < $1.title! }
             }
             return phones
         }
@@ -73,16 +60,11 @@ struct CardTemplateModel {
         get {
             var emails: [Email] = []
             
-            let fetchRequest: NSFetchRequest<Email> = Email.fetchRequest()
-            do {
-                let u: [Email] = try CoreDataGod.managedContext.fetch(fetchRequest)
-                if !u.isEmpty {
-                    guard let c = card else { return u }
-                    let applicableEmails = u.filter { !($0.templates?.contains(c) ?? false) }
-                    emails = applicableEmails.sorted { return $0.title! < $1.title! }
-                }
-            } catch {
-                fatalError()
+            let u: [Email] = CoreDataGod.user.emails ?? []
+            if !u.isEmpty {
+                guard let c = card else { return u }
+                let applicableEmails = u.filter { !($0.templates?.contains(c) ?? false) }
+                emails = applicableEmails.sorted { return $0.title! < $1.title! }
             }
             return emails
         }

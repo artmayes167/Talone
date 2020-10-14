@@ -85,7 +85,7 @@ public extension CardTemplate {
             card = CardTemplate(entity: entity, insertInto: CoreDataGod.managedContext)
             card!.templateTitle = title
             card!.image = image
-            
+            CoreDataGod.managedContext.refresh(card!, mergeChanges: true)
             CoreDataGod.save()
         }
         
@@ -211,6 +211,20 @@ public struct CodableCardTemplateInstance: Codable {
         emails = emailBook
         
         image = try? instance.image?.heicData(compressionQuality: 0.5)
+    }
+}
+
+public extension ImageInfo {
+    class func create(withHandle handle: String?, image: UIImage, named: String?, url: String) {
+        let entity = NSEntityDescription.entity(forEntityName: "ImageInfo", in: CoreDataGod.managedContext)!
+        let imageInfo = ImageInfo(entity: entity, insertInto: CoreDataGod.managedContext)
+        imageInfo.handle = handle ?? CoreDataGod.user.handle
+        imageInfo.image = image
+        imageInfo.imageName = named ?? ""
+        imageInfo.imageURLString = url
+        
+        CoreDataGod.managedContext.refresh(imageInfo, mergeChanges: true)
+        CoreDataGod.save()
     }
 }
 

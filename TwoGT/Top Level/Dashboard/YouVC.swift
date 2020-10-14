@@ -241,8 +241,8 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }
         
-        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
-        CoreDataImageHelper.shared.saveImage(data: aspectScaledToFitImage)
+        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 150.0, height: 150.0))
+        CoreDataImageHelper.shared.saveImage(aspectScaledToFitImage, fileName: nil)
         showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
         
         if let im: [ImageInfo] = CoreDataImageHelper.shared.fetchAllImages() {

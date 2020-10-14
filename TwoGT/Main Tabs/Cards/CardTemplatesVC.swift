@@ -16,7 +16,7 @@ class CardTemplatesVC: UIViewController {
         get {
             var cards: [CardTemplate] = []
 //            AppDelegateHelper.managedContext.refreshAllObjects()
-            let c: [CardTemplate] = AppDelegateHelper.user.cardTemplates ?? [] // [Card]
+            let c: [CardTemplate] = CoreDataGod.user.cardTemplates ?? [] // [Card]
             
             /// Only templates, not instances
             if !c.isEmpty {

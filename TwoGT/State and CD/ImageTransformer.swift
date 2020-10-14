@@ -28,11 +28,13 @@
 
 import Foundation
 import UIKit
+import CoreData
 
+@objc(ImageTransformer)
 public class ImageTransformer: ValueTransformer {
 
     public override class func transformedValueClass() -> AnyClass {
-    return NSData.self
+        return NSData.self
   }
 
     public override class func allowsReverseTransformation() -> Bool {

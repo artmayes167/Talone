@@ -114,3 +114,14 @@ class BackgroundTask {
         identifier = UIBackgroundTaskIdentifier.invalid
     }
 }
+
+//extension NSManagedObjectID: FetchSource {
+//
+// override func valueForUndefinedKey() {
+//
+//    //Attempt to unwrap the underlying object from the moc
+//    let mocObject: NSManagedObject = CoreDataGod.managedContext.object(id: self)
+//
+//        return [object valueForKey:key];
+//    }
+//}

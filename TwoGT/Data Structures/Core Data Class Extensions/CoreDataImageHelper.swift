@@ -12,11 +12,8 @@ import CoreData
 class CoreDataImageHelper: NSObject {
     static let shared = CoreDataImageHelper()
     
-    func saveImage(data: UIImage) {
-        let imageInfo = ImageInfo(context: CoreDataGod.managedContext)
-        imageInfo.image = data
-        imageInfo.handle = CoreDataGod.user.handle
-        CoreDataGod.save()
+    func saveImage(_ image: UIImage, fileName: String?, url: String = "") {
+        ImageInfo.create(withHandle: nil, image: image, named: fileName, url: url)
     }
     
     func deleteAllImages() {

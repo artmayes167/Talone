@@ -43,13 +43,10 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.estimatedRowHeight = 62
         
         let images = CoreDataImageHelper.shared.fetchAllImages()
+        imageButton.isEnabled = true
+        plusImage.isHidden = false
         if let i = images?.first?.image {
-            imageButton.isEnabled = true
-            plusImage.isHidden = false
             potentialImage = i.af.imageAspectScaled(toFit: imageButton.bounds.size)
-        } else {
-            imageButton.isEnabled = false
-            plusImage.isHidden = true
         }
         
         handleLabel.text = AppDelegateHelper.user.handle
@@ -105,13 +102,12 @@ class CardTemplateCreatorVC: UIViewController {
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(potentialImage, for: .normal)
             } else {
-                showOkayOrCancelAlert(title: "hmm".taloneCased(), message: "no images have been set. Would you like to add one?".taloneCased()) { (_) in
-                    self.performSegue(withIdentifier: "unwindToDashboard", sender: nil)
+                showOkayOrCancelAlert(title: "hmm", message: "no images have been set. Would you like to add one?") { (_) in
+                    self.changeImage(sender)
                 } cancelHandler: { (_) in }
                 imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
             }
         }
-        
     }
     
     @IBAction func save(_ sender: UIButton) {
@@ -153,6 +149,7 @@ class CardTemplateCreatorVC: UIViewController {
                     }
                 }
             }
+            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         } else { /// Creating
             let c = CardTemplate.create(cardCategory: titleTextField.text!.pure(), image: potentialImage)
             let all = model.allAdded
@@ -165,8 +162,8 @@ class CardTemplateCreatorVC: UIViewController {
                     c.addToEmails(e)
                 }
             }
+            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         }
-        
         CoreDataGod.save()
         view.makeToast("Card created!".taloneCased()) { [weak self] _ in
             self?.performSegue(withIdentifier: "unwindToTemplates", sender: nil)
@@ -299,3 +296,33 @@ extension CardTemplateCreatorVC: UITableViewDragDelegate, UITableViewDropDelegat
     }
 }
 
+extension CardTemplateCreatorVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func changeImage(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let userPickedImage = info[.editedImage] as? UIImage else { return }
+        
+        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 150.0, height: 150.0))
+        CoreDataImageHelper.shared.saveImage(aspectScaledToFitImage, fileName: "")
+        showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
+        
+        if let im: [ImageInfo] = CoreDataImageHelper.shared.fetchAllImages() {
+            if let imageFromStorage = im.last?.image {
+                let i = imageFromStorage.af.imageAspectScaled(toFit: imageButton.bounds.size)
+                imageButton.imageView?.contentMode = .scaleAspectFill
+                imageButton.setImage(i, for: .normal)
+            }
+            
+        } else {
+            view.makeToast("Image saving and rerendering failed")
+            imageButton.setImage(userPickedImage, for: .normal)
+        }
+        picker.dismiss(animated: true)
+    }
+}

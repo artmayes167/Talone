@@ -77,9 +77,9 @@ class WarehouseMainVC: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyHaves" {
-            myHavesDisplay = segue.destination as! MyHavesSearchDisplayVC 
+            myHavesDisplay = segue.destination as? MyHavesSearchDisplayVC
         } else if segue.identifier == "toMyNeeds" {
-            myNeedsDisplay = segue.destination as! MyNeedsSearchDisplayVC
+            myNeedsDisplay = segue.destination as? MyNeedsSearchDisplayVC
         }
     }
 

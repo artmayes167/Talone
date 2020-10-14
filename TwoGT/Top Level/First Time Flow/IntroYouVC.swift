@@ -55,8 +55,8 @@ class IntroYouVC: YouVC {
                     print(url)
                     do {
                         if let d = response.data, let dataAsImage = UIImage(data: d) {
-                            CoreDataImageHelper.shared.deleteAllImages()
-                            CoreDataImageHelper.shared.saveImage(data: dataAsImage)
+                            //CoreDataImageHelper.shared.deleteAllImages()
+                            CoreDataImageHelper.shared.saveImage(dataAsImage, fileName: "", url: try! String(contentsOf: url))
                             self.setState()
                             self.showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
                             
@@ -104,7 +104,6 @@ class IntroYouVC: YouVC {
                 }
             }
             let _ = CardTemplate.create(cardCategory: "my first template", image: imageData)
-            CoreDataGod.managedContext.refreshAllObjects()
             if let temps: [CardTemplate] = CoreDataGod.user.cardTemplates {
                 let fTemps = temps.filter { $0.templateTitle == "my first template" }
                 if !fTemps.isEmpty {

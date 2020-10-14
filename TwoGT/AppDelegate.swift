@@ -119,7 +119,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data stack
     public lazy var persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "TwoGT")
+        let container = NSPersistentCloudKitContainer(name: "Talone")
         container.loadPersistentStores(completionHandler: { (description, error) in
             
             if let error = error as NSError? {
