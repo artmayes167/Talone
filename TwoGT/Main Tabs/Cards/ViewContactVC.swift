@@ -24,9 +24,9 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
-    @IBAction func manageDataShare(_ sender: UIButton) {
-        sendCard()
-    }
+//    @IBAction func manageDataShare(_ sender: UIButton) {
+//        sendCard()
+//    }
     
     var cardAddresses: [NSManagedObject] = [] {
         didSet {
@@ -50,7 +50,6 @@ class ViewContactVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setCardData()
         updateUI()
     }
     
@@ -92,15 +91,15 @@ class ViewContactVC: UIViewController {
             }
         }
         cardAddresses = allAdded
-        updateUI()
+        tableView.reloadData()
     }
     
     func setCardData() {}
     func saveNotes(_ notes: String) {}
-    func updateUI() {}
     func sendCard() {}
     
     func updateUIFor(card c: CardTemplateInstance) {
+        CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         handleLabel.text = c.userHandle
         templateTitleLabel.text = c.templateTitle
         messageTextView.text = c.message
@@ -117,7 +116,8 @@ class ViewContactVC: UIViewController {
         view.layoutIfNeeded()
     }
     
-    func updateUIFor(template c: CardTemplate) {
+    func updateUIFor(template c: CardTemplateInstance) {
+        CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         handleLabel.text = c.userHandle
         templateTitleLabel.text = c.templateTitle
         
@@ -144,32 +144,48 @@ class TheirContactVC: ViewContactVC {
        }
    }
     
-    var theirCard: CardTemplateInstance? {
+    private var theirCard: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
     
-    var contact: Contact?
+    private var contact: Contact?
+    
+    func set(contact: Contact) {
+        CoreDataGod.managedContext.refresh(contact, mergeChanges: true)
+        self.contact = contact
+        if let received = contact.receivedCards {
+            if let r = received.last {
+                CoreDataGod.managedContext.refresh(r, mergeChanges: true)
+                theirCard = r
+            }
+        }
+    }
     
     override func setCardData() {
         if let c = theirCard {
             setCardAddresses(card: c)
         }
     }
-        
+    
+    // called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
-        if let t = theirCard {
+        if let c = contact {
+            set(contact: c)
             messageTextView.isEditable = false
             notesView.isEditable = true
-            notesView.text = t.personalNotes
-            updateUIFor(card: t)
+            notesView.text = theirCard!.personalNotes
+            updateUIFor(card: theirCard!)
         }
     }
     
     override func saveNotes(_ notes: String) {
-        theirCard!.personalNotes = notes
+        guard let t = theirCard else { fatalError() }
+        t.personalNotes = notes
         DispatchQueue.main.async {
+            CoreDataGod.managedContext.refresh(t, mergeChanges: true)
             CoreDataGod.save()
             self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
+            self.updateUI()
         }
     }
     
@@ -194,15 +210,28 @@ class TheirContactVC: ViewContactVC {
 
 class MyContactVC: ViewContactVC {
     
-    var myCard: CardTemplateInstance? {
+    private var myCard: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
     
-    var contact: Contact?
+    private var contact: Contact?
     
+    func set(contact: Contact) {
+        CoreDataGod.managedContext.refresh(contact, mergeChanges: true)
+        self.contact = contact
+        if let sent = contact.sentCards {
+            if let s = sent.last {
+                CoreDataGod.managedContext.refresh(s, mergeChanges: true)
+                myCard = s
+            }
+        }
+    }
+    
+    // called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
-        if let m = myCard {
-            updateUIFor(card: m)
+        if let c = contact {
+            set(contact: c)
+            updateUIFor(card: myCard!)
         }
     }
     
@@ -217,6 +246,7 @@ class MyContactVC: ViewContactVC {
     }
     
     override func updateUIFor(card c: CardTemplateInstance) {
+        CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         notesView.isHidden = true
         notesTitleLabel?.isHidden = true
         messageTextView.isHidden = true
@@ -239,14 +269,11 @@ class MyContactVC: ViewContactVC {
 
 class MyTemplateVC: ViewContactVC {
     
-    @IBAction func editCard(_ sender: UIButton) {
-        
-    }
-    
     var instance: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
     
+    // called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
         if let m = instance {
             updateUIFor(template: m)

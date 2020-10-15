@@ -43,7 +43,7 @@ class RatingVC: UIViewController {
         }
     }
     
-    func updateUI() {
+    override func updateUI() {
         if let r = rating {
             if isViewLoaded {
                 goodCount = Int(r.good)

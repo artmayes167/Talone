@@ -112,7 +112,7 @@ class CompleteAndSendCardVC: UIViewController {
         updateUI()
     }
     
-    private func updateUI() {
+    override func updateUI() {
         let handle = getRecipientHandle()
         headerTitleLabel.text = "new card to \(handle)"
 //        templateTextField.text =

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class AddNewAddressVC: UIViewController, UIAdaptivePresentationControllerDelegate {
+class AddNewAddressVC: UIViewController {
     
      // MARK: - IBOutlets
     

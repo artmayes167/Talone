@@ -18,7 +18,7 @@ struct CardTemplateModel {
     }
     private var editing: Bool = true
     
-    mutating func set(card: CardTemplateInstance?) {
+    mutating func set(card: CardTemplateInstance) {
         self.card = card
     }
     
@@ -107,12 +107,14 @@ struct CardTemplateModel {
     
     
     private mutating func configure() {
+        
         allPossibles = addresses + phoneNumbers + emails
         if let c = card {
             if let adds = c.addresses {
                 for a in adds {
                     if let add = a as? Address {
                         allAdded.append(add)
+                        allPossibles.removeAll(where: { ($0 as? Address)?.title == add.title })
                     }
                 }
             }
@@ -120,6 +122,7 @@ struct CardTemplateModel {
                 for p in phones {
                     if let ph = p as? PhoneNumber {
                         allAdded.append(ph)
+                        allPossibles.removeAll(where: { ($0 as? PhoneNumber)?.title == ph.title })
                     }
                 }
             }
@@ -127,9 +130,12 @@ struct CardTemplateModel {
                 for e in emails {
                     if let email = e as? Email {
                         allAdded.append(email)
+                        allPossibles.removeAll(where: { ($0 as? Email)?.title == email.title })
                     }
                 }
             }
+        } else {
+            allPossibles = addresses + phoneNumbers + emails
         }
     }
     

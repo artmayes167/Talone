@@ -148,8 +148,8 @@ extension UIViewController {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "Add Template Card") as! CardTemplateCreatorVC
         helper.configure(contact: contact, card: nil, haveItem: haveItem, needItem: needItem)
+        helper.presentationController?.delegate = self
         present(helper, animated: true, completion: nil)
-        
     }
 }
 
@@ -224,4 +224,19 @@ extension UIViewController: MFMailComposeViewControllerDelegate {
         self.showOkayAlert(title: "", message: message.taloneCased(), handler: nil)
        }
    }
+}
+
+extension UIViewController: UIAdaptivePresentationControllerDelegate {
+    @objc func updateUI() {
+        
+    }
+}
+
+extension UIAdaptivePresentationControllerDelegate {
+    ///override point
+    func updateUI() {
+        if let x = self as? UIViewController {
+            x.updateUI()
+        }
+    }
 }

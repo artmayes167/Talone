@@ -30,10 +30,11 @@ class CardTemplateCreatorVC: UIViewController {
 //        return true
 //    }
     private var potentialImage: UIImage?
+    
     private var contact: Contact? {
         didSet {
             if let c = contact, cardInstance == nil {
-                cardInstance = c.sentCards?.first
+                cardInstance = c.sentCards?.last
             }
         }
     }
@@ -68,9 +69,9 @@ class CardTemplateCreatorVC: UIViewController {
     }
     private var cardInstance: CardTemplateInstance? {
         didSet {
-            
             guard let i = cardInstance else { return }
             CoreDataGod.managedContext.refresh(i, mergeChanges: true)
+            model.set(card: i)
             if contact == nil {
                 // check if a received card, and get
                 if let c = CoreDataGod.user.contacts?.filter ({ $0.contactUid == i.uid }), !c.isEmpty  {
@@ -92,11 +93,24 @@ class CardTemplateCreatorVC: UIViewController {
 //    }
     
     func configure(contact: Contact?, card: CardTemplateInstance?, haveItem: HavesBase.HaveItem?, needItem: NeedsBase.NeedItem?) {
-        if (contact == nil) && (card == nil) && (haveItem == nil) && (needItem == nil) { fatalError() }
-        self.contact = contact
-        self.cardInstance = card
-        self.haveItem = haveItem
-        self.needItem = needItem
+        var satisfied = false
+        if (contact != nil) {
+            self.contact = contact
+            satisfied = true
+        }
+        if (card != nil) {
+            self.cardInstance = card
+            satisfied = true
+        }
+        if (haveItem != nil) {
+            self.haveItem = haveItem
+            satisfied = true
+        }
+        if (needItem != nil) {
+            self.needItem = needItem
+            satisfied = true
+        }
+        if !satisfied { fatalError() }
     }
     
      // MARK: - View Life Cycle
@@ -114,7 +128,6 @@ class CardTemplateCreatorVC: UIViewController {
         }
         
         handleLabel.text = AppDelegateHelper.user.handle
-        model.set(card: cardInstance)
         if let c = cardInstance {
             if let image = c.image {
                 /// image has been previously added to template
@@ -174,11 +187,9 @@ class CardTemplateCreatorVC: UIViewController {
     }
     
     @IBAction func save(_ sender: UIButton) {
-        
         /// Editing
         if let c = cardInstance {
-            
-            c.templateTitle = "hi"
+            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
             c.image = potentialImage ?? imageButton.image(for: .normal)
             let all = model.allAdded
             
@@ -194,7 +205,7 @@ class CardTemplateCreatorVC: UIViewController {
                     }
                 }
             }
-            
+            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
             // add addresses to object that have been added
             for x in all {
                 if !c.allAddresses().contains(x) {
@@ -207,12 +218,14 @@ class CardTemplateCreatorVC: UIViewController {
                     }
                 }
             }
+            CoreDataGod.managedContext.refreshAllObjects()
             CoreDataGod.save()
         } else { /// Creating
             let handle = contact!.contactHandle!
             let success =  CardTemplate.create(cardCategory: handle, image: potentialImage)
             if success {
                 if let c = CoreDataGod.user.cardTemplates?.first(where: { $0.templateTitle == handle }) {
+                    CoreDataGod.managedContext.refresh(c, mergeChanges: true)
                     let all = model.allAdded
                     for x in all {
                         if let a = x as? Address {
@@ -224,10 +237,11 @@ class CardTemplateCreatorVC: UIViewController {
                         }
                     }
                     cardInstance = CardTemplateInstance.create(toHandle: handle, card: c)
-                    CoreDataGod.managedContext.refresh(cardInstance!, mergeChanges: true)
+                    CoreDataGod.managedContext.refreshAllObjects()
                 }
             }
         }
+        self.presentationController!.delegate!.updateUI()
         sendCard()
     }
     

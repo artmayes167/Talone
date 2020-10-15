@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllReceivedCardsVC: UIViewController, UIAdaptivePresentationControllerDelegate {
+class AllReceivedCardsVC: UIViewController {
 
     @IBOutlet weak var cardHeaderView: CardPrimaryHeader!
     @IBOutlet weak var tableView: UITableView!

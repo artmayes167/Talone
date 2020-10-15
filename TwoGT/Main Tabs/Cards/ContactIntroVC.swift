@@ -82,12 +82,12 @@ class ContactIntroVC: UIViewController {
         switch segue.identifier {
         case "toTheirContact":
             guard let vc = segue.destination as? TheirContactVC else { fatalError() }
-            vc.theirCard = theirCard
-            vc.contact = contact
+            guard let c = contact else { fatalError() }
+            vc.set(contact: c)
         case "toMyContact":
             guard let vc = segue.destination as? MyContactVC else { fatalError() }
-            vc.myCard = myCard
-            vc.contact = contact
+            guard let c = contact else { fatalError() }
+            vc.set(contact: c)
         default:
             print("Different segue = \(String(describing: segue.identifier))")
         }
