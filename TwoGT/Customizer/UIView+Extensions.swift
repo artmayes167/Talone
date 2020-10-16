@@ -58,6 +58,8 @@ extension UIView {
 
 @IBDesignable class DesignableLabel: UILabel {}
 
+@IBDesignable class DesignableStack: UIStackView {}
+
 extension UIView {
 
   enum GlowEffect: Float {
@@ -106,11 +108,11 @@ extension UIView {
 extension UIImageView {
     func cycleOpacity() {
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fromValue = 0.5
+        animation.fromValue = 0.3
         animation.toValue = 1
         animation.autoreverses = true
         animation.repeatCount = .infinity
-        animation.duration = CFTimeInterval(0.5)
+        animation.duration = CFTimeInterval(1.5)
         layer.add(animation, forKey: "fadeToCover")
     }
     
