@@ -21,16 +21,13 @@ class IntroYouVC: YouVC {
             if isViewLoaded {
                 setProfileData()
             }
-            
             // https://developers.facebook.com/docs/swift/reference/structs/userprofile.html/
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setProfileData()
-        
         showOkayAlert(title: "this is you".taloneCased(), message: String(format: "the data you input here is not shared with anyone, unless you send it to them in a card.  you can access this section in the future from the dashboard.").taloneCased(), handler: nil)
     }
     
@@ -101,35 +98,6 @@ class IntroYouVC: YouVC {
     }
     
     @IBAction func next(_ sender: UIButton) {
-//        let _ = CardTemplate.create(cardCategory: DefaultTitles.noDataTemplate.rawValue, image: nil)
-//        let a = CoreDataGod.user.allAddresses()
-//        if a.count > 1 || imageButton.isSelected {
-//            var imageData: UIImage?
-//            if imageButton.imageView!.image != #imageLiteral(resourceName: "avatar.png") {
-//                if let im = CoreDataImageHelper.shared.fetchAllImages() {
-//                    if let imageFromStorage = im.first?.image {
-//                        imageData = imageFromStorage
-//                    }
-//                }
-//            }
-//            let _ = CardTemplate.create(cardCategory: "my first template", image: imageData)
-//            if let temps: [CardTemplate] = CoreDataGod.user.cardTemplates {
-//                let fTemps = temps.filter { $0.templateTitle == "my first template" }
-//                if !fTemps.isEmpty {
-//                    guard let t = fTemps.first else { fatalError() }
-//                    for x in a {
-//                        if let add = x as? Address {
-//                            t.addToAddresses(add)
-//                        } else if let p = x as? PhoneNumber {
-//                            t.addToPhoneNumbers(p)
-//                        } else if let e = x as? Email {
-//                            t.addToEmails(e)
-//                        }
-//                    }
-//                }
-//            }
-//            CoreDataGod.save()
-//        }
         let u = UserDefaults.standard
         u.setValue(nil, forKey: State.stateDefaultsKey.rawValue)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }

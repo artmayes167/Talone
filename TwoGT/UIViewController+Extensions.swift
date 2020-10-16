@@ -227,9 +227,8 @@ extension UIViewController: MFMailComposeViewControllerDelegate {
 }
 
 extension UIViewController: UIAdaptivePresentationControllerDelegate {
-    @objc func updateUI() {
-        
-    }
+    /// override point
+    @objc func updateUI() { }
 }
 
 extension UIAdaptivePresentationControllerDelegate {

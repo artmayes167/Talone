@@ -183,7 +183,7 @@ class EnterHandleVC: UIViewController {
         _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
         
         showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "as an elite tester, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.".taloneCased())) { _ in
-            self.performSegue(withIdentifier: "toImport", sender: nil)
+            self.performSegue(withIdentifier: "toSetHome", sender: nil)
         }
     }
 }

@@ -21,7 +21,6 @@ class MarketplaceModel: NSObject {
         self.creationManager = creationManager
     }
     
-    /// Call `checkPreconditionsAndAlert(light:)` first, to ensure proper conditions are met
     func storeNeedToDatabase(controller: UIViewController?) {
         controller?.showSpinner()
         let need: NeedsBase.NeedItem = self.createNeedItem()
