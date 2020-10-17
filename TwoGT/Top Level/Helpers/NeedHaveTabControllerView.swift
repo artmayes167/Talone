@@ -10,20 +10,26 @@ import UIKit
 
 class NeedHaveTabControllerView: UIView {
     
-    @IBOutlet weak var leftTabButton: UIButton!
-    @IBOutlet weak var rightTabButton: UIButton!
+    @IBOutlet weak var leftTabButton: UIButton! // need
+    @IBOutlet weak var rightTabButton: UIButton! // have
     
-    @IBOutlet weak var leftContainerView: UIView!
-    @IBOutlet weak var rightContainerView: UIView!
+    @IBOutlet weak var tableView: UITableView!
     
+    var left = true
+    
+//    @IBOutlet weak var leftContainerView: UIView!
+//    @IBOutlet weak var rightContainerView: UIView!
+//
     @IBAction func selectedLeftTab(_ sender: UIButton) {
         bringSubviewToFront(leftTabButton)
-        leftContainerView.superview?.bringSubviewToFront(leftContainerView)
+        left = true
+        //leftContainerView.superview?.bringSubviewToFront(leftContainerView)
     }
-    
+
     @IBAction func selectedRightTab(_ sender: UIButton) {
         bringSubviewToFront(rightTabButton)
-        rightContainerView.superview?.bringSubviewToFront(rightContainerView)
+        left = false
+        //rightContainerView.superview?.bringSubviewToFront(rightContainerView)
     }
 
     /*

@@ -12,6 +12,14 @@ class BaseSwipeVC: UIViewController {
 
     var baseTabBar: UITabBarController?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Start observing any Card receptions or card updates.
+        AppDelegate.cardObserver.startObserving()
+        AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toBaseTabBar" {
@@ -32,6 +40,7 @@ class BaseSwipeVC: UIViewController {
     @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) { }
 }
 
+/// unused
 class CardsBaseSwipeVC: BaseSwipeVC {
     @IBAction func unwindToCardMainFlow( _ segue: UIStoryboardSegue) { }
     

@@ -66,11 +66,10 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
                 print("User: isAnonymous: \(isAnonymous); uid: \(uid)")
             }
         }
-
-        // Start observing any Card receptions or card updates.
-        // We do this late in the flow to ensure user has signed in.
-        AppDelegate.cardObserver.startObserving()
-        AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
+        
+         // MARK: Moved this to BaseSwipeVC
+//        AppDelegate.cardObserver.startObserving()
+//        AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
 
         model = MarketplaceModel(creationManager: creationManager)
     }
@@ -282,39 +281,4 @@ extension MarketplaceSearchAndCreationVC: UITextViewDelegate {
         print("-----------------ended editing called")
         checkSaveButton()
     }
-}
-
- // MARK: -
-protocol NeedSelectionDelegate {
-    func didSelect(_ need: NeedType)
-}
-
- // MARK: -
-class NeedsTVC: UITableViewController {
-    var delegate: NeedSelectionDelegate?
-    var needs: [NeedType] = NeedType.allCases
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.reloadData()
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelect(needs[indexPath.row])
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return needs.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SimpleSearchCell
-        cell.basicLabel.text = needs[indexPath.row].rawValue.capitalized
-        return cell
-    }
-}
-
-class SimpleSearchCell: UITableViewCell {
-    @IBOutlet weak var basicLabel: UILabel!
-    @IBOutlet weak var colorBar: UIView!
 }

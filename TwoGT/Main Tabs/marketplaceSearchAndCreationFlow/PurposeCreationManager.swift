@@ -24,10 +24,6 @@ enum CurrentCreationType: Int {
     }
 }
 
-enum NeedType: String, CaseIterable, DatabaseReady {
-    case any, borrow, food, clothes, shelter, furniture, service, miscellany
-}
-
 class PurposeCreationManager: NSObject {
 
     private var creationType: CurrentCreationType = .unknown

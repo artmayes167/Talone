@@ -10,120 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--MY PROFILE-->
-        <scene sceneID="ofD-Eq-ltL">
-            <objects>
-                <viewController id="naq-Vd-8I0" customClass="ProfileCustomTab" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Thy-DM-XE4">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ZDL-wa-FS4">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omw-5a-PqT">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" id="pWI-Hl-wv4"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rfw-6L-y2y">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
-                                        <subviews>
-                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6gQ-q2-BhT">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
-                                                <connections>
-                                                    <segue destination="Hjq-rh-bzk" kind="embed" id="bCh-Zu-hA6"/>
-                                                </connections>
-                                            </containerView>
-                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8gt-3B-g9F">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
-                                                <connections>
-                                                    <segue destination="8jj-fR-Sx5" kind="embed" id="edS-O7-ZJN"/>
-                                                </connections>
-                                            </containerView>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="6gQ-q2-BhT" secondAttribute="bottom" id="abC-qo-0rB"/>
-                                            <constraint firstAttribute="trailing" secondItem="8gt-3B-g9F" secondAttribute="trailing" id="bbx-eA-Dkg"/>
-                                            <constraint firstAttribute="trailing" secondItem="6gQ-q2-BhT" secondAttribute="trailing" id="i22-q7-IM5"/>
-                                            <constraint firstItem="6gQ-q2-BhT" firstAttribute="leading" secondItem="rfw-6L-y2y" secondAttribute="leading" id="lXt-Rz-jWH"/>
-                                            <constraint firstItem="8gt-3B-g9F" firstAttribute="top" secondItem="rfw-6L-y2y" secondAttribute="top" id="n0I-dd-PcY"/>
-                                            <constraint firstItem="8gt-3B-g9F" firstAttribute="leading" secondItem="rfw-6L-y2y" secondAttribute="leading" id="pmc-h7-F2C"/>
-                                            <constraint firstAttribute="bottom" secondItem="8gt-3B-g9F" secondAttribute="bottom" id="qUb-gW-UyY"/>
-                                            <constraint firstItem="6gQ-q2-BhT" firstAttribute="top" secondItem="rfw-6L-y2y" secondAttribute="top" id="wf4-4z-e6e"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKG-X0-THL" customClass="ProfileTabs" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="774" width="414" height="44"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5cV-nI-irQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z0x-gN-aNu" customClass="TabButton" customModule="Talone" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="207" height="44"/>
-                                                        <state key="normal" title="ME">
-                                                            <color key="titleColor" systemColor="darkTextColor"/>
-                                                        </state>
-                                                        <state key="selected" title="ME"/>
-                                                        <connections>
-                                                            <action selector="touchedMe:" destination="WKG-X0-THL" eventType="touchUpInside" id="Fjc-wU-5Ca"/>
-                                                            <action selector="touchedMe:" destination="zzM-Py-F4i" eventType="touchUpInside" id="pJz-2z-lNQ"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YY0-qh-ubA" customClass="TabButton" customModule="Talone" customModuleProvider="target">
-                                                        <rect key="frame" x="207" y="0.0" width="207" height="44"/>
-                                                        <state key="normal" title="CARD">
-                                                            <color key="titleColor" systemColor="darkTextColor"/>
-                                                        </state>
-                                                        <state key="selected" title="CARD"/>
-                                                        <connections>
-                                                            <action selector="touchedCard:" destination="WKG-X0-THL" eventType="touchUpInside" id="DJs-GA-QvA"/>
-                                                            <action selector="touchedCard:" destination="zzM-Py-F4i" eventType="touchUpInside" id="nAj-nB-Ld5"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="5cV-nI-irQ" secondAttribute="trailing" id="6Kj-Nb-dRp"/>
-                                            <constraint firstItem="5cV-nI-irQ" firstAttribute="top" secondItem="WKG-X0-THL" secondAttribute="top" id="6bR-OQ-Enx"/>
-                                            <constraint firstItem="5cV-nI-irQ" firstAttribute="leading" secondItem="WKG-X0-THL" secondAttribute="leading" id="8WY-bD-3mr"/>
-                                            <constraint firstAttribute="bottom" secondItem="5cV-nI-irQ" secondAttribute="bottom" id="APm-He-UN5"/>
-                                            <constraint firstAttribute="height" constant="44" id="ctw-vY-xZr"/>
-                                        </constraints>
-                                        <connections>
-                                            <outlet property="cardButton" destination="YY0-qh-ubA" id="JgW-Km-sWM"/>
-                                            <outlet property="meButton" destination="Z0x-gN-aNu" id="NKJ-9j-eCX"/>
-                                        </connections>
-                                    </view>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="gwl-bO-8gB"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="ZDL-wa-FS4" firstAttribute="leading" secondItem="gwl-bO-8gB" secondAttribute="leading" id="GCQ-zP-m6L"/>
-                            <constraint firstItem="ZDL-wa-FS4" firstAttribute="top" secondItem="gwl-bO-8gB" secondAttribute="top" id="QIL-1e-ORe"/>
-                            <constraint firstItem="ZDL-wa-FS4" firstAttribute="bottom" secondItem="gwl-bO-8gB" secondAttribute="bottom" id="TqP-Kc-J5L"/>
-                            <constraint firstItem="ZDL-wa-FS4" firstAttribute="trailing" secondItem="gwl-bO-8gB" secondAttribute="trailing" id="jv5-W8-PsI"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="MY PROFILE" id="P0P-I3-r9v"/>
-                    <connections>
-                        <outlet property="cardContainer" destination="6gQ-q2-BhT" id="Ukd-Ak-0ZA"/>
-                        <outlet property="meContainer" destination="8gt-3B-g9F" id="18w-X8-q3G"/>
-                        <outlet property="profileTab" destination="WKG-X0-THL" id="zyw-Kg-MTT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gFn-L0-Qyi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="zzM-Py-F4i" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="2243" y="1615"/>
-        </scene>
         <!--Marketplace MatchesVC-->
         <scene sceneID="Eo6-rB-r60">
             <objects>
@@ -186,14 +72,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ttu-8Y-L8z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2994" y="2288"/>
-        </scene>
-        <!--UIViewController-dAy-k8-LlQ-->
-        <scene sceneID="jl4-dK-iNF">
-            <objects>
-                <viewControllerPlaceholder storyboardName="NoHome" referencedIdentifier="UIViewController-dAy-k8-LlQ" id="8jj-fR-Sx5" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EvL-LA-dMf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2981" y="1750"/>
         </scene>
         <!--Events Intro View Controller-->
         <scene sceneID="CwM-f9-O35">
@@ -785,12 +663,6 @@
     </designables>
     <resources>
         <image name="caveMouth" width="809" height="761"/>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="scrollViewTexturedBackgroundColor">
             <color red="0.43529411764705878" green="0.44313725490196082" blue="0.47450980392156861" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
@@ -800,14 +672,8 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
