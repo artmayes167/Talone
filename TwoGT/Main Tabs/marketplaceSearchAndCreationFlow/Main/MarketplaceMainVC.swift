@@ -52,6 +52,11 @@ class MarketplaceMainVC: UIViewController {
     @IBAction func createAHave() {
         showOkayAlert(title: "Greetings, Tester!", message: "This hasn't been rewired yet, so cool your jets.", handler: nil)
     }
+    
+    @IBAction func chooseCategory(_ sender: UIButton) {
+        categoriesPopOver.isHidden = !categoriesPopOver.isHidden
+        view.layoutIfNeeded()
+    }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -80,7 +85,7 @@ class MarketplaceMainVC: UIViewController {
             model.configure(for: self)
          }
      }
-
+ // MARK: - UITextFieldDelegate
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == whereTextField {
             textField.resignFirstResponder()
@@ -89,8 +94,8 @@ class MarketplaceMainVC: UIViewController {
     }
 }
 
+// MARK: - NeedSelectionDelegate
 extension MarketplaceMainVC: NeedSelectionDelegate {
-    // MARK: - NeedSelectionDelegate
     func didSelect(_ need: NeedType) {
         categoriesLabel.text = need.rawValue.capitalized
         categoriesPopOver.isHidden = true
