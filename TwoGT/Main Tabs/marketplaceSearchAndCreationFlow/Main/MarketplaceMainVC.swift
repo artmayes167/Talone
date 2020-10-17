@@ -9,10 +9,6 @@
 import UIKit
 import Firebase
 
-enum NeedType: String, CaseIterable, DatabaseReady {
-    case any, borrow, food, clothes, shelter, furniture, service, miscellany
-}
-
 class MarketplaceMainVC: UIViewController {
     
     @IBOutlet weak var categoriesPopOver: UIView!
@@ -47,6 +43,14 @@ class MarketplaceMainVC: UIViewController {
             self.loc = newLoc
             model.configure(for: self)
         }
+    }
+    
+    @IBAction func createANeed() {
+        showOkayAlert(title: "Greetings, Tester!", message: "This hasn't been rewired yet, so cool your jets.", handler: nil)
+    }
+    
+    @IBAction func createAHave() {
+        showOkayAlert(title: "Greetings, Tester!", message: "This hasn't been rewired yet, so cool your jets.", handler: nil)
     }
 
     // MARK: - Navigation

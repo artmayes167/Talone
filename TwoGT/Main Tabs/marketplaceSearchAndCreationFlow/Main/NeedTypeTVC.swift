@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum NeedType: String, CaseIterable, DatabaseReady {
+    case any, borrow, food, clothes, shelter, furniture, service, miscellany
+}
+
 // MARK: -
 protocol NeedSelectionDelegate {
    func didSelect(_ need: NeedType)
