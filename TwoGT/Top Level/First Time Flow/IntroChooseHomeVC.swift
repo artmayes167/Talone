@@ -21,6 +21,7 @@ class IntroChooseHomeVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.setValue(State.addHome.rawValue, forKey: State.stateDefaultsKey.rawValue)
         updateUI()
     }
     

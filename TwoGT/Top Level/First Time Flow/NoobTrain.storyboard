@@ -203,10 +203,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ARm-7f-MNU">
-                                <rect key="frame" x="12" y="133" width="390" height="399.5"/>
+                                <rect key="frame" x="12" y="133" width="390" height="268"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="EcC-5M-KC7">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="399.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="268"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="confirm your sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI3-q5-Q19">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
@@ -226,22 +226,16 @@
                                                 <color key="textColor" systemColor="systemRedColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="you might have to return to the email and click the link a few times. details below." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="13B-lr-W3G">
-                                                <rect key="frame" x="0.0" y="118" width="390" height="36"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" systemColor="systemRedColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhW-Ym-NGp">
-                                                <rect key="frame" x="0.0" y="178" width="390" height="54"/>
+                                                <rect key="frame" x="0.0" y="118" width="390" height="54"/>
                                                 <string key="text">at this point, we will generate magic, and enable face/touch ID or lock code. we will use this magic to lock your information behind your own security precautions.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-Xp-4C1">
-                                                <rect key="frame" x="0.0" y="256" width="390" height="143.5"/>
-                                                <string key="text">we will wait patiently for you to click on the link on the email we sent you. you need to navigate to your email application (or browser) on this device. after clicking that link, you will be redirected either back here, or to a random website that Firebase selects for you. if the first thing happens, you can continue this sign-in process. if the second thing happens, hit back, and try the link again. repeat until successful.</string>
+                                                <rect key="frame" x="0.0" y="196" width="390" height="72"/>
+                                                <string key="text">we will wait patiently for you to click on the link on the email we sent you. you need to navigate to your email application (or browser) on this device. after clicking that link, you will be redirected back here.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -249,7 +243,6 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="ds6-WL-oud" secondAttribute="trailing" id="1Pd-G3-ZpZ"/>
-                                            <constraint firstAttribute="trailing" secondItem="13B-lr-W3G" secondAttribute="trailing" id="2Se-o8-hRt"/>
                                         </constraints>
                                     </stackView>
                                     <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="g1L-AO-C1i">
@@ -1065,7 +1058,7 @@
         <!--Intro Choose HomeVC-->
         <scene sceneID="zB3-z6-KZl">
             <objects>
-                <viewController id="iwf-0F-s3g" customClass="IntroChooseHomeVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Add Home" useStoryboardIdentifierAsRestorationIdentifier="YES" id="iwf-0F-s3g" customClass="IntroChooseHomeVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vsp-Qa-i7F">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1088,8 +1081,8 @@
                                     <constraint firstItem="mSL-mr-Mye" firstAttribute="centerX" secondItem="6Tw-Em-gre" secondAttribute="centerX" id="qrp-bo-Lyv"/>
                                 </constraints>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bpE-2P-T7f">
-                                <rect key="frame" x="12" y="161.5" width="390" height="356"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bpE-2P-T7f">
+                                <rect key="frame" x="12" y="144" width="390" height="50"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aiv-Qu-Knh" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
@@ -1112,7 +1105,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="p8o-jZ-aUb" firstAttribute="centerY" secondItem="teh-g2-iXb" secondAttribute="centerY" id="5Uf-Cv-qJo"/>
                                             <constraint firstAttribute="height" constant="50" id="5j5-AN-gL9"/>
@@ -1134,8 +1127,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="esQ-2a-PWO">
-                                        <rect key="frame" x="0.0" y="50" width="390" height="120"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="esQ-2a-PWO">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="120"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Rb-54-4jy" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
@@ -1187,7 +1180,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="9wO-U5-CHH" firstAttribute="centerY" secondItem="8CI-UV-0bG" secondAttribute="centerY" id="CUj-NL-YsL"/>
                                                     <constraint firstAttribute="bottom" secondItem="8CI-UV-0bG" secondAttribute="bottom" id="SBz-WI-ld1"/>
@@ -1220,8 +1213,8 @@
                                             <constraint firstAttribute="trailing" secondItem="n5c-zM-uS2" secondAttribute="trailing" id="kxm-6x-Slu"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="roI-2P-IfA">
-                                        <rect key="frame" x="0.0" y="170" width="390" height="186"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="roI-2P-IfA">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="186"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QdA-Ua-OhJ" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
@@ -1265,6 +1258,12 @@
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                         <real key="value" value="8"/>
                                                                     </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" systemColor="systemBlueColor"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                        <real key="value" value="2"/>
+                                                                    </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="saveAndContinue" destination="iwf-0F-s3g" eventType="touchUpInside" id="bM9-wY-hJI"/>
@@ -1281,6 +1280,12 @@
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                         <real key="value" value="8"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" systemColor="systemRedColor"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                        <real key="value" value="2"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
                                                                 <connections>
@@ -1334,6 +1339,7 @@
                             <constraint firstItem="bpE-2P-T7f" firstAttribute="leading" secondItem="19h-54-unu" secondAttribute="leading" constant="12" id="CmO-3w-dWD"/>
                             <constraint firstItem="19h-54-unu" firstAttribute="trailing" secondItem="6Tw-Em-gre" secondAttribute="trailing" id="Eo8-Nn-L2k"/>
                             <constraint firstItem="6Tw-Em-gre" firstAttribute="top" secondItem="19h-54-unu" secondAttribute="top" id="L7c-7c-j5B"/>
+                            <constraint firstItem="bpE-2P-T7f" firstAttribute="top" secondItem="6Tw-Em-gre" secondAttribute="bottom" constant="50" id="Txu-W8-Ihh"/>
                             <constraint firstItem="6Tw-Em-gre" firstAttribute="leading" secondItem="19h-54-unu" secondAttribute="leading" id="Z2j-4g-EZK"/>
                             <constraint firstAttribute="trailing" secondItem="bpE-2P-T7f" secondAttribute="trailing" constant="12" id="tuG-C1-6P9"/>
                         </constraints>

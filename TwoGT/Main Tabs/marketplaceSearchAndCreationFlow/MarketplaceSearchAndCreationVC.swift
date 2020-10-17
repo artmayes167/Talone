@@ -159,7 +159,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "needsPO":
-            let needsTVC = segue.destination as! NeedsTVC
+            let needsTVC = segue.destination as! NeedTypeTVC
             needsTVC.delegate = self
         case "toNeedsCollection":
             guard let n = sender as? [NeedsBase.NeedItem] else { fatalError() }

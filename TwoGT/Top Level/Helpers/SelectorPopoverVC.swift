@@ -69,19 +69,21 @@ class SelectorPopoverVC: UIViewController {
     
     private var model = CityStateModel()
     private var label: UILabel?
+    private var titleText: String = ""
     
     func configure(state: String?, label l: UILabel) {
         model.configure(state: state)
         label = l
         if let _ = state {
-            titleLabel.text = "select your state"
+            titleText = "select your state"
         } else {
-            titleLabel.text = "select your city"
+            titleText = "select your city"
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        titleLabel.text = titleText
         tableView.reloadData()
     }
 }

@@ -22,8 +22,8 @@ class MarketplaceMainVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    fileprivate var category: NeedType = .any
-    fileprivate var loc: CityStateSearchVC.Loc?
+    var category: NeedType = .any
+    var loc: CityStateSearchVC.Loc?
     
     private let model = MarketplaceMainModel()
 
@@ -53,7 +53,7 @@ class MarketplaceMainVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "needsPO":
-            let needsTVC = segue.destination as! NeedsTVC
+            let needsTVC = segue.destination as! NeedTypeTVC
             needsTVC.delegate = self
         case "toDetails":
             guard let vc = segue.destination as? ItemDetailsVC else { fatalError() }
@@ -102,7 +102,7 @@ extension MarketplaceMainVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return model.relevantCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -187,39 +187,4 @@ class MarketplaceCell: UITableViewCell {
             }
         }
     }
-}
-
-// MARK: -
-protocol NeedSelectionDelegate {
-   func didSelect(_ need: NeedType)
-}
-
-// MARK: -
-class NeedsTVC: UITableViewController {
-   var delegate: NeedSelectionDelegate?
-   var needs: [NeedType] = NeedType.allCases
-
-   override func viewDidLoad() {
-       super.viewDidLoad()
-       tableView.reloadData()
-   }
-
-   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       delegate?.didSelect(needs[indexPath.row])
-   }
-
-   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return needs.count
-   }
-
-   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SimpleSearchCell
-       cell.basicLabel.text = needs[indexPath.row].rawValue.capitalized
-       return cell
-   }
-}
-
-class SimpleSearchCell: UITableViewCell {
-   @IBOutlet weak var basicLabel: UILabel!
-   @IBOutlet weak var colorBar: UIView!
 }

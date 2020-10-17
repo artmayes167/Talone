@@ -64,7 +64,7 @@ public final class AppDelegateHelper: NSObject {
 typealias  State = IntroPageSaveNames
 enum IntroPageSaveNames: String, CaseIterable {
     case stateDefaultsKey
-    case enterEmail, verify, enterHandle, importVC = "import", youIntro
+    case enterEmail, verify, enterHandle, addHome, importVC = "import", youIntro
     
     func segueValue() -> String {
         let firstLetter = String(self.rawValue.first!)

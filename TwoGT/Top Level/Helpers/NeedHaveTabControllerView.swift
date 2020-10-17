@@ -23,13 +23,13 @@ class NeedHaveTabControllerView: UIView {
     @IBAction func selectedLeftTab(_ sender: UIButton) {
         bringSubviewToFront(leftTabButton)
         left = true
-        //leftContainerView.superview?.bringSubviewToFront(leftContainerView)
+        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.44)
     }
 
     @IBAction func selectedRightTab(_ sender: UIButton) {
         bringSubviewToFront(rightTabButton)
         left = false
-        //rightContainerView.superview?.bringSubviewToFront(rightContainerView)
+        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.44)
     }
 
     /*
