@@ -97,7 +97,7 @@ class MarketplaceMainVC: UIViewController {
 // MARK: - NeedSelectionDelegate
 extension MarketplaceMainVC: NeedSelectionDelegate {
     func didSelect(_ need: NeedType) {
-        categoriesLabel.text = need.rawValue.capitalized
+        categoriesLabel.text = need.rawValue
         categoriesPopOver.isHidden = true
         category = need
         model.configure(for: self)

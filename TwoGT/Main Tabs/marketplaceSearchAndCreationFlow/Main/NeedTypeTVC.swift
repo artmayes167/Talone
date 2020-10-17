@@ -37,7 +37,7 @@ class NeedTypeTVC: UITableViewController {
 
    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SimpleSearchCell
-       cell.basicLabel.text = needs[indexPath.row].rawValue.capitalized
+       cell.basicLabel.text = needs[indexPath.row].rawValue
        return cell
    }
 }
