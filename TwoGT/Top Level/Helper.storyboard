@@ -2125,7 +2125,7 @@
                                 <rect key="frame" x="12" y="164" width="390" height="578"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="hN6-um-opn">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="hN6-um-opn" customClass="SimpleSearchCell" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="390" height="46.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hN6-um-opn" id="fTR-BK-JGa">
@@ -2149,6 +2149,9 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="W62-NI-n17" secondAttribute="trailing" id="u0y-Ma-ups"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="basicLabel" destination="W62-NI-n17" id="oqV-8c-1vG"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -2187,6 +2190,10 @@
                             <constraint firstItem="go6-kw-lAA" firstAttribute="top" secondItem="to0-9Y-KFy" secondAttribute="bottom" id="tXd-5v-Blh"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="go6-kw-lAA" id="VIZ-6L-fTV"/>
+                        <outlet property="titleLabel" destination="VH8-gJ-Leh" id="ugg-2h-Eh2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MVu-t4-OLC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

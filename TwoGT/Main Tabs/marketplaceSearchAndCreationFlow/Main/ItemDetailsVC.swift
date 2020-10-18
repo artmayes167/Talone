@@ -30,9 +30,10 @@ extension MarketplaceRepThemeManager {
     }
     
     private func setTheme(header: ConfigurableHeader, color: UIColor) {
-        header.bottomView.backgroundColor = color
+        header.bottomView.borderColor = color
         header.leftView.backgroundColor = color
         header.categoryImageView.backgroundColor = color
+        header.borderWidth = 3
         header.borderColor = color
     }
     

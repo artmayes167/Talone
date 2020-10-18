@@ -34,7 +34,7 @@ class CityStateModel {
             }
             if let st = s {
                 guard let state = states.first(where: { $0.name == st }) else { fatalError() }
-                relevantList = state.cities
+                relevantList = state.cities.sorted()
             } else {
                 allStates.sort{ $0 < $1 }
                 relevantList = allStates
@@ -75,9 +75,9 @@ class SelectorPopoverVC: UIViewController {
         model.configure(state: state)
         label = l
         if let _ = state {
-            titleText = "select your state"
-        } else {
             titleText = "select your city"
+        } else {
+            titleText = "select your state"
         }
     }
     
@@ -121,6 +121,7 @@ extension SelectorPopoverVC: UITableViewDelegate, UITableViewDataSource {
         let key = model.keys[indexPath.section]
         guard let array = model.list[key] else { fatalError() }
         label?.text = array[indexPath.row]
-        dismiss(animated: true) { self.presentationController?.delegate?.updateUI() }
+        presentationController?.delegate?.updateUI()
+        dismiss(animated: true) {}
     }
 }

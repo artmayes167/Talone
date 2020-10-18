@@ -69,10 +69,11 @@ class IntroChooseHomeVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toPopover" {
             let vc = segue.destination as! SelectorPopoverVC
+            vc.presentationController?.delegate = self
             if let s = sender as? String {
-                vc.configure(state: s, label: stateLabel)
+                vc.configure(state: s, label: cityLabel)
             } else {
-                vc.configure(state: nil, label: cityLabel)
+                vc.configure(state: nil, label: stateLabel)
             }
         }
     }
