@@ -62,26 +62,40 @@ class ConfigurableHeader: UIView {
 class NeedDetailModel {
     private var have: HavesBase.HaveItem?
     private var need: NeedsBase.NeedItem?
+    private var rating: ContactRating?
     
     var handlesArray: [String] = []
     
-    func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?, controller c: ItemDetailsVC) {
+    func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
+        if needItem == nil && haveItem == nil { fatalError() }
         if let n = needItem {
             need = n
-            c.handleLabel.text = n.owner
-            c.descriptionTextView.text = n.description
+            if let childNeeds = n.watchers, !childNeeds.isEmpty {
+                handlesArray = childNeeds.map { $0.handle }
+            }
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner })
-            c.manager.configure(c.header, rating: contact?.rating?.last)
-            c.header.configure(needItem: n)
+            rating = contact?.rating?.last
+            
         } else if let h = haveItem {
             have = h
             if let childNeeds = h.needs, !childNeeds.isEmpty {
                 handlesArray = childNeeds.map { $0.owner }
             }
+            let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
+            rating = contact?.rating?.last
+        }
+    }
+    
+    func populate(controller c: ItemDetailsVC) {
+        if let n = need {
+            c.handleLabel.text = n.owner
+            c.descriptionTextView.text = n.description
+            c.manager.configure(c.header, rating: rating)
+            c.header.configure(needItem: n)
+        } else if let h = have {
             c.handleLabel.text = h.owner
             c.descriptionTextView.text = h.description
-            let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
-            c.manager.configure(c.header, rating: contact?.rating?.last)
+            c.manager.configure(c.header, rating: rating)
             c.header.configure(haveItem: h)
         }
     }
@@ -110,12 +124,11 @@ class ItemDetailsVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        model.populate(controller: self)
     }
     
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
-        model.configure(needItem: needItem, haveItem: haveItem, controller: self)
+        model.configure(needItem: needItem, haveItem: haveItem)
     }
     
     @IBAction func touchedWatch(_ sender: UIButton) {

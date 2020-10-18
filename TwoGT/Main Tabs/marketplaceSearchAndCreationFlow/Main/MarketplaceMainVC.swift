@@ -171,6 +171,7 @@ class MarketplaceCell: UITableViewCell {
     
     @IBOutlet weak var letterLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var watchersLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -181,8 +182,10 @@ class MarketplaceCell: UITableViewCell {
         letterLabel.text = "N"
         manager.configure(self, rating: rating)
         headlineLabel.text = needItem.headline
+        descriptionLabel.text = needItem.description
         handleLabel.text = needItem.owner
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
+        categoryImageView.image = UIImage(named: needItem.category) //.lowercased())
         watchersLabel.text = "no watchers yet"
         if let count = needItem.watchers?.count {
             if count == 0 { return }
@@ -199,8 +202,10 @@ class MarketplaceCell: UITableViewCell {
         letterLabel.text = "H"
         manager.configure(self, rating: rating)
         headlineLabel.text = haveItem.headline
+        descriptionLabel.text = haveItem.description
         handleLabel.text = haveItem.owner
         dateLabel.text = haveItem.createdAt?.dateValue().stringFromDate()
+        categoryImageView.image = UIImage(named: haveItem.category) //.lowercased())
         watchersLabel.text = "no watchers yet"
         if let count = haveItem.needs?.count {
             if count == 0 { return }
