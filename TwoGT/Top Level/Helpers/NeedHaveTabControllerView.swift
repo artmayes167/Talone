@@ -11,29 +11,53 @@ import UIKit
 class NeedHaveTabControllerView: UIView {
     
     @IBOutlet weak var leftTabButton: UIButton! // need
+    @IBOutlet weak var leftTabVerticalConstraint: NSLayoutConstraint!
     @IBOutlet weak var rightTabButton: UIButton! // have
+    @IBOutlet weak var rightTabVerticalConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var leftFolderLine: UIView!
     @IBOutlet weak var rightFolderLine: UIView!
     
+    @IBOutlet weak var headerImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     
     var left = true
     
-//    @IBOutlet weak var leftContainerView: UIView!
-//    @IBOutlet weak var rightContainerView: UIView!
+    func configure() {
+        selectedLeftTab(leftTabButton)
+    }
 //
     @IBAction func selectedLeftTab(_ sender: UIButton) {
         bringSubviewToFront(leftFolderLine)
         bringSubviewToFront(leftTabButton)
+        leftTabVerticalConstraint.constant = 0
+        rightTabVerticalConstraint.constant = 6
+        
         left = true
-        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.77)
+        UIView.animate(withDuration: 0.2) {
+            self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(1.0)
+            self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.leftTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.rightTabButton.backgroundColor = self.rightTabButton.backgroundColor!.withAlphaComponent(0.44)
+            self.layoutIfNeeded()
+        }
+        
     }
 
     @IBAction func selectedRightTab(_ sender: UIButton) {
         bringSubviewToFront(rightFolderLine)
         bringSubviewToFront(rightTabButton)
+        leftTabVerticalConstraint.constant = 6
+        rightTabVerticalConstraint.constant = 0
         left = false
-        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.77)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(1.0)
+            self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.rightTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.leftTabButton.backgroundColor = self.leftTabButton.backgroundColor!.withAlphaComponent(0.44)
+            self.layoutIfNeeded()
+        }
     }
 
     /*

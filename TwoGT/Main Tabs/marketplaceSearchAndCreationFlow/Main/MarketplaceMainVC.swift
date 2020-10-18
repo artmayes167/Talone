@@ -44,6 +44,7 @@ class MarketplaceMainVC: UIViewController {
             }
             self.loc = newLoc
             model.configure(for: self)
+            needHaveTabController.configure()
         }
     }
     
