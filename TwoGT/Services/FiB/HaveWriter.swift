@@ -18,7 +18,8 @@ public class HavesBase: FirebaseGeneric {
         var category: String
         var headline: String?
         var description: String?
-        var needs: [NeedStub]?      // Need Ids, userIds and handles
+        var needs: [NeedStub]?
+        var watchers: [UserStub]?
         var validUntil: Timestamp?
         var owner: String
         var createdBy: String
@@ -71,7 +72,7 @@ public class HavesDbWriter: HavesBase {
             completion(GenericFirebaseError.noAuthUser)
         }
     }
-    
+
     /// Unlinks the user from a given Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
     ///
     /// - Parameters:
@@ -91,7 +92,6 @@ public class HavesDbWriter: HavesBase {
             completion(GenericFirebaseError.noAuthUser)
         }
     }
-
 
     private func associateAuthUserToHave(id haveId: String, using handle: String, userId: String, email: String, completion: @escaping (Error?) -> Void) {
         if let _ = Auth.auth().currentUser?.uid {

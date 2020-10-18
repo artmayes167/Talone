@@ -45,6 +45,12 @@ public class FirebaseGeneric {
         }
     }
 
+    public struct UserStub: Codable {
+        var handle: String
+        var uid: String
+        var email: String
+    }
+
     public struct LocationInfo: Codable {
         var city: String
         var state: String
@@ -85,6 +91,7 @@ public class NeedsBase: FirebaseGeneric {
         var category: String // Inherited
         var headline: String?
         var description: String?
+        var watchers: [UserStub]?
         var validUntil: Timestamp
         var owner: String
         var createdBy: String
@@ -93,7 +100,6 @@ public class NeedsBase: FirebaseGeneric {
         var status: String? = "Active"
         var locationInfo: LocationInfo
     }
-
 }
 
 public class NeedsDbWriter: NeedsBase {
