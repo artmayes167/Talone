@@ -14,23 +14,17 @@ import CoreData
 class AddHaveToWatchModel: NSObject {
     func storeWatchingNeedToDatabase(item: HavesBase.HaveItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let have = item
+        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
 
-        let needsWriter = NeedsDbWriter()
-        // add Need to DB
-        needsWriter.createNeedAndJoinHave(have, usingHandle: CoreDataGod.user.handle!) { (error, firebaseNeedItem) in
-            if error == nil, let needItem = firebaseNeedItem {
-                let n = Need.createNeed(item: needItem)
-                _ = Have.createHave(item: have)
-                n.parentHaveItemId = have.id
-                CoreDataGod.save()
-                DispatchQueue.main.async {
-                    controller.view.makeToast("You have successfully linked to \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
-                        // TODO: - Create unwind segue to my needs
-                        controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
-                    }
+        // User is watching the given have. No need is created
+        HavesDbWriter().watchHave(item, usingHandle: CoreDataGod.user.handle!, email: emailStr) { (error) in
+            if error == nil {
+                controller.view.makeToast("You have successfully linked to \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
                 }
             } else {
-                controller.showOkayAlert(title: "Nope", message: "Error while adding a Need. Error: \(error!.localizedDescription)", handler: nil)
+                controller.showOkayAlert(title: "Nope", message: "Error while linking to a have. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
@@ -121,7 +115,7 @@ class AddHaveToWatchVC: UIViewController {
         }
 
         _ = c.setHeadline(headlineTextField.text, description: descriptionTextView.text)
-        
+
         switch c.currentCreationType() {
         case .need:
             model.storeWatchingNeedToDatabase(item: have, creationManager: c, controller: self)
