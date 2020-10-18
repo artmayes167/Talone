@@ -51,7 +51,7 @@ public class FirebaseGeneric {
         var country: String
         var address: AddressInfo?
         var geoLocation: GeographicCoordinates?
-        
+
         init(locationInfo: LocationInfo) {
             self.city = locationInfo.city
             self.state = locationInfo.state
@@ -110,31 +110,8 @@ public class NeedsDbWriter: NeedsBase {
         completion(nil)
     }
 
-    func createNeedAndJoinHave(_ have: HavesBase.HaveItem, usingHandle userHandle: String, completion: @escaping (Error?, NeedItem?) -> Void) {
-
-        let defaultValidUntilDate = Timestamp(date: Date(timeIntervalSinceNow: 30*24*60*60))
-        if let userId = Auth.auth().currentUser?.uid {
-            // TODO: This needsItem needs to derive data from MarketPlaceVC, as user may have entered description/header etc.
-            let description = have.description
-            let needItem = NeedsBase.NeedItem(category: have.category, headline: have.headline, description: description, validUntil: defaultValidUntilDate, owner: userHandle, createdBy: userId, locationInfo: have.locationInfo)
-
-            addNeed(needItem) { error in
-                if error == nil, let _ = needItem.id, let haveId = have.id {
-                    HavesDbWriter().associateAuthUserHavingNeed(needItem, toHaveId: haveId) { error in
-                        // call completion
-                        completion(error, needItem)
-                    }
-                }
-            }
-        } else {
-            completion(GenericFirebaseError.noAuthUser, nil)
-        }
-    }
-
     func deleteNeed(id: String, userHandle: String, associatedHaveId: String? = nil, completion: @escaping (Error?) -> Void) {
-        // TODO: because of the way associated need is stored to a Have, we need
-        // to provide uid, needId and Handle to remove the association. This shall be
-        // refactored later.
+
         guard let _ = Auth.auth().currentUser?.uid else {
             completion(GenericFirebaseError.noAuthUser)
             return
@@ -142,20 +119,58 @@ public class NeedsDbWriter: NeedsBase {
 
         let db = Firestore.firestore()
         db.collection("needs").document(id).delete { err in
-            if let haveId = associatedHaveId {
-                HavesDbWriter().disassociateAuthUserHavingNeedId(id, handle: userHandle, fromHaveId: haveId) { error in
-                    // Error about modifying Have. Have may have been deleted, so updating it may fail.
-                    if error?._code == 5 {
-                        // Have been deleted, we can omit this error
-                        completion(nil)
-                    } else {
-                        completion(error)
-                    }
-                }
-            } else {
-                // Error about deleting the Need
-                completion(err)
+            completion(err)
+        }
+    }
+
+    /// Creates a link to a Need in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    ///
+    /// - Parameters:
+    ///   - need:       `NeedsBase.NeedItem` FiB need item
+    ///   - userHandle      User handle as string
+    ///   - email                   Users associated email
+    /// - Returns:      On unsuccessful completion returns `Error`.
+    func watchNeed(_ need: NeedsBase.NeedItem, usingHandle userHandle: String, email: String, completion: @escaping (Error?) -> Void) {
+
+        if let userId = Auth.auth().currentUser?.uid {
+            associateAuthUserToNeed(id: need.id!, using: userHandle, userId: userId, email: email) { error in
+                completion(error)
             }
+        } else {
+            completion(GenericFirebaseError.noAuthUser)
+        }
+    }
+
+    /// Unlinks the user from a given Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    ///
+    /// - Parameters:
+    ///   - need:       `NeedsBase.NeedItem` FiB need item
+    ///   - userHandle      User handle as string
+    ///   - email                   Users associated email
+    /// - Returns:      On unsuccessful completion returns `Error`.
+    func unwatchNeed(id needId: String, handle: String, email: String, completion: @escaping (Error?) -> Void) {
+        if let userId = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            let ref = db.collection("needs").document(needId)
+            let data = ["uid": userId, "email": email, "handle": handle]
+            ref.updateData(["watchers": FieldValue.arrayRemove([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
+                completion(error)
+            }
+        } else {
+            completion(GenericFirebaseError.noAuthUser)
+        }
+    }
+
+    private func associateAuthUserToNeed(id needId: String, using handle: String, userId: String, email: String, completion: @escaping (Error?) -> Void) {
+        if let _ = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            let ref = db.collection("needs").document(needId)
+            let data = ["uid": userId, "email": email, "handle": handle]
+            ref.updateData(["watchers": FieldValue.arrayUnion([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
+                completion(error)
+            }
+        } else {
+            completion(GenericFirebaseError.noAuthUser)
         }
     }
 }

@@ -54,29 +54,37 @@ public class HavesDbWriter: HavesBase {
         completion(nil)
     }
 
-    func associateNeedId(_ needId: String, withHaveId haveId: String, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-        let ref = db.collection("haves").document(haveId)
-        ref.updateData(["needs": FieldValue.arrayUnion([needId])]) { error in
-            print(error.debugDescription + "in HaveWriter -> associateNeedId")
-            completion(error)
+    /// Creates a link to a Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    ///
+    /// - Parameters:
+    ///   - need:       `HavesBase.HaveItem` FiB have item
+    ///   - userHandle      User handle as string
+    ///   - email                   Users associated email
+    /// - Returns:      On unsuccessful completion returns `Error`.
+    func watchHave(_ have: HavesBase.HaveItem, usingHandle userHandle: String, email: String, completion: @escaping (Error?) -> Void) {
+
+        if let userId = Auth.auth().currentUser?.uid {
+            HavesDbWriter().associateAuthUserToHave(id: have.id!, using: userHandle, userId: userId, email: email) { error in
+                completion(error)
+            }
+        } else {
+            completion(GenericFirebaseError.noAuthUser)
         }
     }
-
-    func associateUserId(_ userId: String, withHaveId haveId: String, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-        let ref = db.collection("haves").document(haveId)
-        ref.updateData(["needs": FieldValue.arrayUnion([userId])]) { error in
-            print(error.debugDescription + "in HaveWriter -> associateUserId")
-            completion(error)
-        }
-    }
-
-    func associateAuthUserWithHaveId(_ haveId: String, completion: @escaping (Error?) -> Void) {
+    
+    /// Unlinks the user from a given Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    ///
+    /// - Parameters:
+    ///   - haveId:     HaveId  for the Have item in Firebase
+    ///   - userHandle     User handle as string
+    ///   - email                 Users associated email
+    /// - Returns:      On unsuccessful completion returns `Error`.
+    func unwatchHave(id haveId: String, handle: String, email: String, completion: @escaping (Error?) -> Void) {
         if let userId = Auth.auth().currentUser?.uid {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(haveId)
-            ref.updateData(["needs": FieldValue.arrayUnion([userId])]) { error in
+            let data = ["uid": userId, "email": email, "handle": handle]
+            ref.updateData(["watchers": FieldValue.arrayRemove([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
         } else {
@@ -84,25 +92,13 @@ public class HavesDbWriter: HavesBase {
         }
     }
 
-    func associateAuthUserHavingNeed(_ needItem: NeedsBase.NeedItem, toHaveId haveId: String, completion: @escaping (Error?) -> Void) {
+
+    private func associateAuthUserToHave(id haveId: String, using handle: String, userId: String, email: String, completion: @escaping (Error?) -> Void) {
         if let _ = Auth.auth().currentUser?.uid {
             let db = Firestore.firestore()
             let ref = db.collection("haves").document(haveId)
-            let data = ["uid": needItem.createdBy, "id": needItem.id, "handle": needItem.owner]
-            ref.updateData(["needs": FieldValue.arrayUnion([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
-                completion(error)
-            }
-        } else {
-            completion(GenericFirebaseError.noAuthUser)
-        }
-    }
-
-    func disassociateAuthUserHavingNeedId(_ id: String, handle: String, fromHaveId: String, completion: @escaping (Error?) -> Void) {
-        if let userId = Auth.auth().currentUser?.uid {
-            let db = Firestore.firestore()
-            let ref = db.collection("haves").document(fromHaveId)
-            let data = ["uid": userId, "id": id, "handle": handle]
-            ref.updateData(["needs": FieldValue.arrayRemove([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
+            let data = ["uid": userId, "email": email, "handle": handle]
+            ref.updateData(["watchers": FieldValue.arrayUnion([data]), "modifiedAt": FieldValue.serverTimestamp()]) { error in
                 completion(error)
             }
         } else {
