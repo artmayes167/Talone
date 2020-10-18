@@ -125,8 +125,12 @@ class ItemDetailsVC: UIViewController {
         /// DOES NOT SAVE YET
     }
     
+    @IBAction func sendCard(_ sender: UIButton) {
+        devNotReady()
+    }
+    
     @IBAction func report(_ sender: UIButton) {
-        /// report action
+        devNotReady()
     }
     
     /*

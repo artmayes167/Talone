@@ -4392,11 +4392,29 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="frenchMarket" translatesAutoresizingMaskIntoConstraints="NO" id="Tb3-iz-hvT">
                                 <rect key="frame" x="0.0" y="-839" width="414" height="1716"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fen-9r-8ft" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                <rect key="frame" x="157" y="119" width="100" height="28"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2uU-EF-Fca" userLabel="Right Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="302" y="119" width="8" height="264"/>
+                                <color key="backgroundColor" red="0.70238835570000002" green="1" blue="0.67543244400000002" alpha="0.44" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="8" id="MWF-BS-hsL"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fen-9r-8ft" userLabel="Left Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                <rect key="frame" x="104" y="119" width="8" height="258"/>
                                 <color key="backgroundColor" red="0.70238835572926117" green="1" blue="0.67543244397555191" alpha="0.44" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="Z6V-Hb-5fZ"/>
+                                    <constraint firstAttribute="width" constant="8" id="Z6V-Hb-5fZ"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
@@ -4423,7 +4441,7 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="roofFull" translatesAutoresizingMaskIntoConstraints="NO" id="Oaw-gL-F89">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="77"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="tintColor" systemColor="systemIndigoColor"/>
+                                        <color key="tintColor" red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="0.77000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                 <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4476,7 +4494,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v1t-Xh-4La">
                                 <rect key="frame" x="0.0" y="123" width="414" height="754"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DR0-Fe-VMb" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DR0-Fe-VMb" userLabel="Top Buttons View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="12" y="12" width="390" height="44"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6MS-cJ-y9P" userLabel="New Buttons View">
@@ -4784,7 +4802,7 @@
                                                     <segue destination="gDx-F2-AgE" kind="embed" identifier="needsPO" id="VY7-yf-oaq"/>
                                                 </connections>
                                             </containerView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byw-xh-6qh" userLabel="Display Table">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byw-xh-6qh" userLabel="Tabs Display Table">
                                                 <rect key="frame" x="0.0" y="184" width="390" height="432"/>
                                                 <subviews>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0ZK-LA-Ow2">
@@ -5082,6 +5100,7 @@
                                                                     <outlet property="leftFolderLine" destination="gZh-lx-tIm" id="x7x-E1-YqF"/>
                                                                     <outlet property="leftTabButton" destination="Pga-z5-pfX" id="Qgx-nR-tjw"/>
                                                                     <outlet property="leftTabVerticalConstraint" destination="RMB-Rd-Ync" id="a32-Kt-EKg"/>
+                                                                    <outlet property="mainView" destination="9f2-MC-Skg" id="g8z-fj-9Ve"/>
                                                                     <outlet property="rightFolderLine" destination="IaB-KK-WFf" id="GgU-J0-fID"/>
                                                                     <outlet property="rightTabButton" destination="shu-c5-CmE" id="rdT-10-Q9M"/>
                                                                     <outlet property="rightTabVerticalConstraint" destination="s5b-hJ-uzc" id="0I2-cE-bPy"/>
@@ -5167,18 +5186,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="shu-c5-CmE" firstAttribute="top" secondItem="2uU-EF-Fca" secondAttribute="bottom" constant="-2" id="1nT-t8-Akc"/>
+                            <constraint firstItem="2uU-EF-Fca" firstAttribute="top" secondItem="HWt-zX-dfq" secondAttribute="bottom" priority="750" constant="-2" id="2lY-vN-YQG"/>
                             <constraint firstItem="HWt-zX-dfq" firstAttribute="top" secondItem="Xu8-uG-ibw" secondAttribute="top" id="36G-ca-z3b"/>
                             <constraint firstAttribute="trailing" secondItem="HWt-zX-dfq" secondAttribute="trailing" id="3g7-o7-gzu"/>
                             <constraint firstItem="Xu8-uG-ibw" firstAttribute="trailing" secondItem="Tb3-iz-hvT" secondAttribute="trailing" id="5aP-Rx-pOv"/>
                             <constraint firstItem="HWt-zX-dfq" firstAttribute="centerX" secondItem="9f2-MC-Skg" secondAttribute="centerX" id="80a-1a-cxG"/>
-                            <constraint firstItem="DR0-Fe-VMb" firstAttribute="top" secondItem="fen-9r-8ft" secondAttribute="bottom" constant="-22" id="IxZ-CC-HTt"/>
+                            <constraint firstItem="2uU-EF-Fca" firstAttribute="centerX" secondItem="8pc-rs-umZ" secondAttribute="centerX" id="EP6-FV-HxJ"/>
                             <constraint firstItem="v1t-Xh-4La" firstAttribute="bottom" secondItem="Xu8-uG-ibw" secondAttribute="bottom" id="J7G-ZS-cXL"/>
                             <constraint firstItem="Tb3-iz-hvT" firstAttribute="leading" secondItem="Xu8-uG-ibw" secondAttribute="leading" id="KxR-El-hsk"/>
                             <constraint firstItem="fen-9r-8ft" firstAttribute="top" relation="lessThanOrEqual" secondItem="HWt-zX-dfq" secondAttribute="bottom" constant="-2" id="N3d-mA-NAN"/>
+                            <constraint firstItem="Pga-z5-pfX" firstAttribute="top" secondItem="fen-9r-8ft" secondAttribute="bottom" constant="-2" id="Om0-yl-HE9"/>
                             <constraint firstItem="v1t-Xh-4La" firstAttribute="top" secondItem="HWt-zX-dfq" secondAttribute="bottom" constant="2" id="PW5-2e-Lt5"/>
+                            <constraint firstItem="fen-9r-8ft" firstAttribute="centerX" secondItem="6gi-lO-JAb" secondAttribute="centerX" id="Xuv-cF-qAm"/>
                             <constraint firstItem="v1t-Xh-4La" firstAttribute="leading" secondItem="Xu8-uG-ibw" secondAttribute="leading" id="YPe-aD-eRl"/>
                             <constraint firstItem="v1t-Xh-4La" firstAttribute="trailing" secondItem="Xu8-uG-ibw" secondAttribute="trailing" id="bbA-9a-wLE"/>
-                            <constraint firstItem="fen-9r-8ft" firstAttribute="centerX" secondItem="9f2-MC-Skg" secondAttribute="centerX" id="e40-2c-HlQ"/>
+                            <constraint firstItem="HWt-zX-dfq" firstAttribute="top" relation="lessThanOrEqual" secondItem="2uU-EF-Fca" secondAttribute="top" constant="-2" id="jry-R5-0zR"/>
                             <constraint firstItem="HWt-zX-dfq" firstAttribute="leading" secondItem="9f2-MC-Skg" secondAttribute="leading" id="kTz-BM-tem"/>
                             <constraint firstItem="Xu8-uG-ibw" firstAttribute="bottom" secondItem="Tb3-iz-hvT" secondAttribute="bottom" id="u48-YY-NEu"/>
                             <constraint firstItem="fen-9r-8ft" firstAttribute="top" secondItem="HWt-zX-dfq" secondAttribute="bottom" priority="750" constant="-2" id="xR6-Nq-UTc"/>
@@ -5444,6 +5467,9 @@
                                                                         <real key="value" value="8"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="report:" destination="848-gQ-Ib6" eventType="touchUpInside" id="jyK-Ms-2QG"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oi5-Fi-wrJ" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="201" y="0.0" width="189" height="44"/>
@@ -5465,6 +5491,9 @@
                                                                         <real key="value" value="8"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="sendCard:" destination="848-gQ-Ib6" eventType="touchUpInside" id="LWT-aW-9Ek"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <constraints>
@@ -5661,7 +5690,7 @@
             <size key="intrinsicContentSize" width="68" height="30"/>
         </designable>
         <designable name="Pga-z5-pfX">
-            <size key="intrinsicContentSize" width="78" height="25"/>
+            <size key="intrinsicContentSize" width="88" height="25"/>
         </designable>
         <designable name="QRA-J0-mol">
             <size key="intrinsicContentSize" width="94" height="36"/>
@@ -5706,7 +5735,7 @@
             <size key="intrinsicContentSize" width="78" height="30"/>
         </designable>
         <designable name="shu-c5-CmE">
-            <size key="intrinsicContentSize" width="75" height="28"/>
+            <size key="intrinsicContentSize" width="85" height="28"/>
         </designable>
         <designable name="wDF-XU-x9j">
             <size key="intrinsicContentSize" width="79" height="18"/>

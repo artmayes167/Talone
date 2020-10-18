@@ -183,7 +183,7 @@ class CardTemplateCreatorVC: UIViewController {
     }
     
     @IBAction func blockUser(_ sender: UIButton) {
-        
+        devNotReady()
     }
     
     @IBAction func save(_ sender: UIButton) {

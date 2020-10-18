@@ -20,13 +20,14 @@ class NeedHaveTabControllerView: UIView {
     
     @IBOutlet weak var headerImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var mainView: UIView!
     
     var left = true
     
     func configure() {
         selectedLeftTab(leftTabButton)
     }
-//
+
     @IBAction func selectedLeftTab(_ sender: UIButton) {
         bringSubviewToFront(leftFolderLine)
         bringSubviewToFront(leftTabButton)
@@ -39,7 +40,7 @@ class NeedHaveTabControllerView: UIView {
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.leftTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.rightTabButton.backgroundColor = self.rightTabButton.backgroundColor!.withAlphaComponent(0.44)
-            self.layoutIfNeeded()
+            self.mainView.layoutIfNeeded()
         }
         
     }
@@ -56,7 +57,7 @@ class NeedHaveTabControllerView: UIView {
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.rightTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.leftTabButton.backgroundColor = self.leftTabButton.backgroundColor!.withAlphaComponent(0.44)
-            self.layoutIfNeeded()
+            self.mainView.layoutIfNeeded()
         }
     }
 

@@ -151,6 +151,10 @@ extension UIViewController {
         helper.presentationController?.delegate = self
         present(helper, animated: true, completion: nil)
     }
+    
+    func devNotReady() {
+        showOkayAlert(title: "Hello, Tester!", message: "This feature has not been built out yet, so cool your jets.", handler: nil)
+    }
 }
 
  // MARK: - default textField delegation implementation
