@@ -133,10 +133,15 @@ class ItemDetailsVC: UIViewController {
     }
     
     @IBAction func touchedWatch(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        model.watcherAction(add: sender.isSelected)
-        tableView.reloadData()
-        /// DOES NOT SAVE YET
+        if sender.title(for: .normal) == "watch" {
+            model.watcherAction(add: true)
+            sender.setTitle("unwatch", for: .normal)
+            tableView.reloadData()
+        } else if sender.title(for: .normal) == "unwatch" {
+            model.watcherAction(add: false)
+            sender.setTitle("watch", for: .normal)
+            tableView.reloadData()
+        }
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
