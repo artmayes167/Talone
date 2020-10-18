@@ -184,15 +184,15 @@ class MarketplaceCell: UITableViewCell {
         handleLabel.text = needItem.owner
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
         watchersLabel.text = "no watchers yet"
-//        if let count = needItem.needs?.count {
-//            if count == 0 { return }
-//            if count == 1 {
-//                watchersLabel.text = "1 watcher"
-//                return
-//            } else {
-//                watchersLabel.text = String(count) + " watchers"
-//            }
-//        }
+        if let count = needItem.watchers?.count {
+            if count == 0 { return }
+            if count == 1 {
+                watchersLabel.text = "1 watcher"
+                return
+            } else {
+                watchersLabel.text = String(count) + " watchers"
+            }
+        }
     }
     
     func configure(rating: ContactRating?, haveItem: HavesBase.HaveItem) {
