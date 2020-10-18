@@ -71,7 +71,7 @@ extension UIView {
     layer.shadowColor = color.cgColor
     layer.shadowRadius = 0
     layer.shadowOpacity = 1
-    layer.shadowOffset = CGSize(width: 0, height: 3)
+    layer.shadowOffset = CGSize(width: 0, height: 0)
     
 //    let glowAnimationRadius = CABasicAnimation(keyPath: "shadowRadius")
 //    glowAnimationRadius.fromValue = 0

@@ -23,19 +23,34 @@ class MarketplaceMainModel {
         }
     }
     
+    private var winner = true
+    
     public func configure(for c: MarketplaceMainVC) {
+        havesArray = []
+        needsArray = []
+        winner = true
         fetchNeeds(for: c)
         fetchHaves(for: c)
         customTab = c.needHaveTabController
+        customTab!.tableView.reloadData()
+        customTab!.tableView.alpha = 0.5
     }
     
     private func fetchNeeds(for c: MarketplaceMainVC) {
         guard let loc = c.loc else { return }
         NeedsDbFetcher().fetchNeedsFor(category: c.category.rawValue, city: loc.city, state: loc.state, country: loc.country, maxCount: 20, filterOutThisUser: true) { array, error in
 
-            if error != nil { c.showOkayAlert(title: "", message: error!.localizedDescription) {_ in } }
+            if error != nil {
+                c.showOkayAlert(title: "", message: error!.localizedDescription) {_ in }
+                return
+            }
             self.needsArray = array
-            
+            let tab = self.customTab!
+            if self.winner {
+                self.winner = false
+                tab.selectedLeftTab(tab.leftTabButton)
+                tab.tableView.alpha = 1.0
+            }
         }
     }
     
@@ -57,6 +72,12 @@ class MarketplaceMainModel {
 
         func handleResults(_ array: [HavesBase.HaveItem], _ message: String, _ error: Error?) {
             self.havesArray = array.filter { $0.owner != AppDelegateHelper.user.handle }
+            let tab = self.customTab!
+            if self.winner {
+                self.winner = false
+                tab.selectedRightTab(tab.rightTabButton)
+                tab.tableView.alpha = 1.0
+            }
         }
     }
     
