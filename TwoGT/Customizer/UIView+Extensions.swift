@@ -73,15 +73,15 @@ extension UIView {
     layer.shadowOpacity = 1
     layer.shadowOffset = CGSize(width: 0, height: 3)
     
-    let glowAnimationRadius = CABasicAnimation(keyPath: "shadowRadius")
-    glowAnimationRadius.fromValue = 0
-    glowAnimationRadius.toValue = effect.rawValue
-    glowAnimationRadius.beginTime = CACurrentMediaTime()+0.3
-    glowAnimationRadius.duration = CFTimeInterval(1.3)
-    glowAnimationRadius.fillMode = .removed
-    glowAnimationRadius.autoreverses = true
-    glowAnimationRadius.repeatCount = .infinity
-    layer.add(glowAnimationRadius, forKey: "shadowGlowingAnimationRadius")
+//    let glowAnimationRadius = CABasicAnimation(keyPath: "shadowRadius")
+//    glowAnimationRadius.fromValue = 0
+//    glowAnimationRadius.toValue = effect.rawValue
+//    glowAnimationRadius.beginTime = CACurrentMediaTime()+0.3
+//    glowAnimationRadius.duration = CFTimeInterval(1.3)
+//    glowAnimationRadius.fillMode = .removed
+//    glowAnimationRadius.autoreverses = true
+//    glowAnimationRadius.repeatCount = .infinity
+//    layer.add(glowAnimationRadius, forKey: "shadowGlowingAnimationRadius")
     
     let glowAnimationOpacity = CABasicAnimation(keyPath: "shadowOpacity")
     glowAnimationOpacity.fromValue = 0
@@ -100,7 +100,7 @@ extension UIView {
         layer.shadowOpacity = 0
         layer.shadowOffset = CGSize(width: 0, height: 0)
         
-        layer.removeAnimation(forKey: "shadowGlowingAnimationRadius")
+//        layer.removeAnimation(forKey: "shadowGlowingAnimationRadius")
         layer.removeAnimation(forKey: "shadowGlowingAnimationOpacity")
     }
 }

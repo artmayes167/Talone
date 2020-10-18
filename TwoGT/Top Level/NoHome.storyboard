@@ -4505,7 +4505,7 @@
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6gi-lO-JAb" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="192" height="44"/>
-                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="backgroundColor" white="1" alpha="0.77000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="ljP-BW-VlZ"/>
                                                                 </constraints>
@@ -4534,7 +4534,7 @@
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8pc-rs-umZ" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="198" y="0.0" width="192" height="44"/>
-                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="backgroundColor" white="1" alpha="0.77000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                                 <inset key="titleEdgeInsets" minX="3" minY="0.0" maxX="3" maxY="0.0"/>
                                                                 <state key="normal" title="create a have">
@@ -5019,7 +5019,7 @@
                                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                                                        <state key="normal" title="i have" image="haveForTab">
+                                                                        <state key="normal" title="haves" image="haveForTab">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <userDefinedRuntimeAttributes>
@@ -5058,7 +5058,7 @@
                                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
                                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                                                        <state key="normal" title="i need" image="needForTab">
+                                                                        <state key="normal" title="needs" image="needForTab">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <userDefinedRuntimeAttributes>
@@ -5098,11 +5098,15 @@
                                                                 <connections>
                                                                     <outlet property="bottomCap" destination="k4K-g7-znD" id="UwQ-VM-lZN"/>
                                                                     <outlet property="headerImage" destination="Oaw-gL-F89" id="wYF-HM-fur"/>
+                                                                    <outlet property="leftCreateButton" destination="6gi-lO-JAb" id="awg-c2-UTj"/>
                                                                     <outlet property="leftFolderLine" destination="gZh-lx-tIm" id="x7x-E1-YqF"/>
+                                                                    <outlet property="leftPost" destination="fen-9r-8ft" id="Otf-Od-sa9"/>
                                                                     <outlet property="leftTabButton" destination="Pga-z5-pfX" id="Qgx-nR-tjw"/>
                                                                     <outlet property="leftTabVerticalConstraint" destination="RMB-Rd-Ync" id="a32-Kt-EKg"/>
                                                                     <outlet property="mainView" destination="9f2-MC-Skg" id="g8z-fj-9Ve"/>
+                                                                    <outlet property="rightCreateButton" destination="8pc-rs-umZ" id="fI5-Bz-3fr"/>
                                                                     <outlet property="rightFolderLine" destination="IaB-KK-WFf" id="GgU-J0-fID"/>
+                                                                    <outlet property="rightPost" destination="2uU-EF-Fca" id="Gp0-4w-WYY"/>
                                                                     <outlet property="rightTabButton" destination="shu-c5-CmE" id="rdT-10-Q9M"/>
                                                                     <outlet property="rightTabVerticalConstraint" destination="s5b-hJ-uzc" id="0I2-cE-bPy"/>
                                                                     <outlet property="tableView" destination="0ZK-LA-Ow2" id="NRb-R0-RzQ"/>
@@ -5143,7 +5147,7 @@
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YoD-js-cGZ" userLabel="Trailing Line View">
                                         <rect key="frame" x="36" y="690" width="342" height="2"/>
-                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="2t5-bl-LF4"/>
                                         </constraints>
@@ -5691,7 +5695,7 @@
             <size key="intrinsicContentSize" width="68" height="30"/>
         </designable>
         <designable name="Pga-z5-pfX">
-            <size key="intrinsicContentSize" width="78" height="25"/>
+            <size key="intrinsicContentSize" width="79" height="25"/>
         </designable>
         <designable name="QRA-J0-mol">
             <size key="intrinsicContentSize" width="94" height="36"/>
