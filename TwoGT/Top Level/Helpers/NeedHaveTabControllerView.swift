@@ -64,7 +64,7 @@ class NeedHaveTabControllerView: UIView {
             self.rightTabButton.backgroundColor = self.rightTabButton.backgroundColor!.withAlphaComponent(0.44)
             self.mainView.layoutIfNeeded()
         }
-        
+        tableView.reloadData()
     }
 
     @IBAction func selectedRightTab(_ sender: UIButton) {
@@ -89,6 +89,7 @@ class NeedHaveTabControllerView: UIView {
             self.leftTabButton.backgroundColor = self.leftTabButton.backgroundColor!.withAlphaComponent(0.44)
             self.mainView.layoutIfNeeded()
         }
+        tableView.reloadData()
     }
 
     /*
