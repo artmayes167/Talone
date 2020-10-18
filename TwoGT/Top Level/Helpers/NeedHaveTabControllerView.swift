@@ -21,6 +21,7 @@ class NeedHaveTabControllerView: UIView {
     @IBOutlet weak var headerImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var bottomCap: UIImageView!
     
     var left = true
     
@@ -36,9 +37,10 @@ class NeedHaveTabControllerView: UIView {
         
         left = true
         UIView.animate(withDuration: 0.2) {
+            self.bottomCap.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
-            self.leftTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.leftTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.90)
             self.rightTabButton.backgroundColor = self.rightTabButton.backgroundColor!.withAlphaComponent(0.44)
             self.mainView.layoutIfNeeded()
         }
@@ -53,9 +55,10 @@ class NeedHaveTabControllerView: UIView {
         left = false
         
         UIView.animate(withDuration: 0.2) {
+            self.bottomCap.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
-            self.rightTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
+            self.rightTabButton.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.90)
             self.leftTabButton.backgroundColor = self.leftTabButton.backgroundColor!.withAlphaComponent(0.44)
             self.mainView.layoutIfNeeded()
         }
