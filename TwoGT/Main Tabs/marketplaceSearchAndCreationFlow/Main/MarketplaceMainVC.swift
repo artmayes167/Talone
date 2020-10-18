@@ -185,7 +185,7 @@ class MarketplaceCell: UITableViewCell {
         descriptionLabel.text = needItem.description
         handleLabel.text = needItem.owner
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
-        categoryImageView.image = UIImage(named: needItem.category) //.lowercased())
+        categoryImageView.image = UIImage(named: needItem.category.lowercased())
         watchersLabel.text = "no watchers yet"
         if let count = needItem.watchers?.count {
             if count == 0 { return }
@@ -205,7 +205,7 @@ class MarketplaceCell: UITableViewCell {
         descriptionLabel.text = haveItem.description
         handleLabel.text = haveItem.owner
         dateLabel.text = haveItem.createdAt?.dateValue().stringFromDate()
-        categoryImageView.image = UIImage(named: haveItem.category) //.lowercased())
+        categoryImageView.image = UIImage(named: haveItem.category.lowercased())
         watchersLabel.text = "no watchers yet"
         if let count = haveItem.needs?.count {
             if count == 0 { return }
