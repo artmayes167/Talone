@@ -12,6 +12,8 @@ class NeedHaveTabControllerView: UIView {
     
     @IBOutlet weak var leftTabButton: UIButton! // need
     @IBOutlet weak var rightTabButton: UIButton! // have
+    @IBOutlet weak var leftFolderLine: UIView!
+    @IBOutlet weak var rightFolderLine: UIView!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -21,15 +23,17 @@ class NeedHaveTabControllerView: UIView {
 //    @IBOutlet weak var rightContainerView: UIView!
 //
     @IBAction func selectedLeftTab(_ sender: UIButton) {
+        bringSubviewToFront(leftFolderLine)
         bringSubviewToFront(leftTabButton)
         left = true
-        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.44)
+        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.77)
     }
 
     @IBAction func selectedRightTab(_ sender: UIButton) {
+        bringSubviewToFront(rightFolderLine)
         bringSubviewToFront(rightTabButton)
         left = false
-        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.44)
+        tableView.backgroundColor = sender.backgroundColor?.withAlphaComponent(0.77)
     }
 
     /*

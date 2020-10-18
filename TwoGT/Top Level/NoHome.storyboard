@@ -740,6 +740,16 @@
             </objects>
             <point key="canvasLocation" x="-38" y="-663"/>
         </scene>
+        <!--Create New Item-->
+        <scene sceneID="WKM-Sl-VPs">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="Create New Item" storyboardName="Helper" referencedIdentifier="Create New Item" id="l8v-GX-Ag1" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="HrV-7w-Xde"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dz0-OO-5FQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="333" y="-15"/>
+        </scene>
         <!--City State Search-->
         <scene sceneID="iRq-He-JGv">
             <objects>
@@ -4554,14 +4564,14 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="k4K-g7-znD">
-                                        <rect key="frame" x="0.0" y="685" width="414" height="121"/>
+                                        <rect key="frame" x="0.0" y="683" width="414" height="121"/>
                                         <color key="tintColor" red="0.38436425149999998" green="0.42516310870000001" blue="0.69521333269999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="121" id="SYP-ot-db8"/>
                                         </constraints>
                                     </imageView>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="joJ-Yb-f8q" userLabel="Logo View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="12" y="287" width="390" height="390"/>
+                                        <rect key="frame" x="12" y="285" width="390" height="390"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appIcon" translatesAutoresizingMaskIntoConstraints="NO" id="YKo-Cf-KMI" customClass="DesignableImage" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="135" y="135" width="120" height="120"/>
@@ -4597,7 +4607,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="So6-Pi-2b0">
-                                        <rect key="frame" x="12" y="59" width="390" height="618"/>
+                                        <rect key="frame" x="12" y="59" width="390" height="616"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jhy-Xl-grl" userLabel="Where View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="80"/>
@@ -4628,7 +4638,7 @@
                                                                         <real key="value" value="8"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                     <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" red="0.67807060480000003" green="0.64153498409999998" blue="0.85853844879999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </userDefinedRuntimeAttribute>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                                         <real key="value" value="2"/>
@@ -4638,31 +4648,6 @@
                                                                     <outlet property="delegate" destination="gAp-4f-cN8" id="mxv-R6-SiW"/>
                                                                 </connections>
                                                             </textField>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSW-YV-v4m" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                                <rect key="frame" x="322" y="0.0" width="44" height="44"/>
-                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="44" id="Qxe-GH-HZq"/>
-                                                                    <constraint firstAttribute="width" constant="44" id="s4m-T6-Roc"/>
-                                                                </constraints>
-                                                                <color key="tintColor" red="0.41855806470000001" green="0.3698504655" blue="0.74379362309999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <inset key="imageEdgeInsets" minX="8" minY="10" maxX="8" maxY="10"/>
-                                                                <state key="normal" image="chevronRight"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                        <color key="value" red="0.69420671460000005" green="0.62092655900000004" blue="0.87667495009999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                        <real key="value" value="2"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                        <real key="value" value="8"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                                <connections>
-                                                                    <segue destination="6ZD-yn-x7J" kind="show" identifier="toSearchLocation" id="uuo-yK-bKE"/>
-                                                                </connections>
-                                                            </button>
                                                         </subviews>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="UtI-zi-gCY"/>
@@ -4792,94 +4777,10 @@
                                                 </connections>
                                             </containerView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byw-xh-6qh" userLabel="Display Table">
-                                                <rect key="frame" x="0.0" y="184" width="390" height="434"/>
+                                                <rect key="frame" x="0.0" y="184" width="390" height="432"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NQD-t3-BcM" userLabel="tab bar view">
-                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
-                                                        <subviews>
-                                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vFJ-aM-Mc1" userLabel="Designable Tab View" customClass="NeedHaveTabControllerView" customModule="Talone" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
-                                                                <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="shu-c5-CmE" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                                        <rect key="frame" x="183" y="8" width="207" height="44"/>
-                                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
-                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                                                        <state key="normal" title="i have" image="button:shu-c5-CmE:image">
-                                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </state>
-                                                                        <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                <real key="value" value="8"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                                <real key="value" value="2"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                        </userDefinedRuntimeAttributes>
-                                                                        <connections>
-                                                                            <action selector="selectedRightTab:" destination="vFJ-aM-Mc1" eventType="touchDown" id="k0i-x1-TPd"/>
-                                                                        </connections>
-                                                                    </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pga-z5-pfX" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="8" width="207" height="44"/>
-                                                                        <color key="backgroundColor" red="0.48005741829999998" green="0.26856213810000001" blue="0.64796090129999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="44" id="VBj-pr-3mZ"/>
-                                                                        </constraints>
-                                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                                                        <state key="normal" title="i need" image="button:Pga-z5-pfX:image">
-                                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </state>
-                                                                        <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                <real key="value" value="8"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                                                <real key="value" value="2"/>
-                                                                            </userDefinedRuntimeAttribute>
-                                                                        </userDefinedRuntimeAttributes>
-                                                                        <connections>
-                                                                            <action selector="selectedLeftTab:" destination="vFJ-aM-Mc1" eventType="touchDown" id="3fH-24-hak"/>
-                                                                        </connections>
-                                                                    </button>
-                                                                </subviews>
-                                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="leading" secondItem="vFJ-aM-Mc1" secondAttribute="leading" id="5fE-89-yRI"/>
-                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="height" secondItem="shu-c5-CmE" secondAttribute="height" id="Ulf-X1-59a"/>
-                                                                    <constraint firstItem="shu-c5-CmE" firstAttribute="leading" secondItem="Pga-z5-pfX" secondAttribute="trailing" constant="-24" id="YJu-Zs-lrj"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="Pga-z5-pfX" secondAttribute="bottom" constant="-8" id="ca9-JJ-0Ho"/>
-                                                                    <constraint firstAttribute="height" constant="44" id="gu0-UY-NNj"/>
-                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="width" secondItem="shu-c5-CmE" secondAttribute="width" id="hCz-3V-oUy"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="shu-c5-CmE" secondAttribute="bottom" constant="-8" id="p3c-FQ-Heh"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="shu-c5-CmE" secondAttribute="trailing" id="xc1-DH-f30"/>
-                                                                </constraints>
-                                                                <connections>
-                                                                    <outlet property="leftTabButton" destination="Pga-z5-pfX" id="Qgx-nR-tjw"/>
-                                                                    <outlet property="rightTabButton" destination="shu-c5-CmE" id="rdT-10-Q9M"/>
-                                                                    <outlet property="tableView" destination="0ZK-LA-Ow2" id="NRb-R0-RzQ"/>
-                                                                </connections>
-                                                            </view>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <constraints>
-                                                            <constraint firstItem="vFJ-aM-Mc1" firstAttribute="leading" secondItem="NQD-t3-BcM" secondAttribute="leading" id="6fr-3T-JVh"/>
-                                                            <constraint firstItem="vFJ-aM-Mc1" firstAttribute="top" secondItem="NQD-t3-BcM" secondAttribute="top" id="8HR-6d-Wis"/>
-                                                            <constraint firstAttribute="trailing" secondItem="vFJ-aM-Mc1" secondAttribute="trailing" id="GP0-hF-NYW"/>
-                                                            <constraint firstAttribute="bottom" secondItem="vFJ-aM-Mc1" secondAttribute="bottom" id="O7P-t4-zdU"/>
-                                                        </constraints>
-                                                    </view>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0ZK-LA-Ow2">
-                                                        <rect key="frame" x="0.0" y="44" width="390" height="390"/>
+                                                        <rect key="frame" x="0.0" y="42" width="390" height="390"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -5052,11 +4953,139 @@
                                                                 </tableViewCellContentView>
                                                             </tableViewCell>
                                                         </prototypes>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <outlet property="dataSource" destination="gAp-4f-cN8" id="l6G-cq-mBE"/>
                                                             <outlet property="delegate" destination="gAp-4f-cN8" id="9QN-Rk-zgf"/>
                                                         </connections>
                                                     </tableView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NQD-t3-BcM" userLabel="tab bar view">
+                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
+                                                        <subviews>
+                                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vFJ-aM-Mc1" userLabel="NeedHaveTab" customClass="NeedHaveTabControllerView" customModule="Talone" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IaB-KK-WFf" userLabel="Right Folder Line">
+                                                                        <rect key="frame" x="0.0" y="42" width="207" height="2"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="2" id="oJT-Sb-nVn"/>
+                                                                        </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                <real key="value" value="0.0"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </view>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="shu-c5-CmE" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                                        <rect key="frame" x="183" y="0.0" width="207" height="52"/>
+                                                                        <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
+                                                                        <state key="normal" title="i have" image="button:shu-c5-CmE:image">
+                                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                <real key="value" value="2"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="selectedRightTab:" destination="vFJ-aM-Mc1" eventType="touchDown" id="k0i-x1-TPd"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gZh-lx-tIm" userLabel="Left Folder Line">
+                                                                        <rect key="frame" x="183" y="42" width="207" height="2"/>
+                                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="2" id="Kxj-H2-qPL"/>
+                                                                        </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                <real key="value" value="0.0"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                    </view>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pga-z5-pfX" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="207" height="52"/>
+                                                                        <color key="backgroundColor" red="0.48005741829999998" green="0.26856213810000001" blue="0.64796090129999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <inset key="titleEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
+                                                                        <state key="normal" title="i need" image="button:Pga-z5-pfX:image">
+                                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                                <real key="value" value="2"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="selectedLeftTab:" destination="vFJ-aM-Mc1" eventType="touchDown" id="3fH-24-hak"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="gZh-lx-tIm" firstAttribute="trailing" secondItem="shu-c5-CmE" secondAttribute="trailing" id="0UX-2e-iZ5"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="gZh-lx-tIm" secondAttribute="bottom" id="0nV-SG-uqa"/>
+                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="leading" secondItem="vFJ-aM-Mc1" secondAttribute="leading" id="5fE-89-yRI"/>
+                                                                    <constraint firstItem="IaB-KK-WFf" firstAttribute="trailing" secondItem="Pga-z5-pfX" secondAttribute="trailing" id="7pG-4W-NKS"/>
+                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="height" secondItem="shu-c5-CmE" secondAttribute="height" id="Ulf-X1-59a"/>
+                                                                    <constraint firstItem="gZh-lx-tIm" firstAttribute="leading" secondItem="shu-c5-CmE" secondAttribute="leading" id="VQO-Uv-Daq"/>
+                                                                    <constraint firstItem="shu-c5-CmE" firstAttribute="leading" secondItem="Pga-z5-pfX" secondAttribute="trailing" constant="-24" id="YJu-Zs-lrj"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="IaB-KK-WFf" secondAttribute="bottom" id="bmJ-h8-hDm"/>
+                                                                    <constraint firstItem="IaB-KK-WFf" firstAttribute="leading" secondItem="Pga-z5-pfX" secondAttribute="leading" id="cQa-C1-HGb"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="Pga-z5-pfX" secondAttribute="bottom" constant="-8" id="ca9-JJ-0Ho"/>
+                                                                    <constraint firstAttribute="height" constant="44" id="gu0-UY-NNj"/>
+                                                                    <constraint firstItem="Pga-z5-pfX" firstAttribute="width" secondItem="shu-c5-CmE" secondAttribute="width" id="hCz-3V-oUy"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="shu-c5-CmE" secondAttribute="bottom" constant="-8" id="p3c-FQ-Heh"/>
+                                                                    <constraint firstItem="shu-c5-CmE" firstAttribute="top" secondItem="vFJ-aM-Mc1" secondAttribute="top" id="s5b-hJ-uzc"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="shu-c5-CmE" secondAttribute="trailing" id="xc1-DH-f30"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <outlet property="leftFolderLine" destination="gZh-lx-tIm" id="x7x-E1-YqF"/>
+                                                                    <outlet property="leftTabButton" destination="Pga-z5-pfX" id="Qgx-nR-tjw"/>
+                                                                    <outlet property="rightFolderLine" destination="IaB-KK-WFf" id="GgU-J0-fID"/>
+                                                                    <outlet property="rightTabButton" destination="shu-c5-CmE" id="rdT-10-Q9M"/>
+                                                                    <outlet property="tableView" destination="0ZK-LA-Ow2" id="NRb-R0-RzQ"/>
+                                                                </connections>
+                                                            </view>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstItem="vFJ-aM-Mc1" firstAttribute="leading" secondItem="NQD-t3-BcM" secondAttribute="leading" id="6fr-3T-JVh"/>
+                                                            <constraint firstItem="vFJ-aM-Mc1" firstAttribute="top" secondItem="NQD-t3-BcM" secondAttribute="top" id="8HR-6d-Wis"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vFJ-aM-Mc1" secondAttribute="trailing" id="GP0-hF-NYW"/>
+                                                            <constraint firstAttribute="bottom" secondItem="vFJ-aM-Mc1" secondAttribute="bottom" id="O7P-t4-zdU"/>
+                                                        </constraints>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -5068,7 +5097,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="NQD-t3-BcM" secondAttribute="trailing" id="Rex-uh-rPg"/>
                                                     <constraint firstAttribute="trailing" secondItem="0ZK-LA-Ow2" secondAttribute="trailing" id="U63-Jb-aQd"/>
                                                     <constraint firstItem="0ZK-LA-Ow2" firstAttribute="leading" secondItem="Byw-xh-6qh" secondAttribute="leading" id="Zqp-12-D3v"/>
-                                                    <constraint firstItem="0ZK-LA-Ow2" firstAttribute="top" secondItem="NQD-t3-BcM" secondAttribute="bottom" id="cUR-id-aoz"/>
+                                                    <constraint firstItem="0ZK-LA-Ow2" firstAttribute="top" secondItem="NQD-t3-BcM" secondAttribute="bottom" constant="-2" id="cUR-id-aoz"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -5082,7 +5111,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YoD-js-cGZ" userLabel="Trailing Line View">
-                                        <rect key="frame" x="36" y="683" width="342" height="2"/>
+                                        <rect key="frame" x="36" y="681" width="342" height="2"/>
                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="2t5-bl-LF4"/>
@@ -5151,11 +5180,14 @@
                     <connections>
                         <outlet property="categoriesLabel" destination="dnu-CC-rTS" id="St1-wb-Wzl"/>
                         <outlet property="categoriesPopOver" destination="HuI-Dt-a0I" id="drz-ic-u1X"/>
+                        <outlet property="emptyTableImageView" destination="YKo-Cf-KMI" id="FgW-WJ-EzV"/>
                         <outlet property="needHaveTabController" destination="vFJ-aM-Mc1" id="zq2-y7-BID"/>
                         <outlet property="tableView" destination="0ZK-LA-Ow2" id="fXj-OX-M3i"/>
                         <outlet property="whereTextField" destination="AcL-lw-hqp" id="b6G-LD-Zz3"/>
                         <segue destination="lmC-uW-dPC" kind="unwind" identifier="unwindToWarehouse" unwindAction="unwindToWarehouse:" id="vwl-Le-HvT"/>
                         <segue destination="848-gQ-Ib6" kind="show" identifier="toDetails" id="xky-am-oWg"/>
+                        <segue destination="l8v-GX-Ag1" kind="show" identifier="toCreateNewItem" id="uyN-y9-f1S"/>
+                        <segue destination="6ZD-yn-x7J" kind="show" identifier="toSearchLocation" id="Mn2-Rt-RNG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M7c-oO-heW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -5613,9 +5645,6 @@
         </designable>
         <designable name="Iu1-Gu-MRC">
             <size key="intrinsicContentSize" width="538" height="538"/>
-        </designable>
-        <designable name="MSW-YV-v4m">
-            <size key="intrinsicContentSize" width="592" height="592"/>
         </designable>
         <designable name="Oi5-Fi-wrJ">
             <size key="intrinsicContentSize" width="68" height="30"/>

@@ -38,23 +38,25 @@ public class Customizer: NSObject {
     }
     
     func customize(_ view: CustomizedObject) {
-//        switch view.key() {
+        switch view.key() {
 //        case .activeTextView, .inactiveTextView:
 //            guard let v = view as? DesignableTextView else { fatalError() }
 //            configure(textView: v)
 //        case .pageHeader, .secondaryPageHeader, .cardPrimaryHeader:
 //            guard let v = view as? DesignableView else { fatalError() }
 //            configure(view: v)
-//        case .modalBackButton:
-//            guard let v = view as? DesignableButton else { fatalError() }
-//            configure(button: v)
+        case .modalBackButton:
+            guard let v = view as? DesignableButton else { fatalError() }
+            configure(button: v)
 //        case .topCap, .bottomCap:
 //            guard let v = view as? DesignableImage else { fatalError() }
 //            configure(imageView: v)
 //        case .addressCell, .phoneCell, .emailCell:
 //            guard let v = view as? UITableViewCell else { fatalError() }
 //            configure(tableCell: v)
-//        }
+        default:
+            return
+        }
     }
 }
 

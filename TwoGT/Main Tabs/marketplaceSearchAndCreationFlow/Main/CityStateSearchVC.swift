@@ -29,6 +29,12 @@ enum SaveType: Int, CaseIterable {
     }
 }
 
+enum UnwindIdentifiers: String, CaseIterable {
+    case marketplaceSearch = "unwindToMarketplaceSearch"
+    case createNewItem = "unwindToCreateNewItem"
+    case addNewAddress = "unwindToAddNewAddress"
+}
+
 class CityStateSearchVC: UIViewController {
     
     @IBOutlet weak var stateTextField: UITextField!
@@ -87,7 +93,7 @@ class CityStateSearchVC: UIViewController {
     // var locationForSave: SearchLocation?
 
     /// To be set by presenting controller, defaults to `unwindToMarketplaceSearch`
-    public var unwindSegueIdentifier: String = "unwindToMarketplaceSearch"
+    public var unwindSegueIdentifier: UnwindIdentifiers = .marketplaceSearch
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -153,7 +159,7 @@ class CityStateSearchVC: UIViewController {
             loc.state = stateTextField.text!
             loc.createLocation()
         }
-        performSegue(withIdentifier: unwindSegueIdentifier, sender: nil)
+        performSegue(withIdentifier: unwindSegueIdentifier.rawValue, sender: nil)
     }
     
     

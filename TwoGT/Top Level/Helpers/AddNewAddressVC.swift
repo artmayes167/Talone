@@ -79,7 +79,7 @@ class AddNewAddressVC: UIViewController {
         if segue.identifier == "toCityState" {
             segue.destination.presentationController?.delegate = self
             guard let vc = segue.destination as? CityStateSearchVC else { fatalError() }
-            vc.unwindSegueIdentifier = "unwindToNewAddress"
+            vc.unwindSegueIdentifier = .addNewAddress
         }
     }
     

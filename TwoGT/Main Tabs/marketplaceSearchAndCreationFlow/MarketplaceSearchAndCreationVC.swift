@@ -34,7 +34,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 
      // MARK: - Variables
     var creationManager: PurposeCreationManager = PurposeCreationManager()
-    var model: MarketplaceModel?
+    var model: MarketplaceModelOld?
 
     var currentNeedHaveSelectedSegmentIndex = 0 {
         didSet {
@@ -71,7 +71,7 @@ class MarketplaceSearchAndCreationVC: UIViewController, NeedSelectionDelegate {
 //        AppDelegate.cardObserver.startObserving()
 //        AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
 
-        model = MarketplaceModel(creationManager: creationManager)
+        model = MarketplaceModelOld(creationManager: creationManager)
     }
 
     override func viewDidAppear(_ animated: Bool) {

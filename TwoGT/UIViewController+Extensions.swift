@@ -173,18 +173,6 @@ extension UIViewController: UITextFieldDelegate {
     }
 }
 
-/// Add VCs to enable Toast.  NOT IMPLEMENTED OR USED YET -- may work better as an extension
-class ModalContainerVC: UIViewController {
-    func addViewController(_ vc: UIViewController) {
-        vc.willMove(toParent: self)
-        view.addSubview(vc.view)
-        addChild(vc)
-        vc.didMove(toParent: self)
-    }
-    
-    // Copy Toast code from BaseSwipeVC?
-}
-
 // MARK: -
 extension UIViewController: MFMailComposeViewControllerDelegate {
     func launchEmail(to recipients: [String], subject: String = "", body: String) {

@@ -17,6 +17,7 @@ class MarketplaceMainVC: UIViewController {
     @IBOutlet weak var whereTextField: UITextField!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyTableImageView: UIImageView!
     
     var category: NeedType = .any
     var loc: CityStateSearchVC.Loc?
@@ -29,6 +30,7 @@ class MarketplaceMainVC: UIViewController {
         tableView.estimatedRowHeight = 100
         
         setInitialValues()
+        emptyTableImageView.cycleOpacity()
     }
     
     private func setInitialValues() {
@@ -46,11 +48,11 @@ class MarketplaceMainVC: UIViewController {
     }
     
     @IBAction func createANeed() {
-        showOkayAlert(title: "Greetings, Tester!", message: "This hasn't been rewired yet, so cool your jets.", handler: nil)
+        performSegue(withIdentifier: "toCreateNewItem", sender: true)
     }
     
     @IBAction func createAHave() {
-        showOkayAlert(title: "Greetings, Tester!", message: "This hasn't been rewired yet, so cool your jets.", handler: nil)
+        performSegue(withIdentifier: "toCreateNewItem", sender: false)
     }
     
     @IBAction func chooseCategory(_ sender: UIButton) {
@@ -71,6 +73,10 @@ class MarketplaceMainVC: UIViewController {
             } else if let h = sender as? HavesBase.HaveItem {
                 vc.configure(needItem: nil, haveItem: h)
             }
+        case "toCreateNewItem":
+            guard let vc = segue.destination as? CreateNewItemVC, let need = sender as? Bool else { fatalError() }
+            vc.loc = loc
+            vc.need = need
         default:
             print("toSearchLocation")
         }
@@ -176,7 +182,16 @@ class MarketplaceCell: UITableViewCell {
         headlineLabel.text = needItem.headline
         handleLabel.text = needItem.owner
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
-        watchersLabel.text = ""
+        watchersLabel.text = "no watchers yet"
+//        if let count = needItem.needs?.count {
+//            if count == 0 { return }
+//            if count == 1 {
+//                watchersLabel.text = "1 watcher"
+//                return
+//            } else {
+//                watchersLabel.text = String(count) + " watchers"
+//            }
+//        }
     }
     
     func configure(rating: ContactRating?, haveItem: HavesBase.HaveItem) {
