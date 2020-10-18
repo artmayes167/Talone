@@ -33,7 +33,7 @@ extension MarketplaceRepThemeManager {
         header.bottomView.borderColor = color
         header.leftView.backgroundColor = color
         header.categoryImageView.backgroundColor = color
-        header.borderWidth = 3
+        header.borderWidth = 0
         header.borderColor = color
     }
     
@@ -46,16 +46,19 @@ class ConfigurableHeader: UIView {
     @IBOutlet weak var firstLetterLabel: UILabel!
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var mainView: UIView!
     
     func configure(needItem: NeedsBase.NeedItem) {
         categoryImageView.image = UIImage(named: needItem.category.lowercased())
         headlineLabel.text = needItem.headline
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
+        mainView.layoutIfNeeded()
     }
     func configure(haveItem: HavesBase.HaveItem) {
         categoryImageView.image = UIImage(named: haveItem.category.lowercased())
         headlineLabel.text = haveItem.headline
         dateLabel.text = haveItem.createdAt?.dateValue().stringFromDate()
+        mainView.layoutIfNeeded()
     }
     
 }
