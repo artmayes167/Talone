@@ -105,14 +105,32 @@ class NeedDetailModel {
     }
     
     func watcherAction(add: Bool) {
-        // TODO: - Actually manage watchers in the DB
-        if add { handlesArray.append(CoreDataGod.user.handle!) }
-        else {
-            if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
-                handlesArray.remove(at: index)
-            }
+        if add {
+            handlesArray.append(CoreDataGod.user.handle!)
+            
+        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
+            handlesArray.remove(at: index)
         }
     }
+    /// Uncomment once api is in place
+//    func newwatcherAction(add: Bool) {
+//        let m = AddHaveToWatchModel()
+//
+//        if let n = need {
+//            m.watcherAction(add: add, need: n)
+//        } else if let h = have {
+//            m.watcherAction(add: add, have: have)
+//        } else {
+//            fatalError()
+//        }
+//
+//        if add {
+//            handlesArray.append(CoreDataGod.user.handle!)
+//
+//        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
+//            handlesArray.remove(at: index)
+//        }
+//    }
 }
 
 class ItemDetailsVC: UIViewController {
