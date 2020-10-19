@@ -106,7 +106,10 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 extension ContributorsVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.size.width - 10
-        return CGSize(width: width, height: 128.0)
+        let x = contributors[indexPath.row].role
+        var z = CGFloat(x?.count ?? 100)
+        z = CGFloat(z/30 * 14)
+        return CGSize(width: width, height: z + 100.0)
     }
 }
 
