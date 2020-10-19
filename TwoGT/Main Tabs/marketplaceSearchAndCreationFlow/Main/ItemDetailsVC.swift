@@ -52,12 +52,14 @@ class ConfigurableHeader: UIView {
         categoryImageView.image = UIImage(named: needItem.category.lowercased())
         headlineLabel.text = needItem.headline
         dateLabel.text = needItem.createdAt?.dateValue().stringFromDate()
+        firstLetterLabel.text = "N"
         mainView.layoutIfNeeded()
     }
     func configure(haveItem: HavesBase.HaveItem) {
         categoryImageView.image = UIImage(named: haveItem.category.lowercased())
         headlineLabel.text = haveItem.headline
         dateLabel.text = haveItem.createdAt?.dateValue().stringFromDate()
+        firstLetterLabel.text = "H"
         mainView.layoutIfNeeded()
     }
     
