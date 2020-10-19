@@ -2587,7 +2587,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contactsBackground" translatesAutoresizingMaskIntoConstraints="NO" id="SVq-25-UHo">
-                                <rect key="frame" x="0.0" y="127" width="414" height="686"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hk7-eZ-oYO" customClass="CardPrimaryHeader" customModule="Talone" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="50"/>
@@ -2612,6 +2612,14 @@
                                     <constraint firstItem="Zbb-Mp-XHC" firstAttribute="top" secondItem="hk7-eZ-oYO" secondAttribute="top" id="HeQ-OB-xg2"/>
                                     <constraint firstItem="Hu5-iW-3sA" firstAttribute="centerX" secondItem="hk7-eZ-oYO" secondAttribute="centerX" id="YV4-UU-aMZ"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="titleLabel" destination="Hu5-iW-3sA" id="qq7-H4-ogh"/>
                                 </connections>
@@ -2870,7 +2878,7 @@
                             <constraint firstItem="cmw-9f-dqb" firstAttribute="trailing" secondItem="6fb-qE-NML" secondAttribute="trailing" id="fey-UH-wFX"/>
                             <constraint firstItem="6fb-qE-NML" firstAttribute="leading" secondItem="cmw-9f-dqb" secondAttribute="leading" id="lCp-aR-Id4"/>
                             <constraint firstItem="hk7-eZ-oYO" firstAttribute="leading" secondItem="cmw-9f-dqb" secondAttribute="leading" id="p6o-0i-6Oe"/>
-                            <constraint firstItem="SVq-25-UHo" firstAttribute="top" secondItem="wcu-Uh-XGK" secondAttribute="bottom" id="tr7-CG-Sof"/>
+                            <constraint firstItem="SVq-25-UHo" firstAttribute="top" secondItem="oCg-yP-PRb" secondAttribute="top" id="tr7-CG-Sof"/>
                             <constraint firstItem="hk7-eZ-oYO" firstAttribute="top" secondItem="cmw-9f-dqb" secondAttribute="top" id="unl-db-2eV"/>
                             <constraint firstItem="SVq-25-UHo" firstAttribute="leading" secondItem="cmw-9f-dqb" secondAttribute="leading" id="yJs-9N-pLp"/>
                         </constraints>
@@ -4797,13 +4805,14 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byw-xh-6qh" userLabel="Tabs Display Table">
                                                 <rect key="frame" x="0.0" y="184" width="390" height="432"/>
                                                 <subviews>
-                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0ZK-LA-Ow2">
+                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0ZK-LA-Ow2">
                                                         <rect key="frame" x="0.0" y="42" width="390" height="390"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="390" id="0kW-SH-W0a"/>
                                                         </constraints>
+                                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
                                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="100" id="Zn6-vd-hgd" customClass="MarketplaceCell" customModule="Talone" customModuleProvider="target">
@@ -5568,12 +5577,13 @@
                                                     <action selector="touchedWatch:" destination="848-gQ-Ib6" eventType="touchUpInside" id="Nly-jZ-wq4"/>
                                                 </connections>
                                             </button>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Dfm-LW-rqP">
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Dfm-LW-rqP">
                                                 <rect key="frame" x="0.0" y="268" width="390" height="300"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="0.44" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="300" id="Cf3-qH-a0N"/>
                                                 </constraints>
+                                                <color key="separatorColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="wD4-xS-7S9" customClass="SimpleSearchCell" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="28" width="390" height="40.5"/>
