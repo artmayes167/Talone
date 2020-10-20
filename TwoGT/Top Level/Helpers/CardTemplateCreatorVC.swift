@@ -127,7 +127,7 @@ class CardTemplateCreatorVC: UIViewController {
             potentialImage = i.af.imageAspectScaled(toFit: imageButton.bounds.size)
         }
         
-        handleLabel.text = AppDelegateHelper.user.handle
+        handleLabel.text = "to: " + contact!.contactHandle!
         if let c = cardInstance {
             if let image = c.image {
                 /// image has been previously added to template
