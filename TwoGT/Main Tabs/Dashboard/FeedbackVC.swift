@@ -77,12 +77,12 @@ class FeedbackVC: UIViewController {
     
     @IBAction func copyEmailToClipboard(_ sender: Any) {
         let pasteBoard = UIPasteboard.general
-        pasteBoard.string = "artmayes167@icloud.com"
+        pasteBoard.string = "talone.the.app@gmail.com"
     }
     
     @IBAction func callArt(_ sender: Any) {
         DispatchQueue.main.async {
-            if let url = URL(string:"tel:7736826910") {
+            if let url = URL(string:"tel:7739451622") {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {

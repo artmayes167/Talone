@@ -24,7 +24,7 @@ class EnterEmailVC: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showOkayAlert(title: "READ EVERYTHING", message: String(format:"you're special. you're about to embark on an adventure in social evolution.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\n and read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
+        showOkayAlert(title: "READ EVERYTHING", message: String(format:"you're special. you're about to embark on an adventure in social evolution.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\nand read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
     }
     
     @IBAction func submitEmail(_ sender: Any) {
@@ -68,10 +68,31 @@ class EnterEmailVC: UIViewController {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let t = textField.text {
+            
+            if textField.text?.pure() == "talone.for.apple@gmail.com" {
+                showApplePasswordAlert(title: "welcome, apple tester", message: "please enter the password provided. this will bypass the account creation mechanism so we don't have 500 of you running around.") { (_) in
+                    // sole entry point
+                    self.handleApple()
+                }
+                return
+            }
+            
             if t.contains("@") && t.contains(".") {
                 submitEmailButton.isEnabled = true
             }
         }
+    }
+    
+    private func handleApple() {
+        let appleHandle = "the_naugahyde_beast"
+        UserDefaults.standard.setValue(appleHandle, forKey: DefaultsKeys.userHandle.rawValue)
+        UserDefaults.standard.synchronize() // to prevent a crash
+        
+        // TODO: - Bypass
+        guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
+        // create user.
+        let _ = CoreDataGod.user
+        _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
     }
 }
 

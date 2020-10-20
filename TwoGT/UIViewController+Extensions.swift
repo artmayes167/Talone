@@ -108,6 +108,27 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+    func showApplePasswordAlert(title: String, message: String, okayHandler: @escaping ((UIAlertAction) -> Void)) {
+        let alertController = UIAlertController(title: title.taloneCased(), message: message, preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "****"
+        }
+        let saveAction = UIAlertAction(title: "enter".taloneCased(), style: .default, handler: { alert -> Void in
+            let firstTextField = alertController.textFields![0] as UITextField
+            let adminPass = "n0t@p@$$w0rd"
+            if firstTextField.text == adminPass {
+                okayHandler(alert)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        })
+        let cancelAction = UIAlertAction(title: "cancel".taloneCased(), style: .cancel, handler: nil)
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
      // MARK: - Spinner Controls
     /// Custom activity indicator
     func showSpinner() {
@@ -193,7 +214,7 @@ extension UIViewController: MFMailComposeViewControllerDelegate {
         mc.mailComposeDelegate = self
         mc.setSubject("Talone: " + subject)
         mc.setMessageBody(body, isHTML: false)
-        mc.setToRecipients(["artmayes167@icloud.com"])
+        mc.setToRecipients(["talone.the.app@gmail.com"])
         self.present(mc, animated: true, completion: nil)
    }
 
