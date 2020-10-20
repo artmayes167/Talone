@@ -114,6 +114,15 @@ class NeedDetailModel {
             handlesArray.remove(at: index)
         }
     }
+    
+    func sendCard(_ c: UIViewController) {
+        if let n = need {
+            c.showCompleteAndSendCardHelper(needItem: n)
+        } else if let h = have {
+            c.showCompleteAndSendCardHelper(haveItem: h)
+        }
+    }
+    
     /// Uncomment once api is in place
 //    func newwatcherAction(add: Bool) {
 //        let m = AddHaveToWatchModel()
@@ -168,7 +177,7 @@ class ItemDetailsVC: UIViewController {
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
-        devNotReady()
+        model.sendCard(self)
     }
     
     @IBAction func report(_ sender: UIButton) {
