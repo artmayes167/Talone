@@ -121,7 +121,6 @@ class CardTemplateCreatorVC: UIViewController {
         availableTableView.estimatedRowHeight = 62
         
         let images = CoreDataImageHelper.shared.fetchAllImages()
-        imageButton.isEnabled = true
         plusImage.isHidden = false
         if let i = images?.first?.image {
             potentialImage = i.af.imageAspectScaled(toFit: imageButton.bounds.size)
@@ -134,8 +133,6 @@ class CardTemplateCreatorVC: UIViewController {
                 potentialImage = image.af.imageAspectScaled(toFit: imageButton.bounds.size)
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(potentialImage, for: .normal)
-                imageButton.isSelected = true
-                imageButton.isEnabled = true
             }
             titleTextField?.text = c.templateTitle
         }
@@ -168,18 +165,7 @@ class CardTemplateCreatorVC: UIViewController {
     
     /// If there wasn't an image shown and included before, there is now-- and vice-versa
     @IBAction func touchedAddRemoveImage(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        if sender.isSelected {
-            if potentialImage != nil {
-                imageButton.imageView?.contentMode = .scaleAspectFill
-                imageButton.setImage(potentialImage, for: .normal)
-            } else {
-                showOkayOrCancelAlert(title: "hmm", message: "no images have been set. would you like to add one?") { (_) in
-                    self.changeImage(sender)
-                } cancelHandler: { (_) in }
-                imageButton.setImage(#imageLiteral(resourceName: "avatar.png"), for: .normal)
-            }
-        }
+        changeImage(sender)
     }
     
     @IBAction func blockUser(_ sender: UIButton) {

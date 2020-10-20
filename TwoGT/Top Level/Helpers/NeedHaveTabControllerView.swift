@@ -46,10 +46,11 @@ class NeedHaveTabControllerView: UIView {
         self.rightTabButton.endGlowAnimation()
         self.leftCreateButton.doGlowAnimation(withColor: .white)
         self.rightCreateButton.endGlowAnimation()
-        
+        tableView.alpha = 0.5
         
         left = true
         UIView.animate(withDuration: 0.2) {
+            self.tableView.alpha = 1.0
             self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.bottomCap.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
@@ -77,10 +78,11 @@ class NeedHaveTabControllerView: UIView {
         self.leftTabButton.endGlowAnimation()
         self.rightCreateButton.doGlowAnimation(withColor: .white)
         self.leftCreateButton.endGlowAnimation()
-        
+        self.tableView.alpha = 0.5
         left = false
         
         UIView.animate(withDuration: 0.2) {
+            self.tableView.alpha = 1.0
             self.bottomCap.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.headerImage.tintColor = sender.backgroundColor!.withAlphaComponent(0.77)
             self.tableView.backgroundColor = sender.backgroundColor!.withAlphaComponent(0.77)
