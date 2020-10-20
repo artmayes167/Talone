@@ -80,6 +80,8 @@ class VerificationVC: UIViewController {
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
     
+    @IBOutlet weak var titleLabel: UILabel!
+    
     @IBOutlet weak var confirmStack: UIStackView!
     @IBOutlet weak var doneStack: UIStackView!
     
@@ -98,10 +100,14 @@ class VerificationVC: UIViewController {
         // Notifications
         NotificationCenter.default.addObserver(self, selector: #selector(passwordlessSignInSuccessful), name: NSNotification.Name(rawValue: "PasswordlessEmailNotificationSuccess"), object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setSignInButtonState()
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setSignInButtonState()
     }
     
     private func setStackState() {
@@ -113,10 +119,12 @@ class VerificationVC: UIViewController {
     private func setSignInButtonState() {
         if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue),
             let _ = UserDefaults.standard.string(forKey: "Link") {
+            titleLabel.text = "email verified"
             signInButton.isEnabled = true
             signInInfo.isHidden = true
             setStackState()
         } else {
+            titleLabel.text = "verify your email"
         }
     }
 
@@ -127,6 +135,7 @@ class VerificationVC: UIViewController {
                     self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (_) in
                         // TODO: Check the error and invalidate link only if the error is specifically about
                         // the link (e.g. expired, already used etc.)
+                        
                         UserDefaults.standard.set(nil, forKey: "Link")
                         // navigate back
                         self.navigationController?.popViewController(animated: true)
