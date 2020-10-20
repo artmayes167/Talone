@@ -9,6 +9,10 @@
 import UIKit
 import Firebase
 
+enum DefaultsSavedLocationKeys: String {
+    case country, state, city, community, display
+}
+
 class MarketplaceMainVC: UIViewController {
     
     @IBOutlet weak var categoriesPopOver: UIView!

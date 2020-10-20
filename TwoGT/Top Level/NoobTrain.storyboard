@@ -767,24 +767,34 @@
                                 <color key="backgroundColor" red="0.65670483729999996" green="0.74328558580000004" blue="0.99775256850000005" alpha="0.76728381850000005" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="header" rowHeight="40" id="qjc-3U-S8d" customClass="YouHeaderCell" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="390" height="40"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="header" rowHeight="30" id="qjc-3U-S8d" customClass="YouHeaderCell" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="390" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qjc-3U-S8d" id="8bs-Dh-cOx">
-                                            <rect key="frame" x="0.0" y="0.0" width="390" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="header:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9P-AA-GXf">
-                                                    <rect key="frame" x="12" y="11" width="52" height="18"/>
+                                                    <rect key="frame" x="12" y="6" width="52" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ky-cY-2L2">
+                                                    <rect key="frame" x="0.0" y="29" width="390" height="1"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="iKs-J1-JAS"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="N9P-AA-GXf" firstAttribute="leading" secondItem="8bs-Dh-cOx" secondAttribute="leading" constant="12" id="8w7-Kv-reB"/>
                                                 <constraint firstItem="N9P-AA-GXf" firstAttribute="centerY" secondItem="8bs-Dh-cOx" secondAttribute="centerY" id="Tfs-pH-8L1"/>
+                                                <constraint firstAttribute="trailing" secondItem="5ky-cY-2L2" secondAttribute="trailing" id="bqq-C8-wnY"/>
+                                                <constraint firstItem="5ky-cY-2L2" firstAttribute="leading" secondItem="8bs-Dh-cOx" secondAttribute="leading" id="wgx-RR-pqb"/>
+                                                <constraint firstAttribute="bottom" secondItem="5ky-cY-2L2" secondAttribute="bottom" id="ym4-K1-CVG"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -793,7 +803,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="address0" rowHeight="100" id="YmC-ze-N06" customClass="AddressCell" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="68" width="390" height="100"/>
+                                        <rect key="frame" x="0.0" y="58" width="390" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YmC-ze-N06" id="N7e-WE-0L1">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
@@ -849,7 +859,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="address1" rowHeight="100" id="bYV-Y1-kOT" customClass="AddressCell" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="168" width="390" height="100"/>
+                                        <rect key="frame" x="0.0" y="158" width="390" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bYV-Y1-kOT" id="R63-0D-CF8">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
@@ -905,7 +915,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="footer" rowHeight="44" id="qBk-sD-naL" customClass="YouFooterCell" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="268" width="390" height="44"/>
+                                        <rect key="frame" x="0.0" y="258" width="390" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qBk-sD-naL" id="Qn1-U6-dXk">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
