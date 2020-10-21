@@ -84,8 +84,8 @@ class NeedDetailModel {
 
         } else if let h = haveItem {
             have = h
-            if let childNeeds = h.needs, !childNeeds.isEmpty {
-                handlesArray = childNeeds.map { $0.owner }
+            if let childNeeds = h.watchers, !childNeeds.isEmpty {
+                handlesArray = childNeeds.map { $0.handle }
             }
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
             rating = contact?.rating?.last
@@ -104,15 +104,13 @@ class NeedDetailModel {
             c.manager.configure(c.header, rating: rating)
             c.header.configure(haveItem: h)
         }
+        
+        if handlesArray.contains(CoreDataGod.user.handle!) {
+            c.watchButton.setTitle("unwatch", for: .normal)
+        } else {
+            c.watchButton.setTitle("watch", for: .normal)
+        }
     }
-
-//    func watcherAction(add: Bool) {
-//        if add {
-//            handlesArray.append(CoreDataGod.user.handle!)
-//        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
-//            handlesArray.remove(at: index)
-//        }
-//    }
 
     func sendCard(_ c: UIViewController) {
         if let n = need {
@@ -135,7 +133,6 @@ class NeedDetailModel {
 
         if add {
             handlesArray.append(CoreDataGod.user.handle!)
-
         } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
             handlesArray.remove(at: index)
         }
@@ -148,6 +145,8 @@ class ItemDetailsVC: UIViewController {
     @IBOutlet weak var header: ConfigurableHeader!
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
+    
+    @IBOutlet weak var watchButton: UIButton!
 
     let manager = MarketplaceRepThemeManager()
     let model = NeedDetailModel()

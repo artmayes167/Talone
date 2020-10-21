@@ -15,7 +15,6 @@ enum AddressSections: Int, CaseIterable {
 }
 
 @objc class YouVC: UIViewController {
-    
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -39,7 +38,6 @@ enum AddressSections: Int, CaseIterable {
                 imageButton.setImage(imageFromStorage, for: .normal)
             }
         }
-        
         handleLabel.text = CoreDataGod.user.handle
     }
     
@@ -50,6 +48,7 @@ enum AddressSections: Int, CaseIterable {
         present(picker, animated: true)
     }
     
+     // MARK: - Navigation
     func performSegueTo(_ section: AddressSections) {
         switch section {
         case .address:
@@ -112,10 +111,8 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
-    }
-    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 30 }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { return 44 }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell
         var str = ""
@@ -131,10 +128,6 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         }
         cell.configure(str)
         return cell.contentView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 44
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -219,6 +212,7 @@ class AddressCell: UITableViewCell {
     }
 }
 
+/// Currently unused, because differentiation here is unnecessary
 class EmailCell: UITableViewCell {
     static let identifier = "email"
     func configure() { }
