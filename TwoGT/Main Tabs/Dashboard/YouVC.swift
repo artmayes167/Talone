@@ -179,22 +179,14 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    @objc func addNewAddress() {
-        performSegueTo(.address)
-    }
-    @objc func addNewPhoneNumber() {
-        performSegueTo(.phoneNumber)
-    }
-    @objc func addNewEmail() {
-        performSegueTo(.email)
-    }
+    @objc func addNewAddress() { performSegueTo(.address) }
+    @objc func addNewPhoneNumber() { performSegueTo(.phoneNumber) }
+    @objc func addNewEmail() { performSegueTo(.email) }
 }
 
  // MARK: - Custom Cells
-
 class YouHeaderCell: UITableViewCell {
     static let identifier = "header"
-    
     @IBOutlet weak var titleLabel: UILabel!
     
     func configure(_ string: String) {
@@ -251,7 +243,6 @@ extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate
                 imageButton.imageView?.contentMode = .scaleAspectFill
                 imageButton.setImage(i, for: .normal)
             }
-            
         } else {
             view.makeToast("Image saving and rerendering failed")
             imageButton.setImage(userPickedImage, for: .normal)
