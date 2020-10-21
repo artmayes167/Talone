@@ -12,7 +12,24 @@ import Toast_Swift
 import CoreData
 
 class AddHaveToWatchModel: NSObject {
-    func storeWatchingNeedToDatabase(item: HavesBase.HaveItem, creationManager: PurposeCreationManager, controller: UIViewController) {
+
+    func watcherAction(add: Bool, need: NeedsBase.NeedItem, vc: UIViewController) {
+        if add {
+            linkUserToNeedInDatabase(need, vc)
+        } else {
+            unlinkUserFromNeedInDatabase(need, vc)
+        }
+    }
+
+    func watcherAction(add: Bool, have: HavesBase.HaveItem, vc: UIViewController) {
+        if add {
+            linkUserToHaveInDatabase(have, vc)
+        } else {
+            unlinkUserFromHaveInDatabase(have, vc)
+        }
+    }
+
+    func linkUserToHaveInDatabase(_ item: HavesBase.HaveItem, _ controller: UIViewController) {
         let have = item
         guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
 
@@ -21,10 +38,61 @@ class AddHaveToWatchModel: NSObject {
             if error == nil {
                 controller.view.makeToast("You have successfully linked to \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
                     // TODO: - Create unwind segue to my needs
-                    controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
+                    //controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
                 }
             } else {
                 controller.showOkayAlert(title: "Nope", message: "Error while linking to a have. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        }
+    }
+
+    func unlinkUserFromHaveInDatabase(_ item: HavesBase.HaveItem, _ controller: UIViewController) {
+        let have = item
+        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
+
+        // User is removing link to given have
+        HavesDbWriter().unwatchHave(id: item.id!, handle: CoreDataGod.user.handle!, email: emailStr) { error in
+            if error == nil {
+                controller.view.makeToast("You have successfully unlinked from \(have.owner)'s have".taloneCased(), duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    //controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
+                }
+            } else {
+                controller.showOkayAlert(title: "Nope", message: "Error while linking to a have. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        }
+    }
+
+    func linkUserToNeedInDatabase(_ item: NeedsBase.NeedItem, _ controller: UIViewController) {
+        let need = item
+        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
+
+        // User is watching the given Need. No additional need is created
+        NeedsDbWriter().watchNeed(need, usingHandle: CoreDataGod.user.handle!, email: emailStr) { (error) in
+            if error == nil {
+                controller.view.makeToast("You have successfully linked to \(need.owner)'s need".taloneCased(), duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    //controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
+                }
+            } else {
+                controller.showOkayAlert(title: "Nope", message: "Error while linking to a need. Error: \(error!.localizedDescription)", handler: nil)
+            }
+        }
+    }
+
+    func unlinkUserFromNeedInDatabase(_ item: NeedsBase.NeedItem, _ controller: UIViewController) {
+        let need = item
+        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
+
+        // User is removing link to given Need
+        NeedsDbWriter().unwatchNeed(id: need.id!, handle: CoreDataGod.user.handle!, email: emailStr) { error in
+            if error == nil {
+                controller.view.makeToast("You have successfully unlinked from \(need.owner)'s need".taloneCased(), duration: 2.0, position: .center) {_ in
+                    // TODO: - Create unwind segue to my needs
+                    //controller.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
+                }
+            } else {
+                controller.showOkayAlert(title: "Nope", message: "Error while linking to a need. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
@@ -118,7 +186,8 @@ class AddHaveToWatchVC: UIViewController {
 
         switch c.currentCreationType() {
         case .need:
-            model.storeWatchingNeedToDatabase(item: have, creationManager: c, controller: self)
+            print("NO OP")
+            //model.storeWatchingNeedToDatabase(item: have, creationManager: c, controller: self)
         case .have:
             model.storeWatchingHaveToDatabase(item: have, creationManager: c, controller: self)
         default:
