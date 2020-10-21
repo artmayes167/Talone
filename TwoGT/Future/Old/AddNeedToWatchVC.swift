@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import Toast_Swift
 import CoreData
-
+/*
 class AddNeedToWatchModel: NSObject {
     func storeWatchingNeedToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
         let c = creationManager
@@ -49,6 +49,9 @@ class AddNeedToWatchModel: NSObject {
     }
     
     func storeWatchingHaveToDatabase(item: NeedsBase.NeedItem, creationManager: PurposeCreationManager, controller: UIViewController) {
+        
+        fatalError()
+        
         let c = creationManager
         let needItem = item
         guard let loc: SearchLocation = CoreDataGod.user.searchLocations?.first(where: { ($0.city == item.locationInfo.city && $0.state == item.locationInfo.state) }),
@@ -84,8 +87,8 @@ class AddNeedToWatchModel: NSObject {
         })
     }
 }
-
-class AddNeedToWatchVC: UIViewController {
+*/
+/*class AddNeedToWatchVC: UIViewController {
 
     @IBOutlet weak var headlineTextField: DesignableTextField!
     @IBOutlet weak var descriptionTextView: ActiveTextView!
@@ -159,4 +162,4 @@ class AddNeedToWatchVC: UIViewController {
     }
     */
 
-}
+}*/
