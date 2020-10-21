@@ -18,17 +18,17 @@ extension MarketplaceRepThemeManager {
         let bad = Float(r.bad)
         let justSo = Float(r.justSo)
         let good = Float(r.good)
-        
+
         let denominator = bad + justSo + good
         if denominator == 0.0 {
             setTheme(header: header, color: colorFor(.justSo))
         }
-        
+
         let justSoCount = Float(justSo) * 0.5
         let count = (good + justSoCount) / denominator
         setTheme(header: header, color: themeFor(count))
     }
-    
+
     private func setTheme(header: ConfigurableHeader, color: UIColor) {
         header.bottomView.borderColor = color
         header.leftView.backgroundColor = color
@@ -36,7 +36,7 @@ extension MarketplaceRepThemeManager {
         header.borderWidth = 0
         header.borderColor = color
     }
-    
+
 }
 
 class ConfigurableHeader: UIView {
@@ -47,7 +47,7 @@ class ConfigurableHeader: UIView {
     @IBOutlet weak var headlineLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var mainView: UIView!
-    
+
     func configure(needItem: NeedsBase.NeedItem) {
         categoryImageView.image = UIImage(named: needItem.category.lowercased())
         headlineLabel.text = needItem.headline
@@ -62,16 +62,16 @@ class ConfigurableHeader: UIView {
         firstLetterLabel.text = "H"
         mainView.layoutIfNeeded()
     }
-    
+
 }
 
 class NeedDetailModel {
     private var have: HavesBase.HaveItem?
     private var need: NeedsBase.NeedItem?
     private var rating: ContactRating?
-    
+
     var handlesArray: [String] = []
-    
+
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         if needItem == nil && haveItem == nil { fatalError() }
         if let n = needItem {
@@ -81,7 +81,7 @@ class NeedDetailModel {
             }
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner })
             rating = contact?.rating?.last
-            
+
         } else if let h = haveItem {
             have = h
             if let childNeeds = h.needs, !childNeeds.isEmpty {
@@ -91,7 +91,7 @@ class NeedDetailModel {
             rating = contact?.rating?.last
         }
     }
-    
+
     func populate(controller c: ItemDetailsVC) {
         if let n = need {
             c.handleLabel.text = n.owner
@@ -105,16 +105,15 @@ class NeedDetailModel {
             c.header.configure(haveItem: h)
         }
     }
-    
-    func watcherAction(add: Bool) {
-        if add {
-            handlesArray.append(CoreDataGod.user.handle!)
-            
-        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
-            handlesArray.remove(at: index)
-        }
-    }
-    
+
+//    func watcherAction(add: Bool) {
+//        if add {
+//            handlesArray.append(CoreDataGod.user.handle!)
+//        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
+//            handlesArray.remove(at: index)
+//        }
+//    }
+
     func sendCard(_ c: UIViewController) {
         if let n = need {
             c.showCompleteAndSendCardHelper(needItem: n)
@@ -122,36 +121,34 @@ class NeedDetailModel {
             c.showCompleteAndSendCardHelper(haveItem: h)
         }
     }
-    
-    /// Uncomment once api is in place
-//    func newwatcherAction(add: Bool) {
-//        let m = AddHaveToWatchModel()
-//
-//        if let n = need {
-//            m.watcherAction(add: add, need: n)
-//        } else if let h = have {
-//            m.watcherAction(add: add, have: have)
-//        } else {
-//            fatalError()
-//        }
-//
-//        if add {
-//            handlesArray.append(CoreDataGod.user.handle!)
-//
-//        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
-//            handlesArray.remove(at: index)
-//        }
-//    }
+
+    func watcherAction(add: Bool, vc: UIViewController) {
+        let m = AddHaveToWatchModel()
+
+        if let n = need {
+            m.watcherAction(add: add, need: n, vc: vc)
+        } else if let h = have {
+            m.watcherAction(add: add, have: h, vc: vc)
+        } else {
+            fatalError()
+        }
+
+        if add {
+            handlesArray.append(CoreDataGod.user.handle!)
+
+        } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
+            handlesArray.remove(at: index)
+        }
+    }
 }
 
 class ItemDetailsVC: UIViewController {
-    
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var header: ConfigurableHeader!
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-    
-    
+
     let manager = MarketplaceRepThemeManager()
     let model = NeedDetailModel()
 
@@ -159,31 +156,31 @@ class ItemDetailsVC: UIViewController {
         super.viewDidLoad()
         model.populate(controller: self)
     }
-    
+
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         model.configure(needItem: needItem, haveItem: haveItem)
     }
-    
+
     @IBAction func touchedWatch(_ sender: UIButton) {
         if sender.title(for: .normal) == "watch" {
-            model.watcherAction(add: true)
+            model.watcherAction(add: true, vc: self)
             sender.setTitle("unwatch", for: .normal)
             tableView.reloadData()
         } else if sender.title(for: .normal) == "unwatch" {
-            model.watcherAction(add: false)
+            model.watcherAction(add: false, vc: self)
             sender.setTitle("watch", for: .normal)
             tableView.reloadData()
         }
     }
-    
+
     @IBAction func sendCard(_ sender: UIButton) {
         model.sendCard(self)
     }
-    
+
     @IBAction func report(_ sender: UIButton) {
         devNotReady()
     }
-    
+
     /*
     // MARK: - Navigation
 
