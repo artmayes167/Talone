@@ -57,28 +57,28 @@ class NeedsDbFetcher: NeedsBase {
                 }
             }
     }
-// CODE CURRENTLY NOT IN USE:
-//    func fetchNeed(id: String, completion: @escaping (NeedItem?, Error?) -> Void) {
-//        let db = Firestore.firestore()
-//
-//        db.collection("needs").whereField("id", isEqualTo: id)
-//            .getDocuments { (snapshot, error) in
-//                if let error = error {
-//                    completion(nil, error)
-//                } else if let snapshot = snapshot {
-//                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
-//                        var item: NeedItem?
-//                        do {
-//                            item = try document.data(as: NeedItem.self)
-//                        } catch {
-//                            print(error)
-//                        }
-//                        return item
-//                    }
-//                    completion(needs.count > 0 ? needs[0] : nil, error)
-//                }
-//            }
-//    }
+
+    func fetchNeed(id: String, completion: @escaping (NeedItem?, Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        db.collection("needs").whereField("id", isEqualTo: id)
+            .getDocuments { (snapshot, error) in
+                if let error = error {
+                    completion(nil, error)
+                } else if let snapshot = snapshot {
+                    let needs = snapshot.documents.compactMap { (document) -> NeedItem? in
+                        var item: NeedItem?
+                        do {
+                            item = try document.data(as: NeedItem.self)
+                        } catch {
+                            print(error)
+                        }
+                        return item
+                    }
+                    completion(needs.count > 0 ? needs[0] : nil, error)
+                }
+            }
+    }
 
 // CODE CURRENTLY NOT IN USE:
     // Convenience function

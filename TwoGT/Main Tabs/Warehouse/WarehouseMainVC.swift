@@ -19,11 +19,17 @@ class WarehouseMainVC: UIViewController {
     @IBOutlet weak var havesHeaderImageView: UIImageView!
     @IBOutlet weak var needsHeaderImageView: UIImageView!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        myHavesDisplay?.getHaves()
+//        myNeedsDisplay?.getNeeds()
+//        // Do any additional setup after loading the view.
+//    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         myHavesDisplay?.getHaves()
         myNeedsDisplay?.getNeeds()
-        // Do any additional setup after loading the view.
     }
     
     func animateInHaves() {

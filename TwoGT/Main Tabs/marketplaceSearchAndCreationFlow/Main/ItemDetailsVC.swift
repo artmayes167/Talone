@@ -91,24 +91,70 @@ class NeedDetailModel {
             rating = contact?.rating?.last
         }
     }
+    
+    private var cdNeed: Need?
+    private var cdHave: Have?
+    
+    func configure(have: Have?, need: Need?) {
+        if need == nil && have == nil { fatalError() }
+        if let n = need {
+            // keeping a reference just in case
+            cdNeed = n
+            let fetcher = NeedsDbFetcher()
+            fetcher.fetchNeed(id: n.id!, completion: { (item, error) in
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.need = item
+                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner }) else { return }
+                self.rating = contact.rating?.last
+            })
+
+        } else if let h = have {
+            cdHave = h
+            let fetcher = HavesDbFetcher()
+            fetcher.fetchHave(id: h.id!, completion: { (item, error) in
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.have = item
+                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner }) else { return }
+                self.rating = contact.rating?.last
+            })
+        }
+    }
 
     func populate(controller c: ItemDetailsVC) {
-        if let n = need {
-            c.handleLabel.text = n.owner
-            c.descriptionTextView.text = n.description
-            c.manager.configure(c.header, rating: rating)
-            c.header.configure(needItem: n)
-        } else if let h = have {
-            c.handleLabel.text = h.owner
-            c.descriptionTextView.text = h.description
-            c.manager.configure(c.header, rating: rating)
-            c.header.configure(haveItem: h)
-        }
-        
-        if handlesArray.contains(CoreDataGod.user.handle!) {
-            c.watchButton.setTitle("unwatch", for: .normal)
-        } else {
-            c.watchButton.setTitle("watch", for: .normal)
+        DispatchQueue.global().async {
+            var success = false
+            if let n = self.need {
+                DispatchQueue.main.async {
+                    c.handleLabel?.text = n.owner
+                    c.descriptionTextView.text = n.description
+                    c.manager.configure(c.header, rating: self.rating)
+                    c.header.configure(needItem: n)
+                }
+                success = true
+            } else if let h = self.have {
+                DispatchQueue.main.async {
+                    c.handleLabel?.text = h.owner
+                    c.descriptionTextView.text = h.description
+                    c.manager.configure(c.header, rating: self.rating)
+                    c.header.configure(haveItem: h)
+                }
+                success = true
+            }
+            if !success {
+                self.populate(controller: c)
+            } else if let b = c.watchButton {
+                DispatchQueue.main.async {
+                    if self.handlesArray.contains(CoreDataGod.user.handle!) {
+                        b.setTitle("unwatch", for: .normal)
+                    } else {
+                        b.setTitle("watch", for: .normal)
+                    }
+                }
+            }
         }
     }
 
@@ -143,19 +189,20 @@ class ItemDetailsVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var header: ConfigurableHeader!
-    @IBOutlet weak var handleLabel: UILabel!
+    @IBOutlet weak var handleLabel: UILabel?
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    @IBOutlet weak var watchButton: UIButton!
+    @IBOutlet weak var watchButton: UIButton?
 
     let manager = MarketplaceRepThemeManager()
     let model = NeedDetailModel()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         model.populate(controller: self)
     }
 
+    /// Not used in subclass MyItemDetailsVC
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         model.configure(needItem: needItem, haveItem: haveItem)
     }
@@ -192,9 +239,12 @@ class ItemDetailsVC: UIViewController {
 
 }
 
+ // MARK: - TableView Used In MyItemDetailsVC
 extension ItemDetailsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        devNotReady()
         // send card?
+        // go to contact?
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

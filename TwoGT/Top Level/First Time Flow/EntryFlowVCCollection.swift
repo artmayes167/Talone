@@ -60,6 +60,10 @@ class EnterEmailVC: UIViewController {
         if let t = textField.text {
             if t.contains("@") && t.contains(".") {
                 submitEmailButton.isEnabled = true
+                textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
+            } else {
+                submitEmailButton.isEnabled = false
+                textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
             }
             if (t.count > 50) && string != "" { return false }
         }
@@ -187,6 +191,7 @@ class VerificationVC: UIViewController {
 
 class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var submitHandleButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -215,5 +220,19 @@ class EnterHandleVC: UIViewController {
         showOkayAlert(title: "Welcome, \(textField.text!)".taloneCased(), message: String(format: "as an elite tester, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.".taloneCased())) { _ in
             self.performSegue(withIdentifier: "toSetHome", sender: nil)
         }
+    }
+    
+    override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let t = textField.text {
+            if t.count > 4 /* && handleDoesNotMatch */ {
+                submitHandleButton.isEnabled = true
+                textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
+            } else {
+                submitHandleButton.isEnabled = false
+                textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
+            }
+            if (t.count > 50) && string != "" { return false }
+        }
+        return true
     }
 }

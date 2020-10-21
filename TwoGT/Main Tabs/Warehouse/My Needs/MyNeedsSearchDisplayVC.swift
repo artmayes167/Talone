@@ -59,9 +59,9 @@ final class MyNeedsSearchDisplayVC: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "viewNeed" {
-            guard let vc = segue.destination as? ViewMyNeedVC, let n = sender as? Need else { fatalError() }
-            vc.need = n
+        if segue.identifier == "toMyDetails" {
+            guard let vc = segue.destination as? MyItemDetailsVC, let n = sender as? Need else { fatalError() }
+            vc.configure(have: nil, need: n)
         }
     }
     
@@ -90,7 +90,7 @@ extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "viewNeed", sender: needs[indexPath.item])
+        performSegue(withIdentifier: "toMyDetails", sender: needs[indexPath.item])
     }
 }
 
