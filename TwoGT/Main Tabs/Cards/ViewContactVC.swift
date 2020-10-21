@@ -14,7 +14,6 @@ import MessageUI
 class ViewContactVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var handleLabel: UILabel!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var templateTitleLabel: UILabel!
@@ -24,14 +23,8 @@ class ViewContactVC: UIViewController {
     @IBOutlet weak var sendCardButton: DesignableButton!
     @IBOutlet weak var imageButton: UIButton!
     
-//    @IBAction func manageDataShare(_ sender: UIButton) {
-//        sendCard()
-//    }
-    
     var cardAddresses: [NSManagedObject] = [] {
-        didSet {
-            tableView.reloadData()
-        }
+        didSet { tableView.reloadData() }
     }
     
     private func typeForClass(_ c: String?) -> CardElementTypes {
@@ -71,23 +64,17 @@ class ViewContactVC: UIViewController {
         var allAdded: [NSManagedObject] = []
         if let adds = c.addresses {
             for a in adds {
-                if let add = a as? Address {
-                    allAdded.append(add)
-                }
+                if let add = a as? Address { allAdded.append(add) }
             }
         }
         if let phones = c.phoneNumbers {
             for p in phones {
-                if let ph = p as? PhoneNumber {
-                    allAdded.append(ph)
-                }
+                if let ph = p as? PhoneNumber { allAdded.append(ph) }
             }
         }
         if let emails = c.emails {
             for e in emails {
-                if let email = e as? Email {
-                    allAdded.append(email)
-                }
+                if let email = e as? Email { allAdded.append(email) }
             }
         }
         cardAddresses = allAdded
@@ -137,11 +124,8 @@ class ViewContactVC: UIViewController {
 class TheirContactVC: ViewContactVC {
     @IBOutlet weak var saveNotesButton: DesignableButton?
     
-    // MARK: - IBActions
    @IBAction func saveNotes(_ sender: UIButton) {
-       if let t = notesView.text?.pure() {
-           saveNotes(t)
-       }
+       if let t = notesView.text?.pure() { saveNotes(t) }
    }
     
     private var theirCard: CardTemplateInstance? {
@@ -162,9 +146,7 @@ class TheirContactVC: ViewContactVC {
     }
     
     override func setCardData() {
-        if let c = theirCard {
-            setCardAddresses(card: c)
-        }
+        if let c = theirCard { setCardAddresses(card: c) }
     }
     
     // called by UIAdaptivePresentationControllerDelegate
@@ -192,12 +174,8 @@ class TheirContactVC: ViewContactVC {
      // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toRatings" {
-            if let vc = segue.destination as? RatingVC {
-                if let c = contact {
-                    vc.configure(contact: c)
-                }
-                
-            }
+            let vc = segue.destination as! RatingVC
+            vc.configure(contact: contact!)
         }
     }
     
@@ -236,9 +214,7 @@ class MyContactVC: ViewContactVC {
     }
     
     override func setCardData() {
-        if let c = myCard {
-            setCardAddresses(card: c)
-        }
+        if let c = myCard { setCardAddresses(card: c) }
     }
     
     @IBAction func sendCard(_ sender: UIButton) {
@@ -257,12 +233,8 @@ class MyContactVC: ViewContactVC {
     // MARK: - Navigation
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if segue.identifier == "toRatings" {
-           if let vc = segue.destination as? RatingVC {
-               if let c = contact {
-                   vc.configure(contact: c)
-               }
-               
-           }
+            let vc = segue.destination as! RatingVC
+            vc.configure(contact: contact!)
        }
    }
 }
@@ -275,29 +247,22 @@ class MyTemplateVC: ViewContactVC {
     
     // called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
-        if let m = instance {
-            updateUIFor(template: m)
-        }
+        if let m = instance { updateUIFor(template: m) }
     }
     
     override func setCardData() {
-        if let c = instance {
-            cardAddresses = c.allAddresses()
-        }
+        if let c = instance { cardAddresses = c.allAddresses() }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toEditTemplate" {
-            guard let vc = segue.destination as? CardTemplateCreatorVC else { fatalError() }
+            let vc = segue.destination as! CardTemplateCreatorVC
             vc.configure(contact: nil, card: instance, haveItem: nil, needItem: nil)
         }
     }
 }
     
 extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cardAddresses.count
@@ -310,25 +275,23 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
         switch typeForClass(object.entity.name) {
         case .address:
             let cell = tableView.dequeueReusableCell(withIdentifier: "address") as! TemplateAddressCell
-            guard let a = object as? Address else { fatalError() }
+            let a = object as! Address
             cell.detailsLabel.text = a.title
             return cell
         case .phoneNumber:
             let cell = tableView.dequeueReusableCell(withIdentifier: "phone") as! TemplatePhoneCell
-            guard let p = object as? PhoneNumber else { fatalError() }
+            let p = object as! PhoneNumber
             cell.detailsLabel.text = p.title
             return cell
         case .email:
             let cell = tableView.dequeueReusableCell(withIdentifier: "email") as! TemplateEmailCell
-            guard let e = object as? Email else { fatalError() }
+            let e = object as! Email
             cell.detailsLabel.text = e.title
             return cell
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
-    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 20 }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: YouHeaderCell.identifier) as! YouHeaderCell

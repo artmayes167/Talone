@@ -22,14 +22,7 @@ class PresenceAndRatingDisplay: UIView {
         }
     }
     
-//    override func didMoveToSuperview() {
-//        if let c = contact {
-//            configureWith(contact: c)
-//        }
-//    }
-    
     private func configureWith(contact: Contact) {
-        
         if let _ = contact.receivedCards?.first {
             themImageView.image = UIImage(named: "contactsBook")
         } else {
@@ -47,17 +40,12 @@ class PresenceAndRatingDisplay: UIView {
     }
     
     func colorFor(rating: ContactRating?) -> UIColor {
-        
-        guard let r = rating else {
-            return .systemPurple
-        }
+        guard let r = rating else { return .systemPurple }
         let g = r.good
         let j = r.justSo
         let b = r.bad
         
-        if j > g && j > b {
-            return .systemPurple
-        }
+        if j > g && j > b { return .systemPurple }
         
         switch g > b {
         case true:
@@ -71,12 +59,4 @@ class PresenceAndRatingDisplay: UIView {
         }
         return .systemPurple
     }
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-
 }

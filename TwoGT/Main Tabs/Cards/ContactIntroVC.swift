@@ -19,9 +19,7 @@ class ContactIntroVC: UIViewController {
     var theirCard: CardTemplateInstance?
     var myCard: CardTemplateInstance?
     
-    var contact: Contact? {
-        didSet { if isViewLoaded { populateUI() } }
-    }
+    var contact: Contact? { didSet { if isViewLoaded { populateUI() } } }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +91,5 @@ class ContactIntroVC: UIViewController {
         }
     }
     
-    @IBAction func unwindToMainContact( _ segue: UIStoryboardSegue) {
-
-    }
+    @IBAction func unwindToMainContact( _ segue: UIStoryboardSegue) { }
 }

@@ -60,7 +60,6 @@ class AllReceivedCardsVC: UIViewController {
             vc.contact = c
         } else {
             segue.destination.presentationController?.delegate = self
-            
         }
     }
 }
@@ -90,7 +89,6 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         } else {
             fatalError()
         }
-        
         return cell
     }
     

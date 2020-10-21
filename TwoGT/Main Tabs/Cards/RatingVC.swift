@@ -38,9 +38,7 @@ class RatingVC: UIViewController {
     private var goodCount: Int = 0
     
     private var rating: ContactRating? {
-        didSet {
-            updateUI()
-        }
+        didSet { updateUI() }
     }
     
     override func updateUI() {
@@ -73,24 +71,20 @@ class RatingVC: UIViewController {
           print("Error: \(error)")
         }
         
-        
         if let objects = self.ratings.fetchedObjects {
             for rating in objects where contact.contactHandle == rating.contactHandle {
                 self.rating = rating
                 return
             }
         }
-        
         _ = ContactRating.create(handle: contact.contactHandle!)
         CoreDataGod.save()
         configure(contact: contact)
-        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func touched(_ sender: RatingButton) {
@@ -120,15 +114,4 @@ class RatingVC: UIViewController {
         r.good = g
         CoreDataGod.save()
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
