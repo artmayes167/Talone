@@ -223,7 +223,7 @@ extension ItemDetailsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // send card
         guard let stub = model.stubsArray .first(where: { $0.handle == model.handlesArray[indexPath.row] }) else { fatalError() }
-        showCompleteAndSendCardHelper(handle: model.handlesArray[indexPath.row], uid: stub.uid)
+        showCompleteAndSendCardHelper(handle: stub.handle, uid: stub.uid)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
