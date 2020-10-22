@@ -66,9 +66,9 @@ class ConfigurableHeader: UIView {
 }
 
 class NeedDetailModel {
-    private var have: HavesBase.HaveItem?
-    private var need: NeedsBase.NeedItem?
-    private var rating: ContactRating?
+    internal var have: HavesBase.HaveItem?
+    internal var need: NeedsBase.NeedItem?
+    internal var rating: ContactRating?
 
     var handlesArray: [String] = []
 
@@ -89,38 +89,6 @@ class NeedDetailModel {
             }
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
             rating = contact?.rating?.last
-        }
-    }
-    
-    private var cdNeed: Need?
-    private var cdHave: Have?
-    
-    func configure(have: Have?, need: Need?) {
-        if need == nil && have == nil { fatalError() }
-        if let n = need {
-            // keeping a reference just in case
-            cdNeed = n
-            let fetcher = NeedsDbFetcher()
-            fetcher.fetchNeed(id: n.id!, completion: { (item, error) in
-                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-                    self.handlesArray = childNeeds.map { $0.handle }
-                }
-                self.need = item
-                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner }) else { return }
-                self.rating = contact.rating?.last
-            })
-
-        } else if let h = have {
-            cdHave = h
-            let fetcher = HavesDbFetcher()
-            fetcher.fetchHave(id: h.id!, completion: { (item, error) in
-                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-                    self.handlesArray = childNeeds.map { $0.handle }
-                }
-                self.have = item
-                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner }) else { return }
-                self.rating = contact.rating?.last
-            })
         }
     }
 
@@ -195,7 +163,7 @@ class ItemDetailsVC: UIViewController {
     @IBOutlet weak var watchButton: UIButton?
 
     let manager = MarketplaceRepThemeManager()
-    let model = NeedDetailModel()
+    var model = NeedDetailModel()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

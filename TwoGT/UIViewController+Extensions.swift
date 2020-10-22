@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MessageUI
+import Toast_Swift
 
 extension UIViewController {
     
@@ -175,6 +176,10 @@ extension UIViewController {
     
     func devNotReady() {
         showOkayAlert(title: "Hello, Tester!", message: "This feature has not been built out yet, so cool your jets.", handler: nil)
+    }
+    
+    func makeToast(_ message: String, duration: TimeInterval = 0.5, completion: @escaping ((Bool) -> Void)) {
+        view.makeToast(message.taloneCased(), duration: duration, position: .center, title: "", completion: completion)
     }
 }
 

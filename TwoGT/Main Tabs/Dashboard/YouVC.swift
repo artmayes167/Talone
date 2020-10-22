@@ -88,7 +88,6 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         // Included switch statement, because other cells may be used if the format changes
         switch AddressSections(rawValue: indexPath.section) {
         case .address:
@@ -223,6 +222,7 @@ class TelephoneNumberCell: UITableViewCell {
     func configure() { }
 }
 
+ // MARK: - UIImagePickerControllerDelegate
 extension YouVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }

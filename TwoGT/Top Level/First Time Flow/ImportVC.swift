@@ -12,10 +12,9 @@ import FBSDKLoginKit
 import Firebase
 
 class ImportVC: UIViewController, LoginButtonDelegate {
-
     @IBOutlet weak var loginButton: FBLoginButton?
     
-    
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // check for valid token
@@ -65,5 +64,4 @@ class ImportVC: UIViewController, LoginButtonDelegate {
             }
         }
     }
-
 }

@@ -15,16 +15,16 @@ class IntroYouVC: YouVC {
     
     var facebookUserId: String?
     
-    var profile: Profile? {
+    var profile: Profile? { // https://developers.facebook.com/docs/swift/reference/structs/userprofile.html/
         didSet {
             //facebookUserId = profile?.userID
             if isViewLoaded {
                 setProfileData()
             }
-            // https://developers.facebook.com/docs/swift/reference/structs/userprofile.html/
         }
     }
     
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setProfileData()
@@ -38,12 +38,21 @@ class IntroYouVC: YouVC {
         }
     }
     
+    // MARK: - Set the App State for Entry Flow
+    func setState() {
+        let u = UserDefaults.standard
+        if u.string(forKey: State.stateDefaultsKey.rawValue) != State.youIntro.rawValue {
+            u.setValue(State.youIntro.rawValue, forKey: State.stateDefaultsKey.rawValue)
+        }
+    }
+    
     override func setInitialUI() {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 62
         handleLabel.text = CoreDataGod.user.handle
     }
     
+     // MARK: - Specifically for FaceBook data
     func setProfileData() {
         if let p = profile {
             if let imageURL = p.imageURL(forMode: .normal, size: CGSize(width: 150.0, height: 150.0)) {
@@ -90,13 +99,7 @@ class IntroYouVC: YouVC {
         }
     }
     
-    func setState() {
-        let u = UserDefaults.standard
-        if u.string(forKey: State.stateDefaultsKey.rawValue) != State.youIntro.rawValue {
-            u.setValue(State.youIntro.rawValue, forKey: State.stateDefaultsKey.rawValue)
-        }
-    }
-    
+     // MARK: - Triggered Actions
     @IBAction func next(_ sender: UIButton) {
         let u = UserDefaults.standard
         u.setValue(nil, forKey: State.stateDefaultsKey.rawValue)

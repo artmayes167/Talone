@@ -12,23 +12,22 @@ import Toast_Swift
 import CoreData
 
 class EnterEmailVC: UIViewController {
-
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var submitEmailButton: UIButton!
 
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         UserDefaults.standard.setValue(State.enterEmail.rawValue, forKey: State.stateDefaultsKey.rawValue)
-        //textField.text = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) ?? ""
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showOkayAlert(title: "READ EVERYTHING", message: String(format:"you're special. you're about to embark on an adventure in social evolution.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\nand read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
     }
     
+     // MARK: - Triggered Actions
     @IBAction func submitEmail(_ sender: Any) {
-
         if let email = self.textField.text?.pure() {
             let actionCodeSettings = ActionCodeSettings() //https://talone.page.link/85EH
             actionCodeSettings.url = URL(string: "https://talone-23f99.firebaseapp.com")  //https://talone.page.link"
@@ -56,6 +55,7 @@ class EnterEmailVC: UIViewController {
         }
     }
     
+     // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if t.contains("@") && t.contains(".") {
@@ -87,6 +87,7 @@ class EnterEmailVC: UIViewController {
         }
     }
     
+     // MARK: - Apple Apple Apple
     private func handleApple() {
         let appleHandle = "the_naugahyde_beast"
         UserDefaults.standard.setValue(appleHandle, forKey: DefaultsKeys.userHandle.rawValue)
@@ -101,15 +102,30 @@ class EnterEmailVC: UIViewController {
 }
 
 class VerificationVC: UIViewController {
-
     @IBOutlet weak var signInInfo: UILabel!
     @IBOutlet weak var signInButton: UIButton!
-    
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var confirmStack: UIStackView!
     @IBOutlet weak var doneStack: UIStackView!
     
+    // MARK: - View Life Cycle
+   override func viewDidLoad() {
+       super.viewDidLoad()
+
+       // Notifications
+       NotificationCenter.default.addObserver(self, selector: #selector(passwordlessSignInSuccessful), name: NSNotification.Name(rawValue: "PasswordlessEmailNotificationSuccess"), object: nil)
+   }
+   
+   override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+       setSignInButtonState()
+   }
+
+   override func viewDidAppear(_ animated: Bool) {
+       super.viewDidAppear(animated)
+   }
+    
+     // MARK: - Triggered Actions
     @IBAction func submitVerification(_ sender: Any) {
         // Sign-in code here
         trySignInWithEmailLink()
@@ -118,23 +134,8 @@ class VerificationVC: UIViewController {
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(passwordlessSignInSuccessful), name: NSNotification.Name(rawValue: "PasswordlessEmailNotificationSuccess"), object: nil)
-    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setSignInButtonState()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
+     // MARK: - All the private stuff
     private func setStackState() {
         confirmStack.isHidden = true
         doneStack.isHidden = false
@@ -193,6 +194,7 @@ class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var submitHandleButton: UIButton!
     
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         UserDefaults.standard.setValue(State.enterHandle.rawValue, forKey: State.stateDefaultsKey.rawValue)
@@ -202,6 +204,7 @@ class EnterHandleVC: UIViewController {
         textField.becomeFirstResponder()
     }
 
+     // MARK: - Triggered Actions
     @IBAction func submitHandle(_ sender: UIButton) {
         guard let t = textField.text, !(t.count < 4)  else {
             showOkayAlert(title: "Oops".taloneCased(), message: "Please choose a handle with 4 or more characters".taloneCased()) { _ in }
@@ -222,6 +225,7 @@ class EnterHandleVC: UIViewController {
         }
     }
     
+     // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if t.count > 4 /* && handleDoesNotMatch */ {

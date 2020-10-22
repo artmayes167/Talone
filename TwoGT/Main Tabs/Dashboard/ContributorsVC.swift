@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 
-class Contributor {
+final class Contributor {
     var name: String = "None Available"
     var imageUrl: String?
     var imageName: String = "avatar"
@@ -19,8 +19,7 @@ class Contributor {
     var symbolName: String = "square"
 }
 
-class ContributorsVC: UIViewController {
-    
+final class ContributorsVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var contributors: [Contributor] = [] {
@@ -114,7 +113,6 @@ extension ContributorsVC: UICollectionViewDelegateFlowLayout {
 }
 
 final class ContributorCell: UICollectionViewCell {
-    
     @IBOutlet weak var contributorImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var roleLabel: UILabel!

@@ -15,7 +15,6 @@ class IntroChooseHomeVC: UIViewController {
     
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
-    
     @IBOutlet weak var showStateAndCityField: UIView!
     @IBOutlet weak var showCityAndButtonsField: UIView!
 
@@ -25,6 +24,7 @@ class IntroChooseHomeVC: UIViewController {
         updateUI()
     }
     
+    // called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
         if let t = stateLabel.text, !t.isEmpty {
             showStateAndCityField.isHidden = false
@@ -38,6 +38,7 @@ class IntroChooseHomeVC: UIViewController {
         view.layoutIfNeeded()
     }
     
+     // MARK: - Triggered Actions
     @IBAction func showStateSelector() {
         if cityLabel.text != nil {
             cityLabel.text = nil
@@ -51,8 +52,7 @@ class IntroChooseHomeVC: UIViewController {
     }
     
     @IBAction func saveAndContinue() {
-        let city = cityLabel.text!
-        let state = stateLabel.text!
+        guard let city = cityLabel.text, let state = stateLabel.text else { return }
         SearchLocation.createSearchLocation(city: city, state: state, country: "USA", community: "", type: "home")
         let dict = ["city": city, "state": state]
         UserDefaults.standard.setValue(dict, forKey: DefaultsKeys.lastUsedLocation.rawValue)
@@ -67,7 +67,7 @@ class IntroChooseHomeVC: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toPopover" {
+        if segue.identifier == popOverSegue {
             let vc = segue.destination as! SelectorPopoverVC
             vc.presentationController?.delegate = self
             if let s = sender as? String {
@@ -77,5 +77,4 @@ class IntroChooseHomeVC: UIViewController {
             }
         }
     }
-
 }
