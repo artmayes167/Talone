@@ -89,7 +89,7 @@ class FaqCell: UITableViewCell {
     @IBOutlet weak var answerLabel: UILabel!
     
     func configure(_ faq: Faq) {
-        questionLabel.text = faq.question
+        questionLabel.text = String(format: faq.question)
         answerLabel.text = String(format: faq.answer)
     }
 }

@@ -183,7 +183,11 @@ extension UIViewController {
     }
     
     func devNotReady() {
-        showOkayAlert(title: "Hello, Tester!", message: "This feature has not been built out yet, so cool your jets.", handler: nil)
+        showOkayAlert(title: "Hello, Founder!", message: "This feature has not been built out yet, so think about how it should look, and send feedback.", handler: nil)
+    }
+    
+    func somebodyScrewedUp() {
+        showOkayAlert(title: "hello, founder!", message: "somebody has screwed up. blame jyrki.", handler: nil)
     }
     
     func makeToast(_ message: String, duration: TimeInterval = 0.5, completion: @escaping ((Bool) -> Void)) {

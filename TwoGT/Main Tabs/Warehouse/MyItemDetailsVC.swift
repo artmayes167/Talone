@@ -38,7 +38,7 @@ extension NeedDetailModel {
     func deleteCurrentHave(controller c: MyItemDetailsVC) {
         guard let have = self.have else {
             c.hideSpinner()
-            c.showOkayAlert(title: "hello, tester!", message: "somebody has screwed up. blame jyrki.", handler: nil)
+            c.somebodyScrewedUp()
             return
         }
 
@@ -55,7 +55,7 @@ extension NeedDetailModel {
     func deleteCurrentNeed(controller c: MyItemDetailsVC) {
         guard let need = self.need else {
             c.hideSpinner()
-            c.showOkayAlert(title: "hello, tester!", message: "somebody has screwed up. blame jyrki.", handler: nil)
+            c.somebodyScrewedUp()
             return
         }
 

@@ -218,7 +218,7 @@ class ItemDetailsVC: UIViewController {
 
 }
 
- // MARK: - TableView Used In MyItemDetailsVC
+ // MARK: - TableView Also Used In MyItemDetailsVC
 extension ItemDetailsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // send card
