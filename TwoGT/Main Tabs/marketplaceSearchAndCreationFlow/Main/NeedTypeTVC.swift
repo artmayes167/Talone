@@ -10,7 +10,7 @@ import UIKit
 
 enum NeedType: String, CaseIterable, DatabaseReady {
     case any, borrow, food, clothes, shelter, furniture, service, miscellany
-}
+} // ride, microloan, sitter, benefactor, mentor,
 
 // MARK: -
 protocol NeedSelectionDelegate {

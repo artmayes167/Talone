@@ -19,7 +19,7 @@ class MarketplaceRepThemeManager {
     }
     
     //private
-    func themeFor(_ count: Float) -> UIColor {
+    internal func themeFor(_ count: Float) -> UIColor {
         switch true {
         case count >= 0 && count < 0.2:
             return colorFor(.bad)
@@ -37,7 +37,7 @@ class MarketplaceRepThemeManager {
     }
     
     //private
-    func colorFor(_ theme: RepTheme) -> UIColor {
+    internal func colorFor(_ theme: RepTheme) -> UIColor {
         switch theme {
         case .bad:
             return .systemRed

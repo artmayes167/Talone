@@ -174,6 +174,14 @@ extension UIViewController {
         present(helper, animated: true, completion: nil)
     }
     
+    func showCompleteAndSendCardHelper(handle: String, uid: String) {
+        let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
+        let helper = helperBoard.instantiateViewController(withIdentifier: "Add Template Card") as! CardTemplateCreatorVC
+        helper.configure(handle: handle, uid: uid)
+        helper.presentationController?.delegate = self
+        present(helper, animated: true, completion: nil)
+    }
+    
     func devNotReady() {
         showOkayAlert(title: "Hello, Tester!", message: "This feature has not been built out yet, so cool your jets.", handler: nil)
     }

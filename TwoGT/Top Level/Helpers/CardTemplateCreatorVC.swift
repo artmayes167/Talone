@@ -56,7 +56,7 @@ class CardTemplateCreatorVC: UIViewController {
     private var needItem: NeedsBase.NeedItem? {
         didSet {
             if let n = needItem {
-                /// see if there's a contact associated with the haveItem
+                /// see if there's a contact associated with the Item
                 if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == n.owner }) {
                     if !c.isEmpty {
                         contact = c.first
@@ -67,6 +67,7 @@ class CardTemplateCreatorVC: UIViewController {
             }
         }
     }
+    
     private var cardInstance: CardTemplateInstance? {
         didSet {
             guard let i = cardInstance else { return }
@@ -111,6 +112,16 @@ class CardTemplateCreatorVC: UIViewController {
             satisfied = true
         }
         if !satisfied { fatalError() }
+    }
+    
+    func configure(handle: String, uid: String) {
+        if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == handle }) {
+            if !c.isEmpty {
+                contact = c.first
+                return
+            }
+        }
+        contact = Contact.create(newPersonHandle: handle, newPersonUid: uid)
     }
     
      // MARK: - View Life Cycle

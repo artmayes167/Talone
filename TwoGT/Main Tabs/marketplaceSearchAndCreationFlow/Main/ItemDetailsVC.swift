@@ -71,6 +71,7 @@ class NeedDetailModel {
     internal var rating: ContactRating?
 
     var handlesArray: [String] = []
+    var stubsArray: [FirebaseGeneric.UserStub] = []
     var endRefreshCycle = false
 
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
@@ -86,6 +87,7 @@ class NeedDetailModel {
         } else if let h = haveItem {
             have = h
             if let childNeeds = h.watchers, !childNeeds.isEmpty {
+                stubsArray = childNeeds
                 handlesArray = childNeeds.map { $0.handle }
             }
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
@@ -101,7 +103,8 @@ class NeedDetailModel {
                 DispatchQueue.main.async {
                     c.handleLabel?.text = n.owner
                     c.descriptionTextView.text = n.description
-                    c.manager.configure(c.header, rating: self.rating)
+                    let manager = MarketplaceRepThemeManager()
+                    manager.configure(c.header, rating: self.rating)
                     c.header.configure(needItem: n)
                 }
                 success = true
@@ -109,7 +112,8 @@ class NeedDetailModel {
                 DispatchQueue.main.async {
                     c.handleLabel?.text = h.owner
                     c.descriptionTextView.text = h.description
-                    c.manager.configure(c.header, rating: self.rating)
+                    let manager = MarketplaceRepThemeManager()
+                    manager.configure(c.header, rating: self.rating)
                     c.header.configure(haveItem: h)
                 }
                 success = true
@@ -163,12 +167,9 @@ class ItemDetailsVC: UIViewController {
     @IBOutlet weak var header: ConfigurableHeader!
     @IBOutlet weak var handleLabel: UILabel?
     @IBOutlet weak var descriptionTextView: UITextView!
-    
     @IBOutlet weak var watchButton: UIButton?
 
     var model = NeedDetailModel()
-    /// called from model
-    let manager = MarketplaceRepThemeManager()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -220,11 +221,9 @@ class ItemDetailsVC: UIViewController {
  // MARK: - TableView Used In MyItemDetailsVC
 extension ItemDetailsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        devNotReady()
-        // send card?  modify:
-//        showCompleteAndSendCardHelper(haveItem: h)
-        // go to contact?
-        
+        // send card
+        guard let stub = model.stubsArray .first(where: { $0.handle == model.handlesArray[indexPath.row] }) else { fatalError() }
+        showCompleteAndSendCardHelper(handle: model.handlesArray[indexPath.row], uid: stub.uid)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
