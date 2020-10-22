@@ -22,7 +22,6 @@ extension NeedDetailModel {
                 guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner }) else { return }
                 self.rating = contact.rating?.last
             })
-
         } else if let h = have {
             let fetcher = HavesDbFetcher()
             fetcher.fetchHave(id: h.id!, completion: { (item, error) in
@@ -37,24 +36,34 @@ extension NeedDetailModel {
     }
     
     func deleteCurrentHave(controller c: MyItemDetailsVC) {
-        guard let have = self.have else { return }
+        guard let have = self.have else {
+            c.hideSpinner()
+            c.showOkayAlert(title: "hello, tester!", message: "somebody has screwed up. blame jyrki.", handler: nil)
+            return
+        }
 
         HavesDbWriter().deleteHave(id: have.id!, creator: have.createdBy) { error in
             if error == nil {
                 c.successfullyDeletedHaveFromBackend()
             } else {
+                c.hideSpinner()
                 c.showOkayAlert(title: "Error", message: "Error while deleting have. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
     }
     
     func deleteCurrentNeed(controller c: MyItemDetailsVC) {
-        guard let need = self.need else { return }
+        guard let need = self.need else {
+            c.hideSpinner()
+            c.showOkayAlert(title: "hello, tester!", message: "somebody has screwed up. blame jyrki.", handler: nil)
+            return
+        }
 
         NeedsDbWriter().deleteNeed(id: need.id!, userHandle: need.createdBy) { error in
             if error == nil {
                 c.successfullyDeletedNeedFromBackend()
             } else {
+                c.hideSpinner()
                 c.showOkayAlert(title: "Error", message: "Error while deleting need. Error: \(error!.localizedDescription)", handler: nil)
             }
         }
@@ -64,13 +73,25 @@ extension NeedDetailModel {
 class MyItemDetailsVC: ItemDetailsVC {
     
     @IBOutlet weak var personalNotesTextView: UITextView!
-    var have: Have?
-    var need: Need?
+    private var have: Have? {
+        didSet {
+            if let h = have {
+                CoreDataGod.managedContext.refresh(h, mergeChanges: false)
+            }
+        }
+    }
+    private var need: Need? {
+        didSet {
+            if let n = need {
+                CoreDataGod.managedContext.refresh(n, mergeChanges: false)
+            }
+        }
+    }
     
     func configure(have: Have?, need: Need?) {
-        model.configure(have: have, need: need)
         self.have = have
         self.need = need
+        model.configure(have: have, need: need)
     }
     
     @IBAction func notifyWatchers(_ sender: UIButton) {
@@ -79,8 +100,10 @@ class MyItemDetailsVC: ItemDetailsVC {
     
     @IBAction func deleteItem(_ sender: UIButton) {
         if let _ = have {
+            showSpinner()
             model.deleteCurrentHave(controller: self)
         } else if let _ = need {
+            showSpinner()
             model.deleteCurrentNeed(controller: self)
         }
     }
@@ -93,6 +116,7 @@ class MyItemDetailsVC: ItemDetailsVC {
     func successfullyDeletedHaveFromBackend() {
         if let h = have {
             h.deleteHave()
+            hideSpinner()
             makeToast("You have Deleted the Have", duration: 0.5) {_ in
                 self.dismiss(animated: true, completion: nil)
             }
@@ -102,6 +126,7 @@ class MyItemDetailsVC: ItemDetailsVC {
     func successfullyDeletedNeedFromBackend() {
         if let n = need {
             n.deleteNeed()
+            hideSpinner()
             makeToast("You have Deleted the Need", duration: 0.5) {_ in
                 self.dismiss(animated: true, completion: nil)
             }
@@ -120,7 +145,7 @@ class MyItemDetailsVC: ItemDetailsVC {
 
 }
 
-
+ // MARK: - UITextViewDelegate
 extension MyItemDetailsVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         switch textView {

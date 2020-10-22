@@ -71,6 +71,7 @@ class NeedDetailModel {
     internal var rating: ContactRating?
 
     var handlesArray: [String] = []
+    var endRefreshCycle = false
 
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         if needItem == nil && haveItem == nil { fatalError() }
@@ -90,6 +91,7 @@ class NeedDetailModel {
             let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
             rating = contact?.rating?.last
         }
+        endRefreshCycle = false
     }
 
     func populate(controller c: ItemDetailsVC) {
@@ -112,9 +114,9 @@ class NeedDetailModel {
                 }
                 success = true
             }
-            if !success {
+            if !success && !self.endRefreshCycle {
                 self.populate(controller: c)
-            } else if let b = c.watchButton {
+            } else if success, let b = c.watchButton {
                 DispatchQueue.main.async {
                     if self.handlesArray.contains(CoreDataGod.user.handle!) {
                         b.setTitle("unwatch", for: .normal)
@@ -131,12 +133,14 @@ class NeedDetailModel {
             c.showCompleteAndSendCardHelper(needItem: n)
         } else if let h = have {
             c.showCompleteAndSendCardHelper(haveItem: h)
+        } else {
+            c.devNotReady()
         }
     }
 
     func watcherAction(add: Bool, vc: UIViewController) {
+        endRefreshCycle = true
         let m = AddHaveToWatchModel()
-
         if let n = need {
             m.watcherAction(add: add, need: n, vc: vc)
         } else if let h = have {
@@ -162,12 +166,18 @@ class ItemDetailsVC: UIViewController {
     
     @IBOutlet weak var watchButton: UIButton?
 
-    let manager = MarketplaceRepThemeManager()
     var model = NeedDetailModel()
+    /// called from model
+    let manager = MarketplaceRepThemeManager()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         model.populate(controller: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        model.endRefreshCycle = true
     }
 
     /// Not used in subclass MyItemDetailsVC
@@ -211,8 +221,10 @@ class ItemDetailsVC: UIViewController {
 extension ItemDetailsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         devNotReady()
-        // send card?
+        // send card?  modify:
+//        showCompleteAndSendCardHelper(haveItem: h)
         // go to contact?
+        
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
