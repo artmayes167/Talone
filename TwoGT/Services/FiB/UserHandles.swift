@@ -14,12 +14,14 @@ import FirebaseFirestoreSwift
 class UserHandlesDbHandler: FirebaseGeneric {
 
     struct UserHandle: Codable {
-        var name: String                // Handle description, e.g. "-NightHawk-"
+        var name: String                // Handle's visual description, e.g. "-NightHawk-"
         var locationInfo: LocationInfo? // Primary location where this handle is associated to
         var community: String?          // Potential community this user belongs to
+        var uid: String?                 // User Id of the owner of the handle.
     }
 
     private struct _UserHandle: Codable {
+        var ownerUid: String?
         var name: String
         var lowercase: String
         var locationInfo: LocationInfo?
@@ -41,7 +43,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
                             lowercase: hd.name.trimmingCharacters(in: CharacterSet.alphanumerics.inverted).lowercased(),
                             locationInfo: hd.locationInfo, community: hd.community)
         do {
-            try db.collection("users").document(uid).setData(from: h)
+            try db.collection("users").document(hd.uid ?? uid).setData(from: h)
         } catch {
             print(error.localizedDescription  + " in \(#function)")
             return error
@@ -96,14 +98,20 @@ class UserHandlesDbHandler: FirebaseGeneric {
             searchTerm = str
             _cache = _cache.filter { $0.lowercase.starts(with: str) }
             let handles = _cache.compactMap { UserHandle(name: $0.name, locationInfo: $0.locationInfo,
-                                                           community: $0.community) }
+                                                         community: $0.community, uid: $0.ownerUid) }
             completion(handles)
             return
         }
 
         let db = Firestore.firestore()
+        var endStr = str
+        var lastChar = endStr.removeLast()
+        lastChar = Character(UnicodeScalar(UInt8(lastChar.asciiValue ?? 121) + 1) ) // 122 = z; last ascii char
+        endStr.append(lastChar)
 
         var t = db.collection("users").whereField("lowercase", isGreaterThanOrEqualTo: str)
+            .whereField("lowercase", isLessThan: endStr)
+        
         if let community = community {
             t = t.whereField("community", isEqualTo: community)
         }
@@ -118,6 +126,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
                     var item: _UserHandle?
                     do {
                         item = try document.data(as: _UserHandle.self)
+                        item?.ownerUid = document.documentID
                     } catch {
                         print(error)
                     }
@@ -126,7 +135,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
                 _cache = _handles
                 searchTerm = str
                 let handles = _handles.compactMap { UserHandle(name: $0.name, locationInfo: $0.locationInfo,
-                                                               community: $0.community) }
+                                                               community: $0.community, uid: $0.ownerUid ?? "uid missing") }
 
                 completion(handles)
             }
