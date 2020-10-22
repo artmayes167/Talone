@@ -81,8 +81,7 @@ class MyItemDetailsVC: ItemDetailsVC {
         if let _ = have {
             model.deleteCurrentHave(controller: self)
         } else if let _ = need {
-            devNotReady()
-            // TODO: delete need from backend
+            model.deleteCurrentNeed(controller: self)
         }
     }
     
