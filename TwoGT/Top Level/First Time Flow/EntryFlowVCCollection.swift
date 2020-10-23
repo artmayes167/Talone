@@ -211,17 +211,38 @@ class EnterHandleVC: UIViewController {
             return
         }
         let handle = t.pure()
-        // TODO: - Set the handle on the back end
-        // completion
-        UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
-        UserDefaults.standard.synchronize() // to prevent a crash
-        guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
-        // create user.
-        let _ = CoreDataGod.user
-        _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
         
-        showOkayAlert(title: "Welcome, \(textField.text!)", message: String(format: "as a Founder, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.")) { _ in
-            self.performSegue(withIdentifier: "toSetHome", sender: nil)
+        // Set the handle on the back end
+        guard let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
+        let handleObject = UserHandlesDbHandler.UserHandle(name: handle, locationInfo: nil, community: nil, uid: uid)
+        showSpinner()
+        _ = UserHandlesDbHandler.registerUserHandleAndCheckUniqueness(handleObject) { (error) in
+            self.hideSpinner()
+            if let e = error {
+                switch e as! FirebaseGeneric.GenericFirebaseError {
+                case .alreadyTaken:
+                    // unavailable
+                    self.showOkayAlert(title: "oops", message: "wires got crossed, and somebody else took that handle. in like milliseconds. or else, our search algorithm is not prioritizing exact matches.") { (_) in
+                        self.checkHandle(text: self.textField.text ?? "")
+                    }
+                case .alreadyOwned:
+                    self.devNotReady()
+                case .noAuthUser, .unauthorized, .undefined:
+                    self.somebodyScrewedUp()
+                }
+            } else {
+                UserDefaults.standard.setValue(handle, forKey: DefaultsKeys.userHandle.rawValue)
+                UserDefaults.standard.synchronize() // to prevent a crash
+                guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
+                // create user.
+                let _ = CoreDataGod.user
+                _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
+                
+                self.showOkayAlert(title: "Welcome, \(self.textField.text!)", message: String(format: "as a Founder, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.")) { _ in
+                    self.performSegue(withIdentifier: "toSetHome", sender: nil)
+                }
+            }
+            
         }
     }
     

@@ -68,6 +68,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
 
         // Check if duplicate found.
         db.collection("users").whereField("name", isEqualTo: hd.name.trimmingCharacters(in: .whitespacesAndNewlines))
+            /// @Jyrki: you're making an assumption here about backend prioritization of results
             .limit(to: 1)
             .getDocuments { [self] (snapshot, error) in
                 if let error = error {
