@@ -27,10 +27,7 @@ final class CreativeCommonsVC: UIViewController {
         do {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            
-            print(jsonData)
             let container = try decoder.decode([String: [[String: String]]].self, from: jsonData) as [String: [[String: String]]]
-            print(container)
             let array = container["creativeCommons"]! as Array
             var conts: [Contributor] = []
             for dict in array {
@@ -38,7 +35,7 @@ final class CreativeCommonsVC: UIViewController {
             }
             contributors = conts
         } catch {
-            print(error.localizedDescription)
+            self.somebodyScrewedUp()
         }
     }
     
@@ -60,9 +57,7 @@ extension CreativeCommonsVC: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let reuseId = "cell\(indexPath.item%2)"
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! CreativeCommonsCell
-       
         cell.configure(contributors[indexPath.row])
-       
         return cell
     }
     
@@ -73,10 +68,10 @@ extension CreativeCommonsVC: UICollectionViewDelegate, UICollectionViewDataSourc
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {
-                    self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309").taloneCased(), handler: nil)
+                    self.somebodyScrewedUp()
                 }
             } else {
-                self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real...").taloneCased(), handler: nil)
+                self.somebodyScrewedUp()
             }
         }
     }

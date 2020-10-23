@@ -67,19 +67,18 @@ class RatingVC: UIViewController {
     func configure(contact: Contact) {
         do {
           try ratings.performFetch()
-        } catch {
-          print("Error: \(error)")
-        }
-        
-        if let objects = self.ratings.fetchedObjects {
-            for rating in objects where contact.contactHandle == rating.contactHandle {
-                self.rating = rating
-                return
+            if let objects = self.ratings.fetchedObjects {
+                for rating in objects where contact.contactHandle == rating.contactHandle {
+                    self.rating = rating
+                    return
+                }
             }
+            _ = ContactRating.create(handle: contact.contactHandle!)
+            CoreDataGod.save()
+            configure(contact: contact)
+        } catch {
+          somebodyScrewedUp()
         }
-        _ = ContactRating.create(handle: contact.contactHandle!)
-        CoreDataGod.save()
-        configure(contact: contact)
     }
 
     override func viewDidLoad() {
@@ -104,7 +103,7 @@ class RatingVC: UIViewController {
             case goodButton:
                 goodLabel.text = x.isConfiguredForSelected ? String(goodCount + adder) : String(goodCount)
             default:
-                fatalError()
+                somebodyScrewedUp()
             }
         }
         guard let r = rating else { fatalError() }

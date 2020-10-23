@@ -19,7 +19,7 @@ final class TextViewHelperVC: UIViewController, UITextViewDelegate {
     
     func configure(textView: UITextView, displayName: String, initialText: String) {
         modifyingTextView = textView
-        self.displayName = displayName
+        self.displayName = displayName.taloneCased()
         self.initialText = initialText
     }
 

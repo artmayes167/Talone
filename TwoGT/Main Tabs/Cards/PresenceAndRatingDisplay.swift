@@ -35,7 +35,7 @@ class PresenceAndRatingDisplay: UIView {
             meImageView.image = UIImage(named:"whoSmall")
         }
         
-        themImageView.tintColor = colorFor(rating: contact.rating?.first)
+        themImageView.tintColor = colorFor(rating: contact.rating?.last)
         meImageView.tintColor = colorFor(rating: nil)
     }
     
@@ -49,13 +49,9 @@ class PresenceAndRatingDisplay: UIView {
         
         switch g > b {
         case true:
-            if g > j {
-                return .systemGreen
-            }
+            if g > j { return .systemGreen }
         case false:
-            if b > j {
-                return .systemRed
-            }
+            if b > j { return .systemRed }
         }
         return .systemPurple
     }

@@ -7,15 +7,17 @@
 //
 
 import UIKit
-
+/** This is the root view for the main app, and functions as a sort of `UISingleton`.
+    -   replaces the navigation controller from the login/noob flow, and manages system-wide UI responses, including management of the dashboard button (the button sits in the root view, and at the top of all controllers presented in the `baseTabBar`)
+    - ` baseTabBar` is embedded as a childVC, through a containerView and segue in the storyboard.  All VCs in the main flow  that are not present in the tabBar's viewControllers array are presented modally
+ */
 class BaseSwipeVC: UIViewController {
-
+    /// explicit reference to manage UI events
     var baseTabBar: UITabBarController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Start observing any Card receptions or card updates.
+        /// Start observing any Card receptions or card updates.
         AppDelegate.cardObserver.startObserving()
         AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
     }
@@ -23,8 +25,10 @@ class BaseSwipeVC: UIViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toBaseTabBar" {
+            // embedded segue
             baseTabBar = segue.destination as? UITabBarController
         } else if segue.identifier == "toFeedback" {
+            /// currently unused
             if let vc = segue.destination as? FeedbackVC {
                 guard let vc2 = baseTabBar?.selectedViewController else { fatalError() }
                 let identifier = vc2.restorationIdentifier ?? "No identifier available"
@@ -37,6 +41,7 @@ class BaseSwipeVC: UIViewController {
         }
     }
 
+    /// gets us back to the tab bar
     @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) { }
 }
 

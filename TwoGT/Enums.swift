@@ -8,17 +8,15 @@
 
 import Foundation
 
-//@objc protocol Keyed {
-//    @objc static func keys() -> [String]
-//}
-
 /// Used specifically for `RawRepresentables` with `rawValue == String`.  Default implementation returns a `String.capitalized` if applicable, and an empty `String` if `rawValue` fails to translate.
-   /// - Returns: The `String` value of the `RawRepresentable`, formatted according to backend developer preferences.
 protocol DatabaseReady: RawRepresentable, CaseIterable {
+    /// - Returns: The `String` value of the `RawRepresentable`, formatted according to backend developer preferences.
     func firebaseValue() -> String
+    /// - Returns: The `String` value of the `RawRepresentable`, formatted according to core data developer preferences.
     func coreDataValue() -> String?
 }
 
+/// Default implementation
 extension DatabaseReady {
     func firebaseValue() -> String {
         if let v = self.rawValue as? String {
@@ -35,18 +33,12 @@ extension DatabaseReady {
     }
 }
 
+/// Specifically for storage prior to dragon creation
 enum DefaultsKeys: String, CaseIterable {
     case lastUsedLocation, taloneEmail, userHandle, uid
 }
 
-enum ProfileButtonType {
-    case me, card
-}
-
-enum DefaultTitles: String, CaseIterable {
-    case noDataTemplate = "no data"
-}
-
+/// Current viewable and shareable string-representible element types (excludes image)
 enum CardElementTypes: String, RawRepresentable {
     case address, phoneNumber, email
 }

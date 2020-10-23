@@ -31,7 +31,7 @@ class ContactIntroVC: UIViewController {
         
         headerView.setTitleText("contact with " + c.contactHandle!)
         
-        if let t = c.receivedCards?.first {
+        if let t = c.receivedCards?.last {
             theirCard = t
             let color = leftView.backgroundColor
             let newColor = color?.withAlphaComponent(0.77)
@@ -46,7 +46,7 @@ class ContactIntroVC: UIViewController {
             leftButton.isEnabled = false
         }
         
-        if let m = c.sentCards?.first {
+        if let m = c.sentCards?.last {
             myCard = m
             let color = rightView.backgroundColor
             let newColor = color?.withAlphaComponent(0.77)

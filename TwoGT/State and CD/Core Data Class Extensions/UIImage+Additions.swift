@@ -36,6 +36,7 @@ extension UIImage {
     case couldNotFinalize
   }
   
+    /// just here for heic data compression until apple creates one
   func heicData(compressionQuality: CGFloat) throws -> Data {
     let data = NSMutableData()
     guard let imageDestination =

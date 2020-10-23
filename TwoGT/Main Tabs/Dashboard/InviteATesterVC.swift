@@ -29,8 +29,8 @@ final class InviteATesterVC: UIViewController {
     }
     
     @IBAction func sendToArt(_ sender: UIButton) {
-        let nopeTitle = "nope".taloneCased()
-        let nopeMessage = "try again?".taloneCased()
+        let nopeTitle = "nope"
+        let nopeMessage = "try again?"
         guard let e = emailTextField.text?.pure(), let n = realNameTextField.text?.pure() else {
             showOkayAlert(title: nopeTitle, message: nopeMessage, handler: nil)
             return

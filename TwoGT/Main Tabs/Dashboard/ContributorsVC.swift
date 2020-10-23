@@ -37,10 +37,7 @@ final class ContributorsVC: UIViewController {
         do {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            
-            print(jsonData)
             let container = try decoder.decode([String: [String: [String: String]]].self, from: jsonData) as [String: [String: [String: String]]]
-            print(container)
             let dict = container["contributors"]! as NSDictionary
             let keys = dict.allKeys
             var conts: [Contributor] = []
@@ -50,7 +47,7 @@ final class ContributorsVC: UIViewController {
             conts.sort { $0.name < $1.name }
             contributors = conts
         } catch {
-            print(error.localizedDescription)
+            self.somebodyScrewedUp()
         }
     }
     
@@ -93,10 +90,10 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 } else {
-                    self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has provided a bad link.  You can call them now at 867-5309").taloneCased(), handler: nil)
+                    self.somebodyScrewedUp()
                 }
             } else {
-                self.showOkayAlert(title: "Oops".taloneCased(), message: String(format: "\(c.name) has not provided a link to any web presence.  Maybe they're not real...").taloneCased(), handler: nil)
+                self.somebodyScrewedUp()
             }
         }
     }
@@ -104,6 +101,7 @@ extension ContributorsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 extension ContributorsVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        /// Replace this with ios14 implementation, as soon as it's viable
         let width = collectionView.frame.size.width - 10
         let x = contributors[indexPath.row].role
         var z = CGFloat(x?.count ?? 100)
@@ -122,11 +120,14 @@ final class ContributorCell: UICollectionViewCell {
         if let url = contributor.imageUrl {
             if let imageURL = URL(string: url), let placeholder = UIImage(named: contributor.imageName) {
                 contributorImage.af.setImage(withURL: imageURL, placeholderImage: placeholder)
+            } else {
+                contributorImage.image = #imageLiteral(resourceName: "avatar.png")
             }
         } else {
             if let image = UIImage(named: contributor.imageName) {
-                //let aspectScaledToFitImage = image.af.imageAspectScaled(toFit: size)
-                contributorImage.image = image //aspectScaledToFitImage
+                contributorImage.image = image
+            } else {
+                contributorImage.image = #imageLiteral(resourceName: "avatar.png")
             }
         }
         nameLabel.text = contributor.name

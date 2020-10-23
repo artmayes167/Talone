@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum ProfileButtonType {
+    case me, card
+}
+
 class ProfileCustomTab: UIViewController, ProfileTabDelegate {
     
     @IBOutlet weak var meContainer: UIView!

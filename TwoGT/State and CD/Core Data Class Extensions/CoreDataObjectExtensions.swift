@@ -51,25 +51,22 @@ public extension User {
 }
 
 /**
- `CardTemplate` is a template with the data that will be shared, identified by `id`(uid + templateTitle)
- 
- Discussion of variables:
- `uid`: The uid created by FiB (FireBase) for User on account creation.  Any reference to `uid` must refer only to the thisUser.
- `handle`: The unique identifier used by CoreData to differentiate between thisUser and otherUser
-
+ `CardTemplate` is superclass used by core data to define common elements of a CardTemplateInstance
  */
 public extension CardTemplate {
-    /**
-        Only thisUser created cards
-     - Parameter image: perfectly fine for this to be nil
-     - Parameter title: This is a unique identifier for the card, set by You.  Namespace collision will result in replacement of the `CardTemplate`
-     */
-    
     override func awakeFromInsert() {
         uid = AppDelegateHelper.user.uid
         userHandle = AppDelegateHelper.user.handle
     }
-    
+    /**
+        Only thisUser created cards
+     - Parameter image: perfectly fine for this to be nil
+     - Parameter title: This is a unique identifier for the card, set by You.  Namespace collision will result in replacement of the `CardTemplate`
+  
+  - Discussion of variables:
+  `uid`: The uid created by FiB (FireBase) for User on account creation.  Any reference to `uid` must refer only to the thisUser.
+  `handle`: The unique identifier used by CoreData to differentiate between thisUser and otherUser
+  */
     class func create(cardCategory title: String, image: UIImage?) -> Bool {
         var card: CardTemplate?
         if let temps = CoreDataGod.user.cardTemplates, !temps.isEmpty {
@@ -101,7 +98,7 @@ public extension CardTemplate {
 }
 
 /**
-        An instance of a `CardTemplate` that contains the data defined in *one of the templates*, personalized with comments.  Only call to create new
+        An instance of a `CardTemplate`.  Only call to create new
  */
 public extension CardTemplateInstance {
     /** - Parameter card: if set, will attempt to create from `card`.  Else, `codableCard` must be set. `card` takes precedence.
@@ -246,11 +243,10 @@ public extension Email {
     class func create(name: String, emailAddress: String, uid: String?) -> Email {
         let entity = NSEntityDescription.entity(forEntityName: "Email", in: CoreDataGod.managedContext)!
         let email = Email(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         email.title = name
         email.emailString = emailAddress
         email.uid = uid ?? AppDelegateHelper.user.uid
-
+        
         CoreDataGod.save()
         return email
     }
@@ -278,12 +274,12 @@ public extension SearchLocation {
 
         let entity = NSEntityDescription.entity(forEntityName: "SearchLocation", in: CoreDataGod.managedContext)!
         let searchLocation = SearchLocation(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         searchLocation.city = city
         searchLocation.state = state
         searchLocation.country = country
         searchLocation.community = community
         searchLocation.type = type
+        
         CoreDataGod.save()
     }
 
@@ -299,7 +295,6 @@ public extension Address {  // :)
         
         let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
         let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         add.title = title
         add.street1 = street1
         add.street2 = street2
@@ -337,7 +332,6 @@ public extension Address {  // :)
         for dict in array {
             let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
             let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
-            
             add.title = dict["title"]!
             add.street1 = dict["street1"]!
             add.street2 = dict["street2"]
@@ -357,7 +351,6 @@ public extension PhoneNumber {
     class func create(title: String, number: String, uid: String?) -> PhoneNumber {
         let entity = NSEntityDescription.entity(forEntityName: "PhoneNumber", in: CoreDataGod.managedContext)!
         let phoneNum = PhoneNumber(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         phoneNum.title = title
         phoneNum.number = number
         phoneNum.uid = uid ?? AppDelegateHelper.user.uid
@@ -390,7 +383,6 @@ public extension Need {
 
         let entity = NSEntityDescription.entity(forEntityName: "Need", in: CoreDataGod.managedContext)!
         let newNeed = Need(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         newNeed.headline = item.headline
         newNeed.category = item.category
         newNeed.desc = item.description
@@ -457,7 +449,6 @@ public extension Have {
     class func createHave(item: HavesBase.HaveItem) -> Have {
         let entity = NSEntityDescription.entity(forEntityName: "Have", in: CoreDataGod.managedContext)!
         let newHave = Have(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         newHave.headline = item.headline
         newHave.category = item.category
         newHave.desc = item.description
@@ -510,11 +501,11 @@ public extension Have {
 
 }
 
+/// This was created explicitly to deal with locationInfo in FiB, but has found other uses.  `Community` is a subclass
 public extension AppLocationInfo {
     class func create(city: String, state: String, country: String) -> AppLocationInfo {
         let entity = NSEntityDescription.entity(forEntityName: "AppLocationInfo", in: CoreDataGod.managedContext)!
         let locationInfo = AppLocationInfo(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         locationInfo.country = country
         locationInfo.city = city
         locationInfo.state = state
@@ -542,10 +533,8 @@ public extension Contact {
 /// will eventually be extended to share ratings
 public extension ContactRating {
     class func create(handle: String, good: Int = 0, just: Int = 0, bad: Int = 0) -> ContactRating {
-
         let entity = NSEntityDescription.entity(forEntityName: "ContactRating", in: CoreDataGod.managedContext)!
         let rating = ContactRating(entity: entity, insertInto: CoreDataGod.managedContext)
-        
         rating.good = Int64(good)
         rating.justSo = Int64(just)
         rating.bad = Int64(bad)

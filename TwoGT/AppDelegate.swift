@@ -88,11 +88,6 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
                 _ = self.handlePasswordlessSignIn(withURL: u)
             }
           }
-//        if let u = returnedUrl {
-//            return handlePasswordlessSignIn(withURL: u)
-//        } else {
-//            return userActivity.webpageURL.flatMap(handlePasswordlessSignIn)!
-//        }
         return handled
     }
     

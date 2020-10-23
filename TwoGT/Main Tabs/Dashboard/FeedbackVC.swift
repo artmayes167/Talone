@@ -93,13 +93,6 @@ class FeedbackVC: UIViewController {
             }
         }
     }
-    // MARK: - Navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "toTextViewHelper" {
-//            guard let vc = segue.destination as? TextViewHelperVC else { fatalError() }
-//            vc.configure(textView: feedbackTextView, displayName: "general feedback", initialText: feedbackTextView.text)
-//        }
-//    }
 }
 
 extension FeedbackVC: UITextViewDelegate {
@@ -109,7 +102,5 @@ extension FeedbackVC: UITextViewDelegate {
         return false
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        
-    }
+    func textViewDidEndEditing(_ textView: UITextView) { }
 }

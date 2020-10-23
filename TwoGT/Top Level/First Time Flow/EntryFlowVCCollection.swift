@@ -65,9 +65,8 @@ class EnterEmailVC: UIViewController {
                 submitEmailButton.isEnabled = false
                 textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
             }
-            if (t.count > 50) && string != "" { return false }
         }
-        return true
+        return super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -158,7 +157,7 @@ class VerificationVC: UIViewController {
         if let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let link = UserDefaults.standard.string(forKey: "Link") {
             Auth.auth().signIn(withEmail: email, link: link) { (result , error) in
                 if let error = error {
-                    self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (_) in
+                    self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (error) in 
                         // TODO: Check the error and invalidate link only if the error is specifically about
                         // the link (e.g. expired, already used etc.)
                         
@@ -201,6 +200,7 @@ class EnterHandleVC: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         textField.becomeFirstResponder()
     }
 
@@ -214,7 +214,8 @@ class EnterHandleVC: UIViewController {
         
         // Set the handle on the back end
         guard let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
-        let handleObject = UserHandlesDbHandler.UserHandle(name: handle, locationInfo: nil, community: nil, uid: uid)
+        // TODO: - Handle community
+        let handleObject = UserHandlesDbHandler.UserHandle(name: handle, locationInfo: nil, community: "", uid: uid)
         showSpinner()
         _ = UserHandlesDbHandler.registerUserHandleAndCheckUniqueness(handleObject) { (error) in
             self.hideSpinner()
@@ -242,7 +243,6 @@ class EnterHandleVC: UIViewController {
                     self.performSegue(withIdentifier: "toSetHome", sender: nil)
                 }
             }
-            
         }
     }
     
@@ -250,24 +250,23 @@ class EnterHandleVC: UIViewController {
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if t.count > 4 && t.count < 50 { checkHandle(text: t+string) }
-            else if (t.count > 49) && string != "" {
-                showOkayAlert(title: "", message: "you really don't need a handle longer than 50 characters.", handler: nil)
-                return false
-            }
         }
-        return true
+        /// UIViewController checks global requirements
+        return super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
     
     func checkHandle(text t: String) {
         let handleHandler = UserHandlesDbHandler()
         handleHandler.fetchUserHandles(startingWith: t, maxCount: 10) { (userHandles) in
             let filteredHandles = userHandles.filter { $0.name == t }
-            if filteredHandles.isEmpty {
-                self.submitHandleButton.isEnabled = true
-                self.textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
-            } else {
-                self.submitHandleButton.isEnabled = false
-                self.textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
+            DispatchQueue.main.async {
+                if filteredHandles.isEmpty {
+                    self.submitHandleButton.isEnabled = true
+                    self.textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
+                } else {
+                    self.submitHandleButton.isEnabled = false
+                    self.textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
+                }
             }
         }
     }

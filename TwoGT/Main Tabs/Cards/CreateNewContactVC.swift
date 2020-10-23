@@ -24,12 +24,13 @@ class CreateContactModel {
 }
 
 class CreateNewContactVC: UIViewController {
-    
+     // MARK: - Outlets
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var tableView: UITableView!
-    
+     // MARK: - Model
     let model = CreateContactModel()
     
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
@@ -41,19 +42,24 @@ class CreateNewContactVC: UIViewController {
         textField.becomeFirstResponder()
     }
 
+     // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if t.count > 2 && t.count < 50 {
                 if string != "" {
                     model.checkHandle(text: t+string, tableView: tableView)
+                } else {
+                    let s = string[..<string.endIndex]
+                    model.checkHandle(text: String(s), tableView: tableView)
                 }
             }
-            else if (t.count > 49) && string != "" { return false }
         }
-        return true
+        /// UIViewController checks global requirements
+        return super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
 }
 
+ // MARK: - UITableViewDelegate, UITableViewDataSource
 extension CreateNewContactVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // send card

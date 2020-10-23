@@ -33,11 +33,11 @@ extension UIViewController {
         }
     }
     
-    /// Show and Alert with an "Ok" button and a "Cancel" button.
+    /// Show an Alert with an "Ok" button and a "Cancel" button.
     ///
     /// - Parameters:
     ///   - title: The title for the Alert, `taloneCased()`
-    ///   - message: The message for the Alert, `taloneCased()
+    ///   - message: The message for the Alert, `taloneCased()`
     ///   - okayHandler: A block to execute when the user taps "Ok".
     func showOkayOrCancelAlert(title: String, message: String, okayHandler: ((UIAlertAction) -> Void)?, cancelHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
@@ -48,11 +48,11 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    /// Show and Alert with a "Retry" button and a "Cancel" button.
+    /// Show an Alert with a "Retry" button and a "Cancel" button.
     ///
     /// - Parameters:
     ///   - title: The title for the Alert, `taloneCased()`
-    ///   - message: The message for the Alert, `taloneCased()
+    ///   - message: The message for the Alert, `taloneCased()`
     ///   - okayHandler: A block to execute when the user taps "Retry".
     func showRetryOrCancelAlert(title: String, message: String, retryHandler: ((UIAlertAction) -> Void)?, cancelHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title.taloneCased(), message: message.taloneCased(), preferredStyle: .alert)
@@ -88,6 +88,7 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    /// Potentially useful mechanism for building admin access into the app using a secret UI code that reveals a password interface
     func showAdminPasswordAlert(title: String, message: String, okayHandler: @escaping ((UIAlertAction) -> Void)) {
         let alertController = UIAlertController(title: title.taloneCased(), message: message, preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -109,6 +110,7 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
+    /// Apple wants to test, so hopefully we can come up with a non-invasive way to manage that
     func showApplePasswordAlert(title: String, message: String, okayHandler: @escaping ((UIAlertAction) -> Void)) {
         let alertController = UIAlertController(title: title.taloneCased(), message: message, preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -158,12 +160,14 @@ extension UIViewController {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "TextView Helper") as! TextViewHelperVC
         helper.configure(textView: textView, displayName: displayName, initialText: initialText)
-        view.endEditing(true)
-        present(helper, animated: true, completion: nil)
+        let success = view.endEditing(true)
+        if !success {
+            present(helper, animated: true, completion: nil)
+        }
     }
     
      // MARK: - CompleteAndSendCard Presentation
-    /** you must include one of `card`, `haveItem` or `needItem`.
+    /** you must include one of  `contact`, `card`, `haveItem` or `needItem`.
             This VC manages creation of cards, and provides a less-annoying textView experience for me.
     */
     func showCompleteAndSendCardHelper(contact: Contact? = nil, card: CardTemplateInstance? = nil, haveItem: HavesBase.HaveItem? = nil, needItem: NeedsBase.NeedItem? = nil) {
@@ -174,6 +178,9 @@ extension UIViewController {
         present(helper, animated: true, completion: nil)
     }
     
+    /**
+        Alternative initialization function, SwiftUI style, specifically for initiating a new contact after searching for user handle
+     */
     func showCompleteAndSendCardHelper(handle: String, uid: String) {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "Add Template Card") as! CardTemplateCreatorVC
@@ -182,14 +189,17 @@ extension UIViewController {
         present(helper, animated: true, completion: nil)
     }
     
+    /// Nothing to see here
     func devNotReady() {
         showOkayAlert(title: "Hello, Founder!", message: "This feature has not been built out yet, so think about how it should look, and send feedback.", handler: nil)
     }
     
+    /// or here
     func somebodyScrewedUp() {
         showOkayAlert(title: "hello, founder!", message: "somebody has screwed up. blame jyrki.", handler: nil)
     }
     
+    /// accessing views got annoying, so now view controllers do it
     func makeToast(_ message: String, duration: TimeInterval = 0.5, completion: @escaping ((Bool) -> Void)) {
         view.makeToast(message.taloneCased(), duration: duration, position: .center, title: "", completion: completion)
     }
@@ -202,11 +212,7 @@ extension UIViewController: UITextFieldDelegate {
         return true
     }
     
-//    public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        return true
-//    }
-    
-    /// Call super on override
+    /// Call super on UIViewController subclass override, to enforce app-wide rules-- may create an accessor instead of a super call
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
             if (t.count > 50) && string != "" { return false }
@@ -257,7 +263,17 @@ extension UIViewController: MFMailComposeViewControllerDelegate {
 }
 
 extension UIViewController: UIAdaptivePresentationControllerDelegate {
-    /// override point
+    /** override point, called by modally presented VCs, when they need to update their presenting VCs.
+     For modal presentation in iOS13+, viewWillAppear and its minions will no longer trigger on dismissal.  Apple now embeds a modally presented view controller in a UIAdaptivePresentationController.
+     
+    - This extension makes it possible for sublasses of UIViewController to set themselves as UIAdaptivePresentationControllerDelegate objects.  When the presented vc calls `self.presentingViewController.delegate?.updateUI()`, it triggers the extension below, which triggers the function in the UIViewController superclass.
+     
+    Any VC wishing to take advantage of this should set the delegate somewhere (I prefer in prepareForSegue())
+     
+      let vc = segue.destination; vc.presentingViewController?.delegate = self;
+    Then, `override func updateUI() {}` in the same class.
+     Then, in the presented class, call `self.presentingViewController.delegate?.updateUI()` before dismissing.
+ */
     @objc func updateUI() { }
 }
 
