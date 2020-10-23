@@ -13,7 +13,15 @@ import FirebaseFirestoreSwift
 
 class UserHandlesDbHandler: FirebaseGeneric {
 
-    struct UserHandle: Codable {
+    struct UserHandle: Codable, Comparable {
+        static func < (lhs: UserHandlesDbHandler.UserHandle, rhs: UserHandlesDbHandler.UserHandle) -> Bool {
+            return lhs.name < rhs.name
+        }
+        
+        static func == (lhs: UserHandlesDbHandler.UserHandle, rhs: UserHandlesDbHandler.UserHandle) -> Bool {
+            return lhs.name == rhs.name && lhs.locationInfo?.state == rhs.locationInfo?.state && lhs.locationInfo?.city == rhs.locationInfo?.city && lhs.community == rhs.community && lhs.uid == rhs.uid
+        }
+        
         var name: String                // Handle's visual description, e.g. "-NightHawk-"
         var locationInfo: LocationInfo? // Primary location where this handle is associated to
         var community: String?          // Potential community this user belongs to
@@ -32,8 +40,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
     var searchTerm = ""
 
     /**
-        Registers given user handle to backend. User handle can contain special chars but it will be trimmed for white spaces.  This method can work offline, and it does
-     not ensure there is no duplicates. That call the calling application logic needs to do separately (and decide how to handle offline-mode registrations
+        Registers given user handle to backend. User handle can contain special chars but it will be trimmed for white spaces.  This method can work offline, and it does not ensure there are no duplicates. That call the calling application logic needs to do separately (and decide how to handle offline-mode registrations
         - Parameter UserHandle: Struct containing UserHandle data*/
     class func registerUserHandle(_ hd: UserHandle) -> Error? {
         let db = Firestore.firestore()
@@ -52,8 +59,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
     }
 
     /**
-        Registers given user handle to backend. User handle can contain special chars but it will be trimmed for white spaces.  Method will first check if the handle is
-        already registered (returns error if is). Because of the requirement to ensure uniqueness of the handle, this method needs internet connection.
+        Registers given user handle to backend. User handle can contain special chars but it will be trimmed for white spaces.  Method will first check if the handle is already registered (returns error if is). Because of the requirement to ensure uniqueness of the handle, this method needs internet connection.
         - Parameter hd: Struct containing UserHandle data.
         - Parameter completion: Completion handler that will be called with nil upon successful operation. If user handle is already reserved by current user, returning GenericFirebaseError.alreadyOwned. If handle is reserved by someone else, returning GenericFirebaseError.alreadyTaken.
         - Parameter Error: nil if succesful, otherwise GenericFirebaseError*/

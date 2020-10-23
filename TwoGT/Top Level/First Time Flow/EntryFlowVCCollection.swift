@@ -228,15 +228,26 @@ class EnterHandleVC: UIViewController {
      // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
-            if t.count > 4 /* && handleDoesNotMatch */ {
-                submitHandleButton.isEnabled = true
-                textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
-            } else {
-                submitHandleButton.isEnabled = false
-                textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
+            if t.count > 4 && t.count < 50 { checkHandle(text: t+string) }
+            else if (t.count > 49) && string != "" {
+                showOkayAlert(title: "", message: "you really don't need a handle longer than 50 characters.", handler: nil)
+                return false
             }
-            if (t.count > 50) && string != "" { return false }
         }
         return true
+    }
+    
+    func checkHandle(text t: String) {
+        let handleHandler = UserHandlesDbHandler()
+        handleHandler.fetchUserHandles(startingWith: t, maxCount: 10) { (userHandles) in
+            let filteredHandles = userHandles.filter { $0.name == t }
+            if filteredHandles.isEmpty {
+                self.submitHandleButton.isEnabled = true
+                self.textField.backgroundColor = UIColor.green.withAlphaComponent(0.44)
+            } else {
+                self.submitHandleButton.isEnabled = false
+                self.textField.backgroundColor = UIColor.red.withAlphaComponent(0.44)
+            }
+        }
     }
 }
