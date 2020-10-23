@@ -231,7 +231,6 @@ public extension Community {
 
         let entity = NSEntityDescription.entity(forEntityName: "Community", in: CoreDataGod.managedContext)!
         let community = Community(entity: entity, insertInto: CoreDataGod.managedContext)
-
         community.name = communityName
 
         CoreDataGod.save()
@@ -251,6 +250,7 @@ public extension Email {
         return email
     }
     
+    /// used for creating FiB object
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
         dict["title"] = title
@@ -258,7 +258,7 @@ public extension Email {
         dict["uid"] = uid // from owner
         return dict
     }
-    
+    /// used for creating from FiB object
     class func emailsFrom(array: [[String: String]]) -> [Email] {
         var arr: [Email] = []
         for dict in array {
@@ -359,7 +359,6 @@ public extension PhoneNumber {
         return phoneNum
     }
     
-    /// Template title not included
     func dictionaryValue() -> [String: String] {
         var dict: [String: String] = [:]
         dict["title"] = title

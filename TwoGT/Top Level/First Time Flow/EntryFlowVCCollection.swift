@@ -257,6 +257,7 @@ class EnterHandleVC: UIViewController {
     
     func checkHandle(text t: String) {
         let handleHandler = UserHandlesDbHandler()
+        // NOTE: - Function assumes backend prioritization of matches
         handleHandler.fetchUserHandles(startingWith: t, maxCount: 10) { (userHandles) in
             let filteredHandles = userHandles.filter { $0.name == t }
             DispatchQueue.main.async {

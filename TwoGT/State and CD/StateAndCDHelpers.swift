@@ -22,22 +22,12 @@ public final class AppDelegateHelper: NSObject {
         return container.viewContext
     }
     
-//    class var managedContextOfAction: NSManagedObjectContext {
-//        return container.newBackgroundContext()
-//    }
-    
     class func save() {
         let d = UIApplication.shared.delegate as! AppDelegate
         if !d.saveContext() {
             print("--------------Failed again.")
         }
     }
-    
-    // MARK: - Properties
-//    fileprivate static var stack: CoreDataStack = {
-//      let manager = DataMigrationManager() //(modelNamed: "TwoGT", enableMigrations: true)
-//      return manager.stack
-//    }()
     
     class func getUser() -> User {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
@@ -55,7 +45,6 @@ public final class AppDelegateHelper: NSObject {
     }
 
     class func createUser() -> User {
-//        let entity = NSEntityDescription.entity(forEntityName: User().entity.name ?? "Fuck", in: CoreDataGod.managedContext)!
         let user = User(context: CoreDataGod.managedContext)
             return user
     }
@@ -94,7 +83,6 @@ class BackgroundTask {
 
     class func run(application: UIApplication, handler: (BackgroundTask) -> Void) {
         // NOTE: The handler must call end() when it is done
-
         let backgroundTask = BackgroundTask(application: application)
         backgroundTask.begin()
         handler(backgroundTask)

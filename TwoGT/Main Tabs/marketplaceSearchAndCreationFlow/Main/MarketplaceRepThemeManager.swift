@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Extension in ItemDetailsVC, so check there too before changing anything
 class MarketplaceRepThemeManager {
     enum RepTheme: String, CaseIterable {
         case bad

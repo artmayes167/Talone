@@ -14,6 +14,7 @@ enum AddressSections: Int, CaseIterable {
     case address, phoneNumber, email
 }
 
+/// Subclassed by IntroYouVC, so check there too before changing anything
 @objc class YouVC: UIViewController {
     @IBOutlet weak var imageButton: UIButton!
     @IBOutlet weak var handleLabel: UILabel!
@@ -41,6 +42,7 @@ enum AddressSections: Int, CaseIterable {
         handleLabel.text = CoreDataGod.user.handle
     }
     
+    /// may move this to UIViewController extension, if enough VCs end up using it
     @IBAction @objc func changeImage(_ sender: UIButton) {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
@@ -83,7 +85,8 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
             if let ems = CoreDataGod.user.emails { emails = ems }
             return emails.count
         default:
-            fatalError()
+            print("you may have added a social media object or something")
+            return 0
         }
     }
     
@@ -106,7 +109,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
             cell.configure(name: email.title, details: email.emailString)
             return cell
         default:
-            fatalError()
+            fatalError("you may have added a social media object or something")
         }
     }
     
@@ -139,7 +142,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
         case .email:
             cell.configure(controller: self, selector: #selector(addNewEmail))
         default:
-            fatalError()
+            fatalError("you may have added a social media object or something")
         }
         return cell.contentView
     }
@@ -163,7 +166,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
                     return // don't want to crash because we're deleting a row that shouldn't be
                 }
             default:
-                fatalError()
+                fatalError("you may have added a social media object or something")
             }
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -176,7 +179,7 @@ extension YouVC: UITableViewDelegate, UITableViewDataSource {
     @objc func addNewEmail() { performSegueTo(.email) }
 }
 
- // MARK: - Custom Cells
+ // MARK: - Custom Cells also used by IntroYouVC subclass
 class YouHeaderCell: UITableViewCell {
     static let identifier = "header"
     @IBOutlet weak var titleLabel: UILabel!
@@ -211,7 +214,7 @@ class AddressCell: UITableViewCell {
     }
 }
 
-/// Currently unused, because differentiation here is unnecessary
+/// Currently unused, because differentiation here is unnecessary so far
 class EmailCell: UITableViewCell {
     static let identifier = "email"
     func configure() { }

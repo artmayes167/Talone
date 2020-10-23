@@ -65,6 +65,7 @@ class ConfigurableHeader: UIView {
 
 }
 
+/// Extension in MyItemDetailsVC, so check there too before changing anything
 class NeedDetailModel {
     internal var have: HavesBase.HaveItem?
     internal var need: NeedsBase.NeedItem?
@@ -161,6 +162,7 @@ class NeedDetailModel {
     }
 }
 
+/// Subclassed by MyItemDetailsVC, so check there too before changing anything
 class ItemDetailsVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -203,7 +205,11 @@ class ItemDetailsVC: UIViewController {
     }
 
     @IBAction func report(_ sender: UIButton) {
-        devNotReady()
+        showOkayOrCancelAlert(title: "are you sure?", message: "blocking will eventually have an effect, once jyrki gets to it.") { (_) in
+            self.devNotReady()
+        } cancelHandler: { (_) in
+            
+        }
     }
 
     /*

@@ -17,6 +17,7 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
     
     @IBOutlet weak var topImage: UIImageView!
 
+     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfAuthenticatedAndProgress()
@@ -27,15 +28,14 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
         topImage.cycleOpacity()
     }
     
+    /// Initial check that routes dragon to the noob flow according to state saved in `UserDefaults`, or replaces the navigation controller with the `BaseSwipeVC` as `window.root`
     func checkIfAuthenticatedAndProgress() {
         if let _ = UserDefaults.standard.string(forKey: DefaultsKeys.userHandle.rawValue), AppDelegate.stateManager.configureIntro() == nil, (Auth.auth().currentUser?.isEmailVerified ?? false) {
             print("Email verified!!! User not anonymous!")
             authenticationWithTouchID() { (success, error) in
                 DispatchQueue.main.async {
-                    self.showSpinner()
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { fatalError() }
                     if success {
-                        self.hideSpinner()
                         appDelegate.window = UIWindow(frame: UIScreen.main.bounds)
                         let mainStoryboard = UIStoryboard(name: "NoHome", bundle: nil)
                         let mainVC = mainStoryboard.instantiateViewController(withIdentifier: "Main App VC") as! BaseSwipeVC
@@ -46,14 +46,12 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                             mainVC.view.alpha = 1
                         }
                     } else if let e = error {
-                        self.hideSpinner()
                         self.showOkayOrCancelAlert(title: "Something went wrong: \(e.localizedDescription).".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
                             
                         })
                     } else {
-                        self.hideSpinner()
                         self.showOkayOrCancelAlert(title: "Something went wrong.".taloneCased(), message: "Try again?".taloneCased(), okayHandler: { (_) in
                             self.checkIfAuthenticatedAndProgress()
                         }, cancelHandler: { (_) in
@@ -66,6 +64,7 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
             DispatchQueue.main.async() {
                 /// This covers the two cases besides the email verification
                 if let name = AppDelegate.stateManager.configureIntro() {
+                    /// previously entered the noob train, and crashed
                     self.performSegue(withIdentifier: name.segueValue(), sender: nil)
                 } else {
                     /// First time entering the noob train
@@ -101,11 +100,11 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
        }
 
     // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-    }
-
-    @IBAction func unwindToLogIn( _ segue: UIStoryboardSegue) {
-
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//
+//    }
+//
+//    @IBAction func unwindToLogIn( _ segue: UIStoryboardSegue) {
+//
+//    }
 }

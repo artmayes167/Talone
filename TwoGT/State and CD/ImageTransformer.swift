@@ -30,6 +30,7 @@ import Foundation
 import UIKit
 import CoreData
 
+/// Used by CoreData, which identifies images as `Transformable`  See data model as reference
 @objc(ImageTransformer)
 public class ImageTransformer: ValueTransformer {
 
@@ -45,7 +46,6 @@ public class ImageTransformer: ValueTransformer {
     guard let data = value as? Data else {
       return nil
     }
-
     return UIImage(data: data)
   }
 
@@ -53,7 +53,6 @@ public class ImageTransformer: ValueTransformer {
     guard let image = value as? UIImage else {
       return nil
     }
-
     return image.pngData()
   }
 }

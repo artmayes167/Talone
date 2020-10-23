@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+/// This controller sets the initial search value, and first saved search location as home
 class IntroChooseHomeVC: UIViewController {
     
     let popOverSegue = "toPopover"
@@ -24,7 +25,7 @@ class IntroChooseHomeVC: UIViewController {
         updateUI()
     }
     
-    // called by UIAdaptivePresentationControllerDelegate
+    // called by UIAdaptivePresentationControllerDelegate, routed through UIViewController parent
     override func updateUI() {
         if let t = stateLabel.text, !t.isEmpty {
             showStateAndCityField.isHidden = false
@@ -44,10 +45,12 @@ class IntroChooseHomeVC: UIViewController {
             cityLabel.text = nil
             updateUI()
         }
+        /// sender being nil  here determines that we are searching for a state
         performSegue(withIdentifier: popOverSegue, sender: nil)
     }
     
     @IBAction func showCitySelector() {
+        /// sender being a string here determines that we are searching for a city
         performSegue(withIdentifier: popOverSegue, sender: stateLabel.text)
     }
     
