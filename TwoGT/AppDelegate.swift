@@ -91,6 +91,15 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         return handled
     }
     
+    /// These may or may not be a good idea
+    public func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+       return true
+    }
+
+    public func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+       return true
+    }
+    
     public func applicationWillEnterForeground(_ application: UIApplication) {
         if Auth.auth().currentUser?.displayName != nil {
             AppDelegate.cardObserver.startObserving()

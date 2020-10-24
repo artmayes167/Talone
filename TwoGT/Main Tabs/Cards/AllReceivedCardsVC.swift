@@ -18,7 +18,10 @@ class AllReceivedCardsVC: UIViewController {
             var dict: [String: [String]] = [:]
             for c in contacts {
                 if let firstChar = c.contactHandle!.first {
-                    if var array = dict[String(firstChar)] { array.append(c.contactHandle!) }
+                    if var array = dict[String(firstChar)] {
+                        array.append(c.contactHandle!)
+                        dict[String(firstChar)] = array
+                    }
                     else { dict[String(firstChar)] = [c.contactHandle!] }
                 } else { fatalError() }
             }
@@ -35,7 +38,9 @@ class AllReceivedCardsVC: UIViewController {
     }
     
     private func getContacts() {
+        CoreDataGod.managedContext.refreshAllObjects()
         contacts = CoreDataGod.user.contacts ?? []
+        print(contacts)
     }
     
     override func viewDidLoad() {
@@ -44,11 +49,13 @@ class AllReceivedCardsVC: UIViewController {
         getContacts()
     }
     
-    @IBAction func goToSearch(_ sender: UIButton) {
-        showOkayAlert(title: "Hi, Jyrki!", message: "This feature is coming soon", handler: nil)
+    override func updateUI() {
+        getContacts()
+        tableView.reloadData()
     }
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        getContacts()
         tableView.reloadData()
     }
     

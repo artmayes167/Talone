@@ -174,6 +174,10 @@ class CardTemplateCreatorVC: UIViewController {
         }
     }
     
+    override func updateUI() {
+        presentationController?.delegate?.updateUI()
+    }
+    
     /// If there wasn't an image shown and included before, there is now-- and vice-versa
     @IBAction func touchedAddRemoveImage(_ sender: UIButton) {
         changeImage(sender)
@@ -255,6 +259,7 @@ class CardTemplateCreatorVC: UIViewController {
                     if let nav = self?.navigationController {
                         nav.popViewController(animated: true)
                     } else {
+                        self?.presentationController?.delegate?.updateUI()
                         self?.dismiss(animated: true, completion: nil)
                     }
                 }

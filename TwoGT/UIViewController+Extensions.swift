@@ -160,10 +160,9 @@ extension UIViewController {
         let helperBoard = UIStoryboard(name: "Helper", bundle: nil)
         let helper = helperBoard.instantiateViewController(withIdentifier: "TextView Helper") as! TextViewHelperVC
         helper.configure(textView: textView, displayName: displayName, initialText: initialText)
-        let success = view.endEditing(true)
-        if !success {
-            present(helper, animated: true, completion: nil)
-        }
+        view.endEditing(true)
+        helper.presentationController?.delegate = self
+        present(helper, animated: true, completion: nil)
     }
     
      // MARK: - CompleteAndSendCard Presentation

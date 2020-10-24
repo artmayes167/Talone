@@ -13,12 +13,13 @@ class CreateContactModel {
     var handleNames: [String] = []
     var handles: [UserHandlesDbHandler.UserHandle] = []
     
-    func checkHandle(text t: String, tableView: UITableView) {
+    func checkHandle(text t: String, controller c: CreateNewContactVC) {
         let handleHandler = UserHandlesDbHandler()
         handleHandler.fetchUserHandles(startingWith: t, maxCount: 100) { (userHandles) in
             self.handles = userHandles.sorted()
             self.handleNames = self.handles.map { $0.name }
-            tableView.reloadData()
+            c.activityIndicatorView.isHidden = true
+            c.tableView.reloadData()
         }
     }
 }
@@ -27,6 +28,7 @@ class CreateNewContactVC: UIViewController {
      // MARK: - Outlets
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
      // MARK: - Model
     let model = CreateContactModel()
     
@@ -47,10 +49,14 @@ class CreateNewContactVC: UIViewController {
         if let t = textField.text {
             if t.count > 2 && t.count < 50 {
                 if string != "" {
-                    model.checkHandle(text: t+string, tableView: tableView)
+                    activityIndicatorView.isHidden = false
+                    model.checkHandle(text: t+string, controller: self)
                 } else {
-                    let s = string[..<string.endIndex]
-                    model.checkHandle(text: String(s), tableView: tableView)
+                    let s = t[..<t.endIndex]
+                    if !s.isEmpty {
+                        activityIndicatorView.isHidden = false
+                        model.checkHandle(text: String(s), controller: self)
+                    }
                 }
             }
         }
