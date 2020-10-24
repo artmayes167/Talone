@@ -32,8 +32,8 @@ class MarketplaceMainVC: UIViewController {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
-        
         setInitialValues()
+        /// fun little placeholder animation
         emptyTableImageView.cycleOpacity()
     }
     
@@ -52,6 +52,8 @@ class MarketplaceMainVC: UIViewController {
         }
     }
     
+    /** `CreateNewItemVC` has a bool it uses to determine whether it is dealing with a have or a need.  The bool passed here is used in `prepareForSegue()` to set the `need` bool
+     */
     @IBAction func createANeed() {
         performSegue(withIdentifier: "toCreateNewItem", sender: true)
     }
@@ -60,6 +62,7 @@ class MarketplaceMainVC: UIViewController {
         performSegue(withIdentifier: "toCreateNewItem", sender: false)
     }
     
+    /// The button both shows and hides the popOver, in case dragon doesn't want to make a new selection
     @IBAction func chooseCategory(_ sender: UIButton) {
         categoriesPopOver.isHidden = !categoriesPopOver.isHidden
         view.layoutIfNeeded()
@@ -87,6 +90,7 @@ class MarketplaceMainVC: UIViewController {
         }
     }
     
+    /// Currently only effectivey used by CityStateSearchVC
     @IBAction func unwindToMarketplaceSearchAndCreationVC( _ segue: UIStoryboardSegue) {
          if let s = segue.source as? CityStateSearchVC {
             whereTextField.text = s.loc.displayName()
@@ -96,6 +100,7 @@ class MarketplaceMainVC: UIViewController {
             model.configure(for: self)
          }
      }
+    
  // MARK: - UITextFieldDelegate
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == whereTextField {
@@ -117,9 +122,7 @@ extension MarketplaceMainVC: NeedSelectionDelegate {
 }
 
 extension MarketplaceMainVC: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+    func numberOfSections(in tableView: UITableView) -> Int { return 1 }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.relevantCount
@@ -137,6 +140,7 @@ extension MarketplaceMainVC: UITableViewDataSource, UITableViewDelegate {
 }
  
  // MARK: - MarketplaceCell configuration
+/// This extension is specific to coloring for the `MarketplaceCell`
 extension MarketplaceRepThemeManager {
     func configure(_ cell: MarketplaceCell, rating: ContactRating?) {
         guard let r = rating else {
@@ -163,7 +167,6 @@ extension MarketplaceRepThemeManager {
         cell.topView.borderColor = color
         cell.categoryImageView.backgroundColor = color
     }
-    
 }
 
 class MarketplaceCell: UITableViewCell {
@@ -215,7 +218,6 @@ class MarketplaceCell: UITableViewCell {
             if count == 0 { return }
             if count == 1 {
                 watchersLabel.text = "1 watcher"
-                return
             } else {
                 watchersLabel.text = String(count) + " watchers"
             }

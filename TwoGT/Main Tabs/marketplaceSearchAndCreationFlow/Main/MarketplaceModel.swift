@@ -30,8 +30,7 @@ class MarketplaceModel: NSObject {
         controller?.showSpinner()
         let need: NeedsBase.NeedItem = self.createNeedItem()
 
-        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
+        let needsWriter = NeedsDbWriter()
         needsWriter.addNeed(need, completion: { [unowned controller] error in
             if error == nil {
                 let _ = Need.createNeed(item: need)
@@ -130,23 +129,14 @@ class MarketplaceModelOld: NSObject {
         controller?.showSpinner()
         let need: NeedsBase.NeedItem = self.createNeedItem()
 
-        let needsWriter = NeedsDbWriter()       // TODO: Decide if this needs to be stored in singleton
-
+        let needsWriter = NeedsDbWriter()
         needsWriter.addNeed(need, completion: { [unowned controller] error in
             if error == nil {
                 let _ = Need.createNeed(item: need)
                 CoreDataGod.save()
-                DispatchQueue.main.async {
-                    controller?.view.makeToast("You have successfully created a Need!", duration: 2.0, position: .center) {_ in
-                        controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
-                        controller?.hideSpinner()
-                    }
-                }
-                
+                self.successFor("Need", controller: controller)
             } else {
-                controller?.showOkayAlert(title: "", message: "Error while adding a Need in Marketplace. Error: \(error!.localizedDescription)") { (_) in
-                    controller?.hideSpinner()
-                }
+                self.failureFor("Need", controller: controller, with: error)
             }
         })
     }
@@ -156,22 +146,32 @@ class MarketplaceModelOld: NSObject {
         let have: HavesBase.HaveItem = self.createHaveItem()
         let havesWriter = HavesDbWriter()
 
-        havesWriter.addHave(have, completion: { [unowned controller] error in
+        havesWriter.addHave(have) { [unowned controller] error in
             if error == nil {
                 let _ = Have.createHave(item: have)
                 CoreDataGod.save()
-                DispatchQueue.main.async {
-                    controller?.view.makeToast("You have successfully created a Have!", duration: 2.0, position: .center) {_ in
-                        controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
-                        controller?.hideSpinner()
-                    }
-                }
+                self.successFor("Have", controller: controller)
             } else {
-                controller?.showOkayAlert(title: "", message: "Error while adding a Have. Error: \(error!.localizedDescription)") { (_) in
-                    controller?.hideSpinner()
-                }
+                self.failureFor("Have", controller: controller, with: error)
             }
-        })
+        }
+    }
+    
+    private func successFor(_ string: String, controller: UIViewController?) {
+        DispatchQueue.main.async {
+            controller?.view.makeToast("You have successfully created a \(string)!", duration: 2.0, position: .center) {_ in
+                controller?.performSegue(withIdentifier: "unwindToWarehouse", sender: nil)
+                controller?.hideSpinner()
+            }
+        }
+    }
+    
+    private func failureFor(_ string: String, controller: UIViewController?, with error: Error?) {
+        DispatchQueue.main.async {
+            controller?.showOkayAlert(title: "", message: "Error while adding a \(string). Error: \(error!.localizedDescription)") { (_) in
+                controller?.hideSpinner()
+            }
+        }
     }
     
     // MARK: Private Creation Functions

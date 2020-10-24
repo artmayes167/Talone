@@ -56,25 +56,17 @@ class MyHavesSearchDisplayVC: UIViewController {
     }
 
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyDetails" {
             guard let vc = segue.destination as? MyItemDetailsVC, let h = sender as? Have else { fatalError() }
             vc.configure(have: h, need: nil)
         }
     }
-
-//    @IBAction func unwindToMyHaves( _ segue: UIStoryboardSegue) {
-//        getHaves()
-//    }
 }
 
 extension MyHavesSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return haves.count

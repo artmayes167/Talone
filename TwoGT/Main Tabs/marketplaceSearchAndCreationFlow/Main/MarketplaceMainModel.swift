@@ -9,11 +9,13 @@
 import UIKit
 import Firebase
 
+/// This model manages the tableview and the tabs, via dependency injection
 class MarketplaceMainModel {
     var havesArray: [HavesBase.HaveItem]?
     var needsArray: [NeedsBase.NeedItem]?
     weak var customTab: NeedHaveTabControllerView?
     
+    /// for tableView numberOfRows
     var relevantCount: Int {
         guard let c = customTab else { return 0 }
         if c.left {
@@ -23,6 +25,7 @@ class MarketplaceMainModel {
         }
     }
     
+    /// Okay, this is kind of a goof.  Whichever call returns first is the `winner`, and we select that tab, and load that table
     private var winner = true
     
     public func configure(for c: MarketplaceMainVC) {
@@ -82,7 +85,6 @@ class MarketplaceMainModel {
     }
     
     func populateCell(cell c: MarketplaceCell, row: Int) {
-        
         if customTab!.left {
             if let need = needsArray?[row] {
                 let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == need.owner })

@@ -205,7 +205,7 @@ class ItemDetailsVC: UIViewController {
     }
 
     @IBAction func report(_ sender: UIButton) {
-        showOkayOrCancelAlert(title: "are you sure?", message: "blocking will eventually have an effect, once jyrki gets to it.") { (_) in
+        showOkayOrCancelAlert(title: "are you sure?", message: "blocking will eventually have an effect, once jyrki gets to it. but for now, go ahead.  be petty.") { (_) in
             self.devNotReady()
         } cancelHandler: { (_) in
             

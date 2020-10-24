@@ -18,13 +18,6 @@ class WarehouseMainVC: UIViewController {
     
     @IBOutlet weak var havesHeaderImageView: UIImageView!
     @IBOutlet weak var needsHeaderImageView: UIImageView!
-
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        myHavesDisplay?.getHaves()
-//        myNeedsDisplay?.getNeeds()
-//        // Do any additional setup after loading the view.
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -58,7 +51,6 @@ class WarehouseMainVC: UIViewController {
         
     }
     
-    
     @IBAction func switchOutViews(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -79,8 +71,6 @@ class WarehouseMainVC: UIViewController {
 
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyHaves" {
             myHavesDisplay = segue.destination as? MyHavesSearchDisplayVC

@@ -35,7 +35,6 @@ final class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func getNeeds() {
-        
         let fetchRequest: NSFetchRequest<Need> = Need.fetchRequest()
         do {
             let u = try CoreDataGod.managedContext.fetch(fetchRequest)
@@ -43,7 +42,7 @@ final class MyNeedsSearchDisplayVC: UIViewController {
                 return $0.owner == CoreDataGod.user.handle
             }
         } catch {
-          fatalError()
+          somebodyScrewedUp()
         }
         if isViewLoaded {
             collectionView.reloadData()
@@ -56,19 +55,12 @@ final class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMyDetails" {
             guard let vc = segue.destination as? MyItemDetailsVC, let n = sender as? Need else { fatalError() }
             vc.configure(have: nil, need: n)
         }
     }
-    
-//    @IBAction func unwindToMyNeeds( _ segue: UIStoryboardSegue) {
-//        getNeeds()
-//    }
-
 }
 
 extension MyNeedsSearchDisplayVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -112,7 +104,7 @@ class MyNeedCell: UICollectionViewCell {
     
     fileprivate lazy var childNeeds: NSFetchedResultsController<Need> = {
         let context = CoreDataGod.managedContext
-      //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
+      //let request: NSFetchRequest<Need> = NSFetchRequest(entityName: "Need")
         let request: NSFetchRequest<Need> = Need.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Need.parentNeedItemId), ascending: false)]
       let ratings = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
@@ -150,19 +142,19 @@ class MyNeedCell: UICollectionViewCell {
 
         do {
           try childNeeds.performFetch()
+            if let cn = childNeeds.fetchedObjects, !cn.isEmpty {
+                let children = cn.filter { $0.parentNeedItemId == need.id }
+                if children.count > 1 {
+                    joinedLabel?.text = "\(children.count) people watching"
+                    return
+                } else if children.count == 1 {
+                    joinedLabel?.text = "1 person watching"
+                    return
+                }
+            }
+            joinedLabel?.text = "nobody's watching yet"
         } catch {
           print("Error: \(error)")
         }
-        if let cn = childNeeds.fetchedObjects, !cn.isEmpty {
-            let children = cn.filter { $0.parentNeedItemId == need.id }
-            if children.count > 1 {
-                joinedLabel?.text = "\(children.count) people watching"
-                return
-            } else if children.count == 1 {
-                joinedLabel?.text = "1 person watching"
-                return
-            }
-        }
-        joinedLabel?.text = "nobody's watching yet"
     }
 }
