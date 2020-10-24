@@ -17,13 +17,11 @@ class AllReceivedCardsVC: UIViewController {
         didSet {
             var dict: [String: [String]] = [:]
             for c in contacts {
-                if let firstChar = c.contactHandle!.first {
-                    if var array = dict[String(firstChar)] {
-                        array.append(c.contactHandle!)
-                        dict[String(firstChar)] = array
-                    }
-                    else { dict[String(firstChar)] = [c.contactHandle!] }
-                } else { fatalError() }
+                let firstChar = c.contactHandle!.first!
+                if var array = dict[String(firstChar)] {
+                    array.append(c.contactHandle!)
+                    dict[String(firstChar)] = array
+                } else { dict[String(firstChar)] = [c.contactHandle!] }
             }
             contactList = dict
         }
@@ -63,7 +61,7 @@ class AllReceivedCardsVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCardIntro" {
             let vc = segue.destination as! ContactIntroVC
-            guard let c = sender as? Contact else { fatalError() }
+            let c = sender as! Contact
             vc.contact = c
         } else {
             segue.destination.presentationController?.delegate = self
@@ -91,11 +89,8 @@ extension AllReceivedCardsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ContactListCell
         let u = contacts.filter { $0.contactHandle == handle }
-        if let trueContact = u.first {
-            cell.configure(contact: trueContact)
-        } else {
-            fatalError()
-        }
+        let trueContact = u.first!
+        cell.configure(contact: trueContact)
         return cell
     }
     
