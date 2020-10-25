@@ -9,24 +9,14 @@ As events unfold, I want to keep feedback open, so that self-defining communitie
 
 # Design Logic:
 - Some gestures are so ingrained in the psyches of iPhone users, that I intend to take advantage of this intuitive understanding as much as possible
-- The Dashboard will be available from every screen in the app (some exceptions may apply)
+- The Dashboard will be available from every main screen in the app, once main flow is entered
 - The user's first thought about how to do something, or simple discovery through casual use, dictate the fundamental design pattern
 - New ideas merit further exploration, but new software packages should be viewed with a skeptical eye
 
-# NEED:
-
-- A need may be searched for and created from the same screen
-- When a Need is found that matches search criteria, a user may join that Need
-- When a Have is found that matches search criteria, a user may join that Have -- 
-      - User will be prompted to enter a description, and a need will be created and linked to the Have
-- When a need is created, a user may connect it to a Have -- mechanism still in design phase --
-
-# HAVE
-
-# EVENT
-
-- The owner of a Have may create an Event, and link related Haves, and/or related Needs
-- Events will have a notification mechanism to alert all parties when created
+# NEED & HAVE:
+- A need or have may be searched for or created
+- When a Need is found that matches search criteria, a user may watch that Need
+- When a Have is found that matches search criteria, a user may watch that Have
 
 Known Issues:
 - If the project stops recognizing Firebase (including Auth), see: https://github.com/firebase/firebase-ios-sdk/issues/6066#issuecomment-662580211
