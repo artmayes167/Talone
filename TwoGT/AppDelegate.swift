@@ -66,6 +66,18 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
+        //let userH = UserHandlesDbHandler.UserHandle(name: "Nightmare", locationInfo: nil, community: nil, uid: "mock000003")
+        //let userH2 = UserHandlesDbHandler.UserHandle(name: "Tonight", locationInfo: nil, community: nil, uid: "mock000004")
+        //UserHandlesDbHandler.registerUserHandle(userH)
+        //UserHandlesDbHandler.registerUserHandle(userH2)
+//
+//        UserHandlesDbHandler().fetchUserHandles(startingWith: "night", maxCount: 2) { handles in
+//            print(handles)
+//        }
+//
+//        UserHandlesDbHandler().fetchUserHandles(startingWith: "nig", maxCount: 100) { handles in
+//            print(handles)
+//        }
         
         return true
     }

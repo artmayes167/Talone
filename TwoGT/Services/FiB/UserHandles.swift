@@ -123,7 +123,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
             t = t.whereField("community", isEqualTo: community)
         }
         t.limit(to: maxCount)
-            .order(by: "lowercase", descending: true)
+            .order(by: "lowercase", descending: false)
             .getDocuments { [self] (snapshot, error) in
             if let error = error {
                 print(error)
