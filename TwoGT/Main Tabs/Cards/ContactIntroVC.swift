@@ -19,11 +19,32 @@ class ContactIntroVC: UIViewController {
     var theirCard: CardTemplateInstance?
     var myCard: CardTemplateInstance?
     
-    var contact: Contact? { didSet { if isViewLoaded { populateUI() } } }
+    private var contact: Contact? { didSet { if isViewLoaded { populateUI() } } }
+    
+    func set(contact: Contact) {
+        CoreDataGod.managedContext.refresh(contact, mergeChanges: true)
+        self.contact = contact
+        if let sent = contact.sentCards {
+            if let s = sent.last {
+                CoreDataGod.managedContext.refresh(s, mergeChanges: true)
+                myCard = s
+            }
+        }
+        if let rec = contact.receivedCards {
+            if let r = rec.last {
+                CoreDataGod.managedContext.refresh(r, mergeChanges: true)
+                theirCard = r
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         populateUI()
+    }
+    
+    override func updateUI() {
+        presentationController?.delegate?.updateUI()
     }
     
     private func populateUI() {
@@ -31,8 +52,7 @@ class ContactIntroVC: UIViewController {
         
         headerView.setTitleText("contact with " + c.contactHandle!)
         
-        if let t = c.receivedCards?.last {
-            theirCard = t
+        if let _ = theirCard {
             let color = leftView.backgroundColor
             let newColor = color?.withAlphaComponent(0.77)
             leftView.backgroundColor = newColor
@@ -46,8 +66,7 @@ class ContactIntroVC: UIViewController {
             leftButton.isEnabled = false
         }
         
-        if let m = c.sentCards?.last {
-            myCard = m
+        if let _ = myCard {
             let color = rightView.backgroundColor
             let newColor = color?.withAlphaComponent(0.77)
             rightView.backgroundColor = newColor
@@ -82,12 +101,15 @@ class ContactIntroVC: UIViewController {
             guard let vc = segue.destination as? TheirContactVC else { fatalError() }
             guard let c = contact else { fatalError() }
             vc.set(contact: c)
+            segue.destination.presentationController?.delegate = self
         case "toMyContact":
             guard let vc = segue.destination as? MyContactVC else { fatalError() }
             guard let c = contact else { fatalError() }
             vc.set(contact: c)
+            segue.destination.presentationController?.delegate = self
         default:
             print("Different segue = \(String(describing: segue.identifier))")
+            segue.destination.presentationController?.delegate = self
         }
     }
     

@@ -19,8 +19,7 @@ class MarketplaceRepThemeManager {
         case unknown
     }
     
-    //private
-    internal func themeFor(_ count: Float) -> UIColor {
+    func themeFor(_ count: Float) -> UIColor {
         switch true {
         case count >= 0 && count < 0.2:
             return colorFor(.bad)
@@ -30,7 +29,7 @@ class MarketplaceRepThemeManager {
             return colorFor(.justSo)
         case count >= 0.6 && count < 0.8:
             return colorFor(.kindaGood)
-        case count >= 0.8 && count < 1.0:
+        case count >= 0.8 && count <= 1.0:
             return colorFor(.good)
         default:
             return colorFor(.unknown)

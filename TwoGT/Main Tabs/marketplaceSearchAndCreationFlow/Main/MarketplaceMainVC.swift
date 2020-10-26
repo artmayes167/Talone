@@ -155,20 +155,7 @@ extension MarketplaceRepThemeManager {
     }
     
     internal func getMyCountFor(_ rating: ContactRating?) -> Float {
-        guard let r = rating else {
-            return 0.5
-        }
-        let bad = r.bad
-        let justSo = r.justSo
-        let good = r.good
-        
-        let denominator = bad + justSo + good
-        if denominator == 0 {
-            return 0.5
-        }
-        
-        let justSoCount = Float(justSo) * 0.5
-        return (Float(good) + justSoCount) / Float(denominator)
+        return rating?.getRating() ?? 0.5
     }
 }
 

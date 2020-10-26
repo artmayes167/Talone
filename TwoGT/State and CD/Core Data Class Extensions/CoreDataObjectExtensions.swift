@@ -542,4 +542,14 @@ public extension ContactRating {
         CoreDataGod.save()
         return rating
     }
+    
+    func getRating() -> Float {
+        let denominator = bad + justSo + good
+        if denominator == 0 {
+            return 0.5
+        }
+        
+        let justSoCount = Float(justSo) * 0.5
+        return (Float(good) + justSoCount) / Float(denominator)
+    }
 }

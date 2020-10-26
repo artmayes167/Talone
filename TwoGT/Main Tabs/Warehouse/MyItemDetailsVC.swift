@@ -43,7 +43,6 @@ extension NeedDetailModel {
             DispatchQueue.main.async {
                 c.descriptionTextView.text = n.desc
                 c.personalNotesTextView.text = n.personalNotes
-                
                 c.header.configure(need: n)
             }
         } else if let h = have {

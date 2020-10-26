@@ -40,19 +40,7 @@ class PresenceAndRatingDisplay: UIView {
     }
     
     func colorFor(rating: ContactRating?) -> UIColor {
-        guard let r = rating else { return .systemPurple }
-        let g = r.good
-        let j = r.justSo
-        let b = r.bad
-        
-        if j > g && j > b { return .systemPurple }
-        
-        switch g > b {
-        case true:
-            if g > j { return .systemGreen }
-        case false:
-            if b > j { return .systemRed }
-        }
-        return .systemPurple
+        let manager = MarketplaceRepThemeManager()
+        return manager.themeFor(rating?.getRating() ?? 0.5)
     }
 }

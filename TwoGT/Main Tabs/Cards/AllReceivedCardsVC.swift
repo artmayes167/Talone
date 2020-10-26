@@ -62,7 +62,8 @@ class AllReceivedCardsVC: UIViewController {
         if segue.identifier == "toCardIntro" {
             let vc = segue.destination as! ContactIntroVC
             let c = sender as! Contact
-            vc.contact = c
+            vc.set(contact: c)
+            segue.destination.presentationController?.delegate = self
         } else {
             segue.destination.presentationController?.delegate = self
         }

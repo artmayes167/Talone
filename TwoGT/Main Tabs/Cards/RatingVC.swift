@@ -37,6 +37,8 @@ class RatingVC: UIViewController {
     private var justCount: Int = 0
     private var goodCount: Int = 0
     
+    private var contactUid: String?
+    
     private var rating: ContactRating? {
         didSet { updateUI() }
     }
@@ -70,11 +72,13 @@ class RatingVC: UIViewController {
             if let objects = self.ratings.fetchedObjects {
                 for rating in objects where contact.contactHandle == rating.contactHandle {
                     self.rating = rating
+                    contactUid = contact.contactUid
                     return
                 }
             }
             _ = ContactRating.create(handle: contact.contactHandle!)
             CoreDataGod.save()
+            /// if this loops more than once, I screwed up
             configure(contact: contact)
         } catch {
           somebodyScrewedUp()
@@ -112,5 +116,10 @@ class RatingVC: UIViewController {
         r.justSo = j
         r.good = g
         CoreDataGod.save()
+        _ = RatingsDbHandler.rateUser(uid: contactUid!, score: Double(r.getRating())) { error in
+            if let e = error {
+                self.showOkayAlert(title: "oops", message: "Failed to set user rating because: \(e.localizedDescription)", handler: nil)
+            }
+        }
     }
 }

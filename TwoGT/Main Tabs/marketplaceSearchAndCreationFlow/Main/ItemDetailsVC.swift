@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 
 extension MarketplaceRepThemeManager {
+    /// Configures for personal rating
     func configure(_ header: ConfigurableHeader, rating: ContactRating?) {
         let count = getMyCountFor(rating)
         self.configure(header, count: count)
