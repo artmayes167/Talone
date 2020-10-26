@@ -10,39 +10,53 @@ import UIKit
 
 extension NeedDetailModel {
     
-    func configure(have: Have?, need: Need?) {
-        if need == nil && have == nil { fatalError() }
+    /// specifically for needs/haves owned by this person
+    func configureMy(_ c: MyItemDetailsVC, have: Have?, need: Need?) {
+        // get rating
+        self.getPopularContactRating(c, uid: CoreDataGod.user.uid!)
+        if need == nil && have == nil { return }
+        // get watchers
         if let n = need {
             let fetcher = NeedsDbFetcher()
-            fetcher.fetchNeed(id: n.id!, completion: { (item, error) in
+            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.need = item
-                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner }) else { return }
-                self.rating = contact.rating?.last
             })
         } else if let h = have {
             let fetcher = HavesDbFetcher()
-            fetcher.fetchHave(id: h.id!, completion: { (item, error) in
+            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.have = item
-                guard let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner }) else { return }
-                self.rating = contact.rating?.last
             })
         }
     }
     
-    func deleteCurrentHave(controller c: MyItemDetailsVC) {
-        guard let have = self.have else {
-            c.hideSpinner()
-            c.somebodyScrewedUp()
-            return
+    // populate initial values while we get the backend data
+    func populate(controller c: MyItemDetailsVC, have: Have?, need: Need?) {
+        if let n = need {
+            DispatchQueue.main.async {
+                c.descriptionTextView.text = n.desc
+                c.personalNotesTextView.text = n.personalNotes
+                
+                c.header.configure(need: n)
+            }
+        } else if let h = have {
+            DispatchQueue.main.async {
+                c.descriptionTextView.text = h.desc
+                c.personalNotesTextView.text = h.personalNotes
+                c.header.configure(have: h)
+            }
         }
-
-        HavesDbWriter().deleteHave(id: have.id!, creator: have.createdBy) { error in
+    }
+    
+    func deleteCurrentHave(controller c: MyItemDetailsVC, have: Have) {
+        HavesDbWriter().deleteHave(id: have.id!, creator: CoreDataGod.user.uid!) { error in
             if error == nil {
                 c.successfullyDeletedHaveFromBackend()
             } else {
@@ -52,14 +66,8 @@ extension NeedDetailModel {
         }
     }
     
-    func deleteCurrentNeed(controller c: MyItemDetailsVC) {
-        guard let need = self.need else {
-            c.hideSpinner()
-            c.somebodyScrewedUp()
-            return
-        }
-
-        NeedsDbWriter().deleteNeed(id: need.id!, userHandle: need.createdBy) { error in
+    func deleteCurrentNeed(controller c: MyItemDetailsVC, need: Need) {
+        NeedsDbWriter().deleteNeed(id: need.id!, userHandle: CoreDataGod.user.handle!) { error in
             if error == nil {
                 c.successfullyDeletedNeedFromBackend()
             } else {
@@ -77,6 +85,7 @@ class MyItemDetailsVC: ItemDetailsVC {
         didSet {
             if let h = have {
                 CoreDataGod.managedContext.refresh(h, mergeChanges: false)
+                model.populate(controller: self, have: h, need: nil)
             }
         }
     }
@@ -84,6 +93,8 @@ class MyItemDetailsVC: ItemDetailsVC {
         didSet {
             if let n = need {
                 CoreDataGod.managedContext.refresh(n, mergeChanges: false)
+                model.populate(controller: self, have: nil, need: n)
+
             }
         }
     }
@@ -91,7 +102,7 @@ class MyItemDetailsVC: ItemDetailsVC {
     func configure(have: Have?, need: Need?) {
         self.have = have
         self.need = need
-        model.configure(have: have, need: need)
+        model.configureMy(self, have: have, need: need)
     }
     
     @IBAction func notifyWatchers(_ sender: UIButton) {
@@ -99,12 +110,12 @@ class MyItemDetailsVC: ItemDetailsVC {
     }
     
     @IBAction func deleteItem(_ sender: UIButton) {
-        if let _ = have {
+        if let h = have {
             showSpinner()
-            model.deleteCurrentHave(controller: self)
-        } else if let _ = need {
+            model.deleteCurrentHave(controller: self, have: h)
+        } else if let n = need {
             showSpinner()
-            model.deleteCurrentNeed(controller: self)
+            model.deleteCurrentNeed(controller: self, need: n)
         }
     }
     

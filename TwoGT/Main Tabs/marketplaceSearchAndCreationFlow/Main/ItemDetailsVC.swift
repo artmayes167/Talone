@@ -11,21 +11,11 @@ import Firebase
 
 extension MarketplaceRepThemeManager {
     func configure(_ header: ConfigurableHeader, rating: ContactRating?) {
-        guard let r = rating else {
-            setTheme(header: header, color: colorFor(.justSo))
-            return
-        }
-        let bad = Float(r.bad)
-        let justSo = Float(r.justSo)
-        let good = Float(r.good)
-
-        let denominator = bad + justSo + good
-        if denominator == 0.0 {
-            setTheme(header: header, color: colorFor(.justSo))
-        }
-
-        let justSoCount = Float(justSo) * 0.5
-        let count = (good + justSoCount) / denominator
+        let count = getMyCountFor(rating)
+        self.configure(header, count: count)
+    }
+    
+    func configure(_ header: ConfigurableHeader, count: Float) {
         setTheme(header: header, color: themeFor(count))
     }
 
@@ -62,6 +52,21 @@ class ConfigurableHeader: UIView {
         firstLetterLabel.text = "H"
         mainView.layoutIfNeeded()
     }
+    
+    func configure(need: Need) {
+        categoryImageView.image = UIImage(named: need.category!.lowercased())
+        headlineLabel.text = need.headline
+        dateLabel.text = need.createdAt?.stringFromDate()
+        firstLetterLabel.text = "N"
+        mainView.layoutIfNeeded()
+    }
+    func configure(have: Have) {
+        categoryImageView.image = UIImage(named: have.category!.lowercased())
+        headlineLabel.text = have.headline
+        dateLabel.text = have.createdAt?.stringFromDate()
+        firstLetterLabel.text = "H"
+        mainView.layoutIfNeeded()
+    }
 
 }
 
@@ -70,33 +75,45 @@ class NeedDetailModel {
     internal var have: HavesBase.HaveItem?
     internal var need: NeedsBase.NeedItem?
     internal var rating: ContactRating?
+    internal var contact: Contact?
+    internal var popularContactRating: Double = 0.5
 
     var handlesArray: [String] = []
     var stubsArray: [FirebaseGeneric.UserStub] = []
     var endRefreshCycle = false
 
-    func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
+    func configure(_ c: ItemDetailsVC, needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         if needItem == nil && haveItem == nil { fatalError() }
         if let n = needItem {
             need = n
             if let childNeeds = n.watchers, !childNeeds.isEmpty {
                 handlesArray = childNeeds.map { $0.handle }
             }
-            let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == n.owner })
-            rating = contact?.rating?.last
-
+            getPopularContactRating(c, uid: n.createdBy)
         } else if let h = haveItem {
             have = h
             if let childNeeds = h.watchers, !childNeeds.isEmpty {
                 stubsArray = childNeeds
                 handlesArray = childNeeds.map { $0.handle }
             }
-            let contact = CoreDataGod.user.contacts?.first( where: { $0.contactHandle == h.owner })
-            rating = contact?.rating?.last
+            getPopularContactRating(c, uid: h.createdBy)
         }
         endRefreshCycle = false
     }
+    
+    func getPopularContactRating(_ c: ItemDetailsVC, uid: String) {
+        RatingsDbHandler.fetchRating(uid: uid) { (rating, error) in
+            if rating >= 0 {
+                self.popularContactRating = rating
+            } else {
+                self.popularContactRating = 0.5
+            }
+            let manager = MarketplaceRepThemeManager()
+            manager.configure(c.header, count: Float(self.popularContactRating))
+        }
+    }
 
+    /// Cycles on a background loop until we get a response-- poor man's KVO
     func populate(controller c: ItemDetailsVC) {
         DispatchQueue.global().async {
             var success = false
@@ -104,8 +121,6 @@ class NeedDetailModel {
                 DispatchQueue.main.async {
                     c.handleLabel?.text = n.owner
                     c.descriptionTextView.text = n.description
-                    let manager = MarketplaceRepThemeManager()
-                    manager.configure(c.header, rating: self.rating)
                     c.header.configure(needItem: n)
                 }
                 success = true
@@ -113,8 +128,6 @@ class NeedDetailModel {
                 DispatchQueue.main.async {
                     c.handleLabel?.text = h.owner
                     c.descriptionTextView.text = h.description
-                    let manager = MarketplaceRepThemeManager()
-                    manager.configure(c.header, rating: self.rating)
                     c.header.configure(haveItem: h)
                 }
                 success = true
@@ -185,7 +198,7 @@ class ItemDetailsVC: UIViewController {
 
     /// Not used in subclass MyItemDetailsVC
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
-        model.configure(needItem: needItem, haveItem: haveItem)
+        model.configure(self, needItem: needItem, haveItem: haveItem)
     }
 
     @IBAction func touchedWatch(_ sender: UIButton) {

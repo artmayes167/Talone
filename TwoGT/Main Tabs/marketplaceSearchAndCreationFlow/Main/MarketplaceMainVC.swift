@@ -143,7 +143,7 @@ extension MarketplaceMainVC: UITableViewDataSource, UITableViewDelegate {
 /// This extension is specific to coloring for the `MarketplaceCell`
 extension MarketplaceRepThemeManager {
     func configure(_ cell: MarketplaceCell, rating: ContactRating?) {
-        let count = getCountFor(rating)
+        let count = getMyCountFor(rating)
         setTheme(cell: cell, color: themeFor(count))
     }
     
@@ -154,7 +154,7 @@ extension MarketplaceRepThemeManager {
         cell.categoryImageView.backgroundColor = color
     }
     
-    private func getCountFor(_ rating: ContactRating?) -> Float {
+    internal func getMyCountFor(_ rating: ContactRating?) -> Float {
         guard let r = rating else {
             return 0.5
         }

@@ -90,6 +90,8 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
                                 completion(success, evaluateError)
                             }
                        }
+                   } else {
+                    self.authenticationWithTouchID(completion: completion)
                    }
                }
            } else {
