@@ -143,21 +143,7 @@ extension MarketplaceMainVC: UITableViewDataSource, UITableViewDelegate {
 /// This extension is specific to coloring for the `MarketplaceCell`
 extension MarketplaceRepThemeManager {
     func configure(_ cell: MarketplaceCell, rating: ContactRating?) {
-        guard let r = rating else {
-            setTheme(cell: cell, color: colorFor(.justSo))
-            return
-        }
-        let bad = Float(r.bad)
-        let justSo = Float(r.justSo)
-        let good = Float(r.good)
-        
-        let denominator = bad + justSo + good
-        if denominator == 0.0 {
-            setTheme(cell: cell, color: colorFor(.justSo))
-        }
-        
-        let justSoCount = Float(justSo) * 0.5
-        let count = (good + justSoCount) / denominator
+        let count = getCountFor(rating)
         setTheme(cell: cell, color: themeFor(count))
     }
     
@@ -166,6 +152,23 @@ extension MarketplaceRepThemeManager {
         cell.leftView.backgroundColor = color
         cell.topView.borderColor = color
         cell.categoryImageView.backgroundColor = color
+    }
+    
+    private func getCountFor(_ rating: ContactRating?) -> Float {
+        guard let r = rating else {
+            return 0.5
+        }
+        let bad = Float(r.bad)
+        let justSo = Float(r.justSo)
+        let good = Float(r.good)
+        
+        let denominator = bad + justSo + good
+        if abs(denominator) == 0 {
+            return 0.5
+        }
+        
+        let justSoCount = Float(justSo) * 0.5
+        return (good + justSoCount) / denominator
     }
 }
 

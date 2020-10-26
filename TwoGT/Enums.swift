@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// categories for search  Images are named according to the rawValue, so if you change the image or add a category, define it here
+enum NeedType: String, CaseIterable, DatabaseReady {
+    case any, borrow, food, clothes, shelter, furniture, service, miscellany
+} // ride, microloan, sitter, benefactor, mentor,
+
 /// Used specifically for `RawRepresentables` with `rawValue == String`.  Default implementation returns a `String.capitalized` if applicable, and an empty `String` if `rawValue` fails to translate.
 protocol DatabaseReady: RawRepresentable, CaseIterable {
     /// - Returns: The `String` value of the `RawRepresentable`, formatted according to backend developer preferences.
