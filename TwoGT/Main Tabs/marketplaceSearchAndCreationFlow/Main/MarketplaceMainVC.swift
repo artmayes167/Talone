@@ -158,17 +158,17 @@ extension MarketplaceRepThemeManager {
         guard let r = rating else {
             return 0.5
         }
-        let bad = Float(r.bad)
-        let justSo = Float(r.justSo)
-        let good = Float(r.good)
+        let bad = r.bad
+        let justSo = r.justSo
+        let good = r.good
         
         let denominator = bad + justSo + good
-        if abs(denominator) == 0 {
+        if denominator == 0 {
             return 0.5
         }
         
         let justSoCount = Float(justSo) * 0.5
-        return (good + justSoCount) / denominator
+        return (Float(good) + justSoCount) / Float(denominator)
     }
 }
 
