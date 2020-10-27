@@ -103,6 +103,21 @@ class NeedDetailModel {
         endRefreshCycle = false
     }
     
+    func refreshWatchers(_ c: ItemDetailsVC) {
+        if let n = need {
+            if let childNeeds = n.watchers, !childNeeds.isEmpty {
+                stubsArray = childNeeds
+                handlesArray = childNeeds.map { $0.handle }
+            }
+        } else if let h = have {
+            if let childNeeds = h.watchers, !childNeeds.isEmpty {
+                stubsArray = childNeeds
+                handlesArray = childNeeds.map { $0.handle }
+            }
+        }
+        c.tableView.reloadData()
+    }
+    
     func getPopularContactRating(_ c: ItemDetailsVC, uid: String) {
         RatingsDbHandler.fetchRating(uid: uid) { (rating, error) in
             if rating >= 0 {
@@ -202,6 +217,10 @@ class ItemDetailsVC: UIViewController {
     func configure(needItem: NeedsBase.NeedItem?, haveItem: HavesBase.HaveItem?) {
         model.configure(self, needItem: needItem, haveItem: haveItem)
     }
+    
+    override func updateUI() {
+        model.refreshWatchers(self)
+    }
 
     @IBAction func touchedWatch(_ sender: UIButton) {
         if sender.title(for: .normal) == "watch" {
@@ -213,6 +232,7 @@ class ItemDetailsVC: UIViewController {
             sender.setTitle("watch", for: .normal)
             tableView.reloadData()
         }
+        updateUI()
     }
 
     @IBAction func sendCard(_ sender: UIButton) {
