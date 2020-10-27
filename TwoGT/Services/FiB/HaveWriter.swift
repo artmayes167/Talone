@@ -18,7 +18,6 @@ public class HavesBase: FirebaseGeneric {
         var category: String
         var headline: String?
         var description: String?
-        var needs: [NeedStub]?
         var watchers: [UserStub]?
         var validUntil: Timestamp?
         var owner: String
@@ -29,17 +28,6 @@ public class HavesBase: FirebaseGeneric {
         var locationInfo: LocationInfo
     }
 
-    public struct NeedStub: Codable {
-        var owner: String
-        var id: String
-        var createdBy: String
-
-        enum CodingKeys: String, CodingKey { // example code to show how to handle differing attribute names.
-            case owner = "handle"
-            case createdBy = "uid"
-            case id
-        }
-    }
 }
 
 public class HavesDbWriter: HavesBase {

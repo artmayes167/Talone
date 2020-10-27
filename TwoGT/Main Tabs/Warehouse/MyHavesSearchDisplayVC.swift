@@ -99,8 +99,8 @@ extension MyHavesSearchDisplayVC: UICollectionViewDelegateFlowLayout {
 /**
  Observe if any linked needs are removed or added while user is on this ViewController. Not likely to happen, but useful during testing.
  */
-extension MyHavesSearchDisplayVC: LinkedNeedsCountChangeDetectable {
-    func havesLinkedNeedsCountChanged() {
+extension MyHavesSearchDisplayVC: LinkedWatchersCountChangeDetectable {
+    func havesLinkedWatchersCountChanged() {
         collectionView.reloadData()
     }
 }

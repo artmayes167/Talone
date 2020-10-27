@@ -1,5 +1,5 @@
 //
-//  LinkedNeedsObserver.swift
+//  LinkedWatchersObserver.swift
 //  TwoGT
 //
 //  Created by Jyrki Hoisko on 10/4/20.
@@ -11,12 +11,12 @@ import UIKit
 import CoreData
 
 /** Certain VCs are interested to update their list views if linked needs count changes. MyHaves List shows count of linked needs. */
-protocol LinkedNeedsCountChangeDetectable: UIViewController {
-    func havesLinkedNeedsCountChanged()
+protocol LinkedWatchersCountChangeDetectable: UIViewController {
+    func havesLinkedWatchersCountChanged()
 }
 
 /** Class that encapsulates functionality need to observe changes in user's Have items stored in Firestore */
-class LinkedNeedsObserver {
+class LinkedWatchersObserver {
 
     var haves: [Have] = []
     var reobservers = Set<UIViewController>()       // VCs that need to be notified if the count of linked needs in a have changes.
@@ -26,11 +26,11 @@ class LinkedNeedsObserver {
      VCs interested to know the real-time changes to the count of linked needs of a Have should register for change events by calling this method.
         - parameters:
             - vc:ViewController that conforms to LinkedNeedsCountChangeDetectable protocol */
-    func registerForUpdates(_ vc: LinkedNeedsCountChangeDetectable) {
+    func registerForUpdates(_ vc: LinkedWatchersCountChangeDetectable) {
         reobservers.insert(vc)
     }
 
-    func deregisterForUpdates(_ vc: LinkedNeedsCountChangeDetectable) {
+    func deregisterForUpdates(_ vc: LinkedWatchersCountChangeDetectable) {
         reobservers.remove(vc)
     }
 
@@ -44,51 +44,49 @@ class LinkedNeedsObserver {
 
         fetcher.observeMyHaves { [self] fibHaveItems in
 
-            var addedNeedOwners = [String]()
+            var addedHaveWatchers = [String]()
             var changedHaves = [Have]()
             var isRedrawRequired = false
 
             // Get the latest haves from CD.
             getHaves()
 
-            // Cross-reference needs
-            for have in self.haves {
-                for fibHave in fibHaveItems where fibHave.id == have.id {
-                    if let needStubs = fibHave.needs {
+            // Cross-reference user stubs (former child needs)
+            for have in self.haves {                                        // CoreData Haves
+                for fibHave in fibHaveItems where fibHave.id == have.id {   // Firebase Haves
+                    if let watchers = fibHave.watchers {
                         var isChanged = false
                         changedHaves.append(have)   // for showing on UI
 
-                        let cdNeeds = have.watchers ?? []
+                        let cdWatchers = have.watchers ?? []
 
-                        // First determine if there are any new needStubs that are missing from CD
+                        // First determine if there are any new userStubs that are missing from CD
                         // These are the people that have linked with this have.
-                        for needStub in needStubs {
+                        for userStub in watchers {
                             var found = false
-                            for cdNeed in cdNeeds where cdNeed.id == needStub.id {
+                            for cdUserStub in cdWatchers where (cdUserStub as! UserStub).uid == userStub.uid {
                                 found = true
                                 break
                             }
                             if found == false {
-                                // create a new need (gets appended to childItems implicitly)
-                                var fibNeed = NeedsBase.NeedItem(category: fibHave.category, validUntil: fibHave.validUntil!, owner: needStub.owner, createdBy: needStub.createdBy, locationInfo: fibHave.locationInfo).self
-                                fibNeed.id = needStub.id // overwrite the implicit Id to reflect existing id.
-                                let n = Need.createNeed(item: fibNeed)
-                                n.parentHaveItemId = fibHave.id
-                                addedNeedOwners.append(fibNeed.owner)
+                                // create a new UserStub
+                                _ = UserStub.create(fibData: userStub, linkedItem: have)
+                                addedHaveWatchers.append(userStub.handle)
                                 isChanged = true
                             }
                         }
 
-                        // Then determine if there are needStubs being deleted requiring cleanup from CD.
+                        // Then determine if there are userStubs being deleted requiring cleanup from CD.
                         // These are the people that have removed the link with this have.
-                        for cdNeed in cdNeeds {
+                        for cdUserStub in cdWatchers {
+                            let cdUserStub = cdUserStub as! UserStub
                             var found = false
-                            for needStub in needStubs where needStub.id == cdNeed.id {
+                            for userStub in watchers where userStub.uid == cdUserStub.uid {
                                 found = true
                                 break
                             }
                             if found == false {
-                                cdNeed.deleteNeed()
+                                cdUserStub.delete()
                                 isChanged = true
                             }
                         }
@@ -100,7 +98,7 @@ class LinkedNeedsObserver {
                 }
             }
             if isRedrawRequired { notifyObservers() }
-            notifyUserOfNewLinks(addedNeedOwners, changedHaves)
+            notifyUserOfNewLinks(addedHaveWatchers, changedHaves)
         }
     }
 
@@ -124,8 +122,8 @@ class LinkedNeedsObserver {
     }
 
     private func notifyObservers() {
-        for obs in reobservers where obs is LinkedNeedsCountChangeDetectable {
-            (obs as! LinkedNeedsCountChangeDetectable).havesLinkedNeedsCountChanged()
+        for obs in reobservers where obs is LinkedWatchersCountChangeDetectable {
+            (obs as! LinkedWatchersCountChangeDetectable).havesLinkedWatchersCountChanged()
         }
     }
 
@@ -137,7 +135,7 @@ class LinkedNeedsObserver {
 
             haves = u.filter { return $0.owner == CoreDataGod.user.handle }
         } catch _ as NSError {
-          print("LinkedNeedsObserver couldn't find Haves")
+          print("ERROR: LinkedWatchersObserver couldn't find Haves")
         }
     }
 }

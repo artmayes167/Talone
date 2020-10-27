@@ -500,6 +500,26 @@ public extension Have {
 
 }
 
+public extension UserStub {
+    class func create(fibData: FirebaseGeneric.UserStub, linkedItem: Item) -> UserStub {
+        let entity = NSEntityDescription.entity(forEntityName: "UserStub", in: CoreDataGod.managedContext)!
+        let newUserStub = UserStub(entity: entity, insertInto: CoreDataGod.managedContext)
+        newUserStub.uid = fibData.uid
+        newUserStub.userHandle = fibData.handle
+        newUserStub.email = fibData.email
+       // newUserStub.item = linkedItem
+        linkedItem.addToWatchers(newUserStub)
+
+        CoreDataGod.save()
+        return newUserStub
+    }
+
+    func delete() {
+        CoreDataGod.managedContext.delete(self)
+        CoreDataGod.save()
+    }
+}
+
 /// This was created explicitly to deal with locationInfo in FiB, but has found other uses.  `Community` is a subclass
 public extension AppLocationInfo {
     class func create(city: String, state: String, country: String) -> AppLocationInfo {
