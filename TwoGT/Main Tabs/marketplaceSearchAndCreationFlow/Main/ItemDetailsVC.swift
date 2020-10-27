@@ -177,7 +177,9 @@ class NeedDetailModel {
     }
 }
 
-/// Subclassed by MyItemDetailsVC, so check there too before changing anything
+/** Subclassed by MyItemDetailsVC, so check there too before changing anything
+        sets the item in the model from the tableView selection in `MarketplaceMain`.  that tableView populates with needItems and haveItems from FiB, so the model populates using the values passed in.  It will update the values by calling refreshMyWatchers on certain user-initiated actions.
+ */
 class ItemDetailsVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -212,12 +214,11 @@ class ItemDetailsVC: UIViewController {
         if sender.title(for: .normal) == "watch" {
             model.watcherAction(add: true, vc: self)
             sender.setTitle("unwatch", for: .normal)
-            tableView.reloadData()
         } else if sender.title(for: .normal) == "unwatch" {
             model.watcherAction(add: false, vc: self)
             sender.setTitle("watch", for: .normal)
-            tableView.reloadData()
         }
+        tableView.reloadData()
         updateUI()
     }
 

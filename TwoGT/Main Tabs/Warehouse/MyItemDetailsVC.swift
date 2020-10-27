@@ -103,6 +103,9 @@ extension NeedDetailModel {
     }
 }
 
+/** MyItemDetailsVC subclasses ItemDetailsVC, so check there too before changing anything
+        sets the item in the model from the core data model `Need` or `Have`.  when those items are set, the model makes a call to retrieve refreshed items from FiB, and sets the resulting `NeedItem` or `HaveItem`, which it uses for future refreshes.  It will update the values by calling refreshMyWatchers on certain user-initiated actions.
+ */
 class MyItemDetailsVC: ItemDetailsVC {
     
     @IBOutlet weak var personalNotesTextView: UITextView!
@@ -130,6 +133,7 @@ class MyItemDetailsVC: ItemDetailsVC {
         self.need = need
     }
     
+    /// Called by UIAdaptivePresentationControllerDelegate
     override func updateUI() {
         model.refreshMyWatchers(self)
     }
