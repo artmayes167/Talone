@@ -102,6 +102,8 @@ class CardTemplateCreatorVC: UIViewController {
         if (card != nil) {
             self.cardInstance = card
             satisfied = true
+        } else {
+            model.set(card: nil)
         }
         if (haveItem != nil) {
             self.haveItem = haveItem
@@ -118,10 +120,12 @@ class CardTemplateCreatorVC: UIViewController {
         if let c = CoreDataGod.user.contacts?.filter ({ $0.contactHandle == handle }) {
             if !c.isEmpty {
                 contact = c.first
+                model.set(card: nil)
                 return
             }
         }
         contact = Contact.create(newPersonHandle: handle, newPersonUid: uid)
+        model.set(card: nil)
     }
     
      // MARK: - View Life Cycle

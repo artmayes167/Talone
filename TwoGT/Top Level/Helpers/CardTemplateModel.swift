@@ -18,7 +18,7 @@ struct CardTemplateModel {
     }
     private var editing: Bool = true
     
-    mutating func set(card: CardTemplateInstance) {
+    mutating func set(card: CardTemplateInstance?) {
         self.card = card
     }
     
@@ -107,7 +107,6 @@ struct CardTemplateModel {
     
     
     private mutating func configure() {
-        
         allPossibles = addresses + phoneNumbers + emails
         if let c = card {
             if let adds = c.addresses {
@@ -134,8 +133,6 @@ struct CardTemplateModel {
                     }
                 }
             }
-        } else {
-            allPossibles = addresses + phoneNumbers + emails
         }
     }
     
