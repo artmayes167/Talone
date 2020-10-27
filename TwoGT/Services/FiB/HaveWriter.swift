@@ -31,7 +31,7 @@ public class HavesBase: FirebaseGeneric {
 }
 
 public class HavesDbWriter: HavesBase {
-    func addHave(_ have: HaveItem, completion: @escaping (Error?) -> Void) {
+    func addHave(_ have: HavesBase.HaveItem, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
 
         do {
@@ -39,14 +39,34 @@ public class HavesDbWriter: HavesBase {
         } catch {
             print(error.localizedDescription  + "in HaveWriter -> addHave")
             completion(error)
+            return
         }
         completion(nil)
+    }
+
+    /// Updates the description and headline of a given Have
+    ///
+    /// - Parameters:
+    ///   - have:       `HavesBase.HaveItem` FiB have item. Ensure that `description` field contains data. If `headline` is defined (not nil), it will be updated as well.
+    /// - Returns:      On unsuccessful completion callback returns `Error`, otherwise nil.
+    func updateHaveDescriptionAndHeadline(_ have: HavesBase.HaveItem, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        guard let haveId = have.id else { completion(GenericFirebaseError.undefined); return }
+
+        let ref = db.collection("haves").document(haveId)
+        var data: [String: Any] = ["modifiedAt": FieldValue.serverTimestamp(),
+                                    "description": have.description ?? "no description"]
+        if let headline = have.headline { data["headline"] = headline }
+
+        ref.updateData(data) { error in
+            completion(error)
+        }
     }
 
     /// Creates a link to a Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
     ///
     /// - Parameters:
-    ///   - need:       `HavesBase.HaveItem` FiB have item
+    ///   - have:       `HavesBase.HaveItem` FiB have item
     ///   - userHandle      User handle as string
     ///   - email                   Users associated email
     /// - Returns:      On unsuccessful completion returns `Error`.

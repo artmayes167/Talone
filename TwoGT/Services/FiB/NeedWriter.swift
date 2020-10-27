@@ -116,7 +116,26 @@ public class NeedsDbWriter: NeedsBase {
         completion(nil)
     }
 
-    func deleteNeed(id: String, userHandle: String, associatedHaveId: String? = nil, completion: @escaping (Error?) -> Void) {
+    /// Updates the description and headline of a given Need
+    ///
+    /// - Parameters:
+    ///   - need:       `NeedsBase.NeedItem` FiB need item. Ensure that `description` field contains data. If `headline` is defined (not nil), it will be updated as well.
+    /// - Returns:      On unsuccessful completion callback returns `Error`, otherwise nil.
+    func updateNeedDescriptionAndHeadline(_ need: NeedsBase.NeedItem, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        guard let needId = need.id else { completion(GenericFirebaseError.undefined); return }
+
+        let ref = db.collection("needs").document(needId)
+        var data: [String: Any] = ["modifiedAt": FieldValue.serverTimestamp(),
+                                    "description": need.description ?? "no description"]
+        if let headline = need.headline { data["headline"] = headline }
+
+        ref.updateData(data) { error in
+            completion(error)
+        }
+    }
+
+    func deleteNeed(id: String, userHandle: String, completion: @escaping (Error?) -> Void) {
 
         guard let _ = Auth.auth().currentUser?.uid else {
             completion(GenericFirebaseError.noAuthUser)
@@ -129,7 +148,7 @@ public class NeedsDbWriter: NeedsBase {
         }
     }
 
-    /// Creates a link to a Need in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    /// Creates a link to a Need in Firebase. Users handle, user Id and email address are added to the Need watchers array.
     ///
     /// - Parameters:
     ///   - need:       `NeedsBase.NeedItem` FiB need item
@@ -147,7 +166,7 @@ public class NeedsDbWriter: NeedsBase {
         }
     }
 
-    /// Unlinks the user from a given Have in Firebase. Users handle, user Id and email address are added to the Have watchers array.
+    /// Unlinks the user from a given Need in Firebase. Users handle, user Id and email address are added to the Need watchers array.
     ///
     /// - Parameters:
     ///   - need:       `NeedsBase.NeedItem` FiB need item

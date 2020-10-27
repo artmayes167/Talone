@@ -17,11 +17,11 @@ class CardReceiverObserver {
     func startObserving() {
         observeCardReceptions()
     }
-    
+
     func stopObserving() {
         fetcher.stopObserving()
     }
-    
+
     fileprivate lazy var contacts: NSFetchedResultsController<Contact> = {
         let context = CoreDataGod.managedContext
       //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
@@ -37,9 +37,9 @@ class CardReceiverObserver {
         } catch {
           print("Error: \(error)")
         }
-        
+
         fetcher.observeCardsSentToMe { (fibCardItems: [CardsBase.FiBCardItem]) in
-            
+
             var newCards = [CardsBase.FiBCardItem]()
             var modifiedCards = newCards
 
@@ -47,7 +47,7 @@ class CardReceiverObserver {
             for fibCard in fibCardItems {
                 if let decodedData = Data(base64Encoded: fibCard.payload) {
                     // Store the received card
-                    _ = GateKeeper().decodeCodableInstance(data: decodedData)
+                   /////// _ = GateKeeper().decodeCodableInstance(data: decodedData)
                     // Ask server database to discard it immediately. Effectively this means
                     // no data can be restored after app uninstall / moving to another phone.
                     // DeleteCard() has a completion handler, but currently unused.
@@ -65,7 +65,7 @@ class CardReceiverObserver {
                     }
                 }
                 if !isExisting { newCards.append(fibCard) }
-                
+
             }
 
             // NOTE: Deleted cards will not be noted; Sender needs to send "an empty" card to
