@@ -204,7 +204,7 @@ class MarketplaceCell: UITableViewCell {
         dateLabel.text = haveItem.createdAt?.dateValue().stringFromDate()
         categoryImageView.image = UIImage(named: haveItem.category.lowercased())
         watchersLabel.text = "no watchers yet"
-        if let count = haveItem.needs?.count {
+        if let count = haveItem.watchers?.count {
             if count == 0 { return }
             if count == 1 {
                 watchersLabel.text = "1 watcher"

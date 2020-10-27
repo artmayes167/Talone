@@ -49,7 +49,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     
     public var window: UIWindow?
     static var cardObserver = CardReceiverObserver()
-    static var linkedNeedsObserver = LinkedNeedsObserver()
+    static var linkedNeedsObserver = LinkedWatchersObserver()
     static let stateManager = StateManager()
 
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

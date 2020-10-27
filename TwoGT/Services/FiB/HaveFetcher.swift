@@ -87,28 +87,28 @@ class HavesDbFetcher: HavesBase, HavesObserver {
 
     func fetchAllHaves(city: String, _ state: String, _ country: String, maxCount: Int, completion: @escaping ([HaveItem], Error?) -> Void) {
         let db = Firestore.firestore()
-
+        
         db.collection("haves").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country)
             .limit(to: maxCount)
             .order(by: "modifiedAt", descending: true)
             .getDocuments { (snapshot, error) in
-            if let error = error {
-                completion([], error)
-            } else if let snapshot = snapshot {
-                let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
-                    var item: HaveItem?
-                    do {
-                        item = try document.data(as: HaveItem.self)
-                    } catch {
-                        print(error)
+                if let error = error {
+                    completion([], error)
+                } else if let snapshot = snapshot {
+                    let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
+                        var item: HaveItem?
+                        do {
+                            item = try document.data(as: HaveItem.self)
+                        } catch {
+                            print(error)
+                        }
+                        return item
                     }
-                    return item
+                    completion(haves, nil)
                 }
-                completion(haves, nil)
             }
-        }
     }
     
     func fetchHave(id: String, completion: @escaping (HaveItem?, Error?) -> Void) {
