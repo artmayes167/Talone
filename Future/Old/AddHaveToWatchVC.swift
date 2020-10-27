@@ -31,7 +31,7 @@ class AddHaveToWatchModel: NSObject {
 
     func linkUserToHaveInDatabase(_ item: HavesBase.HaveItem, _ controller: UIViewController) {
         let have = item
-        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
+        guard let emailStr = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { return }
 
         // User is watching the given have. No need is created
         HavesDbWriter().watchHave(item, usingHandle: CoreDataGod.user.handle!, email: emailStr) { (error) in
@@ -48,7 +48,7 @@ class AddHaveToWatchModel: NSObject {
 
     func unlinkUserFromHaveInDatabase(_ item: HavesBase.HaveItem, _ controller: UIViewController) {
         let have = item
-        guard let email = CoreDataGod.user.emails?[0], let emailStr = email.emailString else { return }
+        guard let emailStr = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { return }
 
         // User is removing link to given have
         HavesDbWriter().unwatchHave(id: item.id!, handle: CoreDataGod.user.handle!, email: emailStr) { error in

@@ -21,6 +21,7 @@ extension NeedDetailModel {
             fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
                 guard let self = self else { return }
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.need = item
@@ -30,6 +31,31 @@ extension NeedDetailModel {
             fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
                 guard let self = self else { return }
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.have = item
+            })
+        }
+    }
+    
+    func refreshMyWatchers(_ c: ItemDetailsVC) {
+        if let n = need {
+            let fetcher = NeedsDbFetcher()
+            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.need = item
+            })
+        } else if let h = have {
+            let fetcher = HavesDbFetcher()
+            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.have = item
@@ -102,6 +128,10 @@ class MyItemDetailsVC: ItemDetailsVC {
         model.configureMy(self, have: have, need: need)
         self.have = have
         self.need = need
+    }
+    
+    override func updateUI() {
+        model.refreshMyWatchers(self)
     }
     
     @IBAction func notifyWatchers(_ sender: UIButton) {
