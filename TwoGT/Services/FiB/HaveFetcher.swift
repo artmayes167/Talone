@@ -114,23 +114,20 @@ class HavesDbFetcher: HavesBase, HavesObserver {
     func fetchHave(id: String, completion: @escaping (HaveItem?, Error?) -> Void) {
         let db = Firestore.firestore()
 
-        db.collection("haves").whereField("id", isEqualTo: id)
-            .getDocuments { (snapshot, error) in
-                if let error = error {
+        db.collection("haves").document(id).getDocument { (document, error) in
+            if let error = error {
+                completion(nil, error)
+            } else if let document = document, document.exists {
+                var item: HaveItem?
+                do {
+                    item = try document.data(as: HaveItem.self)!
+                } catch {
                     completion(nil, error)
-                } else if let snapshot = snapshot {
-                    let haves = snapshot.documents.compactMap { (document) -> HaveItem? in
-                        var item: HaveItem?
-                        do {
-                            item = try document.data(as: HaveItem.self)
-                        } catch {
-                            print(error)
-                        }
-                        return item
-                    }
-                    completion(haves.count > 0 ? haves[0] : nil, error)
+                    return
                 }
+                completion(item, nil)
             }
+        }
     }
 
 // Currently Unused code:
