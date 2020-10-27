@@ -2,7 +2,7 @@
 //  Have+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 10/12/20.
+//  Created by Arthur Mayes on 10/27/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -17,7 +17,6 @@ extension Have {
         return NSFetchRequest<Have>(entityName: "Have")
     }
 
-    @NSManaged public var parentHaveItemId: String?
     @NSManaged public var personalNotes: String?
-    @NSManaged public var childNeeds: [Need]?
+
 }

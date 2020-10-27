@@ -58,7 +58,7 @@ class LinkedNeedsObserver {
                         var isChanged = false
                         changedHaves.append(have)   // for showing on UI
 
-                        let cdNeeds = have.childNeeds ?? []
+                        let cdNeeds = have.watchers ?? []
 
                         // First determine if there are any new needStubs that are missing from CD
                         // These are the people that have linked with this have.

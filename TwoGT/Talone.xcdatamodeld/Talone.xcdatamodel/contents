@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2531" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Address" representedClassName=".Address" parentEntity="AppLocationInfo" syncable="YES">
         <attribute name="street1" attributeType="String"/>
         <attribute name="street2" optional="YES" attributeType="String"/>
@@ -62,14 +62,7 @@
         <relationship name="templates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CardTemplate" inverseName="emails" inverseEntity="CardTemplate"/>
     </entity>
     <entity name="Have" representedClassName=".Have" parentEntity="Item" syncable="YES">
-        <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
-        <fetchedProperty name="childHaves" optional="YES" transient="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Have" predicateString="parentHaveItemId  == $FETCH_SOURCE.id"/>
-        </fetchedProperty>
-        <fetchedProperty name="childNeeds" optional="YES" transient="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentHaveItemId  == $FETCH_SOURCE.id"/>
-        </fetchedProperty>
     </entity>
     <entity name="ImageInfo" representedClassName=".ImageInfo" syncable="YES">
         <attribute name="handle" attributeType="String"/>
@@ -88,14 +81,10 @@
         <attribute name="owner" attributeType="String"/>
         <attribute name="validUntil" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SearchLocation" inverseName="items" inverseEntity="SearchLocation"/>
+        <relationship name="watchers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserStub" inverseName="item" inverseEntity="UserStub"/>
     </entity>
     <entity name="Need" representedClassName=".Need" parentEntity="Item" syncable="YES">
-        <attribute name="parentHaveItemId" optional="YES" attributeType="String"/>
-        <attribute name="parentNeedItemId" optional="YES" attributeType="String"/>
         <attribute name="personalNotes" optional="YES" attributeType="String"/>
-        <fetchedProperty name="childNeeds" optional="YES" transient="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Need" predicateString="parentNeedItemId  == $FETCH_SOURCE.id"/>
-        </fetchedProperty>
     </entity>
     <entity name="PhoneNumber" representedClassName=".PhoneNumber" syncable="YES">
         <attribute name="number" attributeType="String"/>
@@ -156,6 +145,12 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="UserStub" representedClassName="UserStub" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="uid" optional="YES" attributeType="String"/>
+        <attribute name="userHandle" optional="YES" attributeType="String"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="watchers" inverseEntity="Item"/>
+    </entity>
     <elements>
         <element name="Address" positionX="-449.58203125" positionY="-147.2578125" width="128" height="133"/>
         <element name="AppLocationInfo" positionX="-12.484375" positionY="-686.99609375" width="128" height="88"/>
@@ -165,13 +160,14 @@
         <element name="Contact" positionX="-153.46875" positionY="226.83984375" width="128" height="131"/>
         <element name="ContactRating" positionX="-244.65234375" positionY="-225.4453125" width="128" height="103"/>
         <element name="Email" positionX="-396.74609375" positionY="242.6640625" width="128" height="103"/>
-        <element name="Have" positionX="-260.40234375" positionY="359.6171875" width="128" height="116"/>
+        <element name="Have" positionX="-260.40234375" positionY="359.6171875" width="128" height="58"/>
         <element name="ImageInfo" positionX="-625.7890625" positionY="-152.39453125" width="128" height="103"/>
-        <element name="Item" positionX="-77.86328125" positionY="391.0703125" width="128" height="193"/>
-        <element name="Need" positionX="-264.5546875" positionY="496.26953125" width="128" height="116"/>
+        <element name="Item" positionX="-77.86328125" positionY="391.0703125" width="128" height="208"/>
+        <element name="Need" positionX="-264.5546875" positionY="496.26953125" width="128" height="58"/>
         <element name="PhoneNumber" positionX="-632.52734375" positionY="95.29296875" width="128" height="103"/>
         <element name="SearchLocation" positionX="40.87890625" positionY="-226.41796875" width="128" height="88"/>
         <element name="SocialMedia" positionX="-95.06640625" positionY="-105.68359375" width="128" height="133"/>
         <element name="User" positionX="-409.9609375" positionY="-571.90234375" width="128" height="236"/>
+        <element name="UserStub" positionX="-504.80078125" positionY="494.98828125" width="128" height="103"/>
     </elements>
 </model>

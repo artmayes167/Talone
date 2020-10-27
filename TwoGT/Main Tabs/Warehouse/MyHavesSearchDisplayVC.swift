@@ -142,7 +142,7 @@ class MyHaveCell: UICollectionViewCell {
         }
         categoryImage.tintColor = color
 
-        if let cn = have.childNeeds, !cn.isEmpty {
+        if let cn = have.watchers?.allObjects, !cn.isEmpty {
             if cn.count > 1 {
                 joinedLabel?.text = "\(cn.count) people watching"
             } else {

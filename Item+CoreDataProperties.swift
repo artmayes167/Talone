@@ -2,7 +2,7 @@
 //  Item+CoreDataProperties.swift
 //  TwoGT
 //
-//  Created by Arthur Mayes on 10/12/20.
+//  Created by Arthur Mayes on 10/27/20.
 //  Copyright © 2020 Arthur Mayes. All rights reserved.
 //
 //
@@ -27,6 +27,24 @@ extension Item {
     @NSManaged public var owner: String?
     @NSManaged public var validUntil: Date?
     @NSManaged public var location: SearchLocation?
+    @NSManaged public var watchers: NSSet?
+
+}
+
+// MARK: Generated accessors for watchers
+extension Item {
+
+    @objc(addWatchersObject:)
+    @NSManaged public func addToWatchers(_ value: UserStub)
+
+    @objc(removeWatchersObject:)
+    @NSManaged public func removeFromWatchers(_ value: UserStub)
+
+    @objc(addWatchers:)
+    @NSManaged public func addToWatchers(_ values: NSSet)
+
+    @objc(removeWatchers:)
+    @NSManaged public func removeFromWatchers(_ values: NSSet)
 
 }
 

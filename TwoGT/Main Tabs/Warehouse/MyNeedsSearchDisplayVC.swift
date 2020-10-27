@@ -106,7 +106,7 @@ class MyNeedCell: UICollectionViewCell {
         let context = CoreDataGod.managedContext
       //let request: NSFetchRequest<Need> = NSFetchRequest(entityName: "Need")
         let request: NSFetchRequest<Need> = Need.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Need.parentNeedItemId), ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Need.watchers), ascending: false)]
       let ratings = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
       return ratings
     }()
@@ -143,11 +143,10 @@ class MyNeedCell: UICollectionViewCell {
         do {
           try childNeeds.performFetch()
             if let cn = childNeeds.fetchedObjects, !cn.isEmpty {
-                let children = cn.filter { $0.parentNeedItemId == need.id }
-                if children.count > 1 {
-                    joinedLabel?.text = "\(children.count) people watching"
+                if cn.count > 1 {
+                    joinedLabel?.text = "\(cn.count) people watching"
                     return
-                } else if children.count == 1 {
+                } else if cn.count == 1 {
                     joinedLabel?.text = "1 person watching"
                     return
                 }
