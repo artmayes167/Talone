@@ -52,6 +52,10 @@ class MarketplaceMainVC: UIViewController {
         }
     }
     
+    override func updateUI() {
+        model.configure(for: self)
+    }
+    
     /** `CreateNewItemVC` has a bool it uses to determine whether it is dealing with a have or a need.  The bool passed here is used in `prepareForSegue()` to set the `need` bool
      */
     @IBAction func createANeed() {
@@ -76,6 +80,7 @@ class MarketplaceMainVC: UIViewController {
             needsTVC.delegate = self
         case "toDetails":
             guard let vc = segue.destination as? ItemDetailsVC else { fatalError() }
+            vc.presentationController?.delegate = self
             if let n = sender as? NeedsBase.NeedItem {
                 vc.configure(needItem: n, haveItem: nil)
             } else if let h = sender as? HavesBase.HaveItem {

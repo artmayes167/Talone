@@ -205,6 +205,7 @@ class ItemDetailsVC: UIViewController {
     
     override func updateUI() {
         model.refreshMyWatchers(self)
+        presentationController?.delegate?.updateUI()
     }
 
     @IBAction func touchedWatch(_ sender: UIButton) {
