@@ -99,9 +99,9 @@ class MyItemDetailsVC: ItemDetailsVC {
     }
     
     func configure(have: Have?, need: Need?) {
+        model.configureMy(self, have: have, need: need)
         self.have = have
         self.need = need
-        model.configureMy(self, have: have, need: need)
     }
     
     @IBAction func notifyWatchers(_ sender: UIButton) {
@@ -118,9 +118,26 @@ class MyItemDetailsVC: ItemDetailsVC {
         }
     }
     
+    /// Not sending a new card, just updating personal notes
     @IBAction func updateItem(_ sender: UIButton) {
-        // TODO: save personal notes and update description
-        devNotReady()
+        let d = descriptionTextView.text ?? ""
+        let p = personalNotesTextView.text ?? ""
+        if let n = need {
+            n.desc = d
+            n.personalNotes = p
+            CoreDataGod.managedContext.refresh(n, mergeChanges: true)
+            // TODO: - save description changes to FiB
+        } else if let h = have {
+            h.desc = d
+            h.personalNotes = p
+            CoreDataGod.managedContext.refresh(h, mergeChanges: true)
+            CoreDataGod.save()
+            // TODO: - save description changes to FiB
+        }
+        DispatchQueue.main.async {
+            self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
+            self.updateUI()
+        }
     }
     
     func successfullyDeletedHaveFromBackend() {

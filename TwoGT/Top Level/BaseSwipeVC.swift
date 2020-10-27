@@ -27,6 +27,7 @@ class BaseSwipeVC: UIViewController {
         if segue.identifier == "toBaseTabBar" {
             // embedded segue
             baseTabBar = segue.destination as? UITabBarController
+            baseTabBar?.delegate = self
         } else if segue.identifier == "toFeedback" {
             /// currently unused
             if let vc = segue.destination as? FeedbackVC {
@@ -43,6 +44,12 @@ class BaseSwipeVC: UIViewController {
 
     /// gets us back to the tab bar
     @IBAction func unwindToMainFlow( _ segue: UIStoryboardSegue) { }
+}
+
+extension BaseSwipeVC: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        viewController.updateUI()
+    }
 }
 
 /// unused

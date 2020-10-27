@@ -154,6 +154,7 @@ class TheirContactVC: ViewContactVC {
         if let c = contact {
             set(contact: c)
             messageTextView.isEditable = false
+            messageTextView.text = theirCard!.message
             notesView.isEditable = true
             notesView.text = theirCard!.personalNotes
             updateUIFor(card: theirCard!)

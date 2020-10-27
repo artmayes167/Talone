@@ -137,6 +137,7 @@ class CardReceiverObserver {
         let duration = newCards.count + modifiedCards.count >= 3 ? 3.0 : 2.0 // increase toast time if lot's of text to show.
         vc?.view.makeToast(str, duration: duration, position: .top) {_ in
             print("Toast done!")
+            vc?.updateUI()
         }
     }
 }

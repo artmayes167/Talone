@@ -140,6 +140,20 @@ public extension CardTemplateInstance {
         instance.addresses = NSSet(array: Address.addressesFrom(array: c.addresses))
         instance.emails = NSSet(array: Email.emailsFrom(array: c.emails))
         instance.phoneNumbers = NSSet(array: PhoneNumber.phoneNumbersFrom(array: c.phoneNumbers))
+        var contact: Contact?
+        if let contacts = CoreDataGod.user.contacts {
+            let contactArray = contacts.filter({ $0.contactHandle == c.userHandle })
+            if !contactArray.isEmpty {
+                contact = contactArray.last
+                contact!.receivedCards = [instance]
+                CoreDataGod.save()
+                return instance
+            }
+        }
+        
+        contact = Contact.create(newPersonHandle: c.userHandle, newPersonUid: c.uid)
+        contact?.receivedCards = [instance]
+        CoreDataGod.save()
         return instance
     }
 }
@@ -510,7 +524,7 @@ public extension UserStub {
        // newUserStub.item = linkedItem
         linkedItem.addToWatchers(newUserStub)
 
-        CoreDataGod.save()
+        CoreDataGod.managedContext.refresh(linkedItem, mergeChanges: true)
         return newUserStub
     }
 

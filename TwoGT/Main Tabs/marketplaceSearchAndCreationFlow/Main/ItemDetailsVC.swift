@@ -88,6 +88,7 @@ class NeedDetailModel {
         if let n = needItem {
             need = n
             if let childNeeds = n.watchers, !childNeeds.isEmpty {
+                stubsArray = childNeeds
                 handlesArray = childNeeds.map { $0.handle }
             }
             getPopularContactRating(c, uid: n.createdBy)
@@ -219,7 +220,7 @@ class ItemDetailsVC: UIViewController {
     }
 
     @IBAction func report(_ sender: UIButton) {
-        showOkayOrCancelAlert(title: "are you sure?", message: "blocking will eventually have an effect, once jyrki gets to it. but for now, go ahead.  be petty.") { (_) in
+        showOkayOrCancelAlert(title: "are you sure?", message: "reporting will eventually have an effect, once jyrki gets to it. but for now, maybe it'll feel better to hit that button. just a little.") { (_) in
             self.devNotReady()
         } cancelHandler: { (_) in
             
