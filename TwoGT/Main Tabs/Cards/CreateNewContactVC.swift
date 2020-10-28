@@ -9,7 +9,6 @@
 import UIKit
 
 class CreateContactModel {
-    
     var handleNames: [String] = []
     var handles: [UserHandlesDbHandler.UserHandle] = []
     

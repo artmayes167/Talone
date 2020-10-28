@@ -48,7 +48,6 @@ class WarehouseMainVC: UIViewController {
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
-        
     }
     
     @IBAction func switchOutViews(_ sender: UISegmentedControl) {
@@ -68,7 +67,6 @@ class WarehouseMainVC: UIViewController {
     
     var myHavesDisplay: MyHavesSearchDisplayVC?
     var myNeedsDisplay: MyNeedsSearchDisplayVC?
-
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

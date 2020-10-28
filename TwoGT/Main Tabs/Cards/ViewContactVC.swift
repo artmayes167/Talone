@@ -188,7 +188,6 @@ class TheirContactVC: ViewContactVC {
 }
 
 class MyContactVC: ViewContactVC {
-    
     private var myCard: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
@@ -241,7 +240,6 @@ class MyContactVC: ViewContactVC {
 }
 
 class MyTemplateVC: ViewContactVC {
-    
     var instance: CardTemplateInstance? {
         didSet { if isViewLoaded { setCardData() } }
     }
@@ -264,7 +262,6 @@ class MyTemplateVC: ViewContactVC {
 }
     
 extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cardAddresses.count
     }
@@ -320,7 +317,6 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ViewContactVC: UITextViewDelegate {
-    
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView == notesView {
             showTextViewHelper(textView: notesView, displayName: "personal notes", initialText: notesView.text)

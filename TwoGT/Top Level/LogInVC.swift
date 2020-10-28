@@ -11,8 +11,7 @@ import LocalAuthentication
 import FBSDKCoreKit
 import Firebase
 
-// Only use touch/face ID, or passcode to enter app?  Like Venmo
-
+// Only use touch/face ID, or passcode to enter app
 class LogInVC: UIViewController { //, LoginButtonDelegate {
     
     @IBOutlet weak var topImage: UIImageView!
@@ -100,13 +99,4 @@ class LogInVC: UIViewController { //, LoginButtonDelegate {
             }
            }
        }
-
-    // MARK: - Navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//
-//    }
-//
-//    @IBAction func unwindToLogIn( _ segue: UIStoryboardSegue) {
-//
-//    }
 }

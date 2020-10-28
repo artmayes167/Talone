@@ -55,26 +55,6 @@ class AddNewAddressVC: UIViewController {
     }
     
     // MARK: - Navigation
-    
-//    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-//        tableView.reloadData()
-//    }
-    
-    func presentationController(_ presentationController: UIPresentationController, willPresentWithAdaptiveStyle style: UIModalPresentationStyle, transitionCoordinator: UIViewControllerTransitionCoordinator?) {
-//        if let p = presentationController.presentedViewController.view {
-//            if p.canBecomeFirstResponder {
-//                if p.becomeFirstResponder() {
-//                    print("--------------First responder successfully passed.")
-//                } else {
-//                    print("---------------\(p) refuses to become first responder, but it could if it fucking wanted to.")
-//                }
-//            } else {
-//                print("---------------\(p) is incapable of becoming first responder, because reasons.")
-//            }
-//        } else
-    }
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toCityState" {
             segue.destination.presentationController?.delegate = self
@@ -123,7 +103,7 @@ extension AddNewAddressVC {
     
     private func checkValidity() -> Bool {
         for a in addresses {
-            if a.title == labelTextField.text?.lowercased().pure() {
+            if a.title == labelTextField.text?.pure() {
                 showReplaceAlert()
                 return false
             }
@@ -133,7 +113,7 @@ extension AddNewAddressVC {
         let outletCollection = [labelTextField, street1TextField, cityStateTextField, zipTextField]
         for tf in outletCollection {
             guard let x = tf!.text?.pure(), !x.isEmpty else {
-                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.".taloneCased(), handler: nil)
+                showOkayAlert(title: "", message: "Please complete all required fields.  So, everything except Address Line 2 needs to be filled in with something.  It doesn't have to be a real address, I suppose.  But we decided it shouldn't be empty.", handler: nil)
                 return false
             }
         }

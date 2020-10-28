@@ -22,13 +22,11 @@ class AddNewPhoneNumberVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     func addPhoneNumber() {
         guard let t = labelTextField.text?.lowercased().pure(), let n = numberTextField.text?.pure() else {
-            showOkayAlert(title: "", message: "you're trying to save without completing all fields.  bad you.".taloneCased(), handler: nil)
+            showOkayAlert(title: "", message: "you're trying to save without completing all fields.  bad you.", handler: nil)
             return
         }
         let uid = CoreDataGod.user.uid
@@ -38,9 +36,7 @@ class AddNewPhoneNumberVC: UIViewController {
     }
     
     @IBAction func saveTouched(_ sender: Any) {
-        if checkValidity() {
-            addPhoneNumber()
-        }
+        if checkValidity() { addPhoneNumber() }
     }
 }
 
@@ -53,7 +49,7 @@ extension AddNewPhoneNumberVC {
     
     private func checkValidity() -> Bool {
         for p in phoneNumbers {
-            if p.title == labelTextField.text?.lowercased().pure() {
+            if p.title == labelTextField.text?.pure() {
                 showReplaceAlert()
                 return false
             }

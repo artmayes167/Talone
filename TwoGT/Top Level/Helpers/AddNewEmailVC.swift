@@ -21,22 +21,16 @@ class AddNewEmailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     func addEmail() {
-        
         let _ = Email.create(name: labelTextField.text!.lowercased().pure(), emailAddress: emailTextField.text!.pure(), uid: CoreDataGod.user.uid)
-
         CoreDataGod.save()
         performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     
     @IBAction func saveTouched(_ sender: Any) {
-        if checkValidity() {
-            addEmail()
-        }
+        if checkValidity() { addEmail() }
     }
 }
 
@@ -49,7 +43,7 @@ extension AddNewEmailVC {
     
     private func checkValidity() -> Bool {
         for e in emails {
-            if e.title == labelTextField.text?.lowercased().pure() {
+            if e.title == labelTextField.text?.pure() {
                 showReplaceAlert()
                 return false
             }

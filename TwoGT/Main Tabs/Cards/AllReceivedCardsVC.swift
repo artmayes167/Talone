@@ -119,6 +119,7 @@ class ContactListCell: UITableViewCell {
     
     func configure(contact: Contact) {
         nameLabel.text = contact.contactHandle
+        // set the presence of cards and rating
         presenceAndRatingView.contact = contact
     }
 }

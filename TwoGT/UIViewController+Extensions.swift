@@ -272,6 +272,9 @@ extension UIViewController: UIAdaptivePresentationControllerDelegate {
       let vc = segue.destination; vc.presentingViewController?.delegate = self;
     Then, `override func updateUI() {}` in the same class.
      Then, in the presented class, call `self.presentingViewController.delegate?.updateUI()` before dismissing.
+     
+     or  use `func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {}`
+     
  */
     @objc func updateUI() { }
 }
