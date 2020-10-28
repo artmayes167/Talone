@@ -47,7 +47,7 @@ class CardReceiverObserver {
             for fibCard in fibCardItems {
                 if let decodedData = Data(base64Encoded: fibCard.payload) {
                     // Store the received card
-                   /////// _ = GateKeeper().decodeCodableInstance(data: decodedData)
+                    _ = GateKeeper().decodeCodableInstance(data: decodedData)
                     // Ask server database to discard it immediately. Effectively this means
                     // no data can be restored after app uninstall / moving to another phone.
                     // DeleteCard() has a completion handler, but currently unused.

@@ -49,6 +49,7 @@ extension NeedDetailModel {
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.need = item
+                //c.tableView.reloadData()
             })
         } else if let h = have {
             let fetcher = HavesDbFetcher()
@@ -59,6 +60,7 @@ extension NeedDetailModel {
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.have = item
+                //c.tableView.reloadData()
             })
         }
     }
@@ -122,7 +124,6 @@ class MyItemDetailsVC: ItemDetailsVC {
             if let n = need {
                 CoreDataGod.managedContext.refresh(n, mergeChanges: false)
                 model.populate(controller: self, have: nil, need: n)
-
             }
         }
     }

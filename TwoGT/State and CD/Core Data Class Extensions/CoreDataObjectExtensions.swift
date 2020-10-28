@@ -145,14 +145,14 @@ public extension CardTemplateInstance {
             let contactArray = contacts.filter({ $0.contactHandle == c.userHandle })
             if !contactArray.isEmpty {
                 contact = contactArray.last
-                contact!.receivedCards = [instance]
+                CoreDataGod.managedContext.refresh(contact!, mergeChanges: true)
                 CoreDataGod.save()
                 return instance
             }
         }
         
         contact = Contact.create(newPersonHandle: c.userHandle, newPersonUid: c.uid)
-        contact?.receivedCards = [instance]
+        CoreDataGod.managedContext.refresh(contact!, mergeChanges: true)
         CoreDataGod.save()
         return instance
     }

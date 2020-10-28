@@ -98,20 +98,24 @@ class CardTemplateCreatorVC: UIViewController {
         if (contact != nil) {
             self.contact = contact
             satisfied = true
+            return
         }
         if (card != nil) {
             self.cardInstance = card
             satisfied = true
+            return
         } else {
             model.set(card: nil)
         }
         if (haveItem != nil) {
             self.haveItem = haveItem
             satisfied = true
+            return
         }
         if (needItem != nil) {
             self.needItem = needItem
             satisfied = true
+            return
         }
         if !satisfied { fatalError() }
     }
