@@ -156,18 +156,30 @@ class MyItemDetailsVC: ItemDetailsVC {
     @IBAction func updateItem(_ sender: UIButton) {
         let d = descriptionTextView.text ?? ""
         let p = personalNotesTextView.text ?? ""
-        if let n = need {
-            n.desc = d
-            n.personalNotes = p
-            CoreDataGod.managedContext.refresh(n, mergeChanges: true)
-            // TODO: - save description changes to FiB
-        } else if let h = have {
-            h.desc = d
-            h.personalNotes = p
-            CoreDataGod.managedContext.refresh(h, mergeChanges: true)
-            CoreDataGod.save()
-            // TODO: - save description changes to FiB
+        if var n = model.need {
+            n.description = d
+            let writer = NeedsDbWriter()
+            writer.updateNeedDescriptionAndHeadline(n) { (_) in
+                
+            }
+            if let ne = need {
+                ne.desc = d
+                ne.personalNotes = p
+                CoreDataGod.managedContext.refresh(ne, mergeChanges: true)
+            }
+        } else if var h = model.have {
+            h.description = d
+            let writer = HavesDbWriter()
+            writer.updateHaveDescriptionAndHeadline(h) { (_) in
+                
+            }
+            if let ha = have {
+                ha.desc = d
+                ha.personalNotes = p
+                CoreDataGod.managedContext.refresh(ha, mergeChanges: true)
+            }
         }
+        CoreDataGod.save()
         DispatchQueue.main.async {
             self.showOkayAlert(title: "".taloneCased(), message: "successfully saved notes".taloneCased(), handler: nil)
             self.updateUI()
