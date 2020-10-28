@@ -102,15 +102,6 @@ class MyNeedCell: UICollectionViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var joinedLabel: UILabel?
     
-    fileprivate lazy var childNeeds: NSFetchedResultsController<Need> = {
-        let context = CoreDataGod.managedContext
-      //let request: NSFetchRequest<Need> = NSFetchRequest(entityName: "Need")
-        let request: NSFetchRequest<Need> = Need.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Need.watchers), ascending: false)]
-      let ratings = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-      return ratings
-    }()
-    
     func configure(_ need: Need, indexPath: IndexPath) {
         categoryImage.image = UIImage(named: (need.category?.lowercased())!)
         titleLabel.text = need.headline 
@@ -140,20 +131,15 @@ class MyNeedCell: UICollectionViewCell {
         }
         categoryImage.tintColor = color
 
-        do {
-          try childNeeds.performFetch()
-            if let cn = childNeeds.fetchedObjects, !cn.isEmpty {
-                if cn.count > 1 {
-                    joinedLabel?.text = "\(cn.count) people watching"
-                    return
-                } else if cn.count == 1 {
-                    joinedLabel?.text = "1 person watching"
-                    return
-                }
+        if let cn = need.watchers?.allObjects, !cn.isEmpty {
+            if cn.count > 1 {
+                joinedLabel?.text = "\(cn.count) people watching"
+                return
+            } else if cn.count == 1 {
+                joinedLabel?.text = "1 person watching"
+                return
             }
-            joinedLabel?.text = "nobody's watching yet"
-        } catch {
-          print("Error: \(error)")
         }
+        joinedLabel?.text = "nobody's watching yet"
     }
 }
