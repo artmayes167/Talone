@@ -86,7 +86,7 @@ extension UIView {
     let glowAnimationOpacity = CABasicAnimation(keyPath: "shadowOpacity")
     glowAnimationOpacity.fromValue = 0
     glowAnimationOpacity.toValue = 1
-    glowAnimationOpacity.beginTime = CACurrentMediaTime()+0.3
+    glowAnimationOpacity.beginTime = CACurrentMediaTime()  //+0.3
     glowAnimationOpacity.duration = CFTimeInterval(1.3)
     glowAnimationOpacity.fillMode = .removed
     glowAnimationOpacity.autoreverses = true

@@ -415,7 +415,7 @@ extension CardTemplateCreatorVC: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let userPickedImage = info[.editedImage] as? UIImage else { return }
         
-        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 150.0, height: 150.0))
+        let aspectScaledToFitImage = userPickedImage.af.imageAspectScaled(toFit: CGSize(width: 120.0, height: 120.0))
         CoreDataImageHelper.shared.saveImage(aspectScaledToFitImage, fileName: "")
         showOkayAlert(title: "", message: "Image successfully saved", handler: nil)
         

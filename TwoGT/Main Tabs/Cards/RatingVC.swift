@@ -14,7 +14,7 @@ class RatingButton: UIButton {
     func setForSelection(_ selected: Bool) {
         isConfiguredForSelected = selected
         if selected {
-            imageView?.doGlowAnimation(withColor: .white, withEffect: .big)
+            imageView?.doGlowAnimation(withColor: .black, withEffect: .big)
         } else {
             imageView?.endGlowAnimation()
         }
@@ -41,6 +41,12 @@ class RatingVC: UIViewController {
     
     private var rating: ContactRating? {
         didSet { updateUI() }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        badButton.tintColor = UIColor.systemRed.withAlphaComponent(0.5)
+        justButton.tintColor = UIColor.systemPurple.withAlphaComponent(0.5)
+        goodButton.tintColor = UIColor.systemGreen.withAlphaComponent(0.5)
     }
     
     override func updateUI() {

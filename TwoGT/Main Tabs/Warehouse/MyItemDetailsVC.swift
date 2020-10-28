@@ -220,4 +220,13 @@ extension MyItemDetailsVC: UITextViewDelegate {
             return
         }
     }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == descriptionTextView {
+            print("didEndEditing successfully triggered by textViewHelper")
+            /// we could potentially save here, but not right now
+        } else if textView == personalNotesTextView {
+            print("didEndEditing successfully triggered by textViewHelper")
+        }
+    }
 }
