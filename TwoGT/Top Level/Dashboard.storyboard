@@ -54,7 +54,7 @@
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="aperture" translatesAutoresizingMaskIntoConstraints="NO" id="lS1-ag-Pne">
-                                <rect key="frame" x="0.0" y="341" width="414" height="471"/>
+                                <rect key="frame" x="0.0" y="50" width="414" height="762"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W8B-mR-znt" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -367,6 +367,7 @@
                         <constraints>
                             <constraint firstItem="dLq-Qw-3Ah" firstAttribute="trailing" secondItem="Cbh-5U-SfO" secondAttribute="trailing" id="5lw-Xf-TSx"/>
                             <constraint firstItem="Cbh-5U-SfO" firstAttribute="leading" secondItem="dLq-Qw-3Ah" secondAttribute="leading" id="FBo-Qm-YMA"/>
+                            <constraint firstItem="lS1-ag-Pne" firstAttribute="top" secondItem="W8B-mR-znt" secondAttribute="bottom" id="GMd-BM-IS7"/>
                             <constraint firstItem="lS1-ag-Pne" firstAttribute="leading" secondItem="dLq-Qw-3Ah" secondAttribute="leading" id="KeD-Qk-6F0"/>
                             <constraint firstItem="lS1-ag-Pne" firstAttribute="trailing" secondItem="dLq-Qw-3Ah" secondAttribute="trailing" id="RgG-Ch-nul"/>
                             <constraint firstItem="dLq-Qw-3Ah" firstAttribute="trailing" secondItem="W8B-mR-znt" secondAttribute="trailing" id="RsK-wo-PHq"/>
@@ -401,7 +402,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ojm-aL-r9z" userLabel="Line View">
                                         <rect key="frame" x="0.0" y="2" width="418" height="1"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" red="0.71587940855625831" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="Ik6-n8-ILX"/>
                                         </constraints>
@@ -644,7 +645,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2g5-c1-LD7">
-                                                        <rect key="frame" x="22" y="0.0" width="346" height="101.5"/>
+                                                        <rect key="frame" x="22" y="12" width="346" height="77.5"/>
                                                         <string key="text">In order to invite a tester, enter the email they've associated with their Apple account, or any email if you want to make it harder for them.</string>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <nil key="textColor"/>
@@ -656,8 +657,8 @@
                                                     <constraint firstItem="qBh-UR-xBJ" firstAttribute="leading" secondItem="TUr-K2-col" secondAttribute="leading" id="599-iN-dPW"/>
                                                     <constraint firstAttribute="bottom" secondItem="qBh-UR-xBJ" secondAttribute="bottom" id="70d-Cd-wb3"/>
                                                     <constraint firstAttribute="trailing" secondItem="qBh-UR-xBJ" secondAttribute="trailing" id="Kcg-kI-IlH"/>
-                                                    <constraint firstAttribute="bottom" secondItem="2g5-c1-LD7" secondAttribute="bottom" id="cNv-sv-eGw"/>
-                                                    <constraint firstItem="2g5-c1-LD7" firstAttribute="top" secondItem="TUr-K2-col" secondAttribute="top" id="p5t-yi-dKf"/>
+                                                    <constraint firstAttribute="bottom" secondItem="2g5-c1-LD7" secondAttribute="bottom" constant="12" id="cNv-sv-eGw"/>
+                                                    <constraint firstItem="2g5-c1-LD7" firstAttribute="top" secondItem="TUr-K2-col" secondAttribute="top" constant="12" id="p5t-yi-dKf"/>
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="2F3-jR-j6w">
