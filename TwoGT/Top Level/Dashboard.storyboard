@@ -1347,6 +1347,24 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KmM-bp-uMX">
                                 <rect key="frame" x="0.0" y="50" width="414" height="1062"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ob8-Hc-aq1" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="157" y="-2" width="100" height="16"/>
+                                        <color key="backgroundColor" red="0.67639559510000002" green="0.53681921960000001" blue="0.82581740619999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="Ova-zg-bBC"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="REP-fu-y7t">
                                         <rect key="frame" x="0.0" y="12" width="414" height="558"/>
                                         <subviews>
@@ -1607,24 +1625,6 @@
                                             <constraint firstAttribute="bottom" secondItem="1wj-GV-Hoh" secondAttribute="bottom" id="hsc-aw-KJZ"/>
                                             <constraint firstItem="1wj-GV-Hoh" firstAttribute="top" secondItem="REP-fu-y7t" secondAttribute="top" id="yOb-Vy-5PG"/>
                                         </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ob8-Hc-aq1" userLabel="Connecting Bar View" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="157" y="-2" width="100" height="16"/>
-                                        <color key="backgroundColor" red="0.67639559510000002" green="0.53681921960000001" blue="0.82581740619999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="Ova-zg-bBC"/>
-                                        </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="0.0"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunBottom" translatesAutoresizingMaskIntoConstraints="NO" id="hxF-ZO-Lpn" customClass="BottomCap" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="16" y="580" width="382" height="100"/>
