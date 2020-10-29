@@ -51,7 +51,7 @@ final class MyNeedsSearchDisplayVC: UIViewController {
     }
     
     func populateUI() {
-        //pageHeader.setTitleText("All \(needs.count) of My Needs") 
+        
     }
     
     // MARK: - Navigation

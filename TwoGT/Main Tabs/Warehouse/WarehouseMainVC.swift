@@ -9,10 +9,10 @@
 import UIKit
 
 class WarehouseMainVC: UIViewController {
-    
+    /// Containers for collectionViews in tabs
     @IBOutlet weak var myHavesContainer: UIView!
     @IBOutlet weak var myNeedsContainer: UIView!
-    
+    /// Constraints for moving containers
     @IBOutlet weak var myHavesTrailing: NSLayoutConstraint!
     @IBOutlet weak var myNeedsLeading: NSLayoutConstraint!
     
@@ -64,7 +64,7 @@ class WarehouseMainVC: UIViewController {
             print("selected an impossible index.")
         }
     }
-    
+    /// the collectionViews displaying the respective items
     var myHavesDisplay: MyHavesSearchDisplayVC?
     var myNeedsDisplay: MyNeedsSearchDisplayVC?
     

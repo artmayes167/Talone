@@ -73,6 +73,8 @@ class ConfigurableHeader: UIView {
 
 /// Extension in MyItemDetailsVC, so check there too before changing anything
 class NeedDetailModel {
+    /// Model maintains references to FiB objects, and updates them for watcher information
+    /// This model handles things relevant to Marketplace, which deals with FiB objects.  The `NeedDetailModel` extension includes support for the CD Items, which are used for initial display of owned Items.  The update process proceeds after they are set
     internal var have: HavesBase.HaveItem?
     internal var need: NeedsBase.NeedItem?
     internal var rating: ContactRating?
@@ -147,6 +149,32 @@ class NeedDetailModel {
             }
         }
     }
+    
+    func refreshMyWatchers(_ c: ItemDetailsVC) {
+        if let n = need {
+            let fetcher = NeedsDbFetcher()
+            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.need = item
+                //c.tableView.reloadData()
+            })
+        } else if let h = have {
+            let fetcher = HavesDbFetcher()
+            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.have = item
+                //c.tableView.reloadData()
+            })
+        }
+    }
 
     func sendCard(_ c: UIViewController) {
         if let n = need {
@@ -154,7 +182,7 @@ class NeedDetailModel {
         } else if let h = have {
             c.showCompleteAndSendCardHelper(haveItem: h)
         } else {
-            c.devNotReady()
+            c.somebodyScrewedUp()
         }
     }
 
@@ -166,9 +194,8 @@ class NeedDetailModel {
         } else if let h = have {
             m.watcherAction(add: add, have: h, vc: vc)
         } else {
-            fatalError()
+            vc.somebodyScrewedUp()
         }
-
         if add {
             handlesArray.append(CoreDataGod.user.handle!)
         } else if let index = handlesArray.indexOf(CoreDataGod.user.handle!) {
@@ -227,23 +254,8 @@ class ItemDetailsVC: UIViewController {
     }
 
     @IBAction func report(_ sender: UIButton) {
-        showOkayOrCancelAlert(title: "are you sure?", message: "reporting will eventually have an effect, once jyrki gets to it. but for now, maybe it'll feel better to hit that button. just a little.") { (_) in
-            self.devNotReady()
-        } cancelHandler: { (_) in
-            
-        }
+        devNotReady()
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
  // MARK: - TableView Also Used In MyItemDetailsVC

@@ -9,7 +9,6 @@
 import UIKit
 
 extension NeedDetailModel {
-    
     /// specifically for needs/haves owned by this person
     func configureMy(_ c: MyItemDetailsVC, have: Have?, need: Need?) {
         // get rating
@@ -35,32 +34,6 @@ extension NeedDetailModel {
                     self.handlesArray = childNeeds.map { $0.handle }
                 }
                 self.have = item
-            })
-        }
-    }
-    
-    func refreshMyWatchers(_ c: ItemDetailsVC) {
-        if let n = need {
-            let fetcher = NeedsDbFetcher()
-            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
-                guard let self = self else { return }
-                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-                    self.stubsArray = childNeeds
-                    self.handlesArray = childNeeds.map { $0.handle }
-                }
-                self.need = item
-                //c.tableView.reloadData()
-            })
-        } else if let h = have {
-            let fetcher = HavesDbFetcher()
-            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
-                guard let self = self else { return }
-                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-                    self.stubsArray = childNeeds
-                    self.handlesArray = childNeeds.map { $0.handle }
-                }
-                self.have = item
-                //c.tableView.reloadData()
             })
         }
     }
@@ -109,8 +82,8 @@ extension NeedDetailModel {
         sets the item in the model from the core data model `Need` or `Have`.  when those items are set, the model makes a call to retrieve refreshed items from FiB, and sets the resulting `NeedItem` or `HaveItem`, which it uses for future refreshes.  It will update the values by calling refreshMyWatchers on certain user-initiated actions.
  */
 class MyItemDetailsVC: ItemDetailsVC {
-    
     @IBOutlet weak var personalNotesTextView: UITextView!
+    
     private var have: Have? {
         didSet {
             if let h = have {
