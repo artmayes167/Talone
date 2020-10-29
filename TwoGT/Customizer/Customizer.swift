@@ -39,9 +39,9 @@ public class Customizer: NSObject {
     
     func customize(_ view: CustomizedObject) {
         switch view.key() {
-//        case .activeTextView, .inactiveTextView:
-//            guard let v = view as? DesignableTextView else { fatalError() }
-//            configure(textView: v)
+        case .activeTextView, .inactiveTextView:
+            guard let v = view as? DesignableTextView else { fatalError() }
+            configure(textView: v)
 //        case .pageHeader, .secondaryPageHeader, .cardPrimaryHeader:
 //            guard let v = view as? DesignableView else { fatalError() }
 //            configure(view: v)

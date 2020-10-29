@@ -61,8 +61,6 @@ extension UISegmentedControl {
 //    }
 }
 
-@IBDesignable class DesignableSegmentedControl: UISegmentedControl {}
-
 /// Parent classes for display in Storyboard
 @IBDesignable class DesignableImage: UIImageView {}
 @IBDesignable class DesignableView: UIView {}
