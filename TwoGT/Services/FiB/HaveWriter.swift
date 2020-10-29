@@ -15,7 +15,9 @@ public class HavesBase: FirebaseGeneric {
 
     public struct HaveItem: Codable {
         @DocumentID public var id: String? = UUID().uuidString
-        var category: String
+        var category: String { didSet {
+            category = category.taloneDatabaseValue()
+        } }
         var headline: String?
         var description: String?
         var watchers: [UserStub]?

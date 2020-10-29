@@ -21,7 +21,7 @@ class NeedsDbFetcher: NeedsBase {
             .whereField("locationInfo.country", isEqualTo: country ?? "USA")
             .limit(to: maxCount)
         if category.lowercased() != "any" {
-            t = t.whereField("category", isEqualTo: category.capitalized)
+            t = t.whereField("category", isEqualTo: category.taloneDatabaseValue())
         }
 // TODO: Firestore issue
 // As of Oct 6, 2020, Firestore has an issue that it REQUIRES result set be
