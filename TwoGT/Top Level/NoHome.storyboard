@@ -372,7 +372,7 @@
                                             <constraint firstItem="xlh-oz-Rnq" firstAttribute="height" secondItem="OoY-cc-jlQ" secondAttribute="height" id="nmD-Km-agu"/>
                                         </constraints>
                                     </stackView>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="M1y-ze-k4g">
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="M1y-ze-k4g" customClass="DesignableSegmentedControl" customModule="Talone" customModuleProvider="target">
                                         <rect key="frame" x="24" y="95" width="366" height="31"/>
                                         <color key="backgroundColor" red="0.7185212233546483" green="0.66571191992796797" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -383,6 +383,11 @@
                                             <segment title="needs"/>
                                         </segments>
                                         <color key="selectedSegmentTintColor" red="0.86992486896140564" green="1" blue="0.82970874923874327" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
+                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="switchOutViews:" destination="7rI-lL-Bbk" eventType="valueChanged" id="aEk-MK-AsQ"/>
                                         </connections>
@@ -1282,7 +1287,7 @@
             <objects>
                 <viewController id="iOe-oE-ZV0" customClass="CreateNewContactVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="W9I-1S-rLH">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fqn-c0-48a">
@@ -3237,7 +3242,7 @@
                                                                         <rect key="frame" x="12" y="-6" width="366" height="44"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
+                                                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -3782,7 +3787,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="aM3-3e-pMO" firstAttribute="top" secondItem="mzV-R9-29d" secondAttribute="top" id="3DI-U9-BEb"/>
                                             <constraint firstAttribute="trailing" secondItem="aM3-3e-pMO" secondAttribute="trailing" constant="12" id="Ogt-Fr-teX"/>
@@ -3936,7 +3941,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="Zvi-JZ-wfS" firstAttribute="top" secondItem="9pi-ZN-67K" secondAttribute="top" id="HS9-Sx-oIA"/>
                                                     <constraint firstAttribute="trailing" secondItem="Zvi-JZ-wfS" secondAttribute="trailing" constant="12" id="Jhv-ag-GPh"/>
@@ -3958,7 +3963,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mYF-pk-fAP">
                                                         <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
                                                         <subviews>
-                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="x2P-1A-0kI" customClass="InactiveTextView" customModule="Talone" customModuleProvider="target">
+                                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="x2P-1A-0kI" customClass="ActiveTextView" customModule="Talone" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="100"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4748,6 +4753,9 @@
         <designable name="Iu1-Gu-MRC">
             <size key="intrinsicContentSize" width="538" height="538"/>
         </designable>
+        <designable name="M1y-ze-k4g">
+            <size key="intrinsicContentSize" width="113" height="31"/>
+        </designable>
         <designable name="Oi5-Fi-wrJ">
             <size key="intrinsicContentSize" width="68" height="30"/>
         </designable>
@@ -4839,12 +4847,6 @@
         </systemColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

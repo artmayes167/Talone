@@ -41,6 +41,28 @@ extension UIView {
   }
 }
 
+extension UISegmentedControl {
+    @IBInspectable public var titleColor: UIColor {
+        set {
+            var attributes = self.titleTextAttributes(for: state) ?? [:]
+            attributes[.foregroundColor] = newValue
+            self.setTitleTextAttributes(attributes, for: state)
+        }
+        get {
+            let attributes = self.titleTextAttributes(for: state) ?? [:]
+            return attributes[.foregroundColor] as! UIColor
+        }
+    }
+    
+//    func setTitleFont(_ font: UIFont, state: UIControl.State = .normal) {
+//        var attributes = self.titleTextAttributes(for: state) ?? [:]
+//        attributes[.font] = font
+//        self.setTitleTextAttributes(attributes, for: state)
+//    }
+}
+
+@IBDesignable class DesignableSegmentedControl: UISegmentedControl {}
+
 /// Parent classes for display in Storyboard
 @IBDesignable class DesignableImage: UIImageView {}
 @IBDesignable class DesignableView: UIView {}
