@@ -88,7 +88,7 @@ public class NeedsBase: FirebaseGeneric {
 
     public struct NeedItem: Identifiable, Codable {
         @DocumentID public var id: String? = UUID().uuidString
-        var category: String // Inherited
+        var category: String { didSet { category = category.taloneDatabaseValue() } }
         var headline: String?
         var description: String?
         var watchers: [UserStub]?

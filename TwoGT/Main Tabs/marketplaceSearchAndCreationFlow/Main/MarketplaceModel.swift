@@ -85,7 +85,7 @@ class MarketplaceModel: NSObject {
         let headline = controller.headlineTextField.text
         let desc = controller.descriptionTextView.text
         let uid = (Auth.auth().currentUser?.uid ?? AppDelegateHelper.user.uid)!
-        let need = NeedsDbWriter.NeedItem(category: cat.rawValue, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
+        let need = NeedsDbWriter.NeedItem(category: cat.firebaseValue(), headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
         return need
     }
     
@@ -100,7 +100,7 @@ class MarketplaceModel: NSObject {
         let headline = controller.headlineTextField.text
         let desc = controller.descriptionTextView.text
         let uid = (Auth.auth().currentUser?.uid ?? CoreDataGod.user.uid)!
-        let have = HavesDbWriter.HaveItem(category: cat.rawValue, headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
+        let have = HavesDbWriter.HaveItem(category: cat.firebaseValue(), headline: headline, description: desc, validUntil: defaultValidUntilDate, owner: AppDelegateHelper.user.handle!, createdBy: uid, locationInfo: locData)
         return have
     }
    

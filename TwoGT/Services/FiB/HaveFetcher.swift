@@ -64,7 +64,7 @@ class HavesDbFetcher: HavesBase, HavesObserver {
         db.collection("haves").whereField("locationInfo.city", isEqualTo: city)
             .whereField("locationInfo.state", isEqualTo: state)
             .whereField("locationInfo.country", isEqualTo: country)
-            .whereField("category", in: needs)
+            .whereField("category", in: needs.map { $0.taloneDatabaseValue() })
             //.whereField("createdBy", isLessThan: "")
             .getDocuments { (snapshot, error) in
             if let error = error {
