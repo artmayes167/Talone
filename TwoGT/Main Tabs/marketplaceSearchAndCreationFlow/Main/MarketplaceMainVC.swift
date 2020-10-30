@@ -88,6 +88,7 @@ class MarketplaceMainVC: UIViewController {
             }
         case "toCreateNewItem":
             guard let vc = segue.destination as? CreateNewItemVC, let need = sender as? Bool else { fatalError() }
+            vc.presentationController?.delegate = self
             vc.loc = loc
             vc.need = need
         default:

@@ -290,6 +290,9 @@
                                                                 <real key="value" value="8"/>
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <segue destination="7o5-rv-Rmd" kind="presentation" id="W3E-du-Zkn"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1r-2r-UQp" userLabel="Admin" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="448" width="390" height="44"/>
@@ -1728,7 +1731,7 @@
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prw-qT-hqY">
                                         <rect key="frame" x="0.0" y="2" width="418" height="1"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" red="0.5" green="0.0" blue="0.92364083900000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="tDR-7C-B4I"/>
                                         </constraints>
@@ -1753,7 +1756,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SZM-Xi-Qr7">
-                                <rect key="frame" x="12" y="58" width="390" height="750"/>
+                                <rect key="frame" x="12" y="52" width="390" height="756"/>
                                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="100" id="eQR-US-5zF" customClass="FaqCell" customModule="Talone" customModuleProvider="target">
@@ -1770,7 +1773,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvE-bD-3AE">
-                                                                    <rect key="frame" x="6" y="6" width="378" height="44"/>
+                                                                    <rect key="frame" x="12" y="6" width="372" height="38"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                                     <color key="textColor" red="0.0048598507420000003" green="0.096086271109999996" blue="0.57499289509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -1780,16 +1783,24 @@
                                                             <constraints>
                                                                 <constraint firstItem="CvE-bD-3AE" firstAttribute="top" secondItem="LrG-Rj-C4M" secondAttribute="top" constant="6" id="JMN-X5-Ya8"/>
                                                                 <constraint firstAttribute="height" priority="750" constant="50" id="dd6-vR-GNE"/>
-                                                                <constraint firstAttribute="bottom" secondItem="CvE-bD-3AE" secondAttribute="bottom" id="ihd-r9-HvF"/>
+                                                                <constraint firstAttribute="bottom" secondItem="CvE-bD-3AE" secondAttribute="bottom" constant="6" id="ihd-r9-HvF"/>
                                                                 <constraint firstAttribute="trailing" secondItem="CvE-bD-3AE" secondAttribute="trailing" constant="6" id="u01-OU-bgw"/>
-                                                                <constraint firstItem="CvE-bD-3AE" firstAttribute="leading" secondItem="LrG-Rj-C4M" secondAttribute="leading" constant="6" id="uVU-Py-Cas"/>
+                                                                <constraint firstItem="CvE-bD-3AE" firstAttribute="leading" secondItem="LrG-Rj-C4M" secondAttribute="leading" constant="12" id="uVU-Py-Cas"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                    <real key="value" value="2"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <view contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Ldk-pk-ZFj">
                                                             <rect key="frame" x="0.0" y="50" width="390" height="50"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKd-YV-o4o">
-                                                                    <rect key="frame" x="16" y="0.0" width="362" height="38"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKd-YV-o4o">
+                                                                    <rect key="frame" x="12" y="6" width="366" height="32"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -1799,33 +1810,15 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="bottom" secondItem="cKd-YV-o4o" secondAttribute="bottom" constant="12" id="7bl-lp-Bfe"/>
                                                                 <constraint firstAttribute="trailing" secondItem="cKd-YV-o4o" secondAttribute="trailing" constant="12" id="M17-rB-EAK"/>
-                                                                <constraint firstItem="cKd-YV-o4o" firstAttribute="leading" secondItem="Ldk-pk-ZFj" secondAttribute="leading" constant="16" id="dev-XN-llH"/>
-                                                                <constraint firstItem="cKd-YV-o4o" firstAttribute="top" secondItem="Ldk-pk-ZFj" secondAttribute="top" id="hel-9C-Hes"/>
+                                                                <constraint firstItem="cKd-YV-o4o" firstAttribute="leading" secondItem="Ldk-pk-ZFj" secondAttribute="leading" constant="12" id="dev-XN-llH"/>
+                                                                <constraint firstItem="cKd-YV-o4o" firstAttribute="top" secondItem="Ldk-pk-ZFj" secondAttribute="top" constant="6" id="hel-9C-Hes"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
                                                 </stackView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hG3-Wm-Gdw" userLabel="Line View">
-                                                    <rect key="frame" x="12" y="98" width="366" height="2"/>
-                                                    <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="2" id="fqI-kz-8Qr"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                            <color key="value" systemColor="darkTextColor"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                            <real key="value" value="0.0"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="hG3-Wm-Gdw" firstAttribute="leading" secondItem="MEV-mr-64u" secondAttribute="leading" constant="12" id="7TZ-xx-RVF"/>
                                                 <constraint firstItem="Tkq-bO-34E" firstAttribute="top" secondItem="MEV-mr-64u" secondAttribute="top" id="8QK-LU-xeT"/>
-                                                <constraint firstAttribute="bottom" secondItem="hG3-Wm-Gdw" secondAttribute="bottom" id="AA4-2s-xwk"/>
-                                                <constraint firstAttribute="trailing" secondItem="hG3-Wm-Gdw" secondAttribute="trailing" constant="12" id="BsM-9u-Y4P"/>
                                                 <constraint firstAttribute="trailing" secondItem="Tkq-bO-34E" secondAttribute="trailing" id="Dqq-MT-OLe"/>
                                                 <constraint firstItem="Tkq-bO-34E" firstAttribute="leading" secondItem="MEV-mr-64u" secondAttribute="leading" id="Y2I-PZ-LOZ"/>
                                                 <constraint firstAttribute="bottom" secondItem="Tkq-bO-34E" secondAttribute="bottom" id="iBN-p7-dX5"/>
@@ -1848,7 +1841,7 @@
                         <constraints>
                             <constraint firstItem="SZM-Xi-Qr7" firstAttribute="leading" secondItem="ak5-8b-8IH" secondAttribute="leading" constant="12" id="FsT-ey-y4d"/>
                             <constraint firstItem="PVe-Yl-WZ6" firstAttribute="top" secondItem="ak5-8b-8IH" secondAttribute="top" id="PwX-Zp-PkS"/>
-                            <constraint firstItem="SZM-Xi-Qr7" firstAttribute="top" secondItem="PVe-Yl-WZ6" secondAttribute="bottom" constant="8" symbolic="YES" id="cY1-Iv-MEt"/>
+                            <constraint firstItem="SZM-Xi-Qr7" firstAttribute="top" secondItem="PVe-Yl-WZ6" secondAttribute="bottom" constant="2" id="cY1-Iv-MEt"/>
                             <constraint firstItem="ak5-8b-8IH" firstAttribute="trailing" secondItem="PVe-Yl-WZ6" secondAttribute="trailing" constant="-2" id="czd-qK-MVx"/>
                             <constraint firstItem="PVe-Yl-WZ6" firstAttribute="leading" secondItem="ak5-8b-8IH" secondAttribute="leading" constant="-2" id="fCJ-8t-fO1"/>
                             <constraint firstItem="ak5-8b-8IH" firstAttribute="trailing" secondItem="SZM-Xi-Qr7" secondAttribute="trailing" constant="12" id="kZQ-un-x9i"/>
@@ -2503,18 +2496,18 @@
             <objects>
                 <viewController storyboardIdentifier="Resources" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7o5-rv-Rmd" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="15W-F2-s7B">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="caC-7O-SX6">
-                                <rect key="frame" x="0.0" y="812" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="758" width="414" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="UW1-NO-Djb"/>
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="aperture" translatesAutoresizingMaskIntoConstraints="NO" id="Kh3-AF-4JX">
-                                <rect key="frame" x="0.0" y="50" width="414" height="762"/>
+                                <rect key="frame" x="0.0" y="50" width="414" height="708"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsT-4O-VjL" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
@@ -2575,20 +2568,20 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Khf-hH-UZk">
-                                <rect key="frame" x="12" y="62" width="390" height="750"/>
+                                <rect key="frame" x="12" y="62" width="390" height="696"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jYB-E6-O7p">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="750"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="696"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ci4-fG-dUY">
-                                                <rect key="frame" x="75" y="0.0" width="10" height="750"/>
+                                                <rect key="frame" x="75" y="0.0" width="10" height="696"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="10" id="yfV-CX-76l"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="29X-wf-OF8">
-                                                <rect key="frame" x="305" y="0.0" width="10" height="750"/>
+                                                <rect key="frame" x="305" y="0.0" width="10" height="696"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="10" id="dNj-cw-0sy"/>
@@ -2936,9 +2929,6 @@
         <image name="plus" width="100" height="100"/>
         <image name="stack" width="580" height="580"/>
         <image name="sunBottom" width="634" height="299"/>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
