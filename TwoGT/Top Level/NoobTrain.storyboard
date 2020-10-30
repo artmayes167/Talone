@@ -948,22 +948,37 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bpE-2P-T7f">
-                                <rect key="frame" x="12" y="106" width="390" height="50"/>
+                                <rect key="frame" x="12" y="106" width="390" height="94"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aiv-Qu-Knh" customClass="DesignableView" customModule="Talone" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="select a state" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p8o-jZ-aUb">
-                                                <rect key="frame" x="144" y="15" width="102" height="20.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="closest metropolitan hub" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTu-cB-Muf">
+                                                <rect key="frame" x="12" y="12" width="366" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="teh-g2-iXb">
-                                                <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="select a state" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p8o-jZ-aUb">
+                                                <rect key="frame" x="144" y="62" width="102" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="teh-g2-iXb" customClass="DesignableButton" customModule="Talone" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="50" width="390" height="44"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="oBQ-06-rDg"/>
+                                                </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                         <real key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="2"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
@@ -973,23 +988,22 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="vTu-cB-Muf" firstAttribute="top" secondItem="Aiv-Qu-Knh" secondAttribute="top" constant="12" id="5Kh-m3-yrk"/>
                                             <constraint firstItem="p8o-jZ-aUb" firstAttribute="centerY" secondItem="teh-g2-iXb" secondAttribute="centerY" id="5Uf-Cv-qJo"/>
-                                            <constraint firstAttribute="height" constant="50" id="5j5-AN-gL9"/>
                                             <constraint firstItem="teh-g2-iXb" firstAttribute="leading" secondItem="Aiv-Qu-Knh" secondAttribute="leading" id="Bsg-x6-lOc"/>
                                             <constraint firstAttribute="trailing" secondItem="teh-g2-iXb" secondAttribute="trailing" id="KSB-Xh-6Wz"/>
-                                            <constraint firstItem="teh-g2-iXb" firstAttribute="top" secondItem="Aiv-Qu-Knh" secondAttribute="top" id="T1S-VO-sDT"/>
+                                            <constraint firstAttribute="trailing" secondItem="vTu-cB-Muf" secondAttribute="trailing" constant="12" id="Nom-RZ-AaE"/>
+                                            <constraint firstItem="teh-g2-iXb" firstAttribute="top" secondItem="Aiv-Qu-Knh" secondAttribute="top" constant="50" id="T1S-VO-sDT"/>
                                             <constraint firstItem="p8o-jZ-aUb" firstAttribute="centerX" secondItem="teh-g2-iXb" secondAttribute="centerX" id="XXZ-z8-9kV"/>
                                             <constraint firstAttribute="bottom" secondItem="teh-g2-iXb" secondAttribute="bottom" id="aUW-lh-GdE"/>
+                                            <constraint firstItem="vTu-cB-Muf" firstAttribute="leading" secondItem="Aiv-Qu-Knh" secondAttribute="leading" constant="12" id="oUS-m2-Jdc"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <real key="value" value="8"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" systemColor="systemIndigoColor"/>
+                                                <real key="value" value="0.0"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </view>
@@ -1251,6 +1265,9 @@
         <designable name="f3z-V0-rs0">
             <size key="intrinsicContentSize" width="60" height="36"/>
         </designable>
+        <designable name="teh-g2-iXb">
+            <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="OIx-8l-mru"/>
@@ -1289,9 +1306,6 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
