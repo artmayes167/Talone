@@ -16,6 +16,9 @@ target 'TwoGT' do
   pod 'Firebase/Analytics' # Crypto
   pod 'Firebase/DynamicLinks'
 
+  # Firebase Push Notifications (Cloud Messaging)
+  pod 'Firebase/Messaging'
+  
   # Add the pods for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore
   pod 'Firebase/Auth'  # Crypto
