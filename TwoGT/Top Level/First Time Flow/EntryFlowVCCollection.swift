@@ -20,12 +20,12 @@ class EnterEmailVC: UIViewController {
         super.viewDidLoad()
         UserDefaults.standard.setValue(State.enterEmail.rawValue, forKey: State.stateDefaultsKey.rawValue)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        showOkayAlert(title: "READ EVERYTHING", message: String(format:"you're special. you're about to embark on an adventure in social evolution.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\nand read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
+        showOkayAlert(title: "READ EVERYTHING", message: String(format: "you're special. you're about to embark on an adventure in social evolution.  your feedback will determine what this app becomes, so use the feedback mechanism in the app to give me your thoughts at any time. \n\nand read the screens before you move on. if anything is unclear, let me know so i can fix it."), handler: nil)
     }
-    
+
      // MARK: - Triggered Actions
     @IBAction func submitEmail(_ sender: Any) {
         if let email = self.textField.text?.pure() {
@@ -54,7 +54,7 @@ class EnterEmailVC: UIViewController {
             self.showOkayAlert(title: "", message: "Email can't be empty", handler: nil)
         }
     }
-    
+
      // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
@@ -68,10 +68,10 @@ class EnterEmailVC: UIViewController {
         }
         return super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let t = textField.text {
-            
+
             if textField.text?.pure() == "talone.for.apple@gmail.com" {
                 showApplePasswordAlert(title: "welcome, apple tester", message: "please enter the password provided. this will bypass the account creation mechanism so we don't have 500 of you running around.") { (_) in
                     // sole entry point
@@ -79,23 +79,23 @@ class EnterEmailVC: UIViewController {
                 }
                 return
             }
-            
+
             if t.contains("@") && t.contains(".") {
                 submitEmailButton.isEnabled = true
             }
         }
     }
-    
+
      // MARK: - Apple Apple Apple
     private func handleApple() {
         let appleHandle = "the_naugahyde_beast"
         UserDefaults.standard.setValue(appleHandle, forKey: DefaultsKeys.userHandle.rawValue)
         UserDefaults.standard.synchronize() // to prevent a crash
-        
+
         // TODO: - Bypass
         guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
         // create user.
-        let _ = CoreDataGod.user
+        _ = CoreDataGod.user
         _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
     }
 }
@@ -106,7 +106,7 @@ class VerificationVC: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var confirmStack: UIStackView!
     @IBOutlet weak var doneStack: UIStackView!
-    
+
     // MARK: - View Life Cycle
    override func viewDidLoad() {
        super.viewDidLoad()
@@ -114,7 +114,7 @@ class VerificationVC: UIViewController {
        // Notifications
        NotificationCenter.default.addObserver(self, selector: #selector(passwordlessSignInSuccessful), name: NSNotification.Name(rawValue: "PasswordlessEmailNotificationSuccess"), object: nil)
    }
-   
+
    override func viewWillAppear(_ animated: Bool) {
        super.viewWillAppear(animated)
        setSignInButtonState()
@@ -123,7 +123,7 @@ class VerificationVC: UIViewController {
    override func viewDidAppear(_ animated: Bool) {
        super.viewDidAppear(animated)
    }
-    
+
      // MARK: - Triggered Actions
     @IBAction func submitVerification(_ sender: Any) {
         // Sign-in code here
@@ -133,7 +133,7 @@ class VerificationVC: UIViewController {
     @IBAction func back(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
+
      // MARK: - All the private stuff
     private func setStackState() {
         confirmStack.isHidden = true
@@ -155,12 +155,12 @@ class VerificationVC: UIViewController {
 
     private func trySignInWithEmailLink() {
         if let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue), let link = UserDefaults.standard.string(forKey: "Link") {
-            Auth.auth().signIn(withEmail: email, link: link) { (result , error) in
+            Auth.auth().signIn(withEmail: email, link: link) { (result, error) in
                 if let error = error {
-                    self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (error) in 
+                    self.showOkayOrCancelAlert(title: "oops", message: "there was a problem: \(error.localizedDescription). hit okay to go back and resubmit, or cancel and try the email link again") { (_) in
                         // TODO: Check the error and invalidate link only if the error is specifically about
                         // the link (e.g. expired, already used etc.)
-                        
+
                         UserDefaults.standard.set(nil, forKey: "Link")
                         // navigate back
                         self.navigationController?.popViewController(animated: true)
@@ -192,13 +192,13 @@ class VerificationVC: UIViewController {
 class EnterHandleVC: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var submitHandleButton: UIButton!
-    
+
      // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         UserDefaults.standard.setValue(State.enterHandle.rawValue, forKey: State.stateDefaultsKey.rawValue)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         textField.becomeFirstResponder()
@@ -211,11 +211,14 @@ class EnterHandleVC: UIViewController {
             return
         }
         let handle = t.pure()
-        
+
         // Set the handle on the back end
         guard let uid = UserDefaults.standard.string(forKey: DefaultsKeys.uid.rawValue) else { fatalError() }
         // TODO: - Handle community
-        let handleObject = UserHandlesDbHandler.UserHandle(name: handle, locationInfo: nil, community: "", uid: uid)
+        var handleObject = UserHandlesDbHandler.UserHandle(name: handle, locationInfo: nil, community: "", uid: uid)
+        // Note: Cloud Messaging token is received separately, and it may be updated arbitrarily. We should have received it by now,
+        // but the token couldn't be stored to Firestore since the user wasn't authenticated at that point. Now she is.
+        handleObject.cloudMessagingToken = UserDefaults.standard.string(forKey: "CloudMessagingToken")
         showSpinner()
         _ = UserHandlesDbHandler.registerUserHandleAndCheckUniqueness(handleObject) { (error) in
             self.hideSpinner()
@@ -236,16 +239,16 @@ class EnterHandleVC: UIViewController {
                 UserDefaults.standard.synchronize() // to prevent a crash
                 guard let email = UserDefaults.standard.string(forKey: DefaultsKeys.taloneEmail.rawValue) else { fatalError() }
                 // create user.
-                let _ = CoreDataGod.user
+                _ = CoreDataGod.user
                 _ = Email.create(name: DefaultsKeys.taloneEmail.rawValue, emailAddress: email, uid: uid)
-                
+
                 self.showOkayAlert(title: "Welcome, \(self.textField.text!)", message: String(format: "as a Founder, you can provide feedback from the dashboard, or call me directly from there. remember that your feedback will generate what this app becomes. \n\nwelcome to Talone.")) { _ in
                     self.performSegue(withIdentifier: "toSetHome", sender: nil)
                 }
             }
         }
     }
-    
+
      // MARK: - UITextFieldDelegate
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let t = textField.text {
@@ -254,7 +257,7 @@ class EnterHandleVC: UIViewController {
         /// UIViewController checks global requirements
         return super.textField(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
-    
+
     func checkHandle(text t: String) {
         let handleHandler = UserHandlesDbHandler()
         // NOTE: - Function assumes backend prioritization of matches

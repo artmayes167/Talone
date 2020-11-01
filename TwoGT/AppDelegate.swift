@@ -13,7 +13,6 @@ import FBSDKCoreKit
 import Firebase
 import FirebaseDynamicLinks
 
-
 extension AppDelegate {
     fileprivate func handlePasswordlessSignIn(withURL url: URL) -> Bool {
         let link = url.absoluteString
@@ -27,7 +26,7 @@ extension AppDelegate {
         }
         return false
     }
-    
+
     /// May move to a flow coordinator
     func setToFlow(storyboardName: String, identifier viewControllerIdentifier: String) {
         DispatchQueue.main.async {
@@ -43,10 +42,10 @@ extension AppDelegate {
         }
     }
 }
-    
+
 @UIApplicationMain
 public class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
     public var window: UIWindow?
     static var cardObserver = CardReceiverObserver()
     static var linkedNeedsObserver = LinkedWatchersObserver()
@@ -69,7 +68,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         Messaging.messaging().delegate = self
 
         SetupRegistrationForRemoteNotifications(application)
-        
+
         return true
     }
 
@@ -84,30 +83,30 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
     public func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        let handled = DynamicLinks.dynamicLinks().handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
+        let handled = DynamicLinks.dynamicLinks().handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, _) in
             if let u = dynamiclink?.url {
                 _ = self.handlePasswordlessSignIn(withURL: u)
             }
           }
         return handled
     }
-    
+
     /// These may or may not be a good idea
     public func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
        return true
     }
-    
+
     public func application(_ application: UIApplication, shouldRestoreSecureApplicationState coder: NSCoder) -> Bool {
         return true
     }
-    
+
     public func applicationWillEnterForeground(_ application: UIApplication) {
         if Auth.auth().currentUser?.displayName != nil {
             AppDelegate.cardObserver.startObserving()
             AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
         }
     }
-    
+
     public func applicationDidEnterBackground(_ application: UIApplication) {
         AppDelegate.cardObserver.stopObserving()
         AppDelegate.linkedNeedsObserver.stopObservingHaveChanges()
@@ -125,8 +124,8 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     public lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "Talone")
-        container.loadPersistentStores(completionHandler: { (description, error) in
-            
+        container.loadPersistentStores(completionHandler: { (_, error) in
+
             if let error = error as NSError? {
                 guard let rootVC = self.window?.rootViewController else {
                     /// log error
@@ -143,55 +142,57 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return container
     }()
-    
+
     public func saveContext() -> Bool {
         if persistentContainer.viewContext.hasChanges {
             persistentContainer.viewContext.insert(CoreDataGod.user)
             do {
                 try persistentContainer.viewContext.save()
                 return true
-            }
-            catch {
+            } catch {
                 return false
             }
         }
         return true
     }
-    
+
     private func SetupRegistrationForRemoteNotifications(_ application: UIApplication) {
 
         UNUserNotificationCenter.current().delegate = self
-        
+
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         UNUserNotificationCenter.current().requestAuthorization(
             options: authOptions,
             completionHandler: {_, _ in })
-        
+
         application.registerForRemoteNotifications()
     }
 }
 
-extension AppDelegate : MessagingDelegate {
+extension AppDelegate: MessagingDelegate {
     public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-      print("Firebase registration token: \(String(describing: fcmToken))")
+        print("Firebase registration token: \(String(describing: fcmToken))")
 
-      let dataDict:[String: String] = ["token": fcmToken]
-      NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-      // TODO: If necessary send token to application server.
-      // Note: This callback is fired at each app startup and whenever a new token is generated.
+        let dataDict: [String: String] = ["token": fcmToken]
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+
+        if UserDefaults.standard.string(forKey: "CloudMessagingToken") != fcmToken {
+            _ = UserHandlesDbHandler.registerUserCloudMessagingToken(fcmToken)
+            UserDefaults.standard.set(fcmToken, forKey: "CloudMessagingToken")
+        }
     }
-    
+
     public func application(_ application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-      Messaging.messaging().apnsToken = deviceToken
+                            didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
     }
-    
+
     public func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-      print("Unable to register for remote notifications: \(error.localizedDescription)")
+        print("Unable to register for remote notifications: \(error.localizedDescription)")
     }
 }
 
-extension AppDelegate : UNUserNotificationCenterDelegate {
+extension AppDelegate: UNUserNotificationCenterDelegate {
 
   // Receive displayed notifications for iOS 10 devices.
     public func userNotificationCenter(_ center: UNUserNotificationCenter,

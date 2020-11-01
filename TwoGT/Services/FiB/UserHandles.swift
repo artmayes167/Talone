@@ -17,15 +17,16 @@ class UserHandlesDbHandler: FirebaseGeneric {
         static func < (lhs: UserHandlesDbHandler.UserHandle, rhs: UserHandlesDbHandler.UserHandle) -> Bool {
             return lhs.name < rhs.name
         }
-        
+
         static func == (lhs: UserHandlesDbHandler.UserHandle, rhs: UserHandlesDbHandler.UserHandle) -> Bool {
             return lhs.name == rhs.name && lhs.locationInfo?.state == rhs.locationInfo?.state && lhs.locationInfo?.city == rhs.locationInfo?.city && lhs.community == rhs.community && lhs.uid == rhs.uid
         }
-        
-        var name: String                // Handle's visual description, e.g. "-NightHawk-"
-        var locationInfo: LocationInfo? // Primary location where this handle is associated to
-        var community: String?          // Potential community this user belongs to
-        var uid: String?                 // User Id of the owner of the handle.
+
+        var name: String                    // Handle's visual description, e.g. "-NightHawk-"
+        var locationInfo: LocationInfo?     // Primary location where this handle is associated to
+        var community: String?              // Potential community this user belongs to.
+        var uid: String?                    // User Id of the owner of the handle.
+        var cloudMessagingToken: String?    // Firebase Cloud Messaging or other Push Notification registration token of this user.
     }
 
     private struct _UserHandle: Codable {
@@ -118,7 +119,7 @@ class UserHandlesDbHandler: FirebaseGeneric {
 
         var t = db.collection("users").whereField("lowercase", isGreaterThanOrEqualTo: str)
             .whereField("lowercase", isLessThan: endStr)
-        
+
         if let community = community {
             t = t.whereField("community", isEqualTo: community)
         }
@@ -147,5 +148,15 @@ class UserHandlesDbHandler: FirebaseGeneric {
                 completion(handles)
             }
         }
+    }
+
+    ///
+    ///    Registers given user Cloud Messaging (Push Notifications) registration token.
+    ///    - Parameter token: Token received from Push Notification/Cloud Messaging system
+    class func registerUserCloudMessagingToken(_ token: String) -> Error? {
+        let db = Firestore.firestore()
+        guard let uid = Auth.auth().currentUser?.uid else { return GenericFirebaseError.noAuthUser }
+        db.collection("users").document(uid).updateData(["cloudMessagingToken": token])
+        return nil
     }
 }
