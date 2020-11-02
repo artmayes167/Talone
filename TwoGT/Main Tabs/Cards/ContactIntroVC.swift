@@ -44,6 +44,7 @@ class ContactIntroVC: UIViewController {
     }
     
     override func updateUI() {
+        populateUI()
         presentationController?.delegate?.updateUI()
     }
     

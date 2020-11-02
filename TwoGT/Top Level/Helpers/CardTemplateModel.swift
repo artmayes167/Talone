@@ -108,6 +108,7 @@ struct CardTemplateModel {
     
     private mutating func configure() {
         allPossibles = addresses + phoneNumbers + emails
+        allAdded = []
         if let c = card {
             if let adds = c.addresses {
                 for a in adds {
@@ -135,6 +136,7 @@ struct CardTemplateModel {
             }
         } else {
             allPossibles = addresses + phoneNumbers + emails
+            allAdded = []
         }
     }
     
