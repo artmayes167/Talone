@@ -70,7 +70,10 @@ class CardTemplateCreatorVC: UIViewController {
     
     private var cardInstance: CardTemplateInstance? {
         didSet {
-            guard let i = cardInstance else { return }
+            guard let i = cardInstance else {
+                model.set(card: nil)
+                return
+            }
             CoreDataGod.managedContext.refresh(i, mergeChanges: true)
             model.set(card: i)
             if contact == nil {
