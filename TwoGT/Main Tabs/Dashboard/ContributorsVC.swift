@@ -118,8 +118,8 @@ final class ContributorCell: UICollectionViewCell {
     
     func configure(_ contributor: Contributor) {
         if let url = contributor.imageUrl {
-            if let imageURL = URL(string: url), let placeholder = UIImage(named: contributor.imageName) {
-                contributorImage.af.setImage(withURL: imageURL, placeholderImage: placeholder)
+            if let imageURL = URL(string: url) {
+                contributorImage.af.setImage(withURL: imageURL, placeholderImage: #imageLiteral(resourceName: "avatar.png"))
             } else {
                 contributorImage.image = #imageLiteral(resourceName: "avatar.png")
             }
