@@ -225,8 +225,14 @@ class MyContactVC: ViewContactVC {
         CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         notesView.isHidden = true
         notesTitleLabel?.isHidden = true
-        messageTextView.isHidden = true
-        messageTitleLabel?.isHidden = true
+        if let m = myCard?.message, !m.isEmpty {
+            messageTextView.isHidden = false
+            messageTitleLabel?.isHidden = false
+            messageTextView.text = m
+        } else {
+            messageTextView.isHidden = true
+            messageTitleLabel?.isHidden = true
+        }
         super.updateUIFor(card: c)
     }
     

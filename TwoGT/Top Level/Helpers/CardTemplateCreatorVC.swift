@@ -227,8 +227,8 @@ class CardTemplateCreatorVC: UIViewController {
                     }
                 }
             }
-            CoreDataGod.managedContext.refreshAllObjects()
-            CoreDataGod.save()
+            c.message = messageTextView?.text.pure()
+            CoreDataGod.managedContext.refresh(c, mergeChanges: true)
         } else { /// Creating
             let handle = contact!.contactHandle!
             let success =  CardTemplate.create(cardCategory: handle, image: potentialImage)
@@ -246,10 +246,12 @@ class CardTemplateCreatorVC: UIViewController {
                         }
                     }
                     cardInstance = CardTemplateInstance.create(toHandle: handle, card: c)
-                    CoreDataGod.managedContext.refreshAllObjects()
+                    cardInstance!.message = messageTextView?.text.pure()
+                    CoreDataGod.managedContext.refresh(cardInstance!, mergeChanges: true)
                 }
             }
         }
+        CoreDataGod.save()
         self.presentationController!.delegate!.updateUI()
         sendCard()
     }
