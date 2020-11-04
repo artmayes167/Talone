@@ -134,9 +134,6 @@ struct CardTemplateModel {
                     }
                 }
             }
-        } else {
-            allPossibles = addresses + phoneNumbers + emails
-            allAdded = []
         }
     }
     

@@ -26,11 +26,22 @@ class CityStateModel {
         do {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            let container = try decoder.decode([String: [String]].self, from: jsonData) as [String: [String]]
-            container.forEach { (key, value) in
-                let st = USState(name: key, cities: value)
+            let container = try decoder.decode([[String: String]].self, from: jsonData) as [[String: String]]
+            var citiesByState: [String: [String]] = [:]
+            container.forEach { dict in
+                guard let c = dict["city"], let state = dict["state"] else { fatalError() }
+                if !allStates.contains(state) {
+                    allStates.append(state)
+                }
+                
+                var a = citiesByState[state] ?? []
+                a.append(c)
+                citiesByState[state] = a
+            }
+            
+            for str in allStates {
+                let st = USState.init(name: str, cities: citiesByState[str]!)
                 states.append(st)
-                allStates.append(key)
             }
             if let st = s {
                 guard let state = states.first(where: { $0.name == st }) else { fatalError() }

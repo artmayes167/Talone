@@ -106,25 +106,42 @@ class CityStateSearchVC: UIViewController {
         savedLocationTableView.rowHeight = UITableView.automaticDimension
         savedLocationTableView.estimatedRowHeight = 50
 
+        configureStatesAndCities()
+        
+        savedLocationTableView.reloadData()
+        savedLocationView.isHidden = true
+    }
+    
+    func configureStatesAndCities() {
         let path = Bundle.main.path(forResource: "citiesAndStates", ofType: "json")
         let url = URL.init(fileURLWithPath: path!)
         do {
             let jsonData = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            let container = try decoder.decode([String: [String]].self, from: jsonData) as [String: [String]]
-            container.forEach { (key, value) in
-                let st = USState(name: key, cities: value)
-                states.append(st)
-                allStates.append(key)
+            let container = try decoder.decode([[String: String]].self, from: jsonData) as [[String: String]]
+            var citiesByState: [String: [String]] = [:]
+            container.forEach { dict in
+                guard let c = dict["city"], let state = dict["state"] else { fatalError() }
+                if !allStates.contains(state) {
+                    allStates.append(state)
+                }
+                
+                var a = citiesByState[state] ?? []
+                a.append(c)
+                citiesByState[state] = a
             }
+            
+            for str in allStates {
+                let st = USState.init(name: str, cities: citiesByState[str]!)
+                states.append(st)
+            }
+            
             allStates.sort{ $0 < $1 }
             stateSelector?.configure(list: allStates, itemType: .state)
             stateContainer.isHidden = true
             statesCoverView?.isHidden = true
             
         } catch { print(error.localizedDescription) }
-        savedLocationTableView.reloadData()
-        savedLocationView.isHidden = true
     }
     
      // MARK: - IBActions

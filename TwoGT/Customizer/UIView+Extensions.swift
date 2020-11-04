@@ -67,7 +67,11 @@ extension UISegmentedControl {
 
  // MARK: - DesignableButton
 ///  Associated classes in ClassesForCustomizer
-@IBDesignable class DesignableButton: UIButton {}
+@IBDesignable class DesignableButton: UIButton {
+//    override func willMove(toSuperview newSuperview: UIView?) {
+//        doGlowAnimation(withColor: .white)
+//    }
+}
 
 @IBDesignable class DesignableTextField: UITextField {}
 @IBDesignable class DesignableSegmentedControl: UISegmentedControl {}
