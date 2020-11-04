@@ -33,6 +33,7 @@ enum UnwindIdentifiers: String, CaseIterable {
     case marketplaceSearch = "unwindToMarketplaceSearch"
     case createNewItem = "unwindToCreateNewItem"
     case addNewAddress = "unwindToAddNewAddress"
+    case searchGuilds = "unwindToMainGuilds"
 }
 
 class CityStateSearchVC: UIViewController {
