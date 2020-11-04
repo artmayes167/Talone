@@ -93,4 +93,6 @@
 // Who by Adrien Coquet from the Noun Project
 
 // borrow by Adrien Coquet from the Noun Project
+
+// "Family by Magicon from the Noun Project"
 // --- Added up to here to creativeCommons.json

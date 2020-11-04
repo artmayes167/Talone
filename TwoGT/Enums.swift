@@ -40,7 +40,7 @@ extension DatabaseReady {
 
 /// Specifically for storage prior to dragon creation
 enum DefaultsKeys: String, CaseIterable {
-    case lastUsedLocation, taloneEmail, userHandle, uid
+    case lastUsedLocation, taloneEmail, userHandle, uid, savedGeoLocations
 }
 
 /// Current viewable and shareable string-representible element types (excludes image)

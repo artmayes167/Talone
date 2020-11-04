@@ -12,6 +12,9 @@ import LocalAuthentication
 import FBSDKCoreKit
 import Firebase
 import FirebaseDynamicLinks
+import FirebaseMessaging
+import CoreLocation
+import UserNotifications
 
 extension AppDelegate {
     fileprivate func handlePasswordlessSignIn(withURL url: URL) -> Bool {
@@ -43,6 +46,53 @@ extension AppDelegate {
     }
 }
 
+extension AppDelegate: CLLocationManagerDelegate {
+  
+    public func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    if region is CLCircularRegion {
+      handleEvent(for: region)
+    }
+  }
+  
+    public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+    if region is CLCircularRegion {
+      handleEvent(for: region)
+    }
+  }
+    
+    func handleEvent(for region: CLRegion!) {
+      // Show an alert if application is active
+      if UIApplication.shared.applicationState == .active {
+        guard let message = note(from: region.identifier) else { return }
+        window?.rootViewController?.showOkayAlert(title: "", message: message, handler: nil)
+      } else {
+        // Otherwise present a local notification
+        guard let body = note(from: region.identifier) else { return }
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.body = body
+        notificationContent.sound = UNNotificationSound.default
+        notificationContent.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: "location_change",
+                                            content: notificationContent,
+                                            trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+          if let error = error {
+            print("Error: \(error)")
+          }
+        }
+      }
+    }
+    
+    func note(from identifier: String) -> String? {
+      let geotifications = Geotification.allGeotifications()
+      guard let matched = geotifications.filter({
+        $0.identifier == identifier
+      }).first else { return nil }
+      return matched.note
+    }
+}
+
 @UIApplicationMain
 public class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -50,12 +100,18 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     static var cardObserver = CardReceiverObserver()
     static var linkedNeedsObserver = LinkedWatchersObserver()
     static let stateManager = StateManager()
+    
+    let locationManager = CLLocationManager()
 
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        
         let def = UserDefaults.standard
-        if !def.bool(forKey: "vigilant") {
-            def.set(false, forKey: "vigilant")
-        }
+//        if !def.bool(forKey: "vigilant") {
+//            def.set(false, forKey: "vigilant")
+//        }
         if def.string(forKey: "admin") == nil {
             def.set("xxxx", forKey: "admin")
         }
