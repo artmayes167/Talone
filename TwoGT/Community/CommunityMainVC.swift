@@ -172,8 +172,7 @@ class MyGuildsTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SimpleSearchCell
-        guard let v = list[indexPath.row] else { fatalError() }
-        cell.basicLabel.text = v
+        cell.basicLabel.text = list[indexPath.row]
         // cell.colorBar
         return cell
     }
@@ -239,20 +238,13 @@ class AvailableGuildsTVC: UITableViewController {
 //        return keys
 //    }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return keys[section]
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let key = keys[section]
-        guard let array = list[key] else { return 0 }
-        return array.count
+        return list.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! SimpleSearchCell
-        guard let v = list[indexPath.row] else { fatalError() }
-        cell.basicLabel.text = v
+        cell.basicLabel.text = list[indexPath.row]
         // cell.colorBar
         return cell
     }
