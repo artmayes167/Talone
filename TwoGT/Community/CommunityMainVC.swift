@@ -41,7 +41,13 @@ class CommunityMainVC: UIViewController {
         }
     }
     
-
+    @IBAction func touchedPrimaryGuildButton(_ sender: UIButton) {
+        if sender.title(for: .normal) == "new guild" {
+            performSegue(withIdentifier: "toNewGuild", sender: nil)
+        } else {
+            
+        }
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
