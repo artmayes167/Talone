@@ -34,9 +34,7 @@ protocol AddGeotificationsViewControllerDelegate {
 }
 
 class AddGeotificationViewController: UITableViewController {
-  
-  @IBOutlet var addButton: UIBarButtonItem!
-  @IBOutlet var zoomButton: UIBarButtonItem!
+    @IBOutlet weak var submitTerritoryButton: UIButton!
   @IBOutlet weak var eventTypeSegmentedControl: UISegmentedControl!
   @IBOutlet weak var radiusTextField: UITextField!
   @IBOutlet weak var noteTextField: UITextField!
@@ -46,19 +44,14 @@ class AddGeotificationViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationItem.rightBarButtonItems = [addButton, zoomButton]
-    addButton.isEnabled = false
+    submitTerritoryButton.isEnabled = false
   }
   
   @IBAction func textFieldEditingChanged(sender: UITextField) {
-    addButton.isEnabled = !radiusTextField.text!.isEmpty && !noteTextField.text!.isEmpty
+    submitTerritoryButton.isEnabled = !radiusTextField.text!.isEmpty && !noteTextField.text!.isEmpty
   }
   
-  @IBAction func onCancel(sender: AnyObject) {
-    dismiss(animated: true, completion: nil)
-  }
-  
-  @IBAction private func onAdd(sender: AnyObject) {
+  @IBAction private func onAdd(sender: UIButton) {
     let coordinate = mapView.centerCoordinate
     let radius = Double(radiusTextField.text!) ?? 0
     let identifier = NSUUID().uuidString
