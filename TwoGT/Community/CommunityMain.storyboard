@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +13,7 @@
         <!--guilds-->
         <scene sceneID="WiB-yL-EIl">
             <objects>
-                <viewController storyboardIdentifier="New Guild Main" title="guilds" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UNM-Hh-Pdq" customClass="CreateGuildMainVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="level 1" title="guilds" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UNM-Hh-Pdq" customClass="CreateGuildMainVC" customModule="Talone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ayv-8d-fq1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -102,7 +103,7 @@
                                                             <constraint firstAttribute="height" constant="44" id="Jvy-JX-TeQ"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                        <state key="normal" title="advanced"/>
+                                                        <state key="normal" title="complete level one"/>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
@@ -153,6 +154,45 @@
             </objects>
             <point key="canvasLocation" x="963.76811594202911" y="-61.607142857142854"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="F8O-ax-V2o">
+            <objects>
+                <viewController storyboardIdentifier="New Guild Main" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lxv-Mi-e6B" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8By-KF-DNS">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YTw-VX-eJe">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="77"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="my guild" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BBy-2k-5da">
+                                        <rect key="frame" x="174.5" y="48" width="65" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="77" id="5WG-L5-k8B"/>
+                                    <constraint firstAttribute="bottom" secondItem="BBy-2k-5da" secondAttribute="bottom" constant="8" id="DcW-ne-EBy"/>
+                                    <constraint firstItem="BBy-2k-5da" firstAttribute="centerX" secondItem="YTw-VX-eJe" secondAttribute="centerX" id="yr0-I3-6TZ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="006-9P-M3a"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="YTw-VX-eJe" firstAttribute="top" secondItem="8By-KF-DNS" secondAttribute="top" id="4hB-Dd-1ev"/>
+                            <constraint firstItem="006-9P-M3a" firstAttribute="trailing" secondItem="YTw-VX-eJe" secondAttribute="trailing" id="Ara-xk-sND"/>
+                            <constraint firstItem="YTw-VX-eJe" firstAttribute="leading" secondItem="006-9P-M3a" secondAttribute="leading" id="j9U-Fu-g26"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4QN-pb-qia" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-55" y="13"/>
+        </scene>
         <!--guilds-->
         <scene sceneID="6m9-ng-qzB">
             <objects>
@@ -170,11 +210,18 @@
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="VdK-4r-Ide" customClass="GradientSlider" customModule="Talone" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="49" width="394" height="31"/>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemYellowColor"/>
                                 <constraints>
+                                    <constraint firstItem="VdK-4r-Ide" firstAttribute="centerY" secondItem="60E-CK-Fgi" secondAttribute="centerY" id="Ggx-kQ-fcD"/>
+                                    <constraint firstItem="VdK-4r-Ide" firstAttribute="leading" secondItem="60E-CK-Fgi" secondAttribute="leading" constant="12" id="SaN-mg-H0l"/>
+                                    <constraint firstAttribute="trailing" secondItem="VdK-4r-Ide" secondAttribute="trailing" constant="12" id="W0D-yl-pwc"/>
                                     <constraint firstItem="261-Wq-18O" firstAttribute="top" secondItem="60E-CK-Fgi" secondAttribute="top" constant="12" id="d14-vh-XUC"/>
                                     <constraint firstAttribute="height" constant="128" id="keS-qi-vdb"/>
+                                    <constraint firstItem="VdK-4r-Ide" firstAttribute="centerY" secondItem="60E-CK-Fgi" secondAttribute="centerY" id="pGr-56-lxh"/>
                                     <constraint firstItem="261-Wq-18O" firstAttribute="centerX" secondItem="60E-CK-Fgi" secondAttribute="centerX" id="ueS-gr-lpa"/>
                                 </constraints>
                             </view>
@@ -191,7 +238,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vnl-G7-qwE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="964" y="661"/>
+            <point key="canvasLocation" x="457.97101449275368" y="642.85714285714278"/>
         </scene>
         <!--Name New CommunityVC-->
         <scene sceneID="qRG-K6-6pk">
@@ -360,6 +407,60 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K7M-5J-6CY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1709" y="-268"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="CXI-2b-Rdf">
+            <objects>
+                <tableViewController id="k96-5l-ZWe" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="weM-sQ-HpH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" id="nch-L0-KuQ">
+                                <rect key="frame" x="0.0" y="28" width="414" height="64.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nch-L0-KuQ" id="P4Q-kl-Z2f">
+                                    <rect key="frame" x="0.0" y="0.0" width="351" height="64.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f8V-bj-6no">
+                                            <rect key="frame" x="12" y="12" width="44" height="44"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="nA3-kT-DKP"/>
+                                                <constraint firstAttribute="height" constant="44" id="u4g-Lj-nSm"/>
+                                            </constraints>
+                                            <state key="normal">
+                                                <imageReference key="image" image="square" catalog="system" symbolScale="large"/>
+                                            </state>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oyG-BJ-g03">
+                                            <rect key="frame" x="64" y="23" width="271" height="18.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="oyG-BJ-g03" secondAttribute="bottom" constant="12" id="6ZY-ed-m0X"/>
+                                        <constraint firstItem="f8V-bj-6no" firstAttribute="top" secondItem="P4Q-kl-Z2f" secondAttribute="top" constant="12" id="G1W-nc-pW4"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="oyG-BJ-g03" secondAttribute="trailing" constant="8" id="H8n-R7-FMO"/>
+                                        <constraint firstItem="oyG-BJ-g03" firstAttribute="top" secondItem="P4Q-kl-Z2f" secondAttribute="topMargin" constant="12" id="YuF-gx-MSV"/>
+                                        <constraint firstItem="oyG-BJ-g03" firstAttribute="leading" secondItem="f8V-bj-6no" secondAttribute="trailing" constant="8" id="geO-aN-Sqq"/>
+                                        <constraint firstItem="f8V-bj-6no" firstAttribute="leading" secondItem="P4Q-kl-Z2f" secondAttribute="leading" constant="12" id="hoP-97-uOH"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="k96-5l-ZWe" id="jDu-v4-nkQ"/>
+                            <outlet property="delegate" destination="k96-5l-ZWe" id="iIl-rF-rAY"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Th-sQ-UIO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2789" y="-271"/>
         </scene>
         <!--Add Geotification View Controller-->
         <scene sceneID="auX-th-806">
@@ -655,9 +756,15 @@
             <point key="canvasLocation" x="1615.9420289855075" y="600.66964285714278"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="VdK-4r-Ide">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
+    </designables>
     <resources>
         <image name="AddPin" width="75" height="75"/>
         <image name="CurrentLocation" width="15" height="15"/>
+        <image name="square" catalog="system" width="128" height="114"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -666,6 +773,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

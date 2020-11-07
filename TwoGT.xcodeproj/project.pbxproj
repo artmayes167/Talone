@@ -114,6 +114,8 @@
 		5DBD60F425533E1400A45B2A /* GeotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBD60F325533E1400A45B2A /* GeotificationsViewController.swift */; };
 		5DBD60F825534A1900A45B2A /* CommunityMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBD60F725534A1900A45B2A /* CommunityMainVC.swift */; };
 		5DBD611E2553697600A45B2A /* CreateGuildMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBD611D2553697600A45B2A /* CreateGuildMainVC.swift */; };
+		5DBD61252555FB8500A45B2A /* Community.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5DBD61232555FB8300A45B2A /* Community.xcdatamodeld */; };
+		5DBD61292556009600A45B2A /* rules.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DBD61282556009600A45B2A /* rules.json */; };
 		5DBDA5CA25158E32001A80A5 /* MyNeedsSearchDisplayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA5C925158E32001A80A5 /* MyNeedsSearchDisplayVC.swift */; };
 		5DBDA5CF25158E58001A80A5 /* MyHavesSearchDisplayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA5CE25158E58001A80A5 /* MyHavesSearchDisplayVC.swift */; };
 		5DBDA61325160C0C001A80A5 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDA60E25160C0C001A80A5 /* AsyncImage.swift */; };
@@ -287,6 +289,8 @@
 		5DBD60F325533E1400A45B2A /* GeotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeotificationsViewController.swift; sourceTree = "<group>"; };
 		5DBD60F725534A1900A45B2A /* CommunityMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityMainVC.swift; sourceTree = "<group>"; };
 		5DBD611D2553697600A45B2A /* CreateGuildMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGuildMainVC.swift; sourceTree = "<group>"; };
+		5DBD61242555FB8400A45B2A /* Community.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Community.xcdatamodel; sourceTree = "<group>"; };
+		5DBD61282556009600A45B2A /* rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules.json; sourceTree = "<group>"; };
 		5DBDA5C925158E32001A80A5 /* MyNeedsSearchDisplayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNeedsSearchDisplayVC.swift; sourceTree = "<group>"; };
 		5DBDA5CE25158E58001A80A5 /* MyHavesSearchDisplayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHavesSearchDisplayVC.swift; sourceTree = "<group>"; };
 		5DBDA60E25160C0C001A80A5 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
@@ -435,6 +439,7 @@
 		5D3A175524B671F90070739D = {
 			isa = PBXGroup;
 			children = (
+				5DBD61232555FB8300A45B2A /* Community.xcdatamodeld */,
 				5D4A81F325097F2100AFC5E5 /* Notes.swift */,
 				5D3A176024B671F90070739D /* TwoGT */,
 				5DD8F4FF2516757A004A4528 /* Future */,
@@ -531,6 +536,7 @@
 				5DF3C6CD250BED8200F8D510 /* contributors.json */,
 				5DE1848D2531FDB10091A1BC /* faq.json */,
 				5DA07FC32544BEB700BE30A5 /* guide.json */,
+				5DBD61282556009600A45B2A /* rules.json */,
 			);
 			path = JSON;
 			sourceTree = "<group>";
@@ -903,6 +909,7 @@
 			files = (
 				5D602A5A251D43D5001B18F5 /* creativeCommons.json in Resources */,
 				5D3A177124B671FC0070739D /* LaunchScreen.storyboard in Resources */,
+				5DBD61292556009600A45B2A /* rules.json in Resources */,
 				5D3A176E24B671FC0070739D /* Preview Assets.xcassets in Resources */,
 				5D61635224E063A500829AF2 /* NoHome.storyboard in Resources */,
 				5DF3C6CE250BED8200F8D510 /* contributors.json in Resources */,
@@ -1019,6 +1026,7 @@
 				5D602A53251CF458001B18F5 /* AddHaveToWatchVC.swift in Sources */,
 				5DCE045B253A205B0038968D /* SelectorPopoverVC.swift in Sources */,
 				5D28511D253533D30067B026 /* Email+CoreDataClass.swift in Sources */,
+				5DBD61252555FB8500A45B2A /* Community.xcdatamodeld in Sources */,
 				5DBD611E2553697600A45B2A /* CreateGuildMainVC.swift in Sources */,
 				5D28511C253533D30067B026 /* Item+CoreDataProperties.swift in Sources */,
 				6D537929254634040093D333 /* RatingsHandler.swift in Sources */,
@@ -1413,6 +1421,16 @@
 			);
 			currentVersion = 5D285210253643C10067B026 /* Talone.xcdatamodel */;
 			path = Talone.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		5DBD61232555FB8300A45B2A /* Community.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5DBD61242555FB8400A45B2A /* Community.xcdatamodel */,
+			);
+			currentVersion = 5DBD61242555FB8400A45B2A /* Community.xcdatamodel */;
+			path = Community.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

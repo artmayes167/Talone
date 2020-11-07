@@ -62,5 +62,38 @@ class AddGeotificationViewController: UITableViewController {
   
   @IBAction private func onZoomToCurrentLocation(sender: AnyObject) {
     mapView.zoomToUserLocation()
+    lookUpCurrentLocation { (placemark) in
+        if let p = placemark {
+            let state = p.administrativeArea ?? "Unknown"
+            let city = p.locality ?? "Unincorporated"
+            let locality = p.subLocality ?? ""
+            self.noteTextField.text = state + ", " + city + ", " + locality
+        }
+    }
   }
+    
+    func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?)
+                    -> Void ) {
+        // Use the last reported location.
+        if let lastLocation = mapView.userLocation.location {
+            let geocoder = CLGeocoder()
+                
+            // Look up the location and pass it to the completion handler
+            geocoder.reverseGeocodeLocation(lastLocation,
+                        completionHandler: { (placemarks, error) in
+                if error == nil {
+                    let firstLocation = placemarks?[0]
+                    completionHandler(firstLocation)
+                }
+                else {
+                 // An error occurred during geocoding.
+                    completionHandler(nil)
+                }
+            })
+        }
+        else {
+            // No location was available.
+            completionHandler(nil)
+        }
+    }
 }

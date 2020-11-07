@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Citizen" representedClassName="Citizen" syncable="YES" codeGenerationType="class">
+        <attribute name="handle" optional="YES" attributeType="String"/>
+        <attribute name="taloneEmail" optional="YES" attributeType="String"/>
+        <attribute name="uid" optional="YES" attributeType="String"/>
+        <relationship name="communities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Community" inverseName="members" inverseEntity="Community"/>
+        <relationship name="guild" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Community"/>
+        <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Role" inverseName="holder" inverseEntity="Role"/>
+    </entity>
+    <entity name="Community" representedClassName="Community" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="outsideSearchable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="members" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Citizen" inverseName="communities" inverseEntity="Citizen"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Owner" inverseName="community" inverseEntity="Owner"/>
+        <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Role" inverseName="community" inverseEntity="Role"/>
+        <fetchedProperty name="rules" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Rule" predicateString="$0.governing == true"/>
+        </fetchedProperty>
+    </entity>
+    <entity name="Owner" representedClassName="Owner" parentEntity="Citizen" syncable="YES" codeGenerationType="class">
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="community" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Community" inverseName="owner" inverseEntity="Community"/>
+    </entity>
+    <entity name="Responsibility" representedClassName="Responsibility" syncable="YES" codeGenerationType="class">
+        <relationship name="role" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Role" inverseName="responsibilities" inverseEntity="Role"/>
+    </entity>
+    <entity name="Right" representedClassName="Right" syncable="YES" codeGenerationType="class">
+        <attribute name="governing" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="required" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="references" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="URLObject" inverseName="rights" inverseEntity="URLObject"/>
+        <relationship name="rule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Rule" inverseName="rights" inverseEntity="Rule"/>
+    </entity>
+    <entity name="Role" representedClassName="Role" syncable="YES" codeGenerationType="class">
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="community" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Community" inverseName="roles" inverseEntity="Community"/>
+        <relationship name="holder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Citizen" inverseName="roles" inverseEntity="Citizen"/>
+        <relationship name="responsibilities" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Responsibility" inverseName="role" inverseEntity="Responsibility"/>
+    </entity>
+    <entity name="Rule" representedClassName="Rule" syncable="YES" codeGenerationType="class">
+        <attribute name="governing" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="URLObject" inverseName="rules" inverseEntity="URLObject"/>
+        <relationship name="rights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Right" inverseName="rule" inverseEntity="Right"/>
+    </entity>
+    <entity name="URLObject" representedClassName="URLObject" syncable="YES" codeGenerationType="class">
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="rights" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Right" inverseName="references" inverseEntity="Right"/>
+        <relationship name="rules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rule" inverseName="references" inverseEntity="Rule"/>
+    </entity>
+    <elements>
+        <element name="Rule" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="Community" positionX="-54" positionY="-9" width="128" height="146"/>
+        <element name="URLObject" positionX="-36" positionY="18" width="128" height="88"/>
+        <element name="Citizen" positionX="-18" positionY="54" width="128" height="133"/>
+        <element name="Role" positionX="0" positionY="99" width="128" height="103"/>
+        <element name="Responsibility" positionX="18" positionY="117" width="128" height="58"/>
+        <element name="Right" positionX="36" positionY="126" width="128" height="118"/>
+        <element name="Owner" positionX="-9" positionY="99" width="128" height="73"/>
+    </elements>
+</model>
