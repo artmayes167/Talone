@@ -24,11 +24,11 @@ class CardReceiverObserver {
 
     fileprivate lazy var contacts: NSFetchedResultsController<Contact> = {
         let context = CoreDataGod.managedContext
-      //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
+        //let request: NSFetchRequest<Contact> = NSFetchRequest(entityName: "Contact")
         let request: NSFetchRequest<Contact> = Contact.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Contact.contactHandle), ascending: false)]
-      let contacts = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-      return contacts
+        let contacts = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return contacts
     }()
 
     func observeCardReceptions() {
