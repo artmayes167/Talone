@@ -101,7 +101,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     public func applicationWillEnterForeground(_ application: UIApplication) {
-        if Auth.auth().currentUser?.displayName != nil {
+        if Auth.auth().currentUser?.uid != nil {
             AppDelegate.cardObserver.startObserving()
             AppDelegate.linkedNeedsObserver.startObservingHaveChanges()
         }
