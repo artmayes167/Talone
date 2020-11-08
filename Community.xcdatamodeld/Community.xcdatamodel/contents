@@ -5,18 +5,18 @@
         <attribute name="taloneEmail" optional="YES" attributeType="String"/>
         <attribute name="uid" optional="YES" attributeType="String"/>
         <relationship name="communities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Community" inverseName="members" inverseEntity="Community"/>
-        <relationship name="guild" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Community"/>
         <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Role" inverseName="holder" inverseEntity="Role"/>
     </entity>
     <entity name="Community" representedClassName="Community" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="outsideSearchable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="members" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Citizen" inverseName="communities" inverseEntity="Citizen"/>
+        <attribute name="representation" optional="YES" attributeType="Transformable" valueTransformerName="ImageTransformer"/>
+        <attribute name="uid" optional="YES" attributeType="String"/>
+        <relationship name="communityPages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="URLObject" inverseName="community" inverseEntity="URLObject"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Citizen" inverseName="communities" inverseEntity="Citizen"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Owner" inverseName="community" inverseEntity="Owner"/>
         <relationship name="roles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Role" inverseName="community" inverseEntity="Role"/>
-        <fetchedProperty name="rules" optional="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Rule" predicateString="$0.governing == true"/>
-        </fetchedProperty>
+        <relationship name="rules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rule" inverseName="communities" inverseEntity="Rule"/>
     </entity>
     <entity name="Owner" representedClassName="Owner" parentEntity="Citizen" syncable="YES" codeGenerationType="class">
         <attribute name="title" optional="YES" attributeType="String"/>
@@ -29,7 +29,7 @@
         <attribute name="governing" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="required" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="text" optional="YES" attributeType="String"/>
-        <relationship name="references" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="URLObject" inverseName="rights" inverseEntity="URLObject"/>
+        <relationship name="references" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="URLObject" inverseName="right" inverseEntity="URLObject"/>
         <relationship name="rule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Rule" inverseName="rights" inverseEntity="Rule"/>
     </entity>
     <entity name="Role" representedClassName="Role" syncable="YES" codeGenerationType="class">
@@ -41,19 +41,22 @@
     <entity name="Rule" representedClassName="Rule" syncable="YES" codeGenerationType="class">
         <attribute name="governing" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="text" optional="YES" attributeType="String"/>
-        <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="URLObject" inverseName="rules" inverseEntity="URLObject"/>
+        <relationship name="communities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Community" inverseName="rules" inverseEntity="Community"/>
+        <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="URLObject" inverseName="rule" inverseEntity="URLObject"/>
         <relationship name="rights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Right" inverseName="rule" inverseEntity="Right"/>
     </entity>
     <entity name="URLObject" representedClassName="URLObject" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="value" optional="YES" attributeType="String"/>
-        <relationship name="rights" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Right" inverseName="references" inverseEntity="Right"/>
-        <relationship name="rules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rule" inverseName="references" inverseEntity="Rule"/>
+        <relationship name="community" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Community" inverseName="communityPages" inverseEntity="Community"/>
+        <relationship name="right" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Right" inverseName="references" inverseEntity="Right"/>
+        <relationship name="rule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Rule" inverseName="references" inverseEntity="Rule"/>
     </entity>
     <elements>
-        <element name="Rule" positionX="-63" positionY="-18" width="128" height="103"/>
-        <element name="Community" positionX="-54" positionY="-9" width="128" height="146"/>
-        <element name="URLObject" positionX="-36" positionY="18" width="128" height="88"/>
-        <element name="Citizen" positionX="-18" positionY="54" width="128" height="133"/>
+        <element name="Rule" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="Community" positionX="-54" positionY="-9" width="128" height="178"/>
+        <element name="URLObject" positionX="-36" positionY="18" width="128" height="118"/>
+        <element name="Citizen" positionX="-18" positionY="54" width="128" height="118"/>
         <element name="Role" positionX="0" positionY="99" width="128" height="103"/>
         <element name="Responsibility" positionX="18" positionY="117" width="128" height="58"/>
         <element name="Right" positionX="36" positionY="126" width="128" height="118"/>
