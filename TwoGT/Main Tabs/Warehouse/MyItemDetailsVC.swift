@@ -22,6 +22,7 @@ extension NeedDetailModel {
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
                     self.stubsArray = childNeeds
                     self.handlesArray = childNeeds.map { $0.handle }
+                    c.tableView.reloadData()
                 }
                 self.need = item
             })
@@ -32,6 +33,7 @@ extension NeedDetailModel {
                 if let childNeeds = item?.watchers, !childNeeds.isEmpty {
                     self.stubsArray = childNeeds
                     self.handlesArray = childNeeds.map { $0.handle }
+                    c.tableView.reloadData()
                 }
                 self.have = item
             })

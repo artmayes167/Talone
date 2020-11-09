@@ -151,30 +151,29 @@ class NeedDetailModel {
     }
     
     func refreshMyWatchers(_ c: ItemDetailsVC) {
-        CoreDataGod.managedContext.refreshAllObjects()
-//        if let n = need {
-//            let fetcher = NeedsDbFetcher()
-//            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
-//                guard let self = self else { return }
-//                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-//                    self.stubsArray = childNeeds
-//                    self.handlesArray = childNeeds.map { $0.handle }
-//                }
-//                self.need = item
-//                //c.tableView.reloadData()
-//            })
-//        } else if let h = have {
-//            let fetcher = HavesDbFetcher()
-//            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
-//                guard let self = self else { return }
-//                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
-//                    self.stubsArray = childNeeds
-//                    self.handlesArray = childNeeds.map { $0.handle }
-//                }
-//                self.have = item
-//                //c.tableView.reloadData()
-//            })
-//        }
+        if let n = need {
+            let fetcher = NeedsDbFetcher()
+            fetcher.fetchNeed(id: n.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.need = item
+                c.tableView.reloadData()
+            })
+        } else if let h = have {
+            let fetcher = HavesDbFetcher()
+            fetcher.fetchHave(id: h.id!, completion: { [weak self] (item, error) in
+                guard let self = self else { return }
+                if let childNeeds = item?.watchers, !childNeeds.isEmpty {
+                    self.stubsArray = childNeeds
+                    self.handlesArray = childNeeds.map { $0.handle }
+                }
+                self.have = item
+                c.tableView.reloadData()
+            })
+        }
     }
 
     func sendCard(_ c: UIViewController) {
@@ -234,7 +233,7 @@ class ItemDetailsVC: UIViewController {
     }
     
     override func updateUI() {
-        model.refreshMyWatchers(self)
+        CoreDataGod.managedContext.refreshAllObjects()
         presentationController?.delegate?.updateUI()
     }
 
