@@ -223,21 +223,29 @@ extension UIViewController: UITextFieldDelegate {
 // MARK: -
 extension UIViewController: MFMailComposeViewControllerDelegate {
     func launchEmail(to recipients: [String], subject: String = "", body: String) {
-        let mc: MFMailComposeViewController = MFMailComposeViewController()
-        mc.mailComposeDelegate = self
-        mc.setSubject("Talone: " + subject)
-        mc.setMessageBody(body, isHTML: false)
-        mc.setToRecipients(recipients)
-        self.present(mc, animated: true, completion: nil)
+        if MFMailComposeViewController.canSendMail() {
+            let mc: MFMailComposeViewController = MFMailComposeViewController()
+            mc.mailComposeDelegate = self
+            mc.setSubject("Talone: " + subject)
+            mc.setMessageBody(body, isHTML: false)
+            mc.setToRecipients(recipients)
+            self.present(mc, animated: true, completion: nil)
+        } else {
+            somebodyScrewedUp()
+        }
    }
     
     func launchOwnerEmail(subject: String = "", body: String) {
-        let mc: MFMailComposeViewController = MFMailComposeViewController()
-        mc.mailComposeDelegate = self
-        mc.setSubject("Talone: " + subject)
-        mc.setMessageBody(body, isHTML: false)
-        mc.setToRecipients(["talone.the.app@gmail.com"])
-        self.present(mc, animated: true, completion: nil)
+        if MFMailComposeViewController.canSendMail() {
+            let mc: MFMailComposeViewController = MFMailComposeViewController()
+            mc.mailComposeDelegate = self
+            mc.setSubject("Talone: " + subject)
+            mc.setMessageBody(body, isHTML: false)
+            mc.setToRecipients(["talone.the.app@gmail.com"])
+            self.present(mc, animated: true, completion: nil)
+        } else {
+            somebodyScrewedUp()
+        }
    }
 
    public func mailComposeController(_ controller:MFMailComposeViewController, didFinishWith result:MFMailComposeResult, error:Error?) {

@@ -137,9 +137,11 @@ public extension CardTemplateInstance {
         instance.receiverUserHandle = c.receiverUserHandle
         instance.templateTitle = c.templateTitle
         instance.message = c.message
-        instance.addresses = NSSet(array: Address.addressesFrom(array: c.addresses))
         instance.emails = NSSet(array: Email.emailsFrom(array: c.emails))
         instance.phoneNumbers = NSSet(array: PhoneNumber.phoneNumbersFrom(array: c.phoneNumbers))
+        
+        Address.addAddressesFrom(array: c.addresses, to: instance)
+        
         var contact: Contact?
         if let contacts = CoreDataGod.user.contacts {
             let contactArray = contacts.filter({ $0.contactHandle == c.userHandle })
@@ -341,8 +343,9 @@ public extension Address {  // :)
     }
     
     /// From someone else
-    class func addressesFrom(array: [[String: String]]) -> [Address] {
-        var arr: [Address] = []
+    class func addAddressesFrom(array: [[String: String]], to instance: CardTemplateInstance) {
+        //var arr: [Address] = []
+        CoreDataGod.managedContext.refresh(instance, mergeChanges: true)
         for dict in array {
             let entity = NSEntityDescription.entity(forEntityName: "Address", in: CoreDataGod.managedContext)!
             let add = Address(entity: entity, insertInto: CoreDataGod.managedContext)
@@ -354,10 +357,9 @@ public extension Address {  // :)
             add.country = dict["country"]!
             add.uid = dict["uid"]!
             add.zip = dict["zip"]
-            arr.append(add)
+            instance.addToAddresses(add)
         }
         CoreDataGod.save()
-        return arr
     }
 }
 

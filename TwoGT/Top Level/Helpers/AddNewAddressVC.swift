@@ -50,7 +50,6 @@ class AddNewAddressVC: UIViewController {
             Address.create(title: t, street1: s1, street2: s2, city: loc.city, zip: zip, state: loc.state, country: loc.country)
         } else { fatalError() }
         
-        CoreDataGod.save()
         performSegue(withIdentifier: "unwindToYou", sender: nil)
     }
     

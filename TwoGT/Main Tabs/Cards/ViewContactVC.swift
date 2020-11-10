@@ -315,7 +315,11 @@ extension ViewContactVC: UITableViewDelegate, UITableViewDataSource {
                 guard let p = object as? PhoneNumber else { return }
                 call(number: p.number!)
             default:
-                showOkayAlert(title: "sorry".taloneCased(), message: "teleportation is not available with this model.".taloneCased(), handler: nil)
+                devNotReady()
+            }
+        } else {
+            makeToast("developers are stupid") { (_) in
+                
             }
         }
         tableView.deselectRow(at: indexPath, animated: false)
